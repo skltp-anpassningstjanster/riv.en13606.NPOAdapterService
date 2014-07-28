@@ -12,6 +12,8 @@
     <artifactId>riv-schemas</artifactId>
 
     <properties>
+        <logistics.urn-prefix>urn:riv:clinicalprocess:logistics:logistics</logistics.urn-prefix>
+        <logistics.pkg-prefix>se.rivta.clinicalprocess.logistics.logistics</logistics.pkg-prefix>
     </properties>
 
     <dependencies/>
@@ -30,19 +32,19 @@
                                         <extraarg>-p</extraarg>
                                         Note: be careful when changing this - must be in sync for all schemas generations in this namespace!
                                         <extraarg>
-                                            urn:riv:clinicalprocess:healthcond:description:GetCareContacts:2:rivtabp21=se.riv.clinicalprocess.logistics.logistics.getcarecontacts.v2
+                                            ${logistics.urn-prefix}:GetCareContacts:2:rivtabp21=${logistics.pkg-prefix}.getcarecontacts.v2
                                         </extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>
-                                            urn:riv:clinicalprocess:healthcond:description:GetCareContactsResponder:2=se.riv.clinicalprocess.logistics.logistics.getcarecontacts.v2
+                                            ${logistics.urn-prefix}:GetCareContactsResponder:2=${logistics.pkg-prefix}.getcarecontacts.v2
                                         </extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>
-                                            urn:riv:clinicalprocess:logistics:logistics:2=se.riv.clinicalprocess.logistics.logistics.v2
+                                            ${logistics.urn-prefix}:2=${logistics.pkg-prefix}.v2
                                         </extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>
-                                            urn:riv:clinicalprocess:logistics:logistics:enums:2=se.riv.clinicalprocess.logistics.logistics.enums.v2
+                                            ${logistics.urn-prefix}:enums:2=${logistics.pkg-prefix}.enums.v2
                                         </extraarg>
                                         <extraarg>-p</extraarg>
                                         <extraarg>
