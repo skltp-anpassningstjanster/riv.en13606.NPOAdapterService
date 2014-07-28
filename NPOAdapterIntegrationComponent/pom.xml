@@ -5,31 +5,26 @@
 	<groupId>se.skltp.adapterservices.npo</groupId>
 	<artifactId>NPOAdapterIntegrationComponent</artifactId>
 	<name>${project.artifactId}</name>
-    <modules>
-        <module>../schemas</module>
-    </modules>
-    <packaging>pom</packaging>
-	<url>http://maven.apache.org</url>
+
+    <packaging>mule</packaging>
 
 	<parent>
-		<groupId>se.skltp.adapterservices.npo</groupId>
+		<groupId>se.skl.skltpservices.npoadapter</groupId>
 		<artifactId>NPOAdapter</artifactId>
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
-		<!-- schema dependencies
 
-		<dependency>
-			<groupId>se.skltp.adapterservices.insuranceprocess.healthreporting</groupId>
-			<artifactId>insuranceprocess-healthreporting-schemas</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>se.skltp.adapterservices.insuranceprocess.healthreporting</groupId>
-			<artifactId>fk-vardgivare-sjukvard-schemas</artifactId>
-		</dependency>  -->
+        <dependency>
+            <groupId>se.skl.skltpservices.npoadapter</groupId>
+            <artifactId>riv-schemas</artifactId>
+        </dependency>
 
-		<!-- soi toolkit dependencies -->
+        <dependency>
+            <groupId>se.skl.skltpservices.npoadapter</groupId>
+            <artifactId>npo-schemas</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.soitoolkit.commons.components</groupId>
