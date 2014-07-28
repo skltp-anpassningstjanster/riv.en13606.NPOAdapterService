@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	xmlns:tns="urn:riv13606:v1.1" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="urn:riv13606:v1.1"
+    xmlns="urn:riv13606:v1.1"
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>
+		Rodolfo Garcia
+		Torbjorn Dahlin
+		Brainpool - Mawell AB
+		
+		XML Schema to support the WSDL schema for Request_EHR_EXTRACT method from 13606-5.
+		The 13606-5 functionality has been extended to support the following functionality:
+		
+		Continuation
+		------------------
+		The ability to fetch batches of EHR_EXTRACTS
+		rather than all or nothing.
+		
+		Multiple errors, warnings and/or informational messages
+		--------------------------------------------------------------------------------
+		This implementationen allows a collection of these types of
+		messages to be returned, with or without actual EHR_EXTRACT results.
+		
+		Generic parameters
+		----------------------------
+		A collection of generic (name, value) pairs are allowed as inbound
+		parameters.
+		
+		Use of ISO 21090 datatypes
+		-----------------------------------------
+		The ISO datatypes are used at the parameter level.
+
+		-----------------------------------------
+                v1.1 2012-11-01. Modified by Bjorn Strihagen Inera (HCT)
+                Replaced xmlns=.. with xmlns:tns=.. in header and qualified referred types with tns:
+                This is required by svcutil.exe
+                
+		</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="ISO_dt.xsd"/>
+	<xs:include schemaLocation="SE13606-1.xsd"/>
+	<xs:element name="RIV13606REQUEST_EHR_EXTRACT_request" type="tns:RIV13606REQUEST_EHR_EXTRACT_request_type"/>
+	<xs:element name="RIV13606REQUEST_EHR_EXTRACT_response" type="tns:RIV13606REQUEST_EHR_EXTRACT_response_type"/>
+	<xs:element name="RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request" type="tns:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request_type"/>
+	<xs:complexType name="RIV13606REQUEST_EHR_EXTRACT_request_type">
+		<xs:sequence>
+			<xs:element name="subject_of_care_id" type="II"/>
+			<xs:element name="purpose" type="CD" minOccurs="0"/>
+			<xs:element name="rc_ids" type="II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="time_period" type="IVL_TS" minOccurs="0"/>
+			<xs:element name="max_sensitivity" type="INT" minOccurs="0"/>
+			<xs:element name="all_versions" type="BL" minOccurs="0"/>
+			<xs:element name="multimedia_included" type="BL" minOccurs="0"/>
+			<xs:element name="archetype_ids" type="II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="meanings" type="CD" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="max_records" type="INT" minOccurs="0"/>
+			<xs:element name="parameters" type="tns:Parameter_type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request_type">
+		<xs:sequence>
+			<xs:element name="max_records" type="INT" minOccurs="0"/>
+			<xs:element name="start_record" type="INT" minOccurs="0"/>
+			<xs:element name="continuation_token" type="ST"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Parameter_type">
+		<xs:sequence>
+			<xs:element name="code" type="CD" minOccurs="0"/>
+			<xs:element name="name" type="ST"/>
+			<xs:element name="value" type="ST"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RIV13606REQUEST_EHR_EXTRACT_response_type">
+		<xs:sequence>
+			<xs:element name="ehr_extract" type="tns:EHR_EXTRACT" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="continuation_token" type="ST" minOccurs="0"/>
+			<xs:element name="response_detail" type="tns:ResponseDetail_type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResponseDetail_type">
+		<xs:sequence>
+			<xs:element name="code" type="CD" minOccurs="0"/>
+			<xs:element name="text" type="ST"/>
+		</xs:sequence>
+		<xs:attribute name="type_code" type="tns:responseDetailTypeCodes"/>
+	</xs:complexType>
+	<xs:simpleType name="responseDetailTypeCodes">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="W"/>
+			<xs:enumeration value="I"/>
+			<!-- Error -->
+			<!-- Warning -->
+			<!-- Information -->
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

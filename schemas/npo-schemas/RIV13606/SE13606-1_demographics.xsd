@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:tns="urn:riv13606:v1.1"
+    xmlns="urn:riv13606:v1.1"
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified"
+	targetNamespace="urn:riv13606:v1.1" >
+	<!--
+	xmlns="urn:riv13606:v1.1"
+        -->
+        
+	<!--                                                          -->
+	<!--                  Demographics Types         -->
+	<!--                                                          -->
+	<!-- 
+    The demographics package is provided on page 47  of the CEN/ISO
+    13606 part 1 standard.
+    
+    Note possible shortcomings of the 13606-1 definition:
+    (a) On several occasions in the standard a code is described as
+    having a CS type, but only two of the necessary parts of the CS
+    are provided by the documentation (usually a value and a human-
+    readable   portion).   They  are  represented  here  as  simple
+    enumerations (with whitespace removed as necessary).
+  -->
+	<xs:include schemaLocation="ISO_dt.xsd"/>
+	<xs:complexType name="IDENTIFIED_ENTITY" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of all  identified parties  to the record.  Note
+        that the  type of  id is not  given  in the  printed  class
+        description  but  is included  in the class diagram on page
+        47 of the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="extract_id" type="II"/>
+			<xs:element name="id" type="II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="telecom" type="TEL" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SOFTWARE_OR_DEVICE">
+		<xs:annotation>
+			<xs:documentation>
+        A piece of equipment or a device.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="code" type="CD"/>
+					<xs:element name="desc" type="ST"/>
+					<xs:element name="manufacturerModelName" type="ST"/>
+					<xs:element name="version" type="ST" minOccurs="0"/>
+					<xs:element name="owningOrganisation_id" type="ST" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ORGANISATION">
+		<xs:annotation>
+			<xs:documentation>
+        An  organisation  corresponding to GPIC 2.008  (2008 in the
+        printed standard).
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="code" type="CD"/>
+					<xs:element name="desc" type="ST"/>
+					<xs:element name="name" type="ST"/>
+					<xs:element name="addr" type="AD" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PERSON">
+		<xs:annotation>
+			<xs:documentation>
+        General    demographic    information    about   a   person
+        corresponding to GPIC 2.006.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="name" type="EN" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="addr" type="AD" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<xs:annotation>
+			<xs:documentation>
+        Reference to an identified healthcare professional, derived 
+        from GPIC 2.034.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:PERSON">
+				<xs:sequence>
+					<xs:element name="role" type="tns:HEALTHCARE_PROFESSIONAL_ROLE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HEALTHCARE_PROFESSIONAL_ROLE">
+		<xs:annotation>
+			<xs:documentation>
+        Describes the  role of  a  healthcare professional  in  the 
+        record,  based on  the GPICS  class of the  same name. Note
+        that the id instances  should refer to the  same identified
+        individual,   but   might  be   needed  to  establish  that 
+        individual's identity in different working environments.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="position_or_grade" type="CD" minOccurs="0"/>
+			<xs:element name="profession" type="CD" minOccurs="0"/>
+			<xs:element name="specialty" type="CD" minOccurs="0"/>
+			<xs:element name="scopingOrganisation_id" type="II" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SUBJECT_OF_CARE_PERSON_IDENTIFICATION">
+		<xs:annotation>
+			<xs:documentation>
+        Identification information about a person  corresponding to
+        GPIC 2.015.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:PERSON">
+				<xs:sequence>
+					<xs:element name="administrativeGenderCode" type="CS"/>
+					<xs:element name="birthOrderNumber" type="INT" minOccurs="0"/>
+					<xs:element name="birthTime" type="TS"/>
+					<xs:element name="deceasedTime" type="TS" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

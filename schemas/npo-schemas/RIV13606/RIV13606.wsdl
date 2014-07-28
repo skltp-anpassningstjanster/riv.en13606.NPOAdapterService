@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:tns="urn:riv13606:v1.1" 
+	targetNamespace="urn:riv13606:v1.1" >
+	<xs:annotation>
+		<xs:documentation>
+		Rodolfo Garcia
+		Torbjorn Dahlin
+		Brainpool - Mawell AB
+		
+		WSDL descriptions for Request_EHR_EXTRACT method from 13606-5.
+		The method has extended to support the following functionality:
+		
+		Continuation
+		------------------
+		The ability to fetch batches of EHR_EXTRACTS
+		rather than all or nothing.
+		
+		Multiple errors, warnings and/or informational messages
+		--------------------------------------------------------------------------------
+		This implementationen allows a collection of these types of
+		messages to be returned, with or without actual EHR_EXTRACT results.
+		
+		Generic parameters
+		----------------------------
+		A collection of generic (name, value) pairs are allowed as inbound
+		parameters.
+		
+		Use of ISO 21090 datatypes
+		-----------------------------------------
+		The ISO datatypes are used at the parameter level.
+		</xs:documentation>
+	</xs:annotation>	
+	<wsdl:types>
+		<xs:schema targetNamespace="urn:riv13606:v1.1">
+			<xs:include schemaLocation="SE13606RequestEHRExtract.xsd" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="RIV13606REQUEST_EHR_EXTRACT_request">
+		<wsdl:part element="tns:RIV13606REQUEST_EHR_EXTRACT_request" name="RIV13606REQUEST_EHR_EXTRACT_request"/>
+	</wsdl:message>
+	<wsdl:message name="RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request">
+		<wsdl:part element="tns:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request" name="RIV13606REQUEST_EHR_EXTRACT_request"/>
+	</wsdl:message>
+	<wsdl:message name="RIV13606REQUEST_EHR_EXTRACT_response">
+		<wsdl:part element="tns:RIV13606REQUEST_EHR_EXTRACT_response" name="RIV13606REQUEST_EHR_EXTRACT_response"/>
+	</wsdl:message>
+	<wsdl:portType name="RIV13606REQUEST_EHR_EXTRACT_PortType">
+		<wsdl:operation name="RIV13606REQUEST_EHR_EXTRACT">
+			<wsdl:input message="tns:RIV13606REQUEST_EHR_EXTRACT_request"/>
+			<wsdl:output message="tns:RIV13606REQUEST_EHR_EXTRACT_response"/>
+		</wsdl:operation>
+		
+		<wsdl:operation name="RIV13606REQUEST_EHR_EXTRACT_CONTINUATION">
+			<wsdl:input message="tns:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request"/>
+			<wsdl:output message="tns:RIV13606REQUEST_EHR_EXTRACT_response"/>
+		</wsdl:operation>
+	</wsdl:portType>	
+	<wsdl:binding name="RIV13606REQUEST_EHR_EXTRACT_Binding" type="tns:RIV13606REQUEST_EHR_EXTRACT_PortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="RIV13606REQUEST_EHR_EXTRACT">
+			<soap:operation soapAction="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RIV13606REQUEST_EHR_EXTRACT_CONTINUATION">
+			<soap:operation soapAction="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+    <wsdl:service name='RIV13606REQUEST_EHR_EXTRACT_Service'>
+        <wsdl:port name='RIV13606REQUEST_EHR_EXTRACT_Port' binding='tns:RIV13606REQUEST_EHR_EXTRACT_Binding'>
+            <soap:address location='http://tempuri.org' />
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
+

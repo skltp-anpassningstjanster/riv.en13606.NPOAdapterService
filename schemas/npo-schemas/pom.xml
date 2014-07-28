@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Schemas</artifactId>
+        <groupId>se.skltp.adapterservices.npo</groupId>
+        <version>0.9.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>npo-schemas</artifactId>
+
+    <properties>
+    </properties>
+
+    <dependencies/>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        Note: be careful when changing this - must be in sync for all schemas generations in this namespace!
+                                        <extraarg>
+                                            urn:riv13606:v1.1=se.rivta.en13606.ehrextract.v11
+                                        </extraarg>
+                                    </extraargs>
+                                    <wsdl>${basedir}/RIV13606/RIV13606.wsdl</wsdl>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+        <!--
+        <resources>
+            <resource>
+                <directory>${schema.path}</directory>
+            </resource>
+        </resources>
+        -->
+    </build>
+</project>
