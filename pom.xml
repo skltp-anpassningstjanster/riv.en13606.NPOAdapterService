@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<!-- This is the System-level Maven POM. Usage: Define all truly common things
+     for the system here. For example: versions of third-party dependencies used
+     throughout the system. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.soitoolkit.commons.poms</groupId>
+        <artifactId>soitoolkit-default-parent</artifactId>
+        <version>0.6.0</version>
+    </parent>
+
+    <groupId>se.skltp.adapterservices.npo</groupId>
+    <artifactId>NPOAdapter</artifactId>
+    <version>0.9.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <scm.url>http://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</scm.url>
+        <mockito.version>1.9.5</mockito.version>
+    </properties>
+
+    <scm>
+        <connection>scm:svn:${scm.url}</connection>
+        <developerConnection>scm:svn:${scm.url}</developerConnection>
+        <url>${scm.url}</url>
+    </scm>
+
+
+    <modules>
+        <module>schemas</module>
+        <module>NPOAdapterIntegrationComponent</module>
+        <!--
+        <module>NPOAdapterIntegrationComponent-teststub</module>
+            <module>NPOAdapterIntegrationComponent-tests</module>
+        -->
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- schema dependencies
+
+             <dependency>
+               <groupId>se.skltp.adapterservices.insuranceprocess.healthreporting</groupId>
+               <artifactId>insuranceprocess-healthreporting-schemas</artifactId>
+               <version>2.0.7-SNAPSHOT</version>
+             </dependency>
+
+             <dependency>
+               <groupId>se.skltp.adapterservices.insuranceprocess.healthreporting</groupId>
+               <artifactId>fk-vardgivare-sjukvard-schemas</artifactId>
+               <version>2.0.7-SNAPSHOT</version>
+             </dependency> -->
+
+            <!-- soi toolkit dependencies -->
+
+            <dependency>
+                <groupId>org.soitoolkit.commons.components</groupId>
+                <artifactId>soitoolkit-commons-mule</artifactId>
+                <version>${soitoolkit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.soitoolkit.commons.poms</groupId>
+                <artifactId>soitoolkit-test-dependencies</artifactId>
+                <version>${soitoolkit.version}</version>
+                <type>pom</type>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.soitoolkit.commons.poms.mule-dependencies</groupId>
+                <artifactId>soitoolkit-mule-3.3.0-dependencies</artifactId>
+                <version>${soitoolkit.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.mycila.maven-license-plugin</groupId>
+                    <artifactId>maven-license-plugin</artifactId>
+                    <version>1.10.b1</version>
+                    <configuration>
+                        <properties>
+                            <year>2014</year>
+                            <copyright>Inera AB, &lt;http://inera.se/&gt;</copyright>
+                            <product>SKLTP</product>
+                        </properties>
+                        <strictCheck>true</strictCheck>
+                        <basedir>${basedir}</basedir>
+                        <header>http://skltp.googlecode.com/svn/tp/license/lgpl/header.txt</header>
+                        <encoding>UTF-8</encoding>
+                        <includes>
+                            <include>src/main/**</include>
+                            <include>src/test/**</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*.xsd</exclude>
+                            <exclude>**/*.wsdl</exclude>
+                            <exclude>**/*.xml</exclude>
+                            <exclude>**/*.dtd</exclude>
+                            <exclude>**/*.jks</exclude>
+                        </excludes>
+                        <useDefaultExcludes>true</useDefaultExcludes>
+                        <mapping>
+                            <tag>DYNASCRIPT_STYLE</tag>
+                        </mapping>
+                        <useDefaultMapping>true</useDefaultMapping>
+                    </configuration>
+                </plugin>
+
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            properties-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.0-alpha-2,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>
+                                                write-project-properties
+                                            </goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.mule.tools
+                                        </groupId>
+                                        <artifactId>
+                                            maven-mule-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.7,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>
+                                                attach-test-resources
+                                            </goal>
+                                            <goal>
+                                                filter-resources
+                                            </goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            com.mycila.maven-license-plugin
+                                        </groupId>
+                                        <artifactId>
+                                            maven-license-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.9.0,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>check</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>license</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>check</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
