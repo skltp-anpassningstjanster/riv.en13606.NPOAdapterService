@@ -53,7 +53,7 @@ public class CareContactsMapperTest {
         ehrextract = root.getValue();
     }
 
-
+    // Make it easy to dump the resulting response after map (for dev purposes only)
     @XmlRootElement
     static class Root {
        @XmlElement
@@ -135,7 +135,7 @@ public class CareContactsMapperTest {
 
         verifyTimeStampType(careContactBody.getCareContactTimePeriod().getStart(), false);
         verifyTimeStampType(careContactBody.getCareContactTimePeriod().getEnd(), true);
-    }
+     }
 
     private void verifyTimeStampType(String timestamp, boolean nullable) {
         if (!nullable) {

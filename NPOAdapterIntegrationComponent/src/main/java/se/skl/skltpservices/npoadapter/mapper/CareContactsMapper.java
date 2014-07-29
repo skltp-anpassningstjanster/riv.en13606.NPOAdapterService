@@ -234,18 +234,15 @@ public class CareContactsMapper {
     }
 
     protected OrgUnitType mapOrgUnit(final List<IDENTIFIEDENTITY> demographics, final String hsaId) {
-        final ORGANISATION organisation = (ORGANISATION) lookupDemographicIdentity(demographics, hsaId);
-
         final OrgUnitType orgUnitType = new OrgUnitType();
-
         orgUnitType.setOrgUnitHSAId(hsaId);
-        orgUnitType.setOrgUnitName(organisation.getName().getValue());
 
+        final ORGANISATION organisation = (ORGANISATION) lookupDemographicIdentity(demographics, hsaId);
         if (organisation != null) {
+            orgUnitType.setOrgUnitName(organisation.getName().getValue());
             mapTel(orgUnitType, organisation);
             mapAddress(orgUnitType, organisation);
         }
-
         return orgUnitType;
     }
 
