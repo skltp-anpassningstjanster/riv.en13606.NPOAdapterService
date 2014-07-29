@@ -76,7 +76,7 @@ public class CareContactsMapper {
 
         headerType.setAccountableHealthcareProfessional(mapProfessional(composition, ehrExtract.getDemographicExtract()));
 
-        // Missing input data (default values have to be used)
+        // FIXME: Missing input data (default values have to be used, validation is required)
         headerType.setApprovedForPatient(true);
         headerType.setNullified(false);
         headerType.setNullifiedReason(null);
@@ -100,14 +100,16 @@ public class CareContactsMapper {
 
         for (final CONTENT content : composition.getContent()) {
             for (final ITEM item : ((ENTRY) content).getItems()) {
-                final String meaningCode = item.getMeaning().getCode();
-
-                if ("vko-vko-typ".equals(meaningCode)) {
-                    bodyType.setCareContactCode(ContactCodes.map.rget(getSTValue((ELEMENT) item)));
-                } else if ("vko-vko-ors".equals(meaningCode)) {
-                    bodyType.setCareContactReason(getSTValue((ELEMENT) item));
-                } else if ("vko-vko-sta".equals(meaningCode)) {
-                    bodyType.setCareContactStatus(ContactStatus.map.rget(getSTValue((ELEMENT) item)));
+                switch (item.getMeaning().getCode()) {
+                    case "vko-vko-typ":
+                        bodyType.setCareContactCode(ContactCodes.map.rget(getSTValue((ELEMENT) item)));
+                        break;
+                    case "vko-vko-ors":
+                        bodyType.setCareContactReason(getSTValue((ELEMENT) item));
+                        break;
+                    case "vko-vko-sta":
+                        bodyType.setCareContactStatus(ContactStatus.map.rget(getSTValue((ELEMENT) item)));
+                        break;
                 }
 
                 // Executing unit
@@ -207,13 +209,24 @@ public class CareContactsMapper {
         return professionalType;
     }
 
+    /**
+     * Removes a string prefix on match.
+     *
+     * @param value the string.
+     * @param prefix the prefix to remove.
+     * @return the string without prefix, i.e. unchanged if the prefix doesn't match.
+     */
+    protected String removePrefix(final String value, final String prefix) {
+        return (value == null) ? null : value.replaceFirst(prefix, "");
+    }
+
     //
     protected OrgUnitType mapTel(final OrgUnitType orgUnitType, final ORGANISATION organisation) {
         for (final TEL item : organisation.getTelecom()) {
             if (item instanceof TELEMAIL) {
-                orgUnitType.setOrgUnitEmail(item.getValue());
+                orgUnitType.setOrgUnitEmail(removePrefix(item.getValue(), "mailto:"));
             } else if (item instanceof TELPHONE) {
-                orgUnitType.setOrgUnitTelecom(item.getValue());
+                orgUnitType.setOrgUnitTelecom(removePrefix(item.getValue(), "tel:"));
             }
         }
         return orgUnitType;
