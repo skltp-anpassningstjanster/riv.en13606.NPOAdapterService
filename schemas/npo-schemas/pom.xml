@@ -17,6 +17,12 @@
     <dependencies/>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/RIV13606</directory>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.cxf</groupId>
