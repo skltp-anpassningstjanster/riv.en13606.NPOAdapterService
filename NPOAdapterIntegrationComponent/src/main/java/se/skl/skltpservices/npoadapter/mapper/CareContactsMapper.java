@@ -48,7 +48,6 @@ public class CareContactsMapper {
         personIdType.setId(ehrExtract.getSubjectOfCare().getExtension());
         personIdType.setType(ehrExtract.getSubjectOfCare().getRoot());
 
-
         for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
             final CareContactType contactType = new CareContactType();
             contactType.setCareContactHeader(mapHeader(ehrExtract, i));
@@ -140,11 +139,13 @@ public class CareContactsMapper {
         return timePeriodType;
     }
 
+    //
     protected String getSTValue(final ELEMENT element) {
         final ST st = (ST) element.getValue();
         return (st == null) ? null : st.getValue();
     }
 
+    //
     protected PersonIdType mapPersonId(final II subjectOfCare) {
         final PersonIdType personIdType = new PersonIdType();
         personIdType.setId(subjectOfCare.getExtension());
@@ -152,15 +153,17 @@ public class CareContactsMapper {
         return personIdType;
     }
 
-
+    //
     protected <T> T firstItem(List<T> list) {
         return (list.size() == 0) ? null : list.get(0);
     }
 
+    //
     protected String getCDCode(final CD cd) {
         return (cd == null) ? null : cd.getCode();
     }
 
+    //
     protected String getPartValue(final List<EN> names) {
         final EN item = firstItem(names);
         if (item != null) {
@@ -170,7 +173,7 @@ public class CareContactsMapper {
         return null;
     }
 
-
+    //
     protected IDENTIFIEDENTITY lookupDemographicIdentity(final List<IDENTIFIEDENTITY> demographics, final String hsaId) {
         for (final IDENTIFIEDENTITY identifiedentity : demographics) {
             if (hsaId.equals(identifiedentity.getExtractId().getExtension())) {
@@ -180,7 +183,7 @@ public class CareContactsMapper {
         return null;
     }
 
-
+    //
     protected HealthcareProfessionalType mapProfessional(final COMPOSITION composition, final List<IDENTIFIEDENTITY> demographics) {
         final HealthcareProfessionalType professionalType = new HealthcareProfessionalType();
         professionalType.setAuthorTime(composition.getCommittal().getTimeCommitted().getValue());
@@ -204,7 +207,7 @@ public class CareContactsMapper {
         return professionalType;
     }
 
-
+    //
     protected OrgUnitType mapTel(final OrgUnitType orgUnitType, final ORGANISATION organisation) {
         for (final TEL item : organisation.getTelecom()) {
             if (item instanceof TELEMAIL) {
@@ -216,6 +219,7 @@ public class CareContactsMapper {
         return orgUnitType;
     }
 
+    //
     protected OrgUnitType mapAddress(final OrgUnitType orgUnitType, final ORGANISATION organisation) {
         for (final AD ad : organisation.getAddr())
             for (final ADXP adxp : ad.getPartOrBrOrAddressLine()) {
@@ -233,6 +237,7 @@ public class CareContactsMapper {
         return orgUnitType;
     }
 
+    //
     protected OrgUnitType mapOrgUnit(final List<IDENTIFIEDENTITY> demographics, final String hsaId) {
         final OrgUnitType orgUnitType = new OrgUnitType();
         orgUnitType.setOrgUnitHSAId(hsaId);
@@ -245,5 +250,4 @@ public class CareContactsMapper {
         }
         return orgUnitType;
     }
-
 }

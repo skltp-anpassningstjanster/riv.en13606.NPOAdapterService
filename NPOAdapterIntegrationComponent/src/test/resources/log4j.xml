@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	
+	<!--
+		This is the logging configuration used for developing and local testing. This file should
+		not be included in the production build of VP. 
+	 -->
+	
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %-30C - %m%n" />
+		</layout>
+	</appender>
+    
+    <appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
+        <param  name="file" value="${mule.home}/logs/mule-app-FkEintygAdapter.log"/>
+        <param name="MaxBackupIndex" value="3" />
+        <param name="MaxFileSize" value="1MB" />
+        
+        <!-- The threshold level for this appender. -->
+        <!-- <param name="Threshold" value="ERROR"/> -->
+        <layout class="org.apache.log4j.PatternLayout">
+        	 <param name="ConversionPattern" value="%d %-5p %-30C - %m%n" />
+        </layout>
+    </appender>
+    
+    <!--
+		Loglevels: {OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL} See:
+		http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html
+	-->
+	
+  
+  	<logger name="org.mockftpserver">
+		<level value="ERROR" />
+	</logger>
+	
+	<logger name="org.apache.sshd">
+		<level value="ERROR" />
+	</logger>	
+
+    <logger name="org.apache.activemq.transport.failover.FailoverTransport">
+        <level value="DEBUG" />
+    </logger>
+    
+	<logger name="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<level value="TRACE" />
+	</logger>
+
+	<logger name="org.springframework.core.io.support.PropertiesLoaderSupport">
+		<level value="INFO" />
+	</logger>
+
+	<logger name="org.springframework.beans.factory.xml.XmlBeanDefinitionReader">
+		<level value="INFO" />
+	</logger>
+
+	<logger name="org.mule.model.seda">
+		<level value="INFO" />
+	</logger>
+	<logger name="org.mule.MuleServer">
+		<level value="INFO" />
+	</logger>
+	<logger name="org.mule.DefaultMuleContext">
+		<level value="INFO" />
+	</logger>
+
+    <!-- Message logging using the old Mule <logger/> - element -->
+    <logger name="org.mule.api.processor.LoggerMessageProcessor">
+        <level value="ERROR" />
+    </logger>
+
+    <!-- Message logging using the old Mule <log-component/> - element -->
+    <logger name="org.mule.component.simple.LogComponent">
+        <level value="ERROR" />
+    </logger>
+
+    <logger name="org.soitoolkit.commons">
+		<level value="ERROR" />
+	</logger>
+    
+ 	<!--     	
+    	For logging events to QUEUE using EventLogger:
+    	
+    	DEBUG puts logevents (with payload) and errorevents on log queue
+    	INFO puts logevents (without payload) and errorevents on log queue
+    	ERROR will only put errorevents on log queue
+    -->
+	<logger name="org.soitoolkit.commons.mule.messageLogger">
+		<level value="DEBUG" />
+	</logger>
+	
+	 <logger name="se.skl.skltpservices.adapter.fk">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <!-- Level DEBUG: Log http headers transfered during a request/response -->
+    <logger name="httpclient.wire.header">
+        <level value="FATAL"/>
+    </logger>
+
+	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
+    <logger name="httpclient.wire.content">
+        <level value="FATAL"/>
+    </logger>
+
+    <root>
+       <priority value="WARN" />
+
+        <appender-ref ref="CONSOLE"/>
+		<!--
+        <appender-ref ref="ROLLINGFILE" />
+		-->
+    </root>
+</log4j:configuration>

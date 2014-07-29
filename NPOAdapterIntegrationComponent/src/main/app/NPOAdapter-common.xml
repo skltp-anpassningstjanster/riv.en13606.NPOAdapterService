@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" 
+	xmlns:management="http://www.mulesoft.org/schema/mule/management"
+	xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" 
+	xmlns:rest="http://www.mulesoft.org/schema/mule/rest"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans-current.xsd   
+						http://www.mulesoft.org/schema/mule/core       http://www.mulesoft.org/schema/mule/core/current/mule.xsd   
+						http://www.mulesoft.org/schema/mule/jms        http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd   
+						http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/current/mule-management.xsd   
+						http://www.mulesoft.org/schema/mule/json       http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd   
+						http://www.mulesoft.org/schema/mule/scripting  http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd   
+						http://www.mulesoft.org/schema/mule/rest       http://www.mulesoft.org/schema/mule/rest/current/mule-rest.xsd   
+						http://www.mulesoft.org/schema/mule/xml        http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd ">
+
+
+	<spring:bean id="propertyPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<spring:property name="ignoreResourceNotFound" value="true" />
+		<spring:property name="locations">
+			<spring:list>
+				<!-- Only available in development env, e.g. Eclipse -->
+				<spring:value>classpath:NPOAdapter-config.properties</spring:value>
+				<spring:value>classpath:NPOAdapter-config-override.properties</spring:value>
+			</spring:list>
+		</spring:property>
+	</spring:bean>
+	
+	
+	<!-- The default profile used by normal usage of mule-app, either deployed in mule or started using st-muleServer-helper-class. Not used by integration tests -->
+    <spring:beans profile="default">
+        <!-- Connectors et al that are specific for different environment specific config-files (local unit-test, integration-test or production environments) -->
+
+        <!-- TODO: Add import of environment specific configuration files here as required -->
+        
+        <!-- Import the JMS-provider used in production here, embedded JMS providers used for integration tests are loaded by the *IntegratIonTest.java classes directly -->  
+        <spring:import resource="classpath:soitoolkit-mule-jms-connector-activemq-external.xml"/>
+
+    </spring:beans>
+
+	<!-- Used by integration tests only -->
+    <spring:beans profile="soitoolkit-integrationtests">
+        <mule>
+            <!--  Allow integration tests to register dynamic listeners by specifying dynamic="true" -->
+            <notifications dynamic="true">
+                <notification event="ENDPOINT-MESSAGE"/>
+                <notification event="COMPONENT-MESSAGE"/>
+            </notifications>
+        </mule>
+    </spring:beans>
+
+
+	<!-- Used by st-muleServer-helper-class only -->
+    <spring:beans profile="soitoolkit-teststubs">
+        <!-- Load all teststub services -->
+        <spring:import resource="classpath:teststub-services/*-teststub-service.xml"/>
+    </spring:beans>
+
+    <!-- Common connectors and endpoints, i.e. that not needs to be changed for different config-files (local unit-test, integration-test or production environments) -->
+  
+    <rest:config/>
+
+    <spring:beans>
+  
+    <spring:import resource="classpath:soitoolkit-mule-http-connector.xml"/>
+    <spring:import resource="classpath:soitoolkit-mule-https-connector.xml"/>
+  </spring:beans>
+
+    <message-properties-transformer name="setJsonContentType" scope="outbound">
+        <add-message-property key="Content-Type" value="application/json;charset=UTF-8"/>
+    </message-properties-transformer>
+ 
+    <json:object-to-json-transformer name="jaxbToJson"/>
+
+    <!-- The common single jaxb-context for this mule-app -->
+    <!-- Don't create additional jaxb-contexts to avoid problems with implicit jaxb transformations that can't resolve what jaxb-context to use! -->
+    <!-- Use ":" as a separator if jaxb-objects from more than one java package will be used by the jaxb-transformers  -->
+    <mulexml:jaxb-context name="jaxbContext"
+                          packageNames="org.soitoolkit.commons.logentry.schema.v1:se.rivta.itintegration.registry.v1:se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2:se.rivta.clinicalprocess.logistics.logistics.v2:se.rivta.en13606.ehrextract.v11"/>
+	
+	<custom-transformer class="org.soitoolkit.commons.mule.core.ObjectToStringTransformer" name="objToStr"/>
+
+	<custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer" name="createCorrId"/>
+	<custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.SaveCorrelationIdTransformer" name="saveCorrId"/>
+	<custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.RestoreCorrelationIdTransformer" name="restoreCorrId"/>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.soap.CreateSoapFaultIfExceptionTransformer" name="createSoapFaultIfException"/>
+
+	<custom-transformer class="org.soitoolkit.commons.mule.mime.MimeToStringTransformer" name="mimeToStr"/>
+	
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logMsgIn">
+		<spring:property name="logType" value="msg-in"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logMsgOut">
+		<spring:property name="logType" value="msg-out"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqIn">
+		<spring:property name="logType" value="req-in"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqOut">
+		<spring:property name="logType" value="req-out"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logRespIn">
+		<spring:property name="logType" value="resp-in"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logRespOut">
+		<spring:property name="logType" value="resp-out"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>  
+
+    <!-- TODO: Add global definitions here -->
+
+	<configuration>
+		<default-receiver-threading-profile
+			maxThreadsActive="${RECEIVE_MAX_THREADS_ACTIVE}" maxThreadsIdle="${RECEIVE_MAX_THREADS_IDLE}"
+			threadTTL="${RECEIVE_MAX_THREADS_TTL}" />
+	</configuration>
+
+	<!-- Transformer check if HSA ID provided is on the hsa id white list
+	<custom-transformer name="checkSenderHsaIdTransformer" class="se.skl.skltpservices.adapter.common.processor.CheckSenderHsaIdTransformer" doc:name="Check Sender HSA ID is on white HSA ID white list">
+		<spring:property name="senderIdPropertyName" value="${CERT_SENDERID}" />
+		<spring:property name="whiteList" value="${FK_WHITE_LIST}" />
+		<spring:property name="certificatesKey" value="${CERTIFICATE_KEY}" />
+	</custom-transformer>
+	-->
+
+</mule>
