@@ -25,8 +25,6 @@ import se.rivta.en13606.ehrextract.v11.*;
 
 import java.util.List;
 
-import static se.rivta.en13606.ehrextract.v11.AddressPartType.AL;
-
 /**
  * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>
  *

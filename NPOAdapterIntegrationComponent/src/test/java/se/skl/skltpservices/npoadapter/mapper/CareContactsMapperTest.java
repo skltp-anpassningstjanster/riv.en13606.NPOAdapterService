@@ -60,20 +60,22 @@ public class CareContactsMapperTest {
        private GetCareContactsResponseType type;
     }
 
-    @Test
-    public void testMapFromEhrToCareContratcs() throws JAXBException {
-        CareContactsMapper mapper = new CareContactsMapper();
-        GetCareContactsResponseType responseType = mapper.map(ehrextract);
-        assertNotNull(responseType);
-
+    //
+    private void dump(GetCareContactsResponseType responseType) throws JAXBException {
         final JAXBContext context = JAXBContext.newInstance(Root.class);
         Root root = new Root();
         root.type = responseType;
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
         marshaller.marshal(root, System.out);
+    }
 
+
+    @Test
+    public void testMapFromEhrToCareContratcs() {
+        CareContactsMapper mapper = new CareContactsMapper();
+        GetCareContactsResponseType responseType = mapper.map(ehrextract);
+        assertNotNull(responseType);
 
         assertNotNull(responseType.getCareContact());
         assertEquals(4, responseType.getCareContact().size());
