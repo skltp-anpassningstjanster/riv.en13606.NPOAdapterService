@@ -19,18 +19,18 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import junit.framework.Assert;
-import org.junit.Before;
+import static junit.framework.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
+import se.rivta.clinicalprocess.logistics.logistics.v2.*;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Peter on 2014-07-28.
@@ -38,26 +38,113 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CareContactsMapperTest {
 
 
-    private EHREXTRACT ehrextract;
-    static JAXBContext context;
+    private static SimpleDateFormat timeStampFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
+    static {
+        timeStampFormatter.setLenient(false);
+    }
 
+    private static EHREXTRACT ehrextract;
 
     @BeforeClass
     public static void init() throws JAXBException {
-        context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
-    }
-
-    @Before
-    public void setup() throws JAXBException {
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(getClass().getResourceAsStream("/CareContacts_SSEN13606-2.1.1.xml"));
+        final JAXBContext context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
+        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(CareContactsMapperTest.class.getResourceAsStream("/CareContacts_SSEN13606-2.1.1.xml"));
         ehrextract = root.getValue();
     }
 
+
+    @XmlRootElement
+    static class Root {
+       @XmlElement
+       private GetCareContactsResponseType type;
+    }
+
     @Test
-    public void testUnmarshalCareContacts() {
-        Assert.assertNotNull(ehrextract);
+    public void testMapFromEhrToCareContratcs() throws JAXBException {
+        CareContactsMapper mapper = new CareContactsMapper();
+        GetCareContactsResponseType responseType = mapper.map(ehrextract);
+        assertNotNull(responseType);
+
+        final JAXBContext context = JAXBContext.newInstance(Root.class);
+        Root root = new Root();
+        root.type = responseType;
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        marshaller.marshal(root, System.out);
+
+
+        assertNotNull(responseType.getCareContact());
+        assertEquals(4, responseType.getCareContact().size());
+
+        for (final CareContactType careContactType : responseType.getCareContact()) {
+            verifyCareContactHeader(careContactType.getCareContactHeader());
+            verifyCareContactBody(careContactType.getCareContactBody());
+        }
     }
 
 
+    private void verifyCareContactHeader(PatientSummaryHeaderType careContactHeader) {
+        assertNotNull(careContactHeader.getDocumentId());
+        assertNotNull(careContactHeader.getSourceSystemHSAId());
+        verifyAccountableHealthcareProfessional(careContactHeader.getAccountableHealthcareProfessional());
+
+        assertNotNull(careContactHeader.getPatientId());
+        assertTrue(careContactHeader.isApprovedForPatient());
+        assertFalse(careContactHeader.isNullified());
+        assertNull(careContactHeader.getNullifiedReason());
+    }
+
+    private void verifyAccountableHealthcareProfessional(HealthcareProfessionalType accountableHealthcareProfessional) {
+        assertNotNull(accountableHealthcareProfessional);
+        verifyTimeStampType(accountableHealthcareProfessional.getAuthorTime(), false);
+        assertNotNull(accountableHealthcareProfessional.getHealthcareProfessionalHSAId());
+        assertNotNull(accountableHealthcareProfessional.getHealthcareProfessionalName());
+        verifyOrgUnit(accountableHealthcareProfessional.getHealthcareProfessionalOrgUnit());
+
+        assertNull(accountableHealthcareProfessional.getHealthcareProfessionalRoleCode());
+
+        // FIXME: According to spec (TKB) these 2 are optional för HealthcareProfessionalType, but mandatory in responseType.
+        assertNull(accountableHealthcareProfessional.getHealthcareProfessionalCareGiverHSAId());
+        assertNull(accountableHealthcareProfessional.getHealthcareProfessionalCareUnitHSAId());
+    }
+
+    private void verifyOrgUnit(OrgUnitType healthcareProfessionalOrgUnit) {
+        assertNotNull(healthcareProfessionalOrgUnit);
+        assertNotNull(healthcareProfessionalOrgUnit.getOrgUnitEmail());
+        assertNotNull(healthcareProfessionalOrgUnit.getOrgUnitAddress());
+        assertNotNull(healthcareProfessionalOrgUnit.getOrgUnitName());
+        assertNull(healthcareProfessionalOrgUnit.getOrgUnitLocation());
+        assertNotNull(healthcareProfessionalOrgUnit.getOrgUnitTelecom());
+    }
+
+
+    private void verifyCareContactBody(CareContactBodyType careContactBody) {
+        assertNotNull(careContactBody.getCareContactCode());
+        assertTrue(1 <= careContactBody.getCareContactCode() && 5 >= careContactBody.getCareContactCode());
+        assertNull(careContactBody.getCareContactReason());
+        assertNotNull(careContactBody.getCareContactStatus());
+        assertTrue(1 <= careContactBody.getCareContactStatus() && 5 >= careContactBody.getCareContactStatus());
+
+        verifyOrgUnit(careContactBody.getCareContactOrgUnit());
+
+        assertNotNull(careContactBody.getCareContactTimePeriod());
+
+        verifyTimeStampType(careContactBody.getCareContactTimePeriod().getStart(), false);
+        verifyTimeStampType(careContactBody.getCareContactTimePeriod().getEnd(), true);
+    }
+
+    private void verifyTimeStampType(String timestamp, boolean nullable) {
+        if (!nullable) {
+            assertNotNull(timestamp);
+        }
+        if (timestamp != null) {
+            try {
+                timeStampFormatter.parse(timestamp);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
