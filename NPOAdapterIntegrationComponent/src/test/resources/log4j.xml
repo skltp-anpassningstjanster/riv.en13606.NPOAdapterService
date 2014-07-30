@@ -39,7 +39,11 @@
 	
 	<logger name="org.apache.sshd">
 		<level value="ERROR" />
-	</logger>	
+	</logger>
+
+    <logger name="org.apache.cxf">
+        <level value="DEBUG" />
+    </logger>
 
     <logger name="org.apache.activemq.transport.failover.FailoverTransport">
         <level value="DEBUG" />

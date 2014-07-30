@@ -102,13 +102,13 @@ public class CareContactsMapper {
             for (final ITEM item : ((ENTRY) content).getItems()) {
                 switch (item.getMeaning().getCode()) {
                     case "vko-vko-typ":
-                        bodyType.setCareContactCode(ContactCodes.map.rget(getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactCode(ContactCodes.map.code(getSTValue((ELEMENT) item)));
                         break;
                     case "vko-vko-ors":
                         bodyType.setCareContactReason(getSTValue((ELEMENT) item));
                         break;
                     case "vko-vko-sta":
-                        bodyType.setCareContactStatus(ContactStatus.map.rget(getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactStatus(ContactStatus.map.code(getSTValue((ELEMENT) item)));
                         break;
                 }
 
@@ -203,6 +203,10 @@ public class CareContactsMapper {
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
             }
         }
+
+        // FIXME: Missing HSAIds have to be validated!
+        // professionalType.setHealthcareProfessionalCareGiverHSAId();
+        // professionalType.setHealthcareProfessionalCareUnitHSAId();
 
         professionalType.setHealthcareProfessionalOrgUnit(mapOrgUnit(demographics, composition.getComposer().getHealthcareFacility().getExtension()));
 

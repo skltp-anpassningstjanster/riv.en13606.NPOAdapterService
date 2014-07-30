@@ -83,6 +83,7 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
+
     <wsdl:service name='RIV13606REQUEST_EHR_EXTRACT_Service'>
         <wsdl:port name='RIV13606REQUEST_EHR_EXTRACT_Port' binding='tns:RIV13606REQUEST_EHR_EXTRACT_Binding'>
             <soap:address location='http://tempuri.org' />

@@ -22,14 +22,11 @@ package se.skl.skltpservices.npoadapter.test;
 import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
 
 /**
- * Created by Peter on 2014-07-29.
+ * SOI toolkit embedded test mule server.
  */
 public class MuleServer {
-
-    public static final String MULE_SERVER_ID = "NPOAdapterIntegrationComponent";
-
     //
     public static void main(String[] args) throws Exception {
-        new StandaloneMuleServer(MULE_SERVER_ID, false, true).run();
+        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true).run();
     }
 }

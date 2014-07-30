@@ -20,7 +20,9 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 /**
- * Created by Peter on 2014-07-29.
+ * Contact status.
+ *
+ * @author Peter
  */
 public class ContactStatus extends AbstarctCodeMapper<Integer, String> {
     public static ContactStatus map = new ContactStatus();
@@ -33,11 +35,11 @@ public class ContactStatus extends AbstarctCodeMapper<Integer, String> {
         map.add(5, "Avslutad");
     }
 
-    public String get(final Integer key) {
-        return super.get(key, "Ej påbörjad");
+    public String text(final Integer key) {
+        return super.value(key, "Ej påbörjad");
     }
 
-    public Integer rget(final String key) {
-        return super.rget(key, 1);
+    public Integer code(final String key) {
+        return super.key(key, 1);
     }
 }

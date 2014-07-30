@@ -25,6 +25,7 @@ import org.junit.Test;
 import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
 import se.rivta.clinicalprocess.logistics.logistics.v2.*;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -47,32 +48,21 @@ public class CareContactsMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
-        final JAXBContext context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
-        final Unmarshaller unmarshaller = context.createUnmarshaller();
-        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(CareContactsMapperTest.class.getResourceAsStream("/CareContacts_SSEN13606-2.1.1.xml"));
-        ehrextract = root.getValue();
+        ehrextract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
     }
 
     // Make it easy to dump the resulting response after map (for dev purposes only)
     @XmlRootElement
     static class Root {
-       @XmlElement
-       private GetCareContactsResponseType type;
+        @XmlElement
+        private GetCareContactsResponseType type;
     }
 
     //
-    private void dump(GetCareContactsResponseType responseType) {
-        final JAXBContext context;
-        try {
-            context = JAXBContext.newInstance(Root.class);
-            Root root = new Root();
-            root.type = responseType;
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(root, System.out);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+    private void dump(final GetCareContactsResponseType responseType) {
+        Root root = new Root();
+        root.type = responseType;
+        Util.dump(root);
     }
 
 
@@ -82,7 +72,7 @@ public class CareContactsMapperTest {
         GetCareContactsResponseType responseType = mapper.map(ehrextract);
         assertNotNull(responseType);
 
-        // dump(responseType);
+        dump(responseType);
 
         assertNotNull(responseType.getCareContact());
         assertEquals(4, responseType.getCareContact().size());
@@ -142,7 +132,7 @@ public class CareContactsMapperTest {
 
         verifyTimeStampType(careContactBody.getCareContactTimePeriod().getStart(), false);
         verifyTimeStampType(careContactBody.getCareContactTimePeriod().getEnd(), true);
-     }
+    }
 
     private void verifyTimeStampType(String timestamp, boolean nullable) {
         if (!nullable) {

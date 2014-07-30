@@ -20,10 +20,11 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 /**
- * Created by Peter on 2014-07-29.
+ * Contact codes.
+ *
+ * @author Peter
  */
 public class ContactCodes extends AbstarctCodeMapper<Integer, String> {
-
     public static ContactCodes map = new ContactCodes();
 
     static {
@@ -34,11 +35,11 @@ public class ContactCodes extends AbstarctCodeMapper<Integer, String> {
         map.add(5, "Annan");
     }
 
-    public String get(final Integer key) {
-        return super.get(key, "Annan");
+    public String text(final Integer key) {
+        return super.value(key, "Annan");
     }
 
-    public Integer rget(final String key) {
-        return super.rget(key, 5);
+    public Integer code(final String key) {
+        return super.key(key, 5);
     }
 }

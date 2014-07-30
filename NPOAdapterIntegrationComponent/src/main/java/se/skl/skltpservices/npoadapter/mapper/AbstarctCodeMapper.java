@@ -22,18 +22,20 @@ package se.skl.skltpservices.npoadapter.mapper;
 import java.util.HashMap;
 
 /**
- * Created by Peter on 2014-07-29.
+ * Abstract code (key) to value mapper (tuples) with reverse index.
+ *
+ * @author Peter
  */
 public abstract class AbstarctCodeMapper<K, V> {
     private HashMap<K, V> map = new HashMap<K, V>();
     private HashMap<V, K> reverseMap = new HashMap<V, K>();
 
-    public void add(K key, V value) {
+    protected void add(K key, V value) {
         map.put(key, value);
         reverseMap.put(value, key);
     }
 
-    public V get(K key, V defaultValue) {
+    protected V value(K key, V defaultValue) {
         if (key == null) {
             return defaultValue;
         }
@@ -41,7 +43,7 @@ public abstract class AbstarctCodeMapper<K, V> {
         return (value == null) ? defaultValue : value;
     }
 
-    public K rget(V key, K defaultValue) {
+    protected K key(V key, K defaultValue) {
         if (key == null) {
             return defaultValue;
         }
