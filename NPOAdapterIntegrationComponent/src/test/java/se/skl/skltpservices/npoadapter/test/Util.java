@@ -33,7 +33,7 @@ public class Util {
     public static final String CARECONTACS_TEST_FILE = "/data/CareContacts_SSEN13606-2.1.1.xml";
 
 
-    // Make it easy to dump the resulting response after map (for dev purposes only)
+    // Make it easy to dump the resulting response after createTS (for dev purposes only)
     @XmlRootElement
     static class Root {
         @XmlElement

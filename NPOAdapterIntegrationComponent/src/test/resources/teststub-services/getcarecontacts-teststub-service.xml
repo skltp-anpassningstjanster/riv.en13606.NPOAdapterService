@@ -7,20 +7,20 @@
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
-    <flow name="ehrextract-teststub-flow" >
+    <flow name="getcarecomtacts-teststub-flow" >
 
-        <inbound-endpoint address="${ENDPOINT_EHR_EXTRACT_STUB}"
+        <inbound-endpoint address="${ENDPOINT_GETCARECONTACTS_STUB}"
                           connector-ref="soitoolkit-http-connector"/>
         <!--
         <custom-transformer class="TestLogger"/>
         -->
 
         <cxf:jaxws-service
-                serviceClass="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"
-                wsdlLocation="classpath:/RIV13606.wsdl" />
+                serviceClass="se.skl.skltpservices.npoadapter.test.stub.GetCareContactsWS"
+                wsdlLocation="classpath:/interactions/GetCareContactsInteraction/GetCareContactsInteraction_2.0_RIVTABP21.wsdl" />
 
         <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"  />
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.GetCareContactsWS"  />
         </component>
     </flow>
 </mule>

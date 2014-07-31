@@ -51,7 +51,7 @@ public class CareContactsMapperTest {
         ehrextract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
     }
 
-    // Make it easy to dump the resulting response after map (for dev purposes only)
+    // Make it easy to dump the resulting response after createTS (for dev purposes only)
     @XmlRootElement
     static class Root {
         @XmlElement

@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.test.Util;
 
@@ -31,6 +33,9 @@ import javax.jws.WebService;
 @WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service", endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType", portName = "RIV13606REQUEST_EHR_EXTRACT_Port", targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
+    //
+    static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
+
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
         return null;
@@ -38,6 +43,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTRequestType request) {
+        log.info("call received: ");
         final EHREXTRACT ehrExtract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
         final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
 

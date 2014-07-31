@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
+import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsType;
 import se.rivta.clinicalprocess.logistics.logistics.v2.*;
 import se.rivta.en13606.ehrextract.v11.*;
 
@@ -33,6 +34,13 @@ import java.util.List;
  * @author Peter
  */
 public class CareContactsMapper {
+
+    public static final CD MEANING_VKO = new CD();
+    static {
+        MEANING_VKO.setCodeSystem("1.2.752.129.2.2.2.1");
+        MEANING_VKO.setCode("vko");
+    }
+
 
     /**
      * Maps from EHR_EXTRACT (vko) to GetCareContactsResponseType.
@@ -56,6 +64,69 @@ public class CareContactsMapper {
         }
 
         return responseType;
+    }
+
+    /**
+     * Maps from GetCareContacsRequestType to EHR_EXTRACT request.
+     */
+    public RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType) {
+        final RIV13606REQUESTEHREXTRACTRequestType targetRequest = new RIV13606REQUESTEHREXTRACTRequestType();
+        targetRequest.setMaxRecords(map(500));
+        targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
+        targetRequest.getMeanings().add(MEANING_VKO);
+        targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));
+        // FIXME: get real hsa_id
+        targetRequest.getParameters().add(createParameter("hsa_id", "DUMMY-TEST"));
+        return targetRequest;
+    }
+
+    protected ParameterType createParameter(String name, String value) {
+        assert (name != null) && (value != null);
+        final ParameterType parameterType = new ParameterType();
+        parameterType.setName(createST(name));
+        parameterType.setValue(createST(value));
+        return parameterType;
+    }
+
+    protected IVLTS map(final DatePeriodType datePeriodType) {
+        if (datePeriodType == null) {
+            return null;
+        }
+        final IVLTS value = new IVLTS();
+        value.setLow(createTS(datePeriodType.getStart()));
+        value.setHigh(createTS(datePeriodType.getEnd()));
+        return value;
+    }
+
+    protected ST createST(final String value) {
+        if (value == null) {
+            return null;
+        }
+        final ST st = new ST();
+        st.setValue(value);
+        return st;
+    }
+
+    protected TS createTS(final String value) {
+        if (value == null) {
+            return null;
+        }
+        final TS ts = new TS();
+        ts.setValue(value);
+        return ts;
+    }
+
+    protected INT map(final int n) {
+        final INT value = new INT();
+        value.setValue(n);
+        return value;
+    }
+
+    protected II map(final PersonIdType personIdType) {
+        final II value= new II();
+        value.setRoot(personIdType.getType());
+        value.setExtension(personIdType.getId());
+        return value;
     }
 
     /**
@@ -89,7 +160,7 @@ public class CareContactsMapper {
     /**
      * Maps contact body information.
      *
-     * @param ehrExtract the extract to map from.
+     * @param ehrExtract the extract to createTS from.
      * @param compositionIndex the actual composition in the list.
      * @return the target body information.
      */
