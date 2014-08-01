@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        ">
+    <flow name="tak-teststub-flow" >
+
+        <http:inbound-endpoint address="${ENDPOINT_TAKVAGVAL_STUB}"
+                          connector-ref="soitoolkit-http-connector" method="GET"/>
+
+         <!-- TBD, just a syntax placeholder -->
+        <http:static-resource-handler resourceBase="classpath:/" defaultFile="tak.xml" />
+
+    </flow>
+</mule>

@@ -32,18 +32,21 @@ import javax.xml.stream.XMLStreamReader;
 import java.util.HashMap;
 
 /**
- * Abstracts all mapping implementations.
+ * Abstracts all @{link Mapper} implementations.
  *
  * @author Peter
  */
 public abstract class AbstractMapper {
+
+    // log
     static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
 
+    // context
     private static final JaxbUtil jaxb = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
-
     static {
         map.put("GetCareContacts", new CareContactsMapper());
     }

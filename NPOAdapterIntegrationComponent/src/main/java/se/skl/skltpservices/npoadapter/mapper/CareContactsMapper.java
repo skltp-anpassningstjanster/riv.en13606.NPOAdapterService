@@ -26,7 +26,9 @@ import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.ObjectFac
 import se.rivta.clinicalprocess.logistics.logistics.v2.*;
 import se.rivta.en13606.ehrextract.v11.*;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 
@@ -45,10 +47,18 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         MEANING_VKO.setCode("vko");
     }
 
-    private static final JaxbUtil jaxbRequest = new JaxbUtil(GetCareContactsType.class);
-    private static final JaxbUtil jaxbResponse = new JaxbUtil(GetCareContactsType.class);
+    private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    private static final JAXBContext jaxbTest;
+
+    static {
+        try {
+            jaxbTest = JAXBContext.newInstance(GetCareContactsType.class);
+        } catch (JAXBException e ) {
+            throw new IllegalStateException(e);
+        }
+    }
 
 
     @Override
@@ -92,7 +102,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     /**
      * Maps from GetCareContacsRequestType to EHR_EXTRACT request.
      */
-    public RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType) {
+    protected RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType) {
         final RIV13606REQUESTEHREXTRACTRequestType targetRequest = new RIV13606REQUESTEHREXTRACTRequestType();
         targetRequest.setMaxRecords(map(500));
         targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
@@ -106,7 +116,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     //
     protected GetCareContactsType unmarshal(final XMLStreamReader reader) {
         try {
-            return  (GetCareContactsType) jaxbRequest.unmarshal(reader);
+            return  (GetCareContactsType) jaxb.unmarshal(reader);
         } finally {
             close(reader);
         }
@@ -115,7 +125,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     protected String marshal(final GetCareContactsResponseType response) {
         final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(response);
-        return jaxbResponse.marshal(el);
+        return jaxb.marshal(el);
     }
 
 
@@ -266,7 +276,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     }
 
     //
-    protected <T> T firstItem(List<T> list) {
+    protected <T> T firstItem(final List<T> list) {
         return (list.size() == 0) ? null : list.get(0);
     }
 

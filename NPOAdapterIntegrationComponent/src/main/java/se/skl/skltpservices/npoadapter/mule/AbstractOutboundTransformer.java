@@ -29,14 +29,29 @@ import se.skl.skltpservices.npoadapter.mapper.Mapper;
 import javax.xml.namespace.QName;
 
 /**
- * Created by Peter on 2014-08-01.
+ * Abstracts outbound transformers. <p/>
+ *
+ * Provides a method to lookup a valid {@link se.skl.skltpservices.npoadapter.mapper.Mapper} implementation.
+ *
+ * @author Peter
  */
 public abstract class AbstractOutboundTransformer extends AbstractMessageTransformer {
     static final Logger log = LoggerFactory.getLogger(AbstractOutboundTransformer.class);
 
     static final String CXF_OPERATION = "cxf_operation";
 
-
+    /**
+     * Returns the actual mapper implementation if any can be found. <p/>
+     *
+     * The CXF message invocation property cxf_operation (QName) is expected, and the local part is used
+     * as key to locate the actual mapper implementation.
+     *
+     * @see javax.xml.namespace.QName#getLocalPart()
+     *
+     * @param message the mule message.
+     * @return the mapper.
+     * @throws java.lang.IllegalStateException when no mapper can be found.
+     */
     protected Mapper getMapper(final MuleMessage message) {
         log.debug("Retrieve the actual (SOAP) operation through the CXF message invocation property: " + CXF_OPERATION);
         final QName operation = message.getInvocationProperty(CXF_OPERATION);

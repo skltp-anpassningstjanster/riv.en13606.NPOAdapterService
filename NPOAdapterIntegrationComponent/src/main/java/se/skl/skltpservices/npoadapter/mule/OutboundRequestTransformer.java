@@ -25,7 +25,12 @@ import org.mule.api.transformer.TransformerException;
 import javax.xml.stream.XMLStreamReader;
 
 /**
- * Created by Peter on 2014-07-31.
+ * Transforms standard RIV Service Contract requests from consumers to a corresponding EHR_EXTRACT request. <p/>
+ *
+ * @see {@link se.skl.skltpservices.npoadapter.mapper.AbstractMapper}
+ *
+ * @author Peter
+ *
  */
 public class OutboundRequestTransformer extends AbstractOutboundTransformer {
 

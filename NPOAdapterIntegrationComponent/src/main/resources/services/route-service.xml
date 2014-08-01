@@ -11,30 +11,10 @@
 
     <flow name="outbound-route-flow" >
 
-        <!--
-        <custom-transformer class="se.skl.tp.vp.vagvalrouter.CheckSenderIdTransformer" doc:name="Check SenderId exist in incoming http request, put in session variable">
-            <spring:property name="senderIdPropertyName" value="${VAGVALROUTER_SENDERID}" />
-            <spring:property name="whiteList" value="${IP_WHITE_LIST}" />
-            <spring:property name="vpInstanceId" value="${VP_INSTANCE_ID}" />
-            <spring:property name="senderIpAdressHttpHeader" value="${VAGVALROUTER_SENDER_IP_ADRESS_HTTP_HEADER}"/>
-        </custom-transformer>
-        -->
-
-        <!-- Save the http header x-rivta-original-serviceconsumer-hsaid in session-property originalServiceconsumerHsaid -->
-        <set-session-variable variableName="originalServiceconsumerHsaid" value="#[message.inboundProperties.get('x-rivta-original-serviceconsumer-hsaid')]" />
-
-
-        <!--
-        <transformer ref="rivTransformer" />
-        -->
-
         <cxf:proxy-client payload="body" />
 
         <custom-processor class="se.skl.skltpservices.npoadapter.mule.OutboundRouter" >
-            <!-- Default value for response timeout is set in VagvalRouter -->
             <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
-            <!-- Value for HTTP header x-vp-instance-id -->
-            <spring:property name="vpInstanceId" value="${VP_INSTANCE_ID}" />
         </custom-processor>
 
     </flow>
