@@ -29,6 +29,7 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.util.HashMap;
 
 /**
  * Abstracts all mapping implementations.
@@ -40,10 +41,12 @@ public abstract class AbstractMapper {
 
     private static final JaxbUtil jaxb = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
     private static final ObjectFactory objectFactory = new ObjectFactory();
-    private static final String GETCARECONTACTS = "GetCareContacts";
 
-    // mappers
-    private static final CareContactsMapper careContactsMapper = new CareContactsMapper();
+    private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
+
+    static {
+        map.put("GetCareContacts", new CareContactsMapper());
+    }
 
     /**
      * Returns the actual mapper instance by the name of the (inbound SOAP) service operation.
@@ -55,13 +58,11 @@ public abstract class AbstractMapper {
     public static Mapper getInstance(String operation) {
         assert operation != null;
         log.debug("Lookup mapper for operation: \"" + operation + "\"");
-        switch (operation) {
-            case GETCARECONTACTS:
-                return careContactsMapper;
-            default:
-                break;
+        final Mapper mapper = map.get(operation);
+        if (mapper == null) {
+            throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + operation+ "\"");
         }
-        throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + operation+ "\"");
+        return mapper;
     }
 
     //
@@ -83,8 +84,8 @@ public abstract class AbstractMapper {
     protected void close(final XMLStreamReader reader) {
         try {
             reader.close();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
+        } catch (XMLStreamException | NullPointerException e) {
+            ;
         }
     }
 }
