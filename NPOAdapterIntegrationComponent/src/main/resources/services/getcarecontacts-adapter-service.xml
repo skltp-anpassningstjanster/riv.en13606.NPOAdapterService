@@ -18,11 +18,7 @@
                            service="GetCareContactsResponderService"
                            wsdlLocation="classpath:/interactions/GetCareContactsInteraction/GetCareContactsInteraction_2.0_RIVTABP21.wsdl" />
 
-        <logger message="***before*** #[message.payload]" level="INFO" />
-
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
-
-        <logger message="***after*** #[message.payload]" level="INFO" />
 
         <flow-ref name="outbound-route-flow" />
 

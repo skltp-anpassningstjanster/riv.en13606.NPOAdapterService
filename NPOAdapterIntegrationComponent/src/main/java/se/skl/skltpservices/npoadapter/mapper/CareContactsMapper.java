@@ -19,11 +19,15 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
 import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsType;
+import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.ObjectFactory;
 import se.rivta.clinicalprocess.logistics.logistics.v2.*;
 import se.rivta.en13606.ehrextract.v11.*;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 
 /**
@@ -33,13 +37,32 @@ import java.util.List;
  *
  * @author Peter
  */
-public class CareContactsMapper {
+public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     public static final CD MEANING_VKO = new CD();
     static {
         MEANING_VKO.setCodeSystem("1.2.752.129.2.2.2.1");
         MEANING_VKO.setCode("vko");
     }
+
+    private static final JaxbUtil jaxbRequest = new JaxbUtil(GetCareContactsType.class);
+    private static final JaxbUtil jaxbResponse = new JaxbUtil(GetCareContactsType.class);
+    private static final ObjectFactory objectFactory = new ObjectFactory();
+
+
+
+    @Override
+    public String mapResponse(XMLStreamReader reader) {
+        final RIV13606REQUESTEHREXTRACTResponseType response = unmarshalEHRResponse(reader);
+        return marshal(map(response.getEhrExtract().get(0)));
+    }
+
+    @Override
+    public String mapRequest(XMLStreamReader reader) {
+        final GetCareContactsType request = unmarshal(reader);
+        return marshalEHRRequest(map(request));
+    }
+
 
 
     /**
@@ -48,7 +71,7 @@ public class CareContactsMapper {
      * @param ehrExtract the EHR_EXTRACT XML Java bean.
      * @return the corresponding {@link se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType} response type
      */
-    public GetCareContactsResponseType map(final EHREXTRACT ehrExtract) {
+    protected GetCareContactsResponseType map(final EHREXTRACT ehrExtract) {
 
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
@@ -79,6 +102,22 @@ public class CareContactsMapper {
         targetRequest.getParameters().add(createParameter("hsa_id", "DUMMY-TEST"));
         return targetRequest;
     }
+
+    //
+    protected GetCareContactsType unmarshal(final XMLStreamReader reader) {
+        try {
+            return  (GetCareContactsType) jaxbRequest.unmarshal(reader);
+        } finally {
+            close(reader);
+        }
+    }
+
+
+    protected String marshal(final GetCareContactsResponseType response) {
+        final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(response);
+        return jaxbResponse.marshal(el);
+    }
+
 
     protected ParameterType createParameter(String name, String value) {
         assert (name != null) && (value != null);
@@ -337,5 +376,55 @@ public class CareContactsMapper {
             mapAddress(orgUnitType, organisation);
         }
         return orgUnitType;
+    }
+
+    /**
+     * Contact codes.
+     *
+     * @author Peter
+     */
+    public static class ContactCodes extends AbstarctCodeMapper<Integer, String> {
+        public static ContactCodes map = new ContactCodes();
+
+        static {
+            map.add(1, "Besök");
+            map.add(2, "Telefon");
+            map.add(3, "Vårdtillfälle");
+            map.add(4, "Dagsjukvård");
+            map.add(5, "Annan");
+        }
+
+        public String text(final Integer key) {
+            return super.value(key, "Annan");
+        }
+
+        public Integer code(final String key) {
+            return super.key(key, 5);
+        }
+    }
+
+    /**
+     * Contact status.
+     *
+     * @author Peter
+     */
+    public static class ContactStatus extends AbstarctCodeMapper<Integer, String> {
+        public static ContactStatus map = new ContactStatus();
+
+        static {
+            map.add(1, "Ej påbörjad");
+            map.add(2, "Inställd");
+            map.add(3, "Pågående");
+            map.add(4, "Avbruten");
+            map.add(5, "Avslutad");
+        }
+
+        public String text(final Integer key) {
+            return super.value(key, "Ej påbörjad");
+        }
+
+        public Integer code(final String key) {
+            return super.key(key, 1);
+        }
     }
 }

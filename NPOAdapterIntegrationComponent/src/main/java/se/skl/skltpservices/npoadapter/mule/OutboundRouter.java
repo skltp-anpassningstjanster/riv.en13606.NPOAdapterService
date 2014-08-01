@@ -39,7 +39,7 @@ public class OutboundRouter extends AbstractRecipientList {
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
-            List<Object> route = Collections.singletonList(getRoute());
+            final List<Object> route = Collections.singletonList(getRoute());
             log.debug("route: " + route.get(0));
             return route;
         } catch (Throwable e) {

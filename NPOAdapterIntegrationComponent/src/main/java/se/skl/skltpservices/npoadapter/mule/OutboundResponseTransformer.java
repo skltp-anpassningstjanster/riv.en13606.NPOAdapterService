@@ -21,36 +21,19 @@ package se.skl.skltpservices.npoadapter.mule;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
-import org.mule.transformer.AbstractMessageTransformer;
-import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsType;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.skl.skltpservices.npoadapter.mapper.CareContactsMapper;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamReader;
 
 /**
  * Created by Peter on 2014-07-31.
  */
-public class OutboundResponseTransformer extends AbstractMessageTransformer {
-
-    private static final JaxbUtil jaxbOut = new JaxbUtil(GetCareContactsType.class);
-    private static final JaxbUtil jaxbIn = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
-    private static final ObjectFactory objectFactory = new ObjectFactory();
-
-    private CareContactsMapper mapper = new CareContactsMapper();
+public class OutboundResponseTransformer extends AbstractOutboundTransformer {
 
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
-        final RIV13606REQUESTEHREXTRACTResponseType in = (RIV13606REQUESTEHREXTRACTResponseType) jaxbIn.unmarshal(message.getPayload());
-        return marshal(mapper.map(in.getEhrExtract().get(0)));
-    }
-
-    private String marshal(final GetCareContactsResponseType in) {
-        final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(in);
-        return jaxbOut.marshal(el);
+        if (message.getPayload() instanceof XMLStreamReader) {
+            return getMapper(message).mapResponse((XMLStreamReader) message.getPayload());
+        }
+        throw new IllegalArgumentException("NPOAdapter: Unexpected type of message payload (an XMLStreamReader was expected): " + message.getPayload());
     }
 }

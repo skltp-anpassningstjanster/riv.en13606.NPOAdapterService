@@ -19,27 +19,30 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
- * Contact status.
- *
- * @author Peter
+ * Created by Peter on 2014-08-01.
  */
-public class ContactStatus extends AbstarctCodeMapper<Integer, String> {
-    public static ContactStatus map = new ContactStatus();
+public class AbstractMapperTest {
 
-    static {
-        map.add(1, "Ej påbörjad");
-        map.add(2, "Inställd");
-        map.add(3, "Pågående");
-        map.add(4, "Avbruten");
-        map.add(5, "Avslutad");
+    @Test
+    public void testLookupMapper() {
+        final Mapper mapper = AbstractMapper.getInstance("GetCareContacts");
+        assertTrue(mapper instanceof CareContactsMapper);
     }
 
-    public String text(final Integer key) {
-        return super.value(key, "Ej påbörjad");
+
+    @Test(expected = IllegalStateException.class)
+    public void testInvalidURNWHenLookupMapper() {
+        final Mapper mapper = AbstractMapper.getInstance("no-urn");
     }
 
-    public Integer code(final String key) {
-        return super.key(key, 1);
+    @Test(expected = AssertionError.class)
+    public void testWithNull() {
+        AbstractMapper.getInstance(null);
     }
 }
