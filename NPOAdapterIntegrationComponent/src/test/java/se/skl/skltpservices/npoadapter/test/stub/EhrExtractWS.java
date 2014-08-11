@@ -30,7 +30,10 @@ import javax.jws.WebService;
 /**
  * Test stub always returning a fix response.
  */
-@WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service", endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType", portName = "RIV13606REQUEST_EHR_EXTRACT_Port", targetNamespace = "urn:riv13606:v1.1")
+@WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service",
+        endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType",
+        portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
+        targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     //

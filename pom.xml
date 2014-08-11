@@ -55,6 +55,12 @@
                <version>${project.version}</version>
              </dependency>
 
+            <dependency>
+                <groupId>se.skl.skltpservices.npoadapter</groupId>
+                <artifactId>skltp-schemas</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- soi toolkit dependencies -->
 
             <dependency>

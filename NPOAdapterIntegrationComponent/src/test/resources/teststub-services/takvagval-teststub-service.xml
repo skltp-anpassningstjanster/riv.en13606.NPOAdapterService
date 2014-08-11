@@ -11,11 +11,16 @@
         ">
     <flow name="tak-teststub-flow" >
 
-        <http:inbound-endpoint address="${ENDPOINT_TAKVAGVAL_STUB}"
-                          connector-ref="soitoolkit-http-connector" method="GET"/>
+        <inbound-endpoint address="${ENDPOINT_TAKVAGVAL_STUB}"
+                          connector-ref="soitoolkit-http-connector"/>
 
-         <!-- TBD, just a syntax placeholder -->
-        <http:static-resource-handler resourceBase="classpath:/" defaultFile="tak.xml" />
+        <cxf:jaxws-service
+                serviceClass="se.skl.skltpservices.npoadapter.test.stub.SokVagvalWS"
+                wsdlLocation="classpath:/sokvagval-info-v2.wsdl" />
+
+        <component>
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.SokVagvalWS"  />
+        </component>
 
     </flow>
 </mule>

@@ -60,14 +60,14 @@ public class OutboundRouter extends AbstractRecipientList {
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
-            final EndpointBuilder eb = getRoute();
-
+            final EndpointBuilder eb = getEndpoint("");
             final String originalServiceConsumerId = event.getMessage().getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
+
             eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId)));
 
             final List<Object> route = Collections.singletonList((Object) eb.buildOutboundEndpoint());
 
-            log.debug("route: " + route.get(0));
+            log.debug("router: " + route.get(0));
 
             return route;
         } catch (Throwable e) {
@@ -87,14 +87,15 @@ public class OutboundRouter extends AbstractRecipientList {
     }
 
     /**
-     * Returns the route. <p>
+     * Returns the router. <p>
      *
      * Also assigns a matching soitoolkit HTTPS or HTTP connector by name.
      *
+     * @param logicalAddress the logical address (service producer).
      * @return the URL (as a string) to the outbound endpoint.
      */
-    protected EndpointBuilder getRoute() {
-        final String url = getUrl();
+    protected EndpointBuilder getEndpoint(final String logicalAddress) {
+        final String url = getAddress();
 
         final EndpointBuilder eb = new EndpointURIEndpointBuilder(new URIBuilder(url, muleContext));
         eb.setResponseTimeout(responseTimeout);
@@ -126,7 +127,7 @@ public class OutboundRouter extends AbstractRecipientList {
      * @param responseTimeout the timeout in millis, 0 is none (forever).
      */
     public void setResponseTimeout(final int responseTimeout) {
-        log.info("set global response timeout to: " + responseTimeout);
+        log.info("Set global response timeout to: " + responseTimeout);
         this.responseTimeout = responseTimeout;
     }
 
@@ -135,7 +136,7 @@ public class OutboundRouter extends AbstractRecipientList {
      *
      * @return the URL.
      */
-    public String getUrl() {
+    public String getAddress() {
         return "http://localhost:11000/npoadapter/ehrextract/stub";
     }
 }

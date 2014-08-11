@@ -20,6 +20,7 @@
     <modules>
         <module>riv-schemas</module>
         <module>npo-schemas</module>
+        <module>skltp-schemas</module>
     </modules>
 
     <build>
