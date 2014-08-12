@@ -30,8 +30,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 /**
  * Created by Peter on 2014-08-12.
@@ -56,18 +54,6 @@ public class SOAPHeaderExtractor implements MessageProcessor {
         event.getMessage().setInvocationProperty("logical-address", (logicalAddress == null) ? "" : logicalAddress);
 
         return event;
-    }
-
-    @SneakyThrows
-    protected byte[] toBytes(final InputStream in) {
-        final byte[] buf = new byte[1024];
-        final ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
-
-        for (int len = 0; (len = in.read(buf)) > 0; ) {
-            os.write(buf, 0, len);
-        }
-
-        return os.toByteArray();
     }
 
     //
