@@ -20,16 +20,26 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsType;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.ObjectFactory;
-import se.rivta.clinicalprocess.logistics.logistics.v2.*;
+
+import riv.clinicalprocess.logistics.logistics._2.CVType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactType;
+import riv.clinicalprocess.logistics.logistics._2.DatePeriodType;
+import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
+import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
+import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.logistics.logistics._2.PersonIdType;
+import riv.clinicalprocess.logistics.logistics._2.TimePeriodType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamReader;
+
 import java.util.List;
 
 /**

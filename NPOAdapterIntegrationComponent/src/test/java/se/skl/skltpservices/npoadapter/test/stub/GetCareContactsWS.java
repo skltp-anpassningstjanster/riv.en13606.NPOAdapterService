@@ -19,18 +19,19 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponderInterface;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsType;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
+
+import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 
 /**
  * Created by Peter on 2014-07-30.
  */
 @WebService(serviceName = "GetCareContactsResponderService",
-        endpointInterface = "se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponderInterface",
+        endpointInterface = "riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface",
         portName = "GetCareContactsResponderPort",
         targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21")
 public class GetCareContactsWS implements GetCareContactsResponderInterface {
@@ -38,4 +39,6 @@ public class GetCareContactsWS implements GetCareContactsResponderInterface {
     public GetCareContactsResponseType getCareContacts(@WebParam(partName = "LogicalAddress", name = "LogicalAddress", targetNamespace = "urn:riv:itintegration:registry:1", header = true) String logicalAddress, @WebParam(partName = "parameters", name = "GetCareContacts", targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2") GetCareContactsType parameters) {
         return null;
     }
+
+
 }

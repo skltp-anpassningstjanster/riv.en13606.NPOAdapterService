@@ -20,16 +20,23 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.*;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
-import se.rivta.clinicalprocess.logistics.logistics.v2.*;
+
+import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactType;
+import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
+import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
+import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 

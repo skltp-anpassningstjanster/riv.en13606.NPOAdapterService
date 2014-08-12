@@ -81,7 +81,7 @@
     <!-- Don't create additional jaxb-contexts to avoid problems with implicit jaxb transformations that can't resolve what jaxb-context to use! -->
     <!-- Use ":" as a separator if jaxb-objects from more than one java package will be used by the jaxb-transformers  -->
     <mulexml:jaxb-context name="jaxbContext"
-                          packageNames="org.soitoolkit.commons.logentry.schema.v1:se.rivta.itintegration.registry.v1:se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2:se.rivta.clinicalprocess.logistics.logistics.v2:se.rivta.en13606.ehrextract.v11"/>
+                          packageNames="org.soitoolkit.commons.logentry.schema.v1:riv.itintegration.registry._1:riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2:riv.clinicalprocess.logistics.logistics._2:se.rivta.en13606.ehrextract.v11"/>
 	
 	<custom-transformer class="org.soitoolkit.commons.mule.core.ObjectToStringTransformer" name="objToStr"/>
 

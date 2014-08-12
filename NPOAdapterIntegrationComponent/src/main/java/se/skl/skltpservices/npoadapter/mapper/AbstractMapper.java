@@ -49,6 +49,7 @@ public abstract class AbstractMapper {
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
         map.put("GetCareContacts", new CareContactsMapper());
+        map.put("GetCareDocumentation", new CareDocumentationMapper());
     }
 
     /**
