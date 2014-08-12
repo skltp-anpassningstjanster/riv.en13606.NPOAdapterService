@@ -19,9 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import lombok.SneakyThrows;
-import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
 import skl.tp.vagvalsinfo.v2.*;
 
 import javax.jws.WebParam;
