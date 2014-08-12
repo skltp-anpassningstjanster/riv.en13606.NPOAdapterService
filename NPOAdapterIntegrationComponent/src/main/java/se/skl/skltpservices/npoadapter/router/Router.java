@@ -41,14 +41,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class Router implements MuleContextAware {
-    static final ScheduledExecutorService worker =
-            Executors.newSingleThreadScheduledExecutor();
+
+    static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
     static final String NAMESPCAE_PREFIX = "urn:riv:ehr:patientsummary";
 
     private URL takWSDL;
     private String takCacheFilename;
     private RouteData routeData;
-
 
     //
     public String getTakCacheFilename() {
@@ -133,9 +132,11 @@ public class Router implements MuleContextAware {
             cal.set(Calendar.MONTH, 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
         }
-        for (final int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND }) {
-            cal.set(field, 0);
-        }
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
         return cal;
     }
 
