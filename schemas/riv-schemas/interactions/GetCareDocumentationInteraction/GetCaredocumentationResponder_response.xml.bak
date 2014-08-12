@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetCareDocumentationResponse 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:core="urn:riv:ehr:patientsummary:2"
+    xmlns:codes="urn:riv:ehr:patientsummary:enums:2"
+    xmlns="urn:riv:ehr:patientsummary:GetCareDocumentationResponder:2"
+    xsi:schemaLocation="urn:riv:ehr:patientsummary:GetCareDocumentationResponder:2 file:./GetCareDocumentationResponder_2.0.xsd
+">
+    <careDocumentation>
+        <core:careDocumentationHeader>
+            <core:documentId>documentId</core:documentId>
+	        <core:sourceSystem>sourceSystemHSAid</core:sourceSystem>
+            <core:documentTitle>documentTitle</core:documentTitle>
+            <core:documentTime>20130213121419</core:documentTime>
+            <core:patientId>
+                <core:id>1212121212</core:id>
+                <core:type>1.2.752.129.2.1.3.1</core:type>
+            </core:patientId>
+            <core:author>
+                <core:authorTime>20130213121419</core:authorTime>
+                <core:authorHSAid>authorHSAid</core:authorHSAid>
+                <core:authorRoleCode>authorRoleCode</core:authorRoleCode>
+                <core:authorName>authorName</core:authorName>
+                <core:authorOrgUnitHSAid>authorOrgUnitHSAid</core:authorOrgUnitHSAid>
+                <core:authorOrgUnitName>careUnitAddress</core:authorOrgUnitName>
+                <core:authorOrgUnitAddress>careUnitAddress</core:authorOrgUnitAddress>
+                <core:careUnitHSAid>careUnitHSAid</core:careUnitHSAid>
+                <core:careGiverHSAid>careGiverHSAid</core:careGiverHSAid>
+            </core:author>
+            <core:legalAuthenticator>
+                <core:signatureTime>20130213121419</core:signatureTime>
+                <core:legalAuthenticatorHSAid>legalAuthenticatorHSAid</core:legalAuthenticatorHSAid>
+            </core:legalAuthenticator>
+            <core:approvedForPatient>false</core:approvedForPatient>
+            <core:careContactId>careContactId</core:careContactId>
+        </core:careDocumentationHeader>
+        <core:careDocumentationBody>
+            <core:clinicalDocumentNote>
+                <core:clinicalDocumentNoteCode>utr</core:clinicalDocumentNoteCode>
+                <core:clinicalDocumentNoteTitle>clinicalDocumentNoteTitle</core:clinicalDocumentNoteTitle>
+                <core:clinicalDocumentNoteText>clinicalDocumentNoteText</core:clinicalDocumentNoteText>
+            <core:/clinicalDocumentNote>
+            <core:multimediaEntry>
+                <core:id>MM1</core:id>
+                <core:mediaType>image/jpeg</core:mediaType>
+                <core:value>ZGVmYXVsdA==</core:value>
+            <core:/multimediaEntry>
+        </core:careDocumentationBody>
+    <careDocumentation>
+</GetCareDocumentationResponse>
