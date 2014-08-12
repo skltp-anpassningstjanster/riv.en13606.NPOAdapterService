@@ -41,7 +41,6 @@ public class SOAPHeaderExtractor implements MessageProcessor {
     static XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 
     static final String HEADER_EL = "Header";
-    static final String TO_EL = "To";
     static final String LOGICAL_ADDRESS_EL = "LogicalAddress";
 
     @Override
@@ -59,29 +58,31 @@ public class SOAPHeaderExtractor implements MessageProcessor {
     //
     private String extractLogicalAddress(final XMLStreamReader reader) throws XMLStreamException {
         String logicalAddress = null;
-        boolean headerFound = false;
+        boolean headerSection = false;
 
         int event = reader.getEventType();
 
-        while (reader.hasNext()) {
+        while (reader.hasNext() && (logicalAddress == null)) {
             switch (event) {
                 case XMLStreamConstants.START_ELEMENT:
-                    final String localName = reader.getLocalName();
-                    if (HEADER_EL.equals(localName)) {
-                        headerFound = true;
+                    final String startTag = reader.getLocalName();
+                    if (HEADER_EL.equals(startTag)) {
+                        headerSection = true;
                     }
                     // Don't bother about riv-version in this code
-                    if (headerFound && (TO_EL.equals(localName) || LOGICAL_ADDRESS_EL.equals(localName))) {
+                    if (headerSection && LOGICAL_ADDRESS_EL.equals(startTag)) {
                         reader.next();
                         logicalAddress = reader.getText();
                     }
                     break;
 
                 case XMLStreamConstants.END_ELEMENT:
-                    if (HEADER_EL.equals(reader.getLocalName())) {
-                        return logicalAddress;
+                    final String endTag = reader.getLocalName();
+                    if (HEADER_EL.equals(endTag)) {
+                        headerSection = false;
                     }
                     break;
+
                 default:
                     break;
             }
