@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="riv-schemas" />
     <orderEntry type="module" module-name="npo-schemas" />
     <orderEntry type="module" module-name="skltp-schemas" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.14.4" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-mule:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-xml:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />

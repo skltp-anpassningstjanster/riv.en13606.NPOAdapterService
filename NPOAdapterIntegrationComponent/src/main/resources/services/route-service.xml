@@ -13,9 +13,7 @@
 
         <cxf:proxy-client payload="body" />
 
-        <custom-processor class="se.skl.skltpservices.npoadapter.mule.OutboundRouter" >
-            <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
-        </custom-processor>
+        <processor ref="route-processor" />
 
     </flow>
 

@@ -19,64 +19,191 @@
  */
 package se.skl.skltpservices.npoadapter.router;
 
+import lombok.Synchronized;
+import lombok.extern.slf4j.Slf4j;
+import org.mule.api.MuleContext;
+import org.mule.api.context.MuleContextAware;
 import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
 import skl.tp.vagvalsinfo.v2.SokVagvalsServiceSoap11LitDocService;
+import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Peter on 2014-08-08.
  */
-public class Router {
+@Slf4j
+public class Router implements MuleContextAware {
+    static final ScheduledExecutorService worker =
+            Executors.newSingleThreadScheduledExecutor();
+    static final String NAMESPCAE_PREFIX = "urn:riv:ehr:patientsummary";
 
-    private URL endpoint;
-    private HamtaAllaVirtualiseringarResponseType routingData;
+    private URL takWSDL;
+    private String takCacheFilename;
+    private RouteData routeData;
+
 
     //
-    public String getEndpoint(final String logicalAddress) {
-        return "";
+    public String getTakCacheFilename() {
+        return takCacheFilename;
     }
 
     //
-    public void load() {
-        final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
-        setRoutingData(data);
+    public void setTakCacheFilename(String takCacheFilename) {
+        this.takCacheFilename = takCacheFilename;
     }
 
     //
-    public HamtaAllaVirtualiseringarResponseType getRoutingDataFromSource() {
-        final SokVagvalsServiceSoap11LitDocService client = new SokVagvalsServiceSoap11LitDocService(endpoint);
+    public RouteData.Route getRoute(final String logicalAddress) {
+        return getRouteData().getRoute(logicalAddress);
+    }
+
+    //
+    public void updateRoutingData() {
+        try {
+            final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
+            final RouteData routeData = toRouteData(data);
+            RouteData.save(routeData, takCacheFilename);
+            setRouteData(routeData);
+        } catch (Throwable e) {
+            log.error("NPOAdapter: Unable to get routing data from TAK", e);
+            log.info("NPOAdapter: Trying with locally stored cache: " + takCacheFilename);
+            final RouteData routeData = RouteData.load(takCacheFilename);
+            if (routeData == null) {
+                log.error("NPOAdapter: FATAL ERROR, Can't get routing data from TAK or local cache file");
+            } else {
+                setRouteData(routeData);
+            }
+        }
+    }
+
+    //
+    protected RouteData toRouteData(final HamtaAllaVirtualiseringarResponseType data) {
+        final RouteData routeData = new RouteData();
+        final Calendar now = Calendar.getInstance();
+        for (final VirtualiseringsInfoType infoType : data.getVirtualiseringsInfo()) {
+            if (isActive(now, infoType) && inNamespace(infoType.getTjansteKontrakt())) {
+                routeData.setRoute(infoType.getReceiverId(), RouteData.route(infoType.getTjansteKontrakt(), infoType.getAdress()));
+            }
+        }
+        return routeData;
+    }
+
+    //
+    protected boolean inNamespace(final String namespace) {
+        return (namespace == null) ? false : namespace.startsWith(NAMESPCAE_PREFIX);
+    }
+
+    //
+    protected boolean isActive(final Calendar time, final VirtualiseringsInfoType infoType) {
+        final Calendar from = floorDate(toDate(infoType.getFromTidpunkt()));
+        final Calendar to = ceilDate(toDate(infoType.getTomTidpunkt()));
+        return (time.after(from) && time.before(to));
+    }
+
+    /**
+     * Returns a {@link Date} date and time representation.
+     *
+     * @param cal the actual date and time.
+     * @return the {@link Date} representation.
+     */
+    protected Calendar toDate(XMLGregorianCalendar cal) {
+        if (cal != null) {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.DATE, cal.getDay());
+            c.set(Calendar.MONTH, cal.getMonth() - 1);
+            c.set(Calendar.YEAR, cal.getYear());
+            return c;
+        }
+        return null;
+    }
+
+    // truncates a date to 00:00:00
+    protected static Calendar floorDate(Calendar cal) {
+        if (cal == null) {
+            cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, 1970);
+            cal.set(Calendar.MONTH, 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+        }
+        for (final int field : new int[] { Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND }) {
+            cal.set(field, 0);
+        }
+        return cal;
+    }
+
+    // increases a date to 23:59:59
+    protected static Calendar ceilDate(Calendar cal) {
+        if (cal == null) {
+            cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, 2999);
+            cal.set(Calendar.MONTH, 12);
+            cal.set(Calendar.DAY_OF_MONTH, 31);
+        }
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        return cal;
+    }
+
+
+    //
+    protected HamtaAllaVirtualiseringarResponseType getRoutingDataFromSource() {
+        final SokVagvalsServiceSoap11LitDocService client = new SokVagvalsServiceSoap11LitDocService(getTakWSDL());
         final HamtaAllaVirtualiseringarResponseType data = client.getSokVagvalsSoap11LitDocPort().hamtaAllaVirtualiseringar(null);
         return data;
     }
 
     //
-    public void setSource(final String endpoint) {
+    public void setTakWSDL(final String takWSDL) {
         try {
-            setSource(new URL(endpoint));
+            setTakWSDL(new URL(takWSDL));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
 
     //
-    public void setSource(final URL endpoint) {
-        this.endpoint = endpoint;
+    public void setTakWSDL(final URL takWSDL) {
+        this.takWSDL = takWSDL;
     }
 
     //
-    public URL getSource() {
-        return this.endpoint;
+    public URL getTakWSDL() {
+        return this.takWSDL;
     }
 
     //
-    public synchronized void setRoutingData(final HamtaAllaVirtualiseringarResponseType routingData) {
-        this.routingData = routingData;
+    @Synchronized
+    public void setRouteData(final RouteData routeData) {
+        this.routeData = routeData;
     }
 
     //
-    public synchronized  HamtaAllaVirtualiseringarResponseType getRoutingData() {
-        return this.routingData;
+    @Synchronized
+    public RouteData getRouteData() {
+        if (this.routeData == null) {
+            updateRoutingData();
+        }
+        return this.routeData;
+    }
+
+    @Override
+    public void setMuleContext(MuleContext context) {
+        log.info("NPOAdapter: Mule context ready, schedule initialization of routing data");
+        worker.schedule(new Runnable() {
+            @Override
+            public void run() {
+                getRouteData();
+            }
+        }, 10, TimeUnit.SECONDS);
     }
 }

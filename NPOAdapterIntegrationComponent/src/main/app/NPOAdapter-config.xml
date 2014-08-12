@@ -12,7 +12,16 @@
         
      	<!-- Import services -->
         <spring:import resource="classpath:services/*-service.xml"/>
-        
+
+        <spring:bean id="router" class="se.skl.skltpservices.npoadapter.router.Router">
+            <spring:property name="takCacheFilename" value="${FILE_LOCAL_TAK_CACHE}" />
+            <spring:property name="takWSDL" value="${ENDPOINT_TAK_WSDL}" />
+        </spring:bean>
+
+        <spring:bean id="route-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundRouter">
+            <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
+            <spring:property name="router" ref="router" />
+        </spring:bean>
     </spring:beans>
 
 </mule>

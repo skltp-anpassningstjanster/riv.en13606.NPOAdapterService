@@ -20,10 +20,16 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import lombok.SneakyThrows;
+import se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType;
 import skl.tp.vagvalsinfo.v2.*;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Test stub service    .
@@ -37,13 +43,13 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
     public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(@WebParam(partName = "parameters", name = "hamtaAllaVirtualiseringar", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
         final HamtaAllaVirtualiseringarResponseType responseType = new HamtaAllaVirtualiseringarResponseType();
         final VirtualiseringsInfoType infoType = new VirtualiseringsInfoType();
-        infoType.setReceiverId("P");
-        infoType.setRivProfil("RIV-EN13606");
+        infoType.setReceiverId("SE123456-00");
+        infoType.setRivProfil("RIVEN13606");
         infoType.setTjansteKontrakt("urn:riv:ehr:patientsummary");
         infoType.setVirtualiseringsInfoId("ID");
         infoType.setAdress("http://localhost:11000/npoadapter/ehrextract/stub");
-        infoType.setFromTidpunkt(new XMLGregorianCalendarImpl());
-        infoType.setTomTidpunkt(new XMLGregorianCalendarImpl());
+        infoType.setFromTidpunkt(fromNow(-2));
+        infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
         return responseType;
     }
@@ -51,5 +57,14 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
     @Override
     public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(@WebParam(partName = "parameters", name = "hamtaAllaAnropsBehorigheter", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
         throw new IllegalArgumentException("Method is not implemneted (not valid in this context)!");
+    }
+
+    //
+    @SneakyThrows
+    protected XMLGregorianCalendar fromNow(int days) {
+        final GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+        cal.add(Calendar.DATE, days);
+        final XMLGregorianCalendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        return date;
     }
 }

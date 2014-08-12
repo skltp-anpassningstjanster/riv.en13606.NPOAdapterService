@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
+import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.slf4j.Logger;
@@ -35,8 +36,8 @@ import javax.xml.namespace.QName;
  *
  * @author Peter
  */
+@Slf4j
 public abstract class AbstractOutboundTransformer extends AbstractMessageTransformer {
-    static final Logger log = LoggerFactory.getLogger(AbstractOutboundTransformer.class);
 
     static final String CXF_OPERATION = "cxf_operation";
 
@@ -60,5 +61,4 @@ public abstract class AbstractOutboundTransformer extends AbstractMessageTransfo
         }
         return AbstractMapper.getInstance(operation.getLocalPart());
     }
-
 }

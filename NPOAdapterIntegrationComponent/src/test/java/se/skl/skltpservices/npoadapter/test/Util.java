@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.test;
 
+import lombok.SneakyThrows;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
 import javax.xml.bind.*;
@@ -32,37 +33,22 @@ public class Util {
 
     public static final String CARECONTACS_TEST_FILE = "/data/CareContacts_SSEN13606-2.1.1.xml";
 
-
-    // Make it easy to dump the resulting response after createTS (for dev purposes only)
-    @XmlRootElement
-    static class Root {
-        @XmlElement
-        private Object type;
-    }
-
-
     //
+    @SneakyThrows
     public static EHREXTRACT loadTestData(final String name) {
-        try {
-            final JAXBContext context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
-            final Unmarshaller unmarshaller;
-            unmarshaller = context.createUnmarshaller();
-            final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(name));
-            return root.getValue();
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
+        final JAXBContext context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
+        final Unmarshaller unmarshaller;
+        unmarshaller = context.createUnmarshaller();
+        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(name));
+        return root.getValue();
     }
 
+    @SneakyThrows
     public static <T> void dump(final T jaxbObject) {
         final JAXBContext context;
-        try {
-            context = JAXBContext.newInstance(jaxbObject.getClass());
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(jaxbObject, System.out);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        context = JAXBContext.newInstance(jaxbObject.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(jaxbObject, System.out);
     }
 }

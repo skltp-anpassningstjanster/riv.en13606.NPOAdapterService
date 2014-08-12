@@ -11,7 +11,9 @@
     <flow name="getcarecomtacts-adapter-flow">
 
         <inbound-endpoint address="${ENDPOINT_GETCARECONTACTS}"
-                          connector-ref="soitoolkit-http-connector"/>
+                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"/>
+
+        <custom-processor class="se.skl.skltpservices.npoadapter.mule.SOAPHeaderExtractor" />
 
         <cxf:proxy-service namespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21"
                            payload="body"
