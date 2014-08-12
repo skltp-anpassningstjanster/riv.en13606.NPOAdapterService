@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+        ">
+
+    <flow name="getcaredocument-adapter-flow">
+
+        <inbound-endpoint address="${ENDPOINT_GETCAREDOCUMENT}"
+                          connector-ref="soitoolkit-http-connector"/>
+
+        <cxf:proxy-service namespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21"
+                           payload="body"
+                           service="GetCareDocumentationResponderService"
+                           wsdlLocation="classpath:/interactions/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.0_RIVTABP21.wsdl" />
+
+        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
+
+        <flow-ref name="outbound-route-flow" />
+
+        <response>
+            <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundResponseTransformer" />
+        </response>
+
+    </flow>
+
+</mule>
