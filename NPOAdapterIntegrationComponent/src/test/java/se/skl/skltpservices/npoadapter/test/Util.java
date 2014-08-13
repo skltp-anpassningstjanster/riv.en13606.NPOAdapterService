@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Util {
 
     public static final String CARECONTACS_TEST_FILE = "/data/CareContacts_SSEN13606-2.1.1.xml";
+    public static final String CAREDOCUMENTATION_TEST_FILE = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
 
     //
     @SneakyThrows
