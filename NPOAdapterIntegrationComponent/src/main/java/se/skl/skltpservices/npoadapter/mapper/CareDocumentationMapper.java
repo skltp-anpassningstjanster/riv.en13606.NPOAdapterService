@@ -19,27 +19,245 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
+import riv.clinicalprocess.healthcond.description._2.CVType;
+import riv.clinicalprocess.healthcond.description._2.CareDocumentationBodyType;
+import riv.clinicalprocess.healthcond.description._2.CareDocumentationType;
+import riv.clinicalprocess.healthcond.description._2.ClinicalDocumentNoteType;
+import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
+import riv.clinicalprocess.healthcond.description._2.LegalAuthenticatorType;
+import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
+import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentNoteCodeEnum;
+import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentTypeCodeEnum;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import se.rivta.en13606.ehrextract.v11.AD;
+import se.rivta.en13606.ehrextract.v11.AUDITINFO;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TEL;
+import se.rivta.en13606.ehrextract.v11.TELEMAIL;
+import se.rivta.en13606.ehrextract.v11.TELPHONE;
+
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	private static final Logger log = LoggerFactory.getLogger(CareDocumentationMapper.class);
+	private static JaxbUtil jaxb = new JaxbUtil(GetCareDocumentationType.class);
+	private static final ObjectFactory objFactory = new ObjectFactory();
 	
-	private static final JaxbUtil jaxb = new JaxbUtil(CareDocumentationMapper.class);
+	private static final String UNKNOWN_VALUE = "-- UNKOWN_VALUE -- ";
 
+	public static final CD MEANING_VOO = new CD();
+    static {
+        MEANING_VOO.setCodeSystem("1.2.752.129.2.2.2.1");
+        MEANING_VOO.setCode("voo");
+    }
+    
+    private static final String SUPPORTED_ELEMENT = "voo-voo-txt";
+    
+    //For Test purpose
+    protected void setJaxbUtil(JaxbUtil jaxb) {
+    	this.jaxb = jaxb;
+    }
+	
 	@Override
 	public String mapRequest(XMLStreamReader reader) {
-		return null;
+		GetCareDocumentationType req = unmarshal(reader);
+		return marshalEHRRequest(map13606Request(req));
 	}
 
+	//TODO: Add NullPointerHandler.
 	@Override
 	public String mapResponse(XMLStreamReader reader) {
-		return null;
+		final RIV13606REQUESTEHREXTRACTResponseType resp = unmarshalEHRResponse(reader);
+		return marshal(mapResponseType(resp.getEhrExtract().get(0)));
+	}
+		
+	protected GetCareDocumentationType unmarshal(final XMLStreamReader reader) {
+        try {
+            return  (GetCareDocumentationType) jaxb.unmarshal(reader);
+        } finally {
+            close(reader);
+        }
+    }
+	
+	protected GetCareDocumentationResponseType mapResponseType(final EHREXTRACT ehrExtract) {
+		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
+		final String systemHsaId = ehrExtract.getEhrSystem().getExtension();
+		final PersonIdType person = mapPersonIdType(ehrExtract.getSubjectOfCare());
+		
+		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
+		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
+		
+		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
+			if(entity instanceof ORGANISATION) {
+				final ORGANISATION org = (ORGANISATION) entity;
+				orgs.put(org.getExtractId().getExtension(), org);
+			}
+			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
+				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
+				hps.put(hp.getExtractId().getExtension(), hp);
+			}
+		}
+		
+		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
+			final CareDocumentationType doc = new CareDocumentationType();
+			doc.setCareDocumentationHeader(mapHeaderType(comp, systemHsaId, person, orgs, hps));
+			doc.setCareDocumentationBody(mapBodyType(comp));
+			resp.getCareDocumentation().add(doc);			
+		}		
+		return resp;
 	}
 	
+	protected CareDocumentationBodyType mapBodyType(final COMPOSITION comp) {
+		final CareDocumentationBodyType type = new CareDocumentationBodyType();
+		final ClinicalDocumentNoteType note = new ClinicalDocumentNoteType();
+		type.setClinicalDocumentNote(note);
+		//Are there other supported types?
+		content_loop:
+		for(CONTENT content : comp.getContent()) {
+			if(content instanceof ENTRY) {
+				ENTRY e = (ENTRY) content;
+				//Only voo-voo-txt and is DocumentNoteCode always UTR?
+				for(ITEM item : e.getItems()) {
+					if(item instanceof ELEMENT) {
+						ELEMENT elm = (ELEMENT) item;
+						if(elm.getMeaning() != null && elm.getMeaning().getCode() != null 
+								&& elm.getMeaning().getCode().equalsIgnoreCase(SUPPORTED_ELEMENT)) {
+							note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
+							if(elm.getMeaning().getDisplayName() != null) {
+								note.setClinicalDocumentNoteTitle(elm.getMeaning().getDisplayName().getValue());
+							}
+							if(elm.getValue() instanceof ST) {
+								ST text = (ST) elm.getValue();
+								note.setClinicalDocumentNoteText(text.getValue());
+							}
+						}
+					}
+				}
+			}
+		}
+		return type;
+	}
+	
+	protected PatientSummaryHeaderType mapHeaderType(final COMPOSITION comp, final String systemHsaId, 
+				final PersonIdType person, final Map<String, ORGANISATION> orgs, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps) {
+		final PatientSummaryHeaderType header = new PatientSummaryHeaderType();
+		header.setDocumentId(comp.getRcId().getExtension());
+		header.setSourceSystemHSAid(systemHsaId);
+		header.setDocumentTitle(comp.getName().getValue());
+		//Which time is to be used? time_created on root-level or time on attestations-level
+		header.setDocumentTime(null);
+		header.setPatientId(person);
+		header.setAccountableHealthcareProfessional(mapHealtcareProfessionalType(comp.getComposer(), orgs, hps, comp.getCommittal()));
+		final LegalAuthenticatorType legal = new LegalAuthenticatorType();
+		//Only author time exists.
+		legal.setLegalAuthenticatorHSAId(UNKNOWN_VALUE);
+		legal.setLegalAuthenticatorName(UNKNOWN_VALUE);
+		legal.setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
+		header.setLegalAuthenticator(legal);
+		if(!comp.getLinks().isEmpty() && !comp.getLinks().get(0).getTargetId().isEmpty()) {
+			header.setCareContactId(comp.getLinks().get(0).getTargetId().get(0).getExtension());
+		}
+		return header;
+	}
+	
+	//author??
+	protected HealthcareProfessionalType mapHealtcareProfessionalType(final FUNCTIONALROLE composer, 
+			final Map<String, ORGANISATION> orgs, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final AUDITINFO committal) {
+		final HealthcareProfessionalType type = new HealthcareProfessionalType();
+		final String organisationKey = composer.getHealthcareFacility().getExtension();
+		final String performerKey = composer.getPerformer().getExtension();
+		//TODO: Fix
+		type.setHealthcareProfessionalHSAId(UNKNOWN_VALUE);
+		if(orgs.containsKey(organisationKey)) {
+			final ORGANISATION org = orgs.get(organisationKey);
+			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
+			final OrgUnitType orgUnitType = new OrgUnitType();
+			if(!org.getAddr().isEmpty() && !org.getAddr().get(0).getPartOrBrOrAddressLine().isEmpty()) {
+				orgUnitType.setOrgUnitAddress(org.getAddr().get(0).getPartOrBrOrAddressLine().get(0).getContent());
+				for(TEL t : org.getTelecom()) {
+					if(t instanceof TELEMAIL) {
+						orgUnitType.setOrgUnitEmail(((TELEMAIL)t).getValue());
+					}
+					if(t instanceof TELPHONE) {
+						orgUnitType.setOrgUnitTelecom(((TELPHONE)t).getValue());
+					}
+				}
+				orgUnitType.setOrgUnitHSAId(organisationKey);
+			}
+			type.setHealthcareProfessionalOrgUnit(orgUnitType);
+		}
+		if(hps.containsKey(performerKey)) {
+			final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = hps.get(performerKey);
+			if(committal != null && committal.getTimeCommitted() != null) {
+				type.setAuthorTime(committal.getTimeCommitted().getValue());
+			}
+			type.setHealthcareProfessionalCareGiverHSAId(hp.getExtractId().getExtension());
+			if(!hp.getName().isEmpty() && !hp.getName().get(0).getPart().isEmpty()) {
+				type.setHealthcareProfessionalName(hp.getName().get(0).getPart().get(0).getValue());
+			}
+			final CVType cv = new CVType();
+			if(!hp.getRole().isEmpty()) {
+				if(hp.getRole().get(0).getProfession() != null) {
+					final CD cd = hp.getRole().get(0).getProfession();
+					cv.setCode(cd.getCode());
+					cv.setCodeSystem(cd.getCodeSystem());
+				}
+			}
+			type.setHealthcareProfessionalRoleCode(cv);
+		}
+		return type;
+	}
+		
+	protected IDENTIFIEDENTITY findComposer(final List<IDENTIFIEDENTITY> composers) {
+		return composers.get(0);
+	}
+	
+	protected PersonIdType mapPersonIdType(final II elm) {
+		final PersonIdType person = new PersonIdType();
+		person.setId(elm.getExtension());
+		person.setType(elm.getRoot());
+		return person;
+	}
+	
+	protected String marshal(final GetCareDocumentationResponseType response) {
+        final JAXBElement<GetCareDocumentationResponseType> el = objFactory.createGetCareDocumentationResponse(response);
+        return jaxb.marshal(el);
+    }
+			
+	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req) {
+		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
+		type.getMeanings().add(MEANING_VOO);
+		return type;
+	}
 
 }
