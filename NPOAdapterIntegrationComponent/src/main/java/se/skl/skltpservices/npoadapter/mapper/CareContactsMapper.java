@@ -89,7 +89,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      * Maps from EHR_EXTRACT (vko) to GetCareContactsResponseType.
      *
      * @param ehrExtract the EHR_EXTRACT XML Java bean.
-     * @return the corresponding {@link se.rivta.clinicalprocess.logistics.logistics.getcarecontacts.v2.GetCareContactsResponseType} response type
+     * @return the corresponding {@link riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType} response type
      */
     protected GetCareContactsResponseType map(final EHREXTRACT ehrExtract) {
 
@@ -257,7 +257,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     }
 
     /**
-     * Maps from {@link IVLTS} to {@link se.rivta.clinicalprocess.logistics.logistics.v2.TimePeriodType}
+     * Maps from {@link IVLTS} to {@link riv.clinicalprocess.logistics.logistics._2.TimePeriodType}
      *
      * @param sessionTime the source session time.
      * @return the target time period type.

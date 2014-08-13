@@ -156,6 +156,7 @@ public class OutboundRouter extends AbstractRecipientList {
         return router;
     }
 
+
     //
     public void setRouter(Router router) {
         log.info("Set router to: " + router);

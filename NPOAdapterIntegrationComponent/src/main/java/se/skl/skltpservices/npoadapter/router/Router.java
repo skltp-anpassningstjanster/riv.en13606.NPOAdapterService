@@ -64,9 +64,20 @@ public class Router implements MuleContextAware {
         return getRouteData().getRoute(logicalAddress);
     }
 
+    /**
+     * Used by a mule flow to periodically schedule updates of the routing data cache.
+     *
+     * Checkout flow spec in file "update-tak-cache-service.xml"
+     */
+    public void updateRoutingDataScheduledEvent() {
+        log.info("NPOAdapter: Received scheduled routing data update event");
+        updateRoutingData0();
+    }
+
     //
-    public void updateRoutingData() {
+    protected void updateRoutingData0() {
         try {
+            log.info("NPOAdapter: Load routing data from TAK");
             final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
             final RouteData routeData = toRouteData(data);
             RouteData.save(routeData, takCacheFilename);
@@ -192,17 +203,18 @@ public class Router implements MuleContextAware {
     @Synchronized
     public RouteData getRouteData() {
         if (this.routeData == null) {
-            updateRoutingData();
+            updateRoutingData0();
         }
         return this.routeData;
     }
 
     @Override
     public void setMuleContext(MuleContext context) {
-        log.info("NPOAdapter: Mule context ready, schedule initialization of routing data");
+        log.info("NPOAdapter: Mule context ready, schedule pre-loading of routing data");
         worker.schedule(new Runnable() {
             @Override
             public void run() {
+                log.info("NPOAdapter: Pre-load (initialize) routing data");
                 getRouteData();
             }
         }, 10, TimeUnit.SECONDS);
