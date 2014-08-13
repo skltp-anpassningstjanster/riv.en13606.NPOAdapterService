@@ -35,10 +35,12 @@ import javax.jws.WebService;
         portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
         targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
-
     //
     static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
 
+    private static final String VKO = "vko";
+    private static final String VOO = "voo";
+    
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
         return null;
@@ -47,11 +49,22 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTRequestType request) {
         log.info("call received: ");
-        final EHREXTRACT ehrExtract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
         final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
-
-        responseType.getEhrExtract().add(ehrExtract);
-
+        switch(request.getMeanings().get(0).getCode()) {
+        case VKO:
+        	log.info("Recived VKO Request");
+        	responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
+        	break;
+        case VOO:
+        	log.info("Recived VOO Request");
+        	responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
+        	break;
+        default:
+        }
         return responseType;
+    }
+    
+    protected EHREXTRACT getTestData(final String path) {
+    	return Util.loadTestData(path);
     }
 }
