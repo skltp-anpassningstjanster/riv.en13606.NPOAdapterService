@@ -62,6 +62,9 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
             </resource>
+            <resource>
+                <directory>${basedir}/src/main/app</directory>
+            </resource>
         </resources>
 
         <plugins>
