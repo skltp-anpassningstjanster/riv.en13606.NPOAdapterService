@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
@@ -173,7 +174,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 					if(item instanceof ELEMENT) {
 						ELEMENT elm = (ELEMENT) item;
 						if(elm.getMeaning() != null && elm.getMeaning().getCode() != null 
-								&& elm.getMeaning().getCode().equalsIgnoreCase(SUPPORTED_ELEMENT)) {
+								&& StringUtils.equals(elm.getMeaning().getCode(), SUPPORTED_ELEMENT)) {
 							note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
 							if(elm.getMeaning().getDisplayName() != null) {
 								note.setClinicalDocumentNoteTitle(elm.getMeaning().getDisplayName().getValue());
