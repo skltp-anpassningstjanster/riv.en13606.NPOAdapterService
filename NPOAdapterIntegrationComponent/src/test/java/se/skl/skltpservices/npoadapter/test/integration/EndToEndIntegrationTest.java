@@ -19,19 +19,70 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
+
+
+import static org.junit.Assert.assertFalse;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.junit.Before;
 import org.junit.Test;
+
+import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 
 /**
  * Created by Peter on 2014-08-14.
  */
+@Slf4j
 public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
+	
+	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation";
+	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts";
+	
+	private static final String LOGICAL_ADDRESS = "SE123456-00";
+	private static final String INVALID_LOGICAL_ADDRESS = "XX000000-00";
 
     public EndToEndIntegrationTest() {
-        super();
+    	setDisposeContextPerClass(true);
+    }
+    
+    @Before
+    public void init() throws Exception {
+    	super.doSetUp();
     }
 
     @Test
-    public void testHappyDays() {
-
+    public void GetCareContactsSuccessTest() {
+    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
+		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
+		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
+		GetCareContactsResponderInterface service = (GetCareContactsResponderInterface) jaxWs.create();
+		GetCareContactsResponseType resp = service.getCareContacts(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareContactsType());
+		assertFalse(resp.getCareContact().isEmpty());
+    }
+    
+    @Test
+    public void GetCareDocumentationSuccessTest() {
+    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
+		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
+		jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
+		GetCareDocumentationResponderInterface service = (GetCareDocumentationResponderInterface) jaxWs.create();
+		GetCareDocumentationResponseType resp = service.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType());
+		assertFalse(resp.getCareDocumentation().isEmpty());
+    }
+    
+    @Test(expected=SOAPFaultException.class)
+    public void GetCareDocumentationRoutingExceptionTest() {
+    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
+    	jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
+    	jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
+    	GetCareDocumentationResponderInterface service = (GetCareDocumentationResponderInterface) jaxWs.create();
+    	service.getCareDocumentation(INVALID_LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType());
     }
 }
