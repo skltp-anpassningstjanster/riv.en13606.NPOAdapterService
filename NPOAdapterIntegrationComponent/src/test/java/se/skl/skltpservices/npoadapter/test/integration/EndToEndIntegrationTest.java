@@ -29,7 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mule.api.MuleEvent;
+import org.mule.construct.Flow;
+import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
@@ -42,6 +46,9 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
 @Slf4j
 public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	
+	private static final RecursiveResourceBundle rb = new RecursiveResourceBundle("NPOAdapter-config");
+	
+	//TODO: Collect Endpoints from configuration
 	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation";
 	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts";
 	
@@ -84,5 +91,12 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
     	GetCareDocumentationResponderInterface service = (GetCareDocumentationResponderInterface) jaxWs.create();
     	service.getCareDocumentation(INVALID_LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType());
+    }
+    
+    @Test
+    public void UpdateTakCacheTest() throws Exception {
+    	Flow flow = (Flow) getFlowConstruct("update-tak-cache-flow");
+    	MuleEvent event = getTestEvent("", flow);
+    	flow.process(event);
     }
 }
