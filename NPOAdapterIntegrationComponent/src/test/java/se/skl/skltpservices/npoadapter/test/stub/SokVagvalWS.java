@@ -54,7 +54,7 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
 
     @Override
     public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(@WebParam(partName = "parameters", name = "hamtaAllaAnropsBehorigheter", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
-        throw new IllegalArgumentException("Method is not implemneted (not valid in this context)!");
+        throw new IllegalArgumentException("Method is not implemented (not valid in this context)!");
     }
 
     //

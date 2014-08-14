@@ -19,6 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.dozer.DozerBeanMapper;
+import org.dozer.loader.api.BeanMappingBuilder;
+import org.dozer.loader.api.FieldDefinition;
+import org.dozer.loader.api.TypeMappingBuilder;
+import org.dozer.loader.api.TypeMappingOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
@@ -31,12 +36,88 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.HashMap;
 
+import static org.dozer.loader.api.TypeMappingOptions.*;
+
 /**
  * Abstracts all @{link Mapper} implementations.
  *
  * @author Peter
  */
 public abstract class AbstractMapper {
+
+    //
+    static DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
+
+    static {
+        final BeanMappingBuilder builder = new BeanMappingBuilder() {
+
+
+            @Override
+            protected void configure() {
+
+                typeMappingBuilder(
+                        RIV13606REQUESTEHREXTRACTRequestType.class,
+                        riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType.class,
+                        new String[] { "meanings", "parameters", "archetypeIds", "rcIds" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType.class,
+                        RIV13606REQUESTEHREXTRACTResponseType.class,
+                        new String[] { "ehrExtract", "responseDetail" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.EHREXTRACT.class,
+                        se.rivta.en13606.ehrextract.v11.EHREXTRACT.class,
+                        new String[] { "allCompositions", "criteria", "folders", "demographicExtract" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.COMPOSITION.class,
+                        se.rivta.en13606.ehrextract.v11.COMPOSITION.class,
+                        new String[] { "attestations", "otherParticipations", "content" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.ATTESTATIONINFO.class,
+                        se.rivta.en13606.ehrextract.v11.ATTESTATIONINFO.class,
+                        new String[] { "targetRcId" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.EXTRACTCRITERIA.class,
+                        se.rivta.en13606.ehrextract.v11.EXTRACTCRITERIA.class,
+                        new String[] { "archetypeIds" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.FOLDER.class,
+                        se.rivta.en13606.ehrextract.v11.FOLDER.class,
+                        new String[] { "subFolders" , "attestations", "compositionRcIds" });
+
+                typeMappingBuilder(
+                        riv.ehr.patientsummary._1.IDENTIFIEDENTITY.class,
+                        se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY.class,
+                        new String[] { "id" , "telecom" });
+            }
+
+            /** Makes a mapping and ensures private list fields are traversed during mapping. <p/>
+             *
+             * Since no set method exists we need to se accessible on private list fields.
+             */
+            TypeMappingBuilder typeMappingBuilder(Class<?> src, Class<?> dst, String[] listFields) {
+                final TypeMappingBuilder m = mapping(
+                        type(src),
+                        type(dst),
+                        TypeMappingOptions.oneWay(),
+                        mapNull(false));
+
+                // accessible makes the trick
+                for (final String field : listFields) {
+                    final FieldDefinition f = field(field).accessible();
+                    m.fields(f, f);
+                }
+                return m;
+            }
+        };
+
+        dozerBeanMapper.addMapping(builder);
+    }
 
     // log
     static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
@@ -92,4 +173,17 @@ public abstract class AbstractMapper {
             ;
         }
     }
+
+    //
+    protected riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType map(final RIV13606REQUESTEHREXTRACTRequestType ehrRequest) {
+        final riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType ehrExtractType = dozerBeanMapper.map(ehrRequest, riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType.class);
+        return ehrExtractType;
+    }
+
+    //
+    protected RIV13606REQUESTEHREXTRACTResponseType map(final riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType ehrExtractResponseType) {
+        final RIV13606REQUESTEHREXTRACTResponseType responseType = dozerBeanMapper.map(ehrExtractResponseType, RIV13606REQUESTEHREXTRACTResponseType.class);
+        return responseType;
+    }
+
 }

@@ -17,12 +17,16 @@
     <orderEntry type="module" module-name="npo-schemas" />
     <orderEntry type="module" module-name="skltp-schemas" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.14.4" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.dozer:dozer:5.5.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-mule:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-xml:0.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-schemas:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
@@ -38,9 +42,7 @@
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.3.04" level="project" />
     <orderEntry type="library" name="Maven: org.safehaus.jug:jug.osgi:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.mule:mule-core:3.3.0" level="project" />
-    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
-    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.5.3" level="project" />

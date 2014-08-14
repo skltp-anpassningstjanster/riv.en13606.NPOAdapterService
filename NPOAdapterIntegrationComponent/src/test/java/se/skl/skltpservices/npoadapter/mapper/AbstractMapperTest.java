@@ -20,7 +20,12 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.Test;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
+import se.rivta.en13606.ehrextract.v11.*;
 
+import javax.xml.stream.XMLStreamReader;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,4 +50,76 @@ public class AbstractMapperTest {
     public void testWithNull() {
         AbstractMapper.getInstance(null);
     }
+
+    @Test
+    public void testEhrRequestMapping() {
+        final RIV13606REQUESTEHREXTRACTRequestType source = new RIV13606REQUESTEHREXTRACTRequestType();
+
+        source.setSubjectOfCareId(createII());
+        source.setTimePeriod(createIVLTS());
+        source.getMeanings().add(createCD());
+        source.setMaxRecords(createINT());
+        source.getParameters().add(createParameter("enduser_assertion", "...Base64-kodat SAML-intyg..."));
+
+        AbstractMapper mapper = new AbstractMapper() {};
+
+        GetEhrExtractType target = mapper.map(source);
+
+        assertNotNull(target.getSubjectOfCareId());
+        assertEquals(Integer.valueOf(100), target.getMaxRecords().getValue());
+        assertEquals("20080101", target.getTimePeriod().getLow().getValue());
+        assertEquals("20080520", target.getTimePeriod().getHigh().getValue());
+
+        assertEquals(1, target.getMeanings().size());
+        assertEquals(1, target.getParameters().size());
+
+    }
+
+    //
+    static ParameterType createParameter(String name, String value) {
+        final ParameterType parameterType = new ParameterType();
+        parameterType.setName(createST(name));
+        parameterType.setValue(createST(name));
+
+        return parameterType;
+    }
+
+    static ST createST(String value) {
+        final ST val = new ST();
+        val.setValue(value);
+        return val;
+    }
+
+    static INT createINT() {
+        final INT val = new INT();
+
+        val.setValue(100);
+
+        return val;
+    }
+
+    static CD createCD() {
+        final CD val = new CD();
+        val.setCode("voo");
+        return val;
+    }
+
+    static IVLTS createIVLTS() {
+        final IVLTS val = new IVLTS();
+        final TS low = new TS();
+        low.setValue("20080101");
+        final TS high = new TS();
+        high.setValue("20080520");
+        val.setHigh(high);
+        val.setLow(low);
+        return val;
+    }
+
+    static II createII() {
+        final II val = new II();
+        val.setRoot("191212121212");
+        val.setExtension("1.2.752.129.2.1.3");
+        return val;
+    }
+
 }

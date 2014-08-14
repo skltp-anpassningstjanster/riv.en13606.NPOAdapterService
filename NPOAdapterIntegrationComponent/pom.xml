@@ -38,6 +38,11 @@
         </dependency>
 
         <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.soitoolkit.commons.components</groupId>
             <artifactId>soitoolkit-commons-mule</artifactId>
         </dependency>
