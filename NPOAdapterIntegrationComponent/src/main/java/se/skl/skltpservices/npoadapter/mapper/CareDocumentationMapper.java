@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
@@ -35,6 +37,7 @@ import riv.clinicalprocess.healthcond.description._2.CVType;
 import riv.clinicalprocess.healthcond.description._2.CareDocumentationBodyType;
 import riv.clinicalprocess.healthcond.description._2.CareDocumentationType;
 import riv.clinicalprocess.healthcond.description._2.ClinicalDocumentNoteType;
+import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.description._2.LegalAuthenticatorType;
 import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
@@ -58,7 +61,9 @@ import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
 import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
 import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
 import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.INT;
 import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
@@ -66,10 +71,12 @@ import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
+import se.rivta.en13606.ehrextract.v11.TS;
+import se.skl.skltpservices.npoadapter.mule.SOAPHeaderExtractor;
 
+@Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
-	private static final Logger log = LoggerFactory.getLogger(CareDocumentationMapper.class);
 	private static JaxbUtil jaxb = new JaxbUtil(GetCareDocumentationType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
 	
@@ -90,13 +97,14 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	@Override
 	public String mapRequest(XMLStreamReader reader) {
+		log.debug("Transforming Request");
 		GetCareDocumentationType req = unmarshal(reader);
 		return marshalEHRRequest(map13606Request(req));
 	}
 
-	//TODO: Add NullPointerHandler.
 	@Override
 	public String mapResponse(XMLStreamReader reader) {
+		log.debug("Transforming Response");
 		final RIV13606REQUESTEHREXTRACTResponseType resp = unmarshalEHRResponse(reader);
 		return marshal(mapResponseType(resp.getEhrExtract().get(0)));
 	}
@@ -109,9 +117,17 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         }
     }
 	
+	/**
+	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentation
+	 * @param ehrExtract subset from RIV136060REQUESTEHREXTRACT.
+	 * @return GetCareDocumentationType for marshaling.
+	 */
 	protected GetCareDocumentationResponseType mapResponseType(final EHREXTRACT ehrExtract) {
 		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
-		final String systemHsaId = ehrExtract.getEhrSystem().getExtension();
+		String systemHsaId = null;
+		if(ehrExtract.getEhrSystem() != null) {
+			systemHsaId = ehrExtract.getEhrSystem().getExtension();
+		}
 		final PersonIdType person = mapPersonIdType(ehrExtract.getSubjectOfCare());
 		
 		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
@@ -120,11 +136,15 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
 			if(entity instanceof ORGANISATION) {
 				final ORGANISATION org = (ORGANISATION) entity;
-				orgs.put(org.getExtractId().getExtension(), org);
+				if(org.getExtractId() != null) {
+					orgs.put(org.getExtractId().getExtension(), org);
+				}
 			}
 			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
 				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
-				hps.put(hp.getExtractId().getExtension(), hp);
+				if(hp.getExtractId() != null) {
+					hps.put(hp.getExtractId().getExtension(), hp);
+				}
 			}
 		}
 		
@@ -141,11 +161,13 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		final CareDocumentationBodyType type = new CareDocumentationBodyType();
 		final ClinicalDocumentNoteType note = new ClinicalDocumentNoteType();
 		type.setClinicalDocumentNote(note);
+		//TODO:
 		//Are there other supported types?
 		content_loop:
 		for(CONTENT content : comp.getContent()) {
 			if(content instanceof ENTRY) {
 				ENTRY e = (ENTRY) content;
+				//TODO:
 				//Only voo-voo-txt and is DocumentNoteCode always UTR?
 				for(ITEM item : e.getItems()) {
 					if(item instanceof ELEMENT) {
@@ -161,6 +183,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 								note.setClinicalDocumentNoteText(text.getValue());
 							}
 						}
+						break content_loop;
 					}
 				}
 			}
@@ -171,18 +194,24 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected PatientSummaryHeaderType mapHeaderType(final COMPOSITION comp, final String systemHsaId, 
 				final PersonIdType person, final Map<String, ORGANISATION> orgs, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps) {
 		final PatientSummaryHeaderType header = new PatientSummaryHeaderType();
-		header.setDocumentId(comp.getRcId().getExtension());
+		if(comp.getRcId() != null) {
+			header.setDocumentId(comp.getRcId().getExtension());
+		}
 		header.setSourceSystemHSAid(systemHsaId);
-		header.setDocumentTitle(comp.getName().getValue());
+		if(comp.getName() != null) {
+			header.setDocumentTitle(comp.getName().getValue());
+		}
 		//Which time is to be used? time_created on root-level or time on attestations-level
-		header.setDocumentTime(null);
+		header.setDocumentTime(UNKNOWN_VALUE);
 		header.setPatientId(person);
 		header.setAccountableHealthcareProfessional(mapHealtcareProfessionalType(comp.getComposer(), orgs, hps, comp.getCommittal()));
 		final LegalAuthenticatorType legal = new LegalAuthenticatorType();
 		//Only author time exists.
 		legal.setLegalAuthenticatorHSAId(UNKNOWN_VALUE);
 		legal.setLegalAuthenticatorName(UNKNOWN_VALUE);
-		legal.setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
+		if(header.getAccountableHealthcareProfessional() != null) {
+			legal.setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
+		}
 		header.setLegalAuthenticator(legal);
 		if(!comp.getLinks().isEmpty() && !comp.getLinks().get(0).getTargetId().isEmpty()) {
 			header.setCareContactId(comp.getLinks().get(0).getTargetId().get(0).getExtension());
@@ -194,11 +223,17 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected HealthcareProfessionalType mapHealtcareProfessionalType(final FUNCTIONALROLE composer, 
 			final Map<String, ORGANISATION> orgs, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final AUDITINFO committal) {
 		final HealthcareProfessionalType type = new HealthcareProfessionalType();
-		final String organisationKey = composer.getHealthcareFacility().getExtension();
-		final String performerKey = composer.getPerformer().getExtension();
+		String organisationKey = null;
+		String performerKey = null;
+		if(composer.getHealthcareFacility() != null) {
+			organisationKey = composer.getHealthcareFacility().getExtension();
+		}
+		if(composer.getPerformer() != null) {
+			performerKey = composer.getPerformer().getExtension();
+		}
 		//TODO: Fix
 		type.setHealthcareProfessionalHSAId(UNKNOWN_VALUE);
-		if(orgs.containsKey(organisationKey)) {
+		if(organisationKey != null && orgs.containsKey(organisationKey)) {
 			final ORGANISATION org = orgs.get(organisationKey);
 			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
 			final OrgUnitType orgUnitType = new OrgUnitType();
@@ -216,7 +251,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			}
 			type.setHealthcareProfessionalOrgUnit(orgUnitType);
 		}
-		if(hps.containsKey(performerKey)) {
+		if(performerKey != null && hps.containsKey(performerKey)) {
 			final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = hps.get(performerKey);
 			if(committal != null && committal.getTimeCommitted() != null) {
 				type.setAuthorTime(committal.getTimeCommitted().getValue());
@@ -238,14 +273,12 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		return type;
 	}
 		
-	protected IDENTIFIEDENTITY findComposer(final List<IDENTIFIEDENTITY> composers) {
-		return composers.get(0);
-	}
-	
 	protected PersonIdType mapPersonIdType(final II elm) {
 		final PersonIdType person = new PersonIdType();
-		person.setId(elm.getExtension());
-		person.setType(elm.getRoot());
+		if(elm != null) {
+			person.setId(elm.getExtension());
+			person.setType(elm.getRoot());
+		}
 		return person;
 	}
 	
@@ -257,7 +290,40 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
+		type.setMaxRecords(intType(500));
+		type.setSubjectOfCareId(iiType(req.getPatientId()));
+		type.setTimePeriod(IVLTSType(req.getTimePeriod()));
 		return type;
+	}
+	
+	protected INT intType(final int value) {
+		final INT _int = new INT();
+		_int.setValue(value);
+		return _int;
+	}
+	
+	protected II iiType(final PersonIdType idType) {
+		II ii = new II();
+		if(idType != null) {
+			ii.setRoot(idType.getType());
+			ii.setExtension(idType.getId());
+		}
+		return ii;
+	}
+	
+	protected IVLTS IVLTSType(final DatePeriodType datePeriod) {
+		final IVLTS ivlts = new IVLTS();
+		if(datePeriod != null) {
+			ivlts.setLow(tsType(datePeriod.getStart()));
+			ivlts.setHigh(tsType(datePeriod.getEnd()));
+		}
+		return ivlts;
+	}
+	
+	protected TS tsType(final String value) {
+		final TS ts = new TS();
+		ts.setValue(value);
+		return ts;
 	}
 
 }
