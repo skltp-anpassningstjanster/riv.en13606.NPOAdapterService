@@ -19,13 +19,12 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldDefinition;
 import org.dozer.loader.api.TypeMappingBuilder;
 import org.dozer.loader.api.TypeMappingOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import se.rivta.en13606.ehrextract.v11.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
@@ -43,6 +42,7 @@ import static org.dozer.loader.api.TypeMappingOptions.*;
  *
  * @author Peter
  */
+@Slf4j
 public abstract class AbstractMapper {
 
     //
@@ -118,9 +118,6 @@ public abstract class AbstractMapper {
 
         dozerBeanMapper.addMapping(builder);
     }
-
-    // log
-    static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
 
     // context
     private static final JaxbUtil jaxb = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
