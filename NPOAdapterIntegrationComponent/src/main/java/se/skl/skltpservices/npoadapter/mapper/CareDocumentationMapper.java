@@ -86,6 +86,8 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	private static final String TIME_ELEMENT = "voo-voo-tid";
 	private static final String TEXT_ELEMENT = "voo-voo-txt";
+	
+	private static final int MAX_ROWS = 500;
 
 	public static final CD MEANING_VOO = new CD();
     static {
@@ -302,7 +304,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
-		type.setMaxRecords(intType(500));
+		type.setMaxRecords(intType(MAX_ROWS));
 		type.setSubjectOfCareId(iiType(req.getPatientId()));
 		type.setTimePeriod(IVLTSType(req.getTimePeriod()));
 		return type;
