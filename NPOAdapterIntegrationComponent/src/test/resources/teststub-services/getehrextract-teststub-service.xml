@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+        ">
+    <flow name="getehrextract-teststub-flow" >
+
+        <inbound-endpoint address="${ENDPOINT_GET_EHR_EXTRACT_STUB}"
+                          connector-ref="soitoolkit-http-connector"/>
+
+        <cxf:jaxws-service
+                serviceClass="se.skl.skltpservices.npoadapter.test.stub.GetEhrExtractWS"
+                wsdlLocation="classpath:/interactions/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl" />
+
+        <component>
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.GetEhrExtractWS"  />
+        </component>
+    </flow>
+</mule>

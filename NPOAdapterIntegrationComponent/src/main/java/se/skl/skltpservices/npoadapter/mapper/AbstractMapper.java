@@ -85,7 +85,8 @@ public abstract class AbstractMapper {
 
             }
 
-            /** Makes a mapping and ensures private list fields are traversed during mapping.
+            /**
+             * Makes a mapping and ensures private list fields are traversed during mapping.
              * Ans also checks that the actual field exists in the destination class.  <p/>
              *
              * Since no set method exists we need to se accessible on private list fields.
@@ -97,13 +98,12 @@ public abstract class AbstractMapper {
                         mapNull(false));
 
                 // accessible makes the trick
-                // check for type
                 for (final String field : listFields) {
                     if (getAllListFields(dst).contains(field)) {
                         final FieldDefinition f = field(field).accessible();
                         m.fields(f, f);
                     } else {
-                        log.warn("Mapping mismatch detected between src " + src + " and dst " + dst + " no field " + field + " in dst class");
+                        log.warn("Mapping mismatch detected between source \"" + src.getCanonicalName() + "\" and dest \"" + dst.getCanonicalName() + "\", no list field \"" + field + "\" in dest class");
                     }
                 }
                 return m;
@@ -166,18 +166,28 @@ public abstract class AbstractMapper {
     }
 
     //
-    protected riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType map(final RIV13606REQUESTEHREXTRACTRequestType ehrRequest) {
+    protected static riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType map(final RIV13606REQUESTEHREXTRACTRequestType ehrRequest) {
         final riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType ehrExtractType = dozerBeanMapper.map(ehrRequest, riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType.class);
         return ehrExtractType;
     }
 
     //
-    protected RIV13606REQUESTEHREXTRACTResponseType map(final riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType ehrExtractResponseType) {
+    protected static RIV13606REQUESTEHREXTRACTResponseType map(final riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType ehrExtractResponseType) {
         final RIV13606REQUESTEHREXTRACTResponseType responseType = dozerBeanMapper.map(ehrExtractResponseType, RIV13606REQUESTEHREXTRACTResponseType.class);
         return responseType;
     }
 
+    //
+    public static DozerBeanMapper getDozerBeanMapper() {
+        return dozerBeanMapper;
+    }
 
+    /**
+     * Returns all {@link java.util.List} fields for any given class.
+     *
+     * @param type the input class.
+     * @return all list field names.
+     */
     private static List<String> getAllListFields(Class<?> type) {
         final List<String> fields = new ArrayList<String>();
         for (Class<?> c = type; c != null; c = c.getSuperclass()) {
@@ -197,16 +207,16 @@ public abstract class AbstractMapper {
      * @return the list of candidates.
      */
     @SneakyThrows
-    private static List<Class<?>> findCandidates(String basePackage)
+    private static List<Class<?>> findCandidates(final String basePackage)
     {
-        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+        final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        final MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
-        List<Class<?>> candidates = new ArrayList<Class<?>>(200);
-        String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+        final List<Class<?>> candidates = new ArrayList<Class<?>>(200);
+        final String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                 resolveBasePackage(basePackage) + "/" + "**/*.class";
-        Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-        for (Resource resource : resources) {
+        final Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+        for (final Resource resource : resources) {
             if (resource.isReadable()) {
                 MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                 if (isCandidate(metadataReader)) {
@@ -215,7 +225,7 @@ public abstract class AbstractMapper {
             }
         }
 
-        log.info("Found " + candidates.size() + " candidates for XML Bean doamin schema mapping");
+        log.info("Found " + candidates.size() + " XML Bean candidates for domain schema mapping in baseline package \"" + basePackage + "\"");
 
         return candidates;
     }
@@ -226,7 +236,7 @@ public abstract class AbstractMapper {
      * @param basePackage the base package name.
      * @return the resource path.
      */
-    private static String resolveBasePackage(String basePackage) {
+    private static String resolveBasePackage(final String basePackage) {
         return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
     }
 
@@ -235,10 +245,10 @@ public abstract class AbstractMapper {
      * @param metadataReader the metadataReader.
      * @return true if the class is candidate, otherwise false.
      */
-    private static boolean isCandidate(MetadataReader metadataReader)
+    private static boolean isCandidate(final MetadataReader metadataReader)
     {
         try {
-            Class a = Class.forName(metadataReader.getClassMetadata().getClassName());
+            final Class a = Class.forName(metadataReader.getClassMetadata().getClassName());
             if (!Modifier.isAbstract(a.getModifiers())
                     && a.getAnnotation(XmlType.class) != null
                     && classB(a.getSimpleName()) != null) {
@@ -262,15 +272,21 @@ public abstract class AbstractMapper {
             aName = "GetEhrExtractResponseType";
         }
         Class<?> b = null;
-        for (int i = 0; (i < B_PKGS.length && b == null); i++) {
+        for (int i = 0; (i < B_PKGS.length) && (b == null); i++) {
             b = classForName(B_PKGS[i] + aName);
         }
         if (b == null) {
-            log.warn("No b-class found for a-class when configuring Dozer XMLBean mapping between domain namespaces: " + aName);
+            log.warn("No destination (b-class) found for source \"" + aName + "\" when configuring Dozer XMLBean namespace mapping");
         }
         return b;
     }
 
+    /**
+     * Resolves a name to the actual class.
+     *
+     * @param name the class name.
+     * @return the class or null if no such class exists in classpath.
+     */
     private static Class<?> classForName(final String name) {
         try {
             return Class.forName(name);
