@@ -239,6 +239,9 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
 			final OrgUnitType orgUnitType = new OrgUnitType();
 			if(!org.getAddr().isEmpty() && !org.getAddr().get(0).getPartOrBrOrAddressLine().isEmpty()) {
+				if(org.getName() != null) {
+					orgUnitType.setOrgUnitName(org.getName().getValue());
+				}
 				orgUnitType.setOrgUnitAddress(org.getAddr().get(0).getPartOrBrOrAddressLine().get(0).getContent());
 				for(TEL t : org.getTelecom()) {
 					if(t instanceof TELEMAIL) {
