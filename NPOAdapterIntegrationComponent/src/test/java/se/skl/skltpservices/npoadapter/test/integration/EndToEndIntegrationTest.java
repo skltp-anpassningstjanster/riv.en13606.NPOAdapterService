@@ -54,9 +54,23 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	
 	private static final String LOGICAL_ADDRESS = "SE123456-00";
 	private static final String INVALID_LOGICAL_ADDRESS = "XX000000-00";
+	
+	
+	private final GetCareDocumentationResponderInterface getCareDocumentationServices;
+	private final GetCareContactsResponderInterface getCareContactsServices;
 
     public EndToEndIntegrationTest() {
     	setDisposeContextPerClass(true);
+    	
+    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
+    	
+		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
+		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
+		getCareContactsServices = (GetCareContactsResponderInterface) jaxWs.create();
+		
+		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
+		jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
+		getCareDocumentationServices = (GetCareDocumentationResponderInterface) jaxWs.create();
     }
     
     @Before
@@ -66,33 +80,27 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
     @Test
     public void GetCareContactsSuccessTest() {
-    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
-		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
-		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
-		GetCareContactsResponderInterface service = (GetCareContactsResponderInterface) jaxWs.create();
-		GetCareContactsResponseType resp = service.getCareContacts(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareContactsType());
+		GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareContact().isEmpty());
     }
     
     @Test
     public void GetCareDocumentationSuccessTest() {
-    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
-		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
-		jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
-		GetCareDocumentationResponderInterface service = (GetCareDocumentationResponderInterface) jaxWs.create();
-		GetCareDocumentationResponseType resp = service.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType());
+		GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareDocumentation().isEmpty());
     }
     
     @Test(expected=SOAPFaultException.class)
     public void GetCareDocumentationRoutingExceptionTest() {
-    	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
-    	jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
-    	jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
-    	GetCareDocumentationResponderInterface service = (GetCareDocumentationResponderInterface) jaxWs.create();
-    	service.getCareDocumentation(INVALID_LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType());
+    	getCareDocumentationServices.getCareDocumentation(INVALID_LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
     }
     
+    //TODO: When exceptionHandler is implemented verify that correct exception is thrown
+    @Test(expected=SOAPFaultException.class)
+    public void GetCareDocumentationBackEndExceptionTest() {
+    	getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
+    }
+	
     @Test
     public void UpdateTakCacheTest() throws Exception {
     	Flow flow = (Flow) getFlowConstruct("update-tak-cache-flow");

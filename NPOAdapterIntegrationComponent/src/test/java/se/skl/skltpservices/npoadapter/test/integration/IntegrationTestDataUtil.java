@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
 public final class IntegrationTestDataUtil {
 	private static final String SOURCE_SYSTEM_HSA_ID = UUID.randomUUID().toString();
@@ -31,25 +32,30 @@ public final class IntegrationTestDataUtil {
 	private static final String STRING_TEST_DATA_3 = UUID.randomUUID().toString();
 	private static final String STRING_TEST_DATA_4 = UUID.randomUUID().toString();
 	
-	public static GetCareDocumentationType createGetCareDocumentationType() {
+	public static final int TRIGGER_INFO_MESSAGE = 0;
+	public static final int TRIGGER_WARNING_MESSAGE = 1;
+	public static final int TRIGGER_ERROR_MESSAGE = 2;
+	public static final int NO_TRIGGER = 3;
+	
+	public static GetCareDocumentationType createGetCareDocumentationType(int triggerType) {
 		final GetCareDocumentationType type = new GetCareDocumentationType();
-		type.setPatientId(docPersonIdType());
+		type.setPatientId(docPersonIdType(triggerType));
 		type.setSourceSystemHSAid(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(docDatePeriodType());
 		return type;
 	}
 	
-	public static GetCareContactsType createGetCareContactsType() {
+	public static GetCareContactsType createGetCareContactsType(int triggerType) {
 		final GetCareContactsType type = new GetCareContactsType();
-		type.setPatientId(conPersonIdType());
+		type.setPatientId(conPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(conDatePeriodType());
 		return type;
 	}
 	
-	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType() {
+	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();
-		personIdType.setId(STRING_TEST_DATA_1);
+		personIdType.setId(personId(triggerType));
 		personIdType.setType(STRING_TEST_DATA_2);
 		return personIdType;
 	}
@@ -61,9 +67,9 @@ public final class IntegrationTestDataUtil {
 		return datePeriodType;
 	}
 	
-	private static riv.clinicalprocess.logistics.logistics._2.PersonIdType conPersonIdType() {
+	private static riv.clinicalprocess.logistics.logistics._2.PersonIdType conPersonIdType(int triggerType) {
 		final riv.clinicalprocess.logistics.logistics._2.PersonIdType personIdType = new riv.clinicalprocess.logistics.logistics._2.PersonIdType();
-		personIdType.setId(STRING_TEST_DATA_1);
+		personIdType.setId(personId(triggerType));
 		personIdType.setType(STRING_TEST_DATA_2);
 		return personIdType;
 	}
@@ -73,5 +79,18 @@ public final class IntegrationTestDataUtil {
 		datePeriodType.setEnd(STRING_TEST_DATA_3);
 		datePeriodType.setStart(STRING_TEST_DATA_4);
 		return datePeriodType;
+	}
+	
+	private static String personId(int triggerType) {
+		switch(triggerType) {
+		case TRIGGER_ERROR_MESSAGE:
+			return EhrExtractWS.PATIENT_ID_TRIGGER_ERROR;
+		case TRIGGER_INFO_MESSAGE:
+			return EhrExtractWS.PATIENT_ID_TRIGGER_INFO;
+		case TRIGGER_WARNING_MESSAGE:
+			return EhrExtractWS.PATIENT_ID_TRIGGER_WARNING;
+		default:
+			return STRING_TEST_DATA_1;		
+		}
 	}
 }

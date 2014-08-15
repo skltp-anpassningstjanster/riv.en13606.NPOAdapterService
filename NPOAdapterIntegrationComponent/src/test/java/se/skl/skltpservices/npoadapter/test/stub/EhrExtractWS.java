@@ -41,6 +41,13 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String VKO = "vko";
     private static final String VOO = "voo";
     
+    //Public accessible for testing.
+    public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
+    public static final String INTEGRATION_TEST_ERROR_TEXT = "This is a error message";
+    public static final String PATIENT_ID_TRIGGER_ERROR = "triggerError";
+    public static final String PATIENT_ID_TRIGGER_WARNING = "triggerWarning";
+    public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
+        
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
         return null;
@@ -48,8 +55,19 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTRequestType request) {
-        log.info("call received: ");
-        final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
+    	//See if error flow is triggered.
+    	switch(request.getSubjectOfCareId().getExtension()) {
+    	case PATIENT_ID_TRIGGER_ERROR:
+    		return createAlternativeResponse(ResponseDetailTypeCodes.E, INTEGRATION_TEST_ERROR_TEXT);
+    	case PATIENT_ID_TRIGGER_WARNING:
+    		return createAlternativeResponse(ResponseDetailTypeCodes.W, NOT_IMPLEMENTED_YET_TEXT);
+    	case PATIENT_ID_TRIGGER_INFO:
+    		return createAlternativeResponse(ResponseDetailTypeCodes.I, NOT_IMPLEMENTED_YET_TEXT);
+    	}
+    	
+    	
+    	//Return testdata
+    	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
         	log.info("Recived VKO Request");
@@ -60,11 +78,24 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         	responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
         	break;
         default:
+        	return createAlternativeResponse(ResponseDetailTypeCodes.E, NOT_IMPLEMENTED_YET_TEXT);
         }
         return responseType;
     }
     
     protected EHREXTRACT getTestData(final String path) {
     	return Util.loadEhrTestData(path);
+    }
+    
+    protected RIV13606REQUESTEHREXTRACTResponseType createAlternativeResponse(final ResponseDetailTypeCodes code, final String msg) {
+    	final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
+    	final ResponseDetailType detail = new ResponseDetailType();
+    	final ST st = new ST();
+    	final CD cd = new CD();
+    	st.setValue(msg);
+    	detail.setTypeCode(code);
+    	detail.setCode(cd);
+    	detail.setText(st);
+    	return resp;
     }
 }
