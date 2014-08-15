@@ -51,6 +51,7 @@ import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder.
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.AD;
+import se.rivta.en13606.ehrextract.v11.ANY;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -82,6 +83,9 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	private static final ObjectFactory objFactory = new ObjectFactory();
 	
 	private static final String UNKNOWN_VALUE = "-- UNKOWN_VALUE -- ";
+	
+	private static final String TIME_ELEMENT = "voo-voo-tid";
+	private static final String TEXT_ELEMENT = "voo-voo-txt";
 
 	public static final CD MEANING_VOO = new CD();
     static {
@@ -89,7 +93,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         MEANING_VOO.setCode("voo");
     }
     
-    private static final String SUPPORTED_ELEMENT = "voo-voo-txt";
     
     //For Test purpose
     protected void setJaxbUtil(JaxbUtil jaxb) {
@@ -164,32 +167,34 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		type.setClinicalDocumentNote(note);
 		//TODO:
 		//Are there other supported types?
-		content_loop:
-		for(CONTENT content : comp.getContent()) {
+		final ELEMENT txt = findElement(comp.getContent(), TEXT_ELEMENT);
+		if(txt != null) {
+			//TODO: Mapping between old and new EHR codes
+			note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
+			note.setClinicalDocumentNoteText(getTextValue(txt));
+			if(txt.getMeaning() != null && txt.getMeaning().getDisplayName() != null) {				
+				note.setClinicalDocumentNoteTitle(txt.getMeaning().getDisplayName().getValue());
+			}
+		}
+		return type;
+	}
+	
+	//TODO: Loops twice..
+	protected ELEMENT findElement(final List<CONTENT> contents, final String type) {
+		for(CONTENT content : contents) {
 			if(content instanceof ENTRY) {
 				ENTRY e = (ENTRY) content;
-				//TODO:
-				//Only voo-voo-txt and is DocumentNoteCode always UTR?
 				for(ITEM item : e.getItems()) {
 					if(item instanceof ELEMENT) {
 						ELEMENT elm = (ELEMENT) item;
-						if(elm.getMeaning() != null && elm.getMeaning().getCode() != null 
-								&& StringUtils.equals(elm.getMeaning().getCode(), SUPPORTED_ELEMENT)) {
-							note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
-							if(elm.getMeaning().getDisplayName() != null) {
-								note.setClinicalDocumentNoteTitle(elm.getMeaning().getDisplayName().getValue());
-							}
-							if(elm.getValue() instanceof ST) {
-								ST text = (ST) elm.getValue();
-								note.setClinicalDocumentNoteText(text.getValue());
-							}
+						if(elm.getMeaning() != null && StringUtils.equals(elm.getMeaning().getCode(), type)) {
+							return elm;
 						}
-						break content_loop;
 					}
 				}
 			}
 		}
-		return type;
+		return null;
 	}
 	
 	protected PatientSummaryHeaderType mapHeaderType(final COMPOSITION comp, final String systemHsaId, 
@@ -198,12 +203,15 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		if(comp.getRcId() != null) {
 			header.setDocumentId(comp.getRcId().getExtension());
 		}
-		header.setSourceSystemHSAid(systemHsaId);
+		header.setSourceSystemHSAId(systemHsaId);
 		if(comp.getName() != null) {
 			header.setDocumentTitle(comp.getName().getValue());
 		}
 		//Which time is to be used? time_created on root-level or time on attestations-level
-		header.setDocumentTime(UNKNOWN_VALUE);
+		final ELEMENT time = findElement(comp.getContent(), TIME_ELEMENT);
+		if(time != null && time.getValue() instanceof TS) {
+			header.setDocumentTime(((TS)time.getValue()).getValue());
+		}
 		header.setPatientId(person);
 		header.setAccountableHealthcareProfessional(mapHealtcareProfessionalType(comp.getComposer(), orgs, hps, comp.getCommittal()));
 		final LegalAuthenticatorType legal = new LegalAuthenticatorType();
@@ -276,7 +284,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		}
 		return type;
 	}
-		
+			
 	protected PersonIdType mapPersonIdType(final II elm) {
 		final PersonIdType person = new PersonIdType();
 		if(elm != null) {
@@ -328,6 +336,14 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		final TS ts = new TS();
 		ts.setValue(value);
 		return ts;
+	}
+	
+	protected String getTextValue(final ELEMENT elm) {
+		if(elm.getValue() instanceof ST) {
+			ST text = (ST) elm.getValue();
+			return text.getValue();
+		}
+		return null;
 	}
 
 }
