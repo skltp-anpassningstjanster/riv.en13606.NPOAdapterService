@@ -55,7 +55,7 @@ public class CareContactsMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
-        ehrextract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
+        ehrextract = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
     }
 
     // Make it easy to dump the resulting response after createTS (for dev purposes only)

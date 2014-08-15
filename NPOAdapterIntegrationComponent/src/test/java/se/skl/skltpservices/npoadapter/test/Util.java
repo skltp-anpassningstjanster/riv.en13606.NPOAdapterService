@@ -25,6 +25,7 @@ import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.OutputStream;
 
 /**
  * Created by Peter on 2014-07-30.
@@ -34,22 +35,35 @@ public class Util {
     public static final String CARECONTACS_TEST_FILE = "/data/CareContacts_SSEN13606-2.1.1.xml";
     public static final String CAREDOCUMENTATION_TEST_FILE = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
 
+
     //
     @SneakyThrows
-    public static EHREXTRACT loadTestData(final String name) {
-        final JAXBContext context = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
+    public static EHREXTRACT loadEhrTestData(final String fileName) {
+        return loadEhrTestData(fileName, "se.rivta.en13606.ehrextract.v11");
+    }
+
+
+    @SneakyThrows
+    public static EHREXTRACT loadEhrTestData(final String fileName, final String contextPath) {
+        final JAXBContext context = JAXBContext.newInstance(contextPath);
         final Unmarshaller unmarshaller;
         unmarshaller = context.createUnmarshaller();
-        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(name));
+        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(fileName));
         return root.getValue();
     }
 
-    @SneakyThrows
+
     public static <T> void dump(final T jaxbObject) {
+        dump(jaxbObject, System.out);
+    }
+
+    @SneakyThrows
+    public static <T> void dump(final T jaxbObject, OutputStream os) {
         final JAXBContext context;
         context = JAXBContext.newInstance(jaxbObject.getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(jaxbObject, System.out);
+        marshaller.marshal(jaxbObject, os);
     }
+
 }

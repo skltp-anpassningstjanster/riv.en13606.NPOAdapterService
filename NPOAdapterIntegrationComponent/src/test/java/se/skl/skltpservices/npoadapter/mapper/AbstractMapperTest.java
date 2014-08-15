@@ -22,8 +22,12 @@ package se.skl.skltpservices.npoadapter.mapper;
 import org.junit.Test;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.*;
-
-import javax.xml.stream.XMLStreamReader;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TS;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -73,13 +77,16 @@ public class AbstractMapperTest {
         assertEquals(1, target.getMeanings().size());
         assertEquals(1, target.getParameters().size());
 
+        assertEquals("voo", target.getMeanings().get(0).getCode());
+        assertEquals("enduser_assertion", target.getParameters().get(0).getName().getValue());
+        assertEquals("...Base64-kodat SAML-intyg...", target.getParameters().get(0).getValue().getValue());
     }
 
     //
     static ParameterType createParameter(String name, String value) {
         final ParameterType parameterType = new ParameterType();
         parameterType.setName(createST(name));
-        parameterType.setValue(createST(name));
+        parameterType.setValue(createST(value));
 
         return parameterType;
     }

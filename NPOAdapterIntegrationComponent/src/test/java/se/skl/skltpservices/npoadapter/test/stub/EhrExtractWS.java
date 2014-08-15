@@ -65,6 +65,6 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     }
     
     protected EHREXTRACT getTestData(final String path) {
-    	return Util.loadTestData(path);
+    	return Util.loadEhrTestData(path);
     }
 }
