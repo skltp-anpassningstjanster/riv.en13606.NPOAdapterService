@@ -151,6 +151,15 @@
 				<synthesised nullFlavor="NA"/>
 				<value xsi:type="ST" value="Vårdförlopp$$NL$$Inkommer pga smärtor i bröstet. Varken EKG eller blodprover visar på hjärtinfarkt.$$NL$$$$NL$$Överkänslighet$$NL$$Patienten tål ej penicillin.$$NL$$$$NL$$Cirkulation$$NL$$Bltr 120/70.$$NL$$$$NL$$Smärta$$NL$$Ej haft någon direkt smärta på avdelningen.$$NL$$$$NL$$Social situation$$NL$$Bor ensam utan hemtjänst.$$NL$$$$NL$$ADL$$NL$$Uppegående, självständig ADL."/>
 			</items>
+			<items xsi:type="ELEMENT">
+				<meaning code="voo-voo-tid" codeSystem="1.2.752.129.2.2.2.1">
+					<displayName value="Tid"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="TS" value="20140101" />
+			</items>
 		</content>
 	</all_compositions>
 	<demographic_extract xsi:type="ORGANISATION">
