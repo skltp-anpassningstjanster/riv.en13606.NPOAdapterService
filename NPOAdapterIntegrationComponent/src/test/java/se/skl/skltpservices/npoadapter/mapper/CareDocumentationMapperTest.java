@@ -75,7 +75,7 @@ public class CareDocumentationMapperTest {
 	
 	@BeforeClass
 	public static void init() {
-		ehrExctract = Util.loadTestData(Util.CARECONTACS_TEST_FILE);
+		ehrExctract = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
 		mapper = new CareDocumentationMapper();
 		careDocType = new GetCareDocumentationType();
 		final PersonIdType personId = new PersonIdType();
