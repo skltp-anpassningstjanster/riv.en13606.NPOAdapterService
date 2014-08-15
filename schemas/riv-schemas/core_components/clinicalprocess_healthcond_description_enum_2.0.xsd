@@ -22,8 +22,6 @@
     targetNamespace="urn:riv:clinicalprocess:healthcond:description:enums:2"
     elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
 
-
-
     <xs:simpleType name="ClinicalDocumentNoteCodeEnum">
         <xs:annotation>
             <xs:documentation>
@@ -182,4 +180,42 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+    
+    <xs:simpleType name="DiagnosisTypeEnum">
+        <xs:annotation>
+            <xs:documentation>
+                Anges som "Huvuddiagnos", "Bidiagnos".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Huvuddiagnos">
+                <xs:annotation>
+                    <xs:documentation>Huvuddiagnos</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Bidiagnos">
+                <xs:annotation>
+                    <xs:documentation>Bidiagnos</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="ResultCodeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OK"/>
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="INFO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="ErrorCodeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INVALID_REQUEST"/>
+            <xs:enumeration value="TRANSFORMATION_ERROR"/>
+            <xs:enumeration value="APPLICATION_ERROR"/>
+            <xs:enumeration value="TECHNICAL_ERROR"/>
+        </xs:restriction>
+    </xs:simpleType>
+   
 </xs:schema>

@@ -55,6 +55,7 @@
 		<xs:sequence>
 			<xs:element name="careDocumentation" type="core:CareDocumentationType" minOccurs="0"
 				maxOccurs="unbounded"/>
+			<xs:element minOccurs="0" name="result" type="core:ResultType"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
