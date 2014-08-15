@@ -20,12 +20,12 @@
 package se.skl.skltpservices.npoadapter.test;
 
 import lombok.SneakyThrows;
+import riv.clinicalprocess.healthcond.description._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
 import javax.xml.bind.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 /**
  * Created by Peter on 2014-07-30.
@@ -54,16 +54,16 @@ public class Util {
 
 
     public static <T> void dump(final T jaxbObject) {
-        dump(jaxbObject, System.out);
+        dump(jaxbObject, new OutputStreamWriter(System.out));
     }
 
     @SneakyThrows
-    public static <T> void dump(final T jaxbObject, OutputStream os) {
+    public static <T> void dump(final T jaxbObject, Writer writer) {
         final JAXBContext context;
         context = JAXBContext.newInstance(jaxbObject.getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(jaxbObject, os);
+        marshaller.marshal(jaxbObject, writer);
     }
 
 }

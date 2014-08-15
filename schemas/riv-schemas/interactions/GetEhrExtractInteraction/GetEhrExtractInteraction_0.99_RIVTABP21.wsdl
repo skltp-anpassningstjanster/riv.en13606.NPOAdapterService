@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->		
+<wsdl:definitions name='GetEhrExtractInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tjsr='urn:riv:ehr:patientsummary:GetEhrExtractResponder:1' xmlns:tjsi='urn:riv:ehr:patientsummary:GetEhrExtractInitiator:1' xmlns:tns='urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21' targetNamespace='urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
+  <xs:annotation>
+    <xs:documentation>
+			 Tjänsteinteraktionens namn: GetEhrExtractInteraction
+			 Beskrivning: 
+			   The responder delivers health records on the RIV13606 format
+			 Revisioner: 
+			 Tjänstedomän: ehr:patientsummary
+			 Tjänsteinteraktionstyp: Fråga-Svar
+			 WS-profil: RIVTABP21
+			 Förvaltas av: Sveriges Kommuner och Landsting
+			 </xs:documentation>
+  </xs:annotation>
+  <wsdl:types>
+    <xs:schema targetNamespace='urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21'>
+      <xs:import schemaLocation='GetEhrExtractResponder_0.99.xsd' namespace='urn:riv:ehr:patientsummary:GetEhrExtractResponder:1' />
+      <xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd' namespace='urn:riv:itintegration:registry:1' />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name='GetEhrExtractRequest'>
+    <wsdl:part name='LogicalAddress' element='itr:LogicalAddress'>
+      <wsdl:documentation>the HSA-id of the service producer</wsdl:documentation>
+    </wsdl:part>
+    <wsdl:part name='parameters' element='tjsr:GetEhrExtract' />
+  </wsdl:message>
+  <wsdl:message name='GetEhrExtractResponse'>
+    <wsdl:part name='parameters' element='tjsr:GetEhrExtractResponse' />
+  </wsdl:message>
+  <wsdl:portType name='GetEhrExtractResponderInterface'>
+    <wsdl:operation name='GetEhrExtract'>
+      <wsdl:input message='tns:GetEhrExtractRequest' />
+      <wsdl:output message='tns:GetEhrExtractResponse' />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name='GetEhrExtractResponderBinding' type='tns:GetEhrExtractResponderInterface'>
+    <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http' />
+    <wsdl:operation name='GetEhrExtract'>
+      <soap:operation soapAction='urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract' style='document' />
+      <wsdl:input>
+        <soap:header use='literal' message='tns:GetEhrExtractRequest' part='LogicalAddress' />
+        <soap:body use='literal' parts='parameters' />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use='literal' />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name='GetEhrExtractResponderService'>
+    <wsdl:port name='GetEhrExtractResponderPort' binding='tns:GetEhrExtractResponderBinding'>
+      <soap:address location='http://tempuri.org' />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->		
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:ehr:patientsummary:1' targetNamespace='urn:riv:ehr:patientsummary:1' elementFormDefault='qualified' attributeFormDefault='unqualified' version='1.0'>
+	<xs:annotation>
+		<xs:documentation>
+		--------------- original copyright -------------------------
+       XML Schema equivalent  representation of  the  CEN/ISO 13606 
+       part 1 model  for  Electronic  Healthcare  Record  Exchange. 
+       This  version of the schema emphasises (1) fidelity  to  the 
+       13606-1 standard  (even where  this leads to sub-optimal XML 
+       representation)  and  (2)  maximum  use  of  W3C  XML Schema
+       features (even where this increases parser complexity). This
+       Schema definition conforms  to the 13606-1 version published
+       February 2007.
+
+       (c) 2008 CHIME, University College London.
+       Created by Taher Hassan.
+       --------------------------------------------------------------------------------------
+       --------------------------------------------------------------------------------------
+		Modified by Brainpool-Mawell to use ISO datatypes, split
+		into separate schemas, corrected and simplified.
+		Rodolfo Garcia
+		Kristin Schoug
+		Torbjorn Dahlin
+		
+		-----------------------------------------------------------------------------
+		v1.1 2008-10-29. Modified by Andreas Ostberg - Arkitekturledningens T-grupp
+		Modification of LINK-type. Additional optional attribute target_type. Holds a 
+		code about the type of content of the target(s). There can only be 0-1 
+		target_type in LINK, therefore it is not possible to use target_type if LINK 
+		is referring to several different types of targets. If it is still necessary to set 
+		target_type use one LINK for each type of target.
+		
+		v1.2 2009-02-03: Modified by Kristin Schoug Bertilsson. The attribute 
+		elementFormDefault="qualified" was added because of problems with the 
+		nameSpace validation.
+		-----------------------------------------------------------------------------
+       
+		-----------------------------------------------------------------------------
+		2012-06-18 Hjalmar Jacobson (Tieto) har skapat detta schema. Innehållet i
+		detta schema kommer från schemafilerna ”SE13606-1.xsd” och ”SE13606-1_demographics.xsd” 
+		-----------------------------------------------------------------------------
+       
+       
+       
+       
+       	<!--                                                          -->
+	<!--                  Demographics Types         -->
+	<!--                                                          -->
+	<!-- 
+    The demographics package is provided on page 47  of the CEN/ISO
+    13606 part 1 standard.
+    
+    Note possible shortcomings of the 13606-1 definition:
+    (a) On several occasions in the standard a code is described as
+    having a CS type, but only two of the necessary parts of the CS
+    are provided by the documentation (usually a value and a human-
+    readable   portion).   They  are  represented  here  as  simple
+    enumerations (with whitespace removed as necessary).
+  -->
+
+    </xs:documentation>
+	</xs:annotation>
+  <xs:include schemaLocation='ISO_dt.xsd' />
+	<xs:complexType name="EHR_EXTRACT">
+		<xs:annotation>
+			<xs:documentation>
+        The root node of an EHR Extract.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="authorising_party" type="tns:II" minOccurs="0"/>
+			<xs:element name="ehr_id" type="tns:II"/>
+			<xs:element name="ehr_system" type="tns:II"/>
+			<xs:element name="rm_id" fixed="EN 13606"/>
+			<xs:element name="subject_of_care" type="tns:II"/>
+			<xs:element name="time_created" type="tns:TS"/>
+			<xs:element name="all_compositions" type="tns:COMPOSITION" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="criteria" type="tns:EXTRACT_CRITERIA" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="folders" type="tns:FOLDER" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="demographic_extract" type="tns:IDENTIFIED_ENTITY" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EXTRACT_CRITERIA">
+		<xs:annotation>
+			<xs:documentation>
+        Restrictions or filters on the creation of the EHR Extract.
+        The time_period  should be a  restriction on the data types
+        of low and  high to  make them TS,  but this restriction is
+        not permissible in XML  Schema and thus the IVL  properties
+        are simply  copied here with the appropriate types.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="all_versions" type="tns:BL" minOccurs="0"/>
+			<xs:element name="archetype_ids" type="tns:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="max_sensitivity" type="tns:INT" minOccurs="0"/>
+			<xs:element name="multimedia_included" type="tns:BL" minOccurs="0"/>
+			<xs:element name="other_constraints" type="tns:ST" minOccurs="0"/>
+			<xs:element name="time_period" type="tns:IVL_TS" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RECORD_COMPONENT" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass  of all concrete  aggregator classes in  the EHR
+        hierarchy.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="archetype_id" type="tns:ST" minOccurs="0"/>
+			<xs:element name="meaning" type="tns:CD" minOccurs="0"/>
+			<xs:element name="name" type="tns:ST"/>
+			<xs:element name="orig_parent_ref" type="tns:II" minOccurs="0"/>
+			<xs:element name="policy_ids" type="tns:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="rc_id" type="tns:II"/>
+			<xs:element name="sensitivity" type="tns:INT" minOccurs="0"/>
+			<xs:element name="synthesised" type="tns:BL"/>
+			<xs:element name="links" type="tns:LINK" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="feeder_audit" type="tns:AUDIT_INFO" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FOLDER">
+		<xs:annotation>
+			<xs:documentation>
+        Organises and groups Compositions within an EHR Extract.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:RECORD_COMPONENT">
+				<xs:sequence>
+					<xs:element name="sub_folders" type="tns:FOLDER" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="attestations" type="tns:ATTESTATION_INFO" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="composition_rc_ids" type="tns:ST" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="COMPOSITION">
+		<xs:annotation>
+			<xs:documentation>
+        Key  aggregation  class  representing  the  set  of  Record
+        Components authored and committed during a  single clinical
+        encounter.  Note the  values for  territory  will  indicate
+        the legal  framework under which  the  data was  committed.
+        The session_time should be a  restriction on the data types
+        of low and  high to  make them TS,  but this restriction is
+        not permissible in XML  Schema and thus the IVL  properties
+        are simply copied here with the appropriate types.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:RECORD_COMPONENT">
+				<xs:sequence>
+					<xs:element name="contribution_id" type="tns:II" minOccurs="0"/>
+					<xs:element name="session_time" type="tns:IVL_TS" minOccurs="0"/>
+					<xs:element name="territory" type="tns:CS" minOccurs="0"/>
+					<xs:element name="attestations" type="tns:ATTESTATION_INFO" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="other_participations" type="tns:FUNCTIONAL_ROLE" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="committal" type="tns:AUDIT_INFO"/>
+					<xs:element name="composer" type="tns:FUNCTIONAL_ROLE" minOccurs="0"/>
+					<xs:element name="content" type="tns:CONTENT" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CONTENT" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of Section and Entry that  enables the former to
+        include instances of itself.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:RECORD_COMPONENT"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SECTION">
+		<xs:annotation>
+			<xs:documentation>
+        Represents  a heading  in the  record  under which  further
+        Entry instances might be found.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:CONTENT">
+				<xs:sequence>
+					<xs:element name="members" type="tns:CONTENT" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ENTRY">
+		<xs:annotation>
+			<xs:documentation>
+        Represents the information  acquired for a  single clinical
+        activity  or recording.  The  Entry  may be  nilled  if  it 
+        corrects a previous erroneous version. 
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:CONTENT">
+				<xs:sequence>
+					<xs:element name="act_id" type="tns:ST" minOccurs="0"/>
+					<xs:element name="act_status" type="tns:CS" minOccurs="0"/>
+					<xs:element name="subject_of_information_category" type="tns:CS" minOccurs="0"/>
+					<xs:element name="uncertainty_expressed" type="tns:BL"/>
+					<xs:element name="items" type="tns:ITEM" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="info_provider" type="tns:FUNCTIONAL_ROLE" minOccurs="0"/>
+					<xs:element name="other_participations" type="tns:FUNCTIONAL_ROLE" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="subject_of_information" type="tns:RELATED_PARTY" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ITEM" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of  Cluster and Element  that enables the former
+        to include  instances of itself.  The obs_time  should be a
+        restriction on the data types of low and high to make  them
+        TS,  but this  restriction is not permissible in XML Schema
+        and thus the IVL properties are simply copied here with the
+        appropriate types.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:RECORD_COMPONENT">
+				<xs:sequence>
+					<xs:element name="emphasis" type="tns:CD" minOccurs="0"/>
+					<xs:element name="item_category" type="tns:CS" minOccurs="0"/>
+					<xs:element name="obs_time" type="tns:IVL_TS" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CLUSTER">
+		<xs:annotation>
+			<xs:documentation>
+        Represents hierarchical organisation of data values.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:ITEM">
+				<xs:sequence>
+					<xs:element name="structure_type" type="tns:CS"/>
+					<xs:element name="parts" type="tns:ITEM" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ELEMENT">
+		<xs:annotation>
+			<xs:documentation>
+        The Data Value holder in the aggregation structure.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:ITEM">
+				<xs:sequence>
+					<xs:element name="value" type="tns:ANY" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AUDIT_INFO">
+		<xs:annotation>
+			<xs:documentation>
+        The  committal  and revision  data for a  Record Component.
+        Note   that  the   invariant  is   incorrectly  stated   as 
+        constraining  "attribute_version_status.coding_scheme_name"
+        in the printed standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="committer" type="tns:II"/>
+			<xs:element name="ehr_system" type="tns:II"/>
+			<xs:element name="previous_version" type="tns:II" minOccurs="0"/>
+			<xs:element name="reason_for_revision" type="tns:CD" minOccurs="0"/>
+			<xs:element name="time_committed" type="tns:TS"/>
+			<xs:element name="version_set_id" type="tns:II" minOccurs="0"/>
+			<xs:element name="version_status" type="tns:CS" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ATTESTATION_INFO">
+		<xs:annotation>
+			<xs:documentation>
+        Any  attestations  for a Record Component.  The proof field
+        should be a  cryptographic  hash of the RECORD_COMPONENT it
+        attests,  but it is recognised that in many implementations
+        the components will change to  point to new components that
+        revise  them.  In  that case,  the  proof  should sign  the
+        unchanging parts of the component only.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attested_view" type="tns:ED" minOccurs="0"/>
+			<xs:element name="proof" type="tns:ED" minOccurs="0"/>
+			<xs:element name="reason_for_attestation" type="tns:CD"/>
+			<xs:element name="time" type="tns:TS"/>
+			<xs:element name="target_rc_id" type="tns:II" maxOccurs="unbounded"/>
+			<xs:element name="attester" type="tns:FUNCTIONAL_ROLE"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FUNCTIONAL_ROLE">
+		<xs:annotation>
+			<xs:documentation>
+        The participation of an entity in the EHR.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="function" type="tns:CD" minOccurs="0"/>
+			<xs:element name="healthcare_facility" type="tns:II" minOccurs="0"/>
+			<xs:element name="mode" type="tns:CS" minOccurs="0"/>
+			<xs:element name="performer" type="tns:II"/>
+			<xs:element name="service_setting" type="tns:CD" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RELATED_PARTY">
+		<xs:annotation>
+			<xs:documentation>
+        Identifies the relationship  of a person to the  subject of
+        care. Specifically used in Entry.subject_of_information.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="party" type="tns:II" minOccurs="0"/>
+			<xs:element name="relationship" type="tns:ED"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LINK">
+		<xs:annotation>
+			<xs:documentation>
+        Creates a  relationship between  two Record Components that
+        is orthogonal  to the common one of containment.  Note that
+        if a recipient is not permitted to see the component linked
+        to,  even revealing the  link constitutes an  inappropriate
+        disclosure.  Role is  of type  CD so  that  the displayName
+        property of that class can be used in place of any specific
+        coding scheme.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="follow_link" type="tns:BL"/>
+			<xs:element name="nature" type="tns:CS"/>
+			<xs:element name="role" type="tns:CD" minOccurs="0"/>
+			<xs:element name="target_type" type="tns:CD" minOccurs="0"/>
+			<xs:element name="target_id" type="tns:II" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	
+	
+	
+		<xs:complexType name="IDENTIFIED_ENTITY" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of all  identified parties  to the record.  Note
+        that the  type of  id is not  given  in the  printed  class
+        description  but  is included  in the class diagram on page
+        47 of the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="extract_id" type="tns:II"/>
+			<xs:element name="id" type="tns:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="telecom" type="tns:TEL" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SOFTWARE_OR_DEVICE">
+		<xs:annotation>
+			<xs:documentation>
+        A piece of equipment or a device.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="code" type="tns:CD"/>
+					<xs:element name="desc" type="tns:ST"/>
+					<xs:element name="manufacturerModelName" type="tns:ST"/>
+					<xs:element name="version" type="tns:ST" minOccurs="0"/>
+					<xs:element name="owningOrganisation_id" type="tns:ST" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ORGANISATION">
+		<xs:annotation>
+			<xs:documentation>
+        An  organisation  corresponding to GPIC 2.008  (2008 in the
+        printed standard).
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="code" type="tns:CD"/>
+					<xs:element name="desc" type="tns:ST"/>
+					<xs:element name="name" type="tns:ST"/>
+					<xs:element name="addr" type="tns:AD" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PERSON">
+		<xs:annotation>
+			<xs:documentation>
+        General    demographic    information    about   a   person
+        corresponding to GPIC 2.006.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:IDENTIFIED_ENTITY">
+				<xs:sequence>
+					<xs:element name="name" type="tns:EN" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="addr" type="tns:AD" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<xs:annotation>
+			<xs:documentation>
+        Reference to an identified healthcare professional, derived 
+        from GPIC 2.034.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:PERSON">
+				<xs:sequence>
+					<xs:element name="role" type="tns:HEALTHCARE_PROFESSIONAL_ROLE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HEALTHCARE_PROFESSIONAL_ROLE">
+		<xs:annotation>
+			<xs:documentation>
+        Describes the  role of  a  healthcare professional  in  the 
+        record,  based on  the GPICS  class of the  same name. Note
+        that the id instances  should refer to the  same identified
+        individual,   but   might  be   needed  to  establish  that 
+        individual's identity in different working environments.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="tns:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="position_or_grade" type="tns:CD" minOccurs="0"/>
+			<xs:element name="profession" type="tns:CD" minOccurs="0"/>
+			<xs:element name="specialty" type="tns:CD" minOccurs="0"/>
+			<xs:element name="scopingOrganisation_id" type="tns:II" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SUBJECT_OF_CARE_PERSON_IDENTIFICATION">
+		<xs:annotation>
+			<xs:documentation>
+        Identification information about a person  corresponding to
+        GPIC 2.015.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:PERSON">
+				<xs:sequence>
+					<xs:element name="administrativeGenderCode" type="tns:CS"/>
+					<xs:element name="birthOrderNumber" type="tns:INT" minOccurs="0"/>
+					<xs:element name="birthTime" type="tns:TS"/>
+					<xs:element name="deceasedTime" type="tns:TS" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

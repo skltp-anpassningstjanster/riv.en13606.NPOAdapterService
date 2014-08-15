@@ -20,7 +20,6 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.Test;
-import riv.ehr.patientsummary._1.*;
 import riv.ehr.patientsummary._1.CD;
 import riv.ehr.patientsummary._1.COMPOSITION;
 import riv.ehr.patientsummary._1.EHREXTRACT;
@@ -36,6 +35,10 @@ import riv.ehr.patientsummary.getehrextractresponder._1.*;
 import riv.ehr.patientsummary.getehrextractresponder._1.ParameterType;
 import se.skl.skltpservices.npoadapter.test.Util;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.StringWriter;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -43,11 +46,44 @@ import static org.junit.Assert.assertEquals;
  */
 public class EhrResponseMappingTest {
 
+    @XmlRootElement
+    static class Root {
+        @XmlElement
+        private se.rivta.en13606.ehrextract.v11.EHREXTRACT ehrextract;
+
+        public Root() {
+        }
+
+        Root(se.rivta.en13606.ehrextract.v11.EHREXTRACT ehrextract1) {
+            this.ehrextract = ehrextract;
+        }
+
+        @Override
+        public String toString() {
+            final StringWriter writer = new StringWriter();
+            Util.dump(this, writer);
+            return writer.toString();
+        }
+    }
+
     @Test
     public void testEhrExtractMapping() {
         se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
 
-        EHREXTRACT target = AbstractMapper.dozerBeanMapper.map(baseline, EHREXTRACT.class);
+        final EHREXTRACT target = AbstractMapper.dozerBeanMapper.map(baseline, EHREXTRACT.class);
+
+        assertEquals("iag", baseline.getAllCompositions().get(1).getOtherParticipations().get(0).getFunction().getCode());
+        assertEquals("iag", target.getAllCompositions().get(1).getOtherParticipations().get(0).getFunction().getCode());
+
+        final se.rivta.en13606.ehrextract.v11.EHREXTRACT result = AbstractMapper.dozerBeanMapper.map(target, se.rivta.en13606.ehrextract.v11.EHREXTRACT.class);
+
+        assertEquals("iag", result.getAllCompositions().get(1).getOtherParticipations().get(0).getFunction().getCode());
+
+        Root baselineRoot  = new Root(baseline);
+        Root resultRoot = new Root(result);
+
+        assertEquals(baselineRoot.toString(), resultRoot.toString());
+
     }
 
     @Test
