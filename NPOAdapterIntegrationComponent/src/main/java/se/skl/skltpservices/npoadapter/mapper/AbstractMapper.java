@@ -80,7 +80,7 @@ public abstract class AbstractMapper {
             protected void configure() {
 
                 for (final Class<?> c : findCandidates("se.rivta.en13606.ehrextract.v11")) {
-                    typeMappingBuilder(c, classB(c.getSimpleName()), getInheritedFields(c));
+                    typeMappingBuilder(c, classB(c.getSimpleName()), getAllListFields(c));
                 }
 
             }
@@ -97,10 +97,13 @@ public abstract class AbstractMapper {
                         mapNull(false));
 
                 // accessible makes the trick
+                // check for type
                 for (final String field : listFields) {
-                    if (getInheritedFields(dst).contains(field)) {
+                    if (getAllListFields(dst).contains(field)) {
                         final FieldDefinition f = field(field).accessible();
                         m.fields(f, f);
+                    } else {
+                        log.warn("Mapping mismatch detected between src " + src + " and dst " + dst + " no field " + field + " in dst class");
                     }
                 }
                 return m;
@@ -175,11 +178,13 @@ public abstract class AbstractMapper {
     }
 
 
-    public static List<String> getInheritedFields(Class<?> type) {
+    private static List<String> getAllListFields(Class<?> type) {
         final List<String> fields = new ArrayList<String>();
         for (Class<?> c = type; c != null; c = c.getSuperclass()) {
             for (final Field f : c.getDeclaredFields()) {
-                fields.add(f.getName());
+                if (f.getType().isAssignableFrom(List.class)) {
+                    fields.add(f.getName());
+                }
             }
         }
         return fields;
