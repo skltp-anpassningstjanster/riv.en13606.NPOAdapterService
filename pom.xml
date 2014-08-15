@@ -23,6 +23,7 @@
         <scm.url>http://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</scm.url>
         <mockito.version>1.9.5</mockito.version>
         <lombok.version>1.14.4</lombok.version>
+        <dozer.version>5.5.1</dozer.version>
     </properties>
 
     <scm>
@@ -66,6 +67,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
             </dependency>
 
             <!-- soi toolkit dependencies -->
