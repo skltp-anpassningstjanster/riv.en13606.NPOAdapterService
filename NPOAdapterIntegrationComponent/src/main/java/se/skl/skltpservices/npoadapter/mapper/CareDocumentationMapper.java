@@ -233,7 +233,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			performerKey = composer.getPerformer().getExtension();
 		}
 		//TODO: Fix
-		type.setHealthcareProfessionalHSAId(UNKNOWN_VALUE);
+		type.setHealthcareProfessionalHSAId(performerKey);
 		if(organisationKey != null && orgs.containsKey(organisationKey)) {
 			final ORGANISATION org = orgs.get(organisationKey);
 			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
