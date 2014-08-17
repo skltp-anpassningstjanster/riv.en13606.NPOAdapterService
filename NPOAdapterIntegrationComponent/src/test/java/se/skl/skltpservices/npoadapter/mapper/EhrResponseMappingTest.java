@@ -137,6 +137,45 @@ public class EhrResponseMappingTest {
 
     }
 
+    public static EHREXTRACT createEhrExtract() {
+        final EHREXTRACT rivExtract = new EHREXTRACT();
+
+        rivExtract.setEhrSystem(createII());
+        rivExtract.setAuthorisingParty(createII());
+        rivExtract.setSubjectOfCare(createII());
+        rivExtract.setTimeCreated(createTS("20140721150000"));
+
+        final COMPOSITION composition = new COMPOSITION();
+        rivExtract.getAllCompositions().add(composition);
+
+        composition.setName(createST("name"));
+        composition.setContributionId(createII());
+        composition.setSessionTime(createIVLTS());
+        composition.setContributionId(createII());
+
+        final SECTION section = new SECTION();
+        composition.getContent().add(section);
+        section.setName(createST("section a"));
+        section.setMeaning(createCD());
+        section.setRcId(createII());
+        section.setSensitivity(createINT());
+
+        final ENTRY entry = new ENTRY();
+        composition.getContent().add(entry);
+        entry.setName(createST("section b"));
+        entry.setMeaning(createCD());
+        entry.setRcId(createII());
+        entry.setSensitivity(createINT());
+
+        final FUNCTIONALROLE functionalrole = new FUNCTIONALROLE();
+        entry.setInfoProvider(functionalrole);
+
+        functionalrole.setFunction(createCD());
+        functionalrole.setPerformer(createII());
+
+        return rivExtract;
+    }
+
     //
     static ParameterType createParameter(String name, String value) {
         final ParameterType parameterType = new ParameterType();

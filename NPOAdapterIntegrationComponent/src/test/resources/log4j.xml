@@ -34,37 +34,43 @@
 	
 
     <logger name="org.apache.cxf">
-        <level value="ERROR" />
+        <level value="WARN" />
+    </logger>
+
+
+    <logger name="org.dozer">
+        <level value="INFO" />
     </logger>
 
     
 	<logger name="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<level value="DEBUG" />
+		<level value="WARN" />
 	</logger>
 
 	<logger name="org.springframework.core.io.support.PropertiesLoaderSupport">
-		<level value="INFO" />
+		<level value="WARN" />
 	</logger>
 
 	<logger name="org.springframework.beans.factory.xml.XmlBeanDefinitionReader">
-		<level value="INFO" />
+		<level value="WARN" />
 	</logger>
+
 	<logger name="org.mule.MuleServer">
 		<level value="INFO" />
 	</logger>
 
-	<logger name="org.mule.DefaultMuleContext">
-		<level value="DEBUG" />
+	<logger name="org.mule">
+		<level value="INFO" />
 	</logger>
 
     <!-- Message logging using the old Mule <logger/> - element -->
     <logger name="org.mule.api.processor.LoggerMessageProcessor">
-        <level value="DEBUG" />
+        <level value="INFO" />
     </logger>
 
     <!-- Message logging using the old Mule <log-component/> - element -->
     <logger name="org.mule.component.simple.LogComponent">
-        <level value="DEBUG" />
+        <level value="INFO" />
     </logger>
 
     <logger name="org.soitoolkit.commons">
@@ -79,25 +85,25 @@
     	ERROR will only put errorevents on log queue
     -->
 	<logger name="org.soitoolkit.commons.mule.messageLogger">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	
 	 <logger name="se.skl.skltpservices">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <logger name="httpclient.wire.header">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
 	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
     <logger name="httpclient.wire.content">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <root>
-       <priority value="WARN" />
+       <priority value="INFO" />
 
         <appender-ref ref="CONSOLE"/>
 		<!--

@@ -20,7 +20,6 @@
 package se.skl.skltpservices.npoadapter.test;
 
 import lombok.SneakyThrows;
-import riv.clinicalprocess.healthcond.description._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
 import javax.xml.bind.*;
@@ -49,7 +48,9 @@ public class Util {
         final Unmarshaller unmarshaller;
         unmarshaller = context.createUnmarshaller();
         final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(fileName));
-        return root.getValue();
+        final EHREXTRACT ehrextract = root.getValue();
+        ehrextract.setRmId("EN 13606"); // hard coded value
+        return ehrextract;
     }
 
 
