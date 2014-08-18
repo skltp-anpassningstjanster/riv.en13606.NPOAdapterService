@@ -96,6 +96,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     	detail.setTypeCode(code);
     	detail.setCode(cd);
     	detail.setText(st);
+    	resp.getResponseDetail().add(detail);
     	return resp;
     }
 }

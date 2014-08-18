@@ -44,12 +44,12 @@ import riv.clinicalprocess.healthcond.description._2.LegalAuthenticatorType;
 import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
 import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentNoteCodeEnum;
-import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentTypeCodeEnum;
+import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.AD;
 import se.rivta.en13606.ehrextract.v11.ANY;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
@@ -69,6 +69,8 @@ import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
@@ -99,6 +101,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     //For Test purpose
     protected void setJaxbUtil(JaxbUtil jaxb) {
     	this.jaxb = jaxb;
+    	EHRUtil util = new EHRUtil();
     }
 	
 	@Override
@@ -111,8 +114,12 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	@Override
 	public String mapResponse(XMLStreamReader reader) {
 		log.debug("Transforming Response");
-		final RIV13606REQUESTEHREXTRACTResponseType resp = unmarshalEHRResponse(reader);
-		return marshal(mapResponseType(resp.getEhrExtract().get(0)));
+		final RIV13606REQUESTEHREXTRACTResponseType ehrResp = unmarshalEHRResponse(reader);
+		final GetCareDocumentationResponseType resp = mapResponseType(ehrResp);
+		if(!ehrResp.getResponseDetail().isEmpty()) {
+			resp.setResult(mapResultType(ehrResp.getResponseDetail()));
+		}
+		return marshal(resp);
 	}
 		
 	protected GetCareDocumentationType unmarshal(final XMLStreamReader reader) {
@@ -128,8 +135,12 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	 * @param ehrExtract subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
-	protected GetCareDocumentationResponseType mapResponseType(final EHREXTRACT ehrExtract) {
+	protected GetCareDocumentationResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType riv) {
 		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
+		if(riv.getEhrExtract().isEmpty()) {
+			return resp;
+		}
+		final EHREXTRACT ehrExtract = riv.getEhrExtract().get(0);
 		String systemHsaId = null;
 		if(ehrExtract.getEhrSystem() != null) {
 			systemHsaId = ehrExtract.getEhrSystem().getExtension();
@@ -163,6 +174,31 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		return resp;
 	}
 	
+	protected ResultType mapResultType(final List<ResponseDetailType> respDetails) {
+		if(respDetails.isEmpty() && respDetails.get(0).getTypeCode() != null) {
+			return null;
+		}
+		final ResponseDetailType resp = respDetails.get(0);
+		final ResultType resultType = new ResultType();
+		if(resp.getText() != null) {
+			resultType.setMessage(resp.getText().getValue());
+		}
+		resultType.setResultCode(interpret(resp.getTypeCode()));
+		return resultType;
+	}
+	
+	protected ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
+		switch(code) {
+		case E:
+		case W:
+			return ResultCodeEnum.ERROR;
+		case I:
+			return ResultCodeEnum.INFO;
+		default:
+			return ResultCodeEnum.OK;
+		}
+	}
+		
 	protected CareDocumentationBodyType mapBodyType(final COMPOSITION comp) {
 		final CareDocumentationBodyType type = new CareDocumentationBodyType();
 		final ClinicalDocumentNoteType note = new ClinicalDocumentNoteType();
@@ -173,7 +209,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		if(txt != null) {
 			//TODO: Mapping between old and new EHR codes
 			note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
-			note.setClinicalDocumentNoteText(getTextValue(txt));
+			note.setClinicalDocumentNoteText(EHRUtil.getElementTextValue(txt));
 			if(txt.getMeaning() != null && txt.getMeaning().getDisplayName() != null) {				
 				note.setClinicalDocumentNoteTitle(txt.getMeaning().getDisplayName().getValue());
 			}
@@ -304,16 +340,10 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
-		type.setMaxRecords(intType(MAX_ROWS));
+		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
 		type.setSubjectOfCareId(iiType(req.getPatientId()));
 		type.setTimePeriod(IVLTSType(req.getTimePeriod()));
 		return type;
-	}
-	
-	protected INT intType(final int value) {
-		final INT _int = new INT();
-		_int.setValue(value);
-		return _int;
 	}
 	
 	protected II iiType(final PersonIdType idType) {
@@ -328,24 +358,10 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected IVLTS IVLTSType(final DatePeriodType datePeriod) {
 		final IVLTS ivlts = new IVLTS();
 		if(datePeriod != null) {
-			ivlts.setLow(tsType(datePeriod.getStart()));
-			ivlts.setHigh(tsType(datePeriod.getEnd()));
+			ivlts.setLow(EHRUtil.tsType(datePeriod.getStart()));
+			ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
 		}
 		return ivlts;
 	}
-	
-	protected TS tsType(final String value) {
-		final TS ts = new TS();
-		ts.setValue(value);
-		return ts;
-	}
-	
-	protected String getTextValue(final ELEMENT elm) {
-		if(elm.getValue() instanceof ST) {
-			ST text = (ST) elm.getValue();
-			return text.getValue();
-		}
-		return null;
-	}
-
+			
 }

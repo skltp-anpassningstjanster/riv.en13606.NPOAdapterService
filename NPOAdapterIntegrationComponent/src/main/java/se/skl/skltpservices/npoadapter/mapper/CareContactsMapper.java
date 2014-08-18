@@ -114,12 +114,12 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      */
     protected RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType) {
         final RIV13606REQUESTEHREXTRACTRequestType targetRequest = new RIV13606REQUESTEHREXTRACTRequestType();
-        targetRequest.setMaxRecords(map(500));
+        targetRequest.setMaxRecords(EHRUtil.intType(500));
         targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
         targetRequest.getMeanings().add(MEANING_VKO);
         targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));
         // FIXME: get real hsa_id
-        targetRequest.getParameters().add(createParameter("hsa_id", "DUMMY-TEST"));
+        targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", "DUMMY-TEST"));
         return targetRequest;
     }
 
@@ -136,56 +136,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetCareContactsResponseType response) {
         final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(response);
         return jaxb.marshal(el);
-    }
-
-
-    protected ParameterType createParameter(String name, String value) {
-        assert (name != null) && (value != null);
-        final ParameterType parameterType = new ParameterType();
-        parameterType.setName(createST(name));
-        parameterType.setValue(createST(value));
-        return parameterType;
-    }
-
-    protected IVLTS map(final DatePeriodType datePeriodType) {
-        if (datePeriodType == null) {
-            return null;
-        }
-        final IVLTS value = new IVLTS();
-        value.setLow(createTS(datePeriodType.getStart()));
-        value.setHigh(createTS(datePeriodType.getEnd()));
-        return value;
-    }
-
-    protected ST createST(final String value) {
-        if (value == null) {
-            return null;
-        }
-        final ST st = new ST();
-        st.setValue(value);
-        return st;
-    }
-
-    protected TS createTS(final String value) {
-        if (value == null) {
-            return null;
-        }
-        final TS ts = new TS();
-        ts.setValue(value);
-        return ts;
-    }
-
-    protected INT map(final int n) {
-        final INT value = new INT();
-        value.setValue(n);
-        return value;
-    }
-
-    protected II map(final PersonIdType personIdType) {
-        final II value= new II();
-        value.setRoot(personIdType.getType());
-        value.setExtension(personIdType.getId());
-        return value;
     }
 
     /**
@@ -232,19 +182,19 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             for (final ITEM item : ((ENTRY) content).getItems()) {
                 switch (item.getMeaning().getCode()) {
                     case "vko-vko-typ":
-                        bodyType.setCareContactCode(ContactCodes.map.code(getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactCode(ContactCodes.map.code(EHRUtil.getSTValue((ELEMENT) item)));
                         break;
                     case "vko-vko-ors":
-                        bodyType.setCareContactReason(getSTValue((ELEMENT) item));
+                        bodyType.setCareContactReason(EHRUtil.getSTValue((ELEMENT) item));
                         break;
                     case "vko-vko-sta":
-                        bodyType.setCareContactStatus(ContactStatus.map.code(getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactStatus(ContactStatus.map.code(EHRUtil.getSTValue((ELEMENT) item)));
                         break;
                 }
 
                 // Executing unit
                 for (final FUNCTIONALROLE role : composition.getOtherParticipations()) {
-                    if ("ute".equals(getCDCode(role.getFunction()))) {
+                    if ("ute".equals(EHRUtil.getCDCode(role.getFunction()))) {
                         final String hsaId = role.getPerformer().getExtension();
                         bodyType.setCareContactOrgUnit(mapOrgUnit(ehrExtract.getDemographicExtract(), hsaId));
                     }
@@ -254,6 +204,13 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             }
         }
         return bodyType;
+    }
+    
+    protected II map(final PersonIdType personIdType) {
+        final II value= new II();
+        value.setRoot(personIdType.getType());
+        value.setExtension(personIdType.getId());
+        return value;
     }
 
     /**
@@ -271,11 +228,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         return timePeriodType;
     }
 
-    //
-    protected String getSTValue(final ELEMENT element) {
-        final ST st = (ST) element.getValue();
-        return (st == null) ? null : st.getValue();
-    }
 
     //
     protected PersonIdType mapPersonId(final II subjectOfCare) {
@@ -285,35 +237,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         return personIdType;
     }
 
-    //
-    protected <T> T firstItem(final List<T> list) {
-        return (list.size() == 0) ? null : list.get(0);
-    }
-
-    //
-    protected String getCDCode(final CD cd) {
-        return (cd == null) ? null : cd.getCode();
-    }
-
-    //
-    protected String getPartValue(final List<EN> names) {
-        final EN item = firstItem(names);
-        if (item != null) {
-            final ENXP part = firstItem(item.getPart());
-            return (part == null) ? null : part.getValue();
-        }
-        return null;
-    }
-
-    //
-    protected IDENTIFIEDENTITY lookupDemographicIdentity(final List<IDENTIFIEDENTITY> demographics, final String hsaId) {
-        for (final IDENTIFIEDENTITY identifiedentity : demographics) {
-            if (hsaId.equals(identifiedentity.getExtractId().getExtension())) {
-                return identifiedentity;
-            }
-        }
-        return null;
-    }
 
     //
     protected HealthcareProfessionalType mapProfessional(final COMPOSITION composition, final List<IDENTIFIEDENTITY> demographics) {
@@ -321,13 +244,13 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         professionalType.setAuthorTime(composition.getCommittal().getTimeCommitted().getValue());
         professionalType.setHealthcareProfessionalHSAId(composition.getComposer().getPerformer().getExtension());
 
-        final IDENTIFIEDHEALTHCAREPROFESSIONAL professional = (IDENTIFIEDHEALTHCAREPROFESSIONAL) lookupDemographicIdentity(demographics, professionalType.getHealthcareProfessionalHSAId());
+        final IDENTIFIEDHEALTHCAREPROFESSIONAL professional = (IDENTIFIEDHEALTHCAREPROFESSIONAL) EHRUtil.lookupDemographicIdentity(demographics, professionalType.getHealthcareProfessionalHSAId());
         if (professional != null) {
-            professionalType.setHealthcareProfessionalName(getPartValue(professional.getName()));
-            final HEALTHCAREPROFESSIONALROLE role = firstItem(professional.getRole());
+            professionalType.setHealthcareProfessionalName(EHRUtil.getPartValue(professional.getName()));
+            final HEALTHCAREPROFESSIONALROLE role = EHRUtil.firstItem(professional.getRole());
             if (role != null && role.getProfession() != null) {
                 final CVType cvType = new CVType();
-                cvType.setCode(getCDCode(role.getProfession()));
+                cvType.setCode(EHRUtil.getCDCode(role.getProfession()));
                 cvType.setCodeSystem(role.getProfession().getCodeSystem());
                 cvType.setDisplayName(role.getProfession().getDisplayName().getValue());
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
@@ -343,6 +266,16 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         return professionalType;
     }
 
+    protected IVLTS map(final DatePeriodType datePeriodType) {
+        if (datePeriodType == null) {
+            return null;
+        }
+        final IVLTS value = new IVLTS();
+        value.setLow(EHRUtil.tsType((datePeriodType.getStart())));
+        value.setHigh(EHRUtil.tsType(datePeriodType.getEnd()));
+        return value;
+    }
+    
     /**
      * Removes a string prefix on match.
      *
@@ -389,7 +322,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         final OrgUnitType orgUnitType = new OrgUnitType();
         orgUnitType.setOrgUnitHSAId(hsaId);
 
-        final ORGANISATION organisation = (ORGANISATION) lookupDemographicIdentity(demographics, hsaId);
+        final ORGANISATION organisation = (ORGANISATION) EHRUtil.lookupDemographicIdentity(demographics, hsaId);
         if (organisation != null) {
             orgUnitType.setOrgUnitName(organisation.getName().getValue());
             mapTel(orgUnitType, organisation);

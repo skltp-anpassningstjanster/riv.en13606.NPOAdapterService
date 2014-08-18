@@ -22,6 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
@@ -38,14 +40,19 @@ import org.junit.Test;
 import org.mvel2.ast.AssertNode;
 
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
+import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.INT;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.CareContactsMapperTest.Root;
@@ -57,6 +64,10 @@ public class CareDocumentationMapperTest {
 	private static EHREXTRACT ehrExctract;
 	private static CareDocumentationMapper mapper;
 	private static GetCareDocumentationType careDocType;
+	private static FUNCTIONALROLE functionalRole;
+	private static Map<String, ORGANISATION> orgs;
+	private static Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> pros;
+	private static AUDITINFO audit;
 	
 	
 	private static final String TEST_CODE_SYSTEM = "1.2.752.129.2.2.2.1";
@@ -87,12 +98,17 @@ public class CareDocumentationMapperTest {
 		datePeriod.setEnd(TEST_VALUE_4);
 		datePeriod.setStart(TEST_VALUE_5);
 		careDocType.setTimePeriod(datePeriod);
+
+		//TODO: add some test data....
+		functionalRole = new FUNCTIONALROLE();
+		orgs = new HashMap<String, ORGANISATION>();
+		pros = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
+		audit = new AUDITINFO();
 	}
 	
 	
 	@Test
 	public void mapResponseTypeTest() {
-		GetCareDocumentationResponseType type = mapper.mapResponseType(ehrExctract);
 	}
 	
 	@Test
@@ -127,50 +143,13 @@ public class CareDocumentationMapperTest {
 		assertEquals(TEST_VALUE_2, type.getType());
 		
 	}
-	
+
+
 	@Test
-	public void intTypeTest() {
-		INT intType = mapper.intType(TEST_INT_VALUE_1);
-		assertEquals(TEST_INT_VALUE_1, intType.getValue().intValue());
+	public void mapHealtcareProfessionalTypeTest() {
+		HealthcareProfessionalType type = mapper.mapHealtcareProfessionalType(functionalRole, orgs, pros, audit);
 	}
 	
-	@Test
-	public void iiTypeTest() {
-		PersonIdType personId = new PersonIdType();
-		personId.setId(TEST_VALUE_1);
-		personId.setType(TEST_VALUE_2);
-		II ii = mapper.iiType(personId);
-		assertEquals(TEST_VALUE_1, ii.getExtension());
-		assertEquals(TEST_VALUE_2, ii.getRoot());
-	}
 	
-	@Test
-	public void IVLTSTypeTest() {
-		DatePeriodType dateTypeNull = new DatePeriodType();
-		IVLTS ivlts = mapper.IVLTSType(dateTypeNull);
-		assertNull(ivlts.getLow().getValue());
-		assertNull(ivlts.getHigh().getValue());
-		
-		ivlts = mapper.IVLTSType(null);
-		assertNull(ivlts.getLow());
-		assertNull(ivlts.getHigh());
-		
-		DatePeriodType dateType = new DatePeriodType();
-		dateType.setEnd(TEST_VALUE_1);
-		dateType.setStart(TEST_VALUE_2);
-		ivlts = mapper.IVLTSType(dateType);
-		assertEquals(TEST_VALUE_1, ivlts.getHigh().getValue());
-		assertEquals(TEST_VALUE_2, ivlts.getLow().getValue());
-		
-		
-	}
-	
-	@Test
-	public void tsTypeTest() {
-		TS ts = mapper.tsType(TEST_VALUE_1);
-		assertEquals(ts.getValue(), TEST_VALUE_1);
-		ts = mapper.tsType(null);
-		assertNull(ts.getValue());
-	}
 
 }

@@ -21,7 +21,9 @@ package se.skl.skltpservices.npoadapter.test.integration;
 
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -35,6 +37,7 @@ import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
 import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
+import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
@@ -95,10 +98,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	getCareDocumentationServices.getCareDocumentation(INVALID_LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
     }
     
-    //TODO: When exceptionHandler is implemented verify that correct exception is thrown
-    @Test(expected=SOAPFaultException.class)
+    @Test
     public void GetCareDocumentationBackEndExceptionTest() {
-    	getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
+    	GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
+    	assertNotNull(resp.getResult());
+    	assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
     }
 	
     @Test

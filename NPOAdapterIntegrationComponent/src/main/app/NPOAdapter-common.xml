@@ -110,6 +110,7 @@
                 maxThreadsActive="${RECEIVE_MAX_THREADS_ACTIVE}" maxThreadsIdle="${RECEIVE_MAX_THREADS_IDLE}"
                 threadTTL="${RECEIVE_MAX_THREADS_TTL}"/>
     </configuration>
+    
 
     <!-- Transformer check if HSA ID provided is on the hsa id white list
     <custom-transformer name="checkSenderHsaIdTransformer" class="se.skl.skltpservices.adapter.common.processor.CheckSenderHsaIdTransformer" doc:name="Check Sender HSA ID is on white HSA ID white list">

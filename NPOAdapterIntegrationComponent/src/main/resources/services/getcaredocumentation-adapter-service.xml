@@ -9,6 +9,7 @@
         ">
 
     <flow name="getcaredocument-adapter-flow">
+    
 
         <inbound-endpoint address="${ENDPOINT_GETCAREDOCUMENT}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"/>
@@ -23,10 +24,13 @@
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 
         <flow-ref name="outbound-route-flow" />
+        
 
         <response>
             <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundResponseTransformer" />
         </response>
+
+		<custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
 
     </flow>
 
