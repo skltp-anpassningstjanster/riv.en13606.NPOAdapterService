@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -183,6 +184,8 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		if(resp.getText() != null) {
 			resultType.setMessage(resp.getText().getValue());
 		}
+		//TODO: Add tracablitiy to UUID
+		resultType.setLogId(UUID.randomUUID().toString());
 		resultType.setResultCode(interpret(resp.getTypeCode()));
 		return resultType;
 	}

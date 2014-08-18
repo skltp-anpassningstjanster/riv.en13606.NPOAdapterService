@@ -25,6 +25,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.ws.soap.SOAPFaultException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +69,9 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	setDisposeContextPerClass(true);
     	
     	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
+    	final Map<String, Object> props = new HashMap<String, Object>();
+    	props.put("schema-validation-enabled", true);
+    	jaxWs.setProperties(props);
     	
 		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
 		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);

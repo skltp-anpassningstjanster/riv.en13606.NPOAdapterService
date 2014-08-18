@@ -182,13 +182,13 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             for (final ITEM item : ((ENTRY) content).getItems()) {
                 switch (item.getMeaning().getCode()) {
                     case "vko-vko-typ":
-                        bodyType.setCareContactCode(ContactCodes.map.code(EHRUtil.getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactCode(ContactCodes.map.code(EHRUtil.getElementTextValue((ELEMENT) item)));
                         break;
                     case "vko-vko-ors":
-                        bodyType.setCareContactReason(EHRUtil.getSTValue((ELEMENT) item));
+                        bodyType.setCareContactReason(EHRUtil.getElementTextValue((ELEMENT) item));
                         break;
                     case "vko-vko-sta":
-                        bodyType.setCareContactStatus(ContactStatus.map.code(EHRUtil.getSTValue((ELEMENT) item)));
+                        bodyType.setCareContactStatus(ContactStatus.map.code(EHRUtil.getElementTextValue((ELEMENT) item)));
                         break;
                 }
 

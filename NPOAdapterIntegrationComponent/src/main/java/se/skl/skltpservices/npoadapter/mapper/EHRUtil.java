@@ -36,7 +36,7 @@ import se.rivta.en13606.ehrextract.v11.TS;
 public final class EHRUtil {
 	
 	public static String getElementTextValue(final ELEMENT e) {
-		if(e.getValue() instanceof ST) {
+		if(e != null && e.getValue() instanceof ST) {
 			ST text = (ST) e.getValue();
 			return text.getValue();
 		}
@@ -50,11 +50,6 @@ public final class EHRUtil {
         final ST st = new ST();
         st.setValue(value);
         return st;
-    }
-	
-	public static String getSTValue(final ELEMENT element) {
-        final ST st = (ST) element.getValue();
-        return (st == null) ? null : st.getValue();
     }
 	
 	public static TS tsType(final String value) {
