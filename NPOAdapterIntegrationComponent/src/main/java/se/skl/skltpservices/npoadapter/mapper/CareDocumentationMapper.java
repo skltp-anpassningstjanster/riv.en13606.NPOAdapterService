@@ -208,7 +208,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		type.setClinicalDocumentNote(note);
 		//TODO:
 		//Are there other supported types?
-		final ELEMENT txt = findElement(comp.getContent(), TEXT_ELEMENT);
+		final ELEMENT txt = EHRUtil.findEntryElement(comp.getContent(), TEXT_ELEMENT);
 		if(txt != null) {
 			//TODO: Mapping between old and new EHR codes
 			note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
@@ -218,24 +218,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			}
 		}
 		return type;
-	}
-	
-	//TODO: Loops twice..
-	protected ELEMENT findElement(final List<CONTENT> contents, final String type) {
-		for(CONTENT content : contents) {
-			if(content instanceof ENTRY) {
-				ENTRY e = (ENTRY) content;
-				for(ITEM item : e.getItems()) {
-					if(item instanceof ELEMENT) {
-						ELEMENT elm = (ELEMENT) item;
-						if(elm.getMeaning() != null && StringUtils.equals(elm.getMeaning().getCode(), type)) {
-							return elm;
-						}
-					}
-				}
-			}
-		}
-		return null;
 	}
 	
 	protected PatientSummaryHeaderType mapHeaderType(final COMPOSITION comp, final String systemHsaId, 
@@ -249,7 +231,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			header.setDocumentTitle(comp.getName().getValue());
 		}
 		//Which time is to be used? time_created on root-level or time on attestations-level
-		final ELEMENT time = findElement(comp.getContent(), TIME_ELEMENT);
+		final ELEMENT time = EHRUtil.findEntryElement(comp.getContent(), TIME_ELEMENT);
 		if(time != null && time.getValue() instanceof TS) {
 			header.setDocumentTime(((TS)time.getValue()).getValue());
 		}

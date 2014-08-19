@@ -31,17 +31,21 @@ import org.junit.Test;
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
 import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.EN;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.ENXP;
 import se.rivta.en13606.ehrextract.v11.HEALTHCAREPROFESSIONALROLE;
 import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.PERSON;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
+import se.rivta.en13606.ehrextract.v11.SECTION;
 import se.rivta.en13606.ehrextract.v11.SOFTWAREORDEVICE;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
@@ -134,5 +138,24 @@ public class EHRUtilTest {
 		ParameterType param = EHRUtil.createParameter(TEST_VALUE_1, TEST_VALUE_2);
 		assertEquals(TEST_VALUE_1, param.getName().getValue());
 		assertEquals(TEST_VALUE_2, param.getValue().getValue());
+	}
+
+	@Test
+	public void testFindElement() throws Exception {
+		List<CONTENT> list = new ArrayList<CONTENT>();
+		list.add(new ENTRY());
+		list.add(new SECTION());
+		list.add(new ENTRY());
+		((ENTRY)list.get(0)).getItems().add(new ELEMENT());
+		((ENTRY)list.get(2)).getItems().add(new ELEMENT());
+		((ENTRY)list.get(0)).getItems().get(0).setMeaning(createCD(TEST_VALUE_1));
+		((ENTRY)list.get(2)).getItems().get(0).setMeaning(createCD(TEST_VALUE_2));
+		assertEquals(TEST_VALUE_1, EHRUtil.findEntryElement(list, TEST_VALUE_1).getMeaning().getCode());
+	}
+	
+	private CD createCD(final String code) {
+		final CD cd = new CD();
+		cd.setCode(code);
+		return cd;
 	}
 }
