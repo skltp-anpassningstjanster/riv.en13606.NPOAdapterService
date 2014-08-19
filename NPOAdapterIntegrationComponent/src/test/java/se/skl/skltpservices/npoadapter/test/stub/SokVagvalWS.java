@@ -40,15 +40,26 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
     @Override
     public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(@WebParam(partName = "parameters", name = "hamtaAllaVirtualiseringar", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
         final HamtaAllaVirtualiseringarResponseType responseType = new HamtaAllaVirtualiseringarResponseType();
-        final VirtualiseringsInfoType infoType = new VirtualiseringsInfoType();
-        infoType.setReceiverId("SE123456-00");
+        VirtualiseringsInfoType infoType = new VirtualiseringsInfoType();
+        infoType.setReceiverId("VS-1");
         infoType.setRivProfil("RIVEN13606");
-        infoType.setTjansteKontrakt("urn:riv:ehr:patientsummary");
-        infoType.setVirtualiseringsInfoId("ID");
+        infoType.setTjansteKontrakt("urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT");
+        infoType.setVirtualiseringsInfoId("ID-1");
         infoType.setAdress("http://localhost:11000/npoadapter/ehrextract/stub");
         infoType.setFromTidpunkt(fromNow(-2));
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
+
+        infoType = new VirtualiseringsInfoType();
+        infoType.setReceiverId("VS-2");
+        infoType.setRivProfil("RIVTABP21");
+        infoType.setTjansteKontrakt("urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21");
+        infoType.setVirtualiseringsInfoId("ID-2");
+        infoType.setAdress("http://localhost:11000/npoadapter/getehrextract/stub");
+        infoType.setFromTidpunkt(fromNow(-2));
+        infoType.setTomTidpunkt(null);
+        responseType.getVirtualiseringsInfo().add(infoType);
+
         return responseType;
     }
 

@@ -39,7 +39,7 @@
 
 
     <logger name="org.dozer">
-        <level value="INFO" />
+        <level value="WARN" />
     </logger>
 
     
@@ -85,11 +85,11 @@
     	ERROR will only put errorevents on log queue
     -->
 	<logger name="org.soitoolkit.commons.mule.messageLogger">
-		<level value="INFO" />
+		<level value="WARN" />
 	</logger>
 	
 	 <logger name="se.skl.skltpservices">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
@@ -99,7 +99,7 @@
 
 	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
     <logger name="httpclient.wire.content">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>

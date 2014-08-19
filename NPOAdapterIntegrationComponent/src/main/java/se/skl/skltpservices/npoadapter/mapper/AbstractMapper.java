@@ -34,20 +34,20 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
-import se.rivta.en13606.ehrextract.v11.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
+import se.rivta.en13606.ehrextract.v11.*;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import static org.dozer.loader.api.FieldsMappingOptions.*;
 import static org.dozer.loader.api.TypeMappingOptions.*;
 
 /**
@@ -61,11 +61,16 @@ public abstract class AbstractMapper {
 
     static final String[] B_PKGS = { "riv.ehr.patientsummary._1.", "riv.ehr.patientsummary.getehrextractresponder._1." };
 
+
     //
     static DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
-    static {
+    /** Special hints needed for the ELEMENT.ANY value */
+    static Class<?>[] ANY_ELEMENT_VALUE_HINTS = { ST.class, TS.class };
+    /** Special hints needed for the IDENTIFEDENTITY.telecom List value */
+    static Class<?>[] TEL_IDENTIFIEDENTITY_VALUE_HINTS = { TELEMAIL.class, TELPHONE.class };
 
+    static {
         /**
          * Configures Dozer to map XmlType beans from baseline package "se.rivta.en13606.ehrextract.v11"
          * to and from corresponding RIV domain schemas defined above {@link B_PKGS}. <p/>
@@ -80,9 +85,8 @@ public abstract class AbstractMapper {
             protected void configure() {
 
                 for (final Class<?> c : findCandidates("se.rivta.en13606.ehrextract.v11")) {
-                    typeMappingBuilder(c, classB(c.getSimpleName()), getAllListFields(c));
+                    typeMappingBuilder(c, classB(c.getSimpleName()), getAllFields(c));
                 }
-
             }
 
             /**
@@ -91,70 +95,142 @@ public abstract class AbstractMapper {
              *
              * Since no set method exists we need to se accessible on private list fields.
              */
-            TypeMappingBuilder typeMappingBuilder(Class<?> src, Class<?> dst, List<String> listFields) {
+            TypeMappingBuilder typeMappingBuilder(final Class<?> src, final Class<?> dst, final List<Field> fields) {
+
+                // log.debug("setup mapping for: {}", src.getSimpleName());
+
                 final TypeMappingBuilder m = mapping(
                         type(src),
                         type(dst),
                         mapNull(false));
 
-                // accessible makes the trick
-                for (final String field : listFields) {
-                    if (getAllListFields(dst).contains(field)) {
-                        final FieldDefinition f = field(field).accessible();
-                        m.fields(f, f);
+
+                // list fields.
+                for (final Field field : fields) {
+                    if (contains(getAllFields(dst), field.getName())) {
+                        final FieldDefinition f = field(field.getName()).accessible();
+                        if (List.class.isAssignableFrom(field.getType())) {
+                            if (IDENTIFIEDENTITY.class.isAssignableFrom(src) && "telecom".equals(field.getName())) {
+                                m.fields(f, f, hintA(TEL_IDENTIFIEDENTITY_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(TEL_IDENTIFIEDENTITY_VALUE_HINTS)))));
+                            } else {
+                                m.fields(f, f);
+                            }
+                        }
+
+                        // handle exceptions from generic configuration
+                        if (src.equals(ELEMENT.class) && "value".equals(field.getName())) {
+                            m.fields(f, f, hintA(ANY_ELEMENT_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(ANY_ELEMENT_VALUE_HINTS)))));
+                        }
+
+                        // Boolean exception handling
+                        if (field.getType().equals(Boolean.class)) {
+                            m.fields(f, f, copyByReference());
+                        }
+
                     } else {
-                        log.warn("Mapping mismatch detected between source \"" + src.getCanonicalName() + "\" and dest \"" + dst.getCanonicalName() + "\", no list field \"" + field + "\" in dest class");
+                        log.warn("Missing mapping field at destination class: {}.{}", dst.getName(), field.getName());
                     }
                 }
                 return m;
             }
+
         };
 
         dozerBeanMapper.addMapping(builder);
     }
 
-    // context
-    private static final JaxbUtil jaxb = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
-    private static final ObjectFactory objectFactory = new ObjectFactory();
+    // context for baseline (en 13606)
+    private static final JaxbUtil enEhrExtractTypeJaxbUtil = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
+    private static final ObjectFactory enObjectFactory = new ObjectFactory();
+
+    // context for the riv alternative
+    private static final JaxbUtil rivEhrExtractTypeJaxbUtil = new JaxbUtil("riv.itintegration.registry._1:riv.ehr.patientsummary._1:riv.ehr.patientsummary.getehrextractresponder._1");
+    private static final riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory rivEhrExtractTypeObjectFactory = new riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory();
+
+
+    static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
+    static final String NS_CAREDOCUMENTATION_2 = "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21";
+    static final String NS_EN_EXTRACT = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
+    static final String NS_RIV_EXTRACT = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
 
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
-        map.put("GetCareContacts", new CareContactsMapper());
-        map.put("GetCareDocumentation", new CareDocumentationMapper());
+        // contacts
+        map.put(NS_EN_EXTRACT + "-" + NS_CARECONTACTS_2, new CareContactsMapper());
+        map.put(NS_RIV_EXTRACT + "-" + NS_CARECONTACTS_2, new RIVCareContactsMapper());
+
+        // docs
+        map.put(NS_EN_EXTRACT + "-" + NS_CAREDOCUMENTATION_2, new CareDocumentationMapper());
+
     }
+
 
     /**
      * Returns the actual mapper instance by the name of the (inbound SOAP) service operation.
      *
-     * @param operation the operation name, i.e. from WSDL. Must be not null.
+     * @param sourceNS the source service contract namespace.
+     * @param  targetNS the target service contract namespace.
      * @return the corresponding mapper.
      * @throws java.lang.IllegalStateException when no mapper matches the name of the operation.
      */
-    public static Mapper getInstance(String operation) {
-        assert operation != null;
-        log.debug("Lookup mapper for operation: \"" + operation + "\"");
-        final Mapper mapper = map.get(operation);
+    public static Mapper getInstance(final String sourceNS, final String targetNS) {
+        assert (sourceNS != null) && (targetNS != null);
+        final String key = sourceNS + "-" + targetNS;
+        final Mapper mapper = map.get(key);
+        log.debug("Lookup mapper for key: \"{}\" -> {}", key, mapper);
         if (mapper == null) {
-            throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + operation+ "\"");
+            throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + key + "\"");
         }
         return mapper;
     }
 
+
     //
-    protected RIV13606REQUESTEHREXTRACTResponseType unmarshalEHRResponse(final XMLStreamReader reader) {
+    private static Class<?>[] toArray(final List<Class<?>> list) {
+        return list.toArray(new Class<?>[0]);
+    }
+
+    //
+    protected static boolean contains(final List<Field> list, final String name) {
+        for (final Field field : list) {
+            if (field.getName().equals((name))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //
+    protected RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType(final XMLStreamReader reader) {
         try {
-            return (RIV13606REQUESTEHREXTRACTResponseType) jaxb.unmarshal(reader);
+            return (RIV13606REQUESTEHREXTRACTResponseType) enEhrExtractTypeJaxbUtil.unmarshal(reader);
         } finally {
             close(reader);
         }
     }
 
     //
-    protected String marshalEHRRequest(final RIV13606REQUESTEHREXTRACTRequestType request) {
-        final JAXBElement<RIV13606REQUESTEHREXTRACTRequestType> el = objectFactory.createRIV13606REQUESTEHREXTRACTRequest(request);
-        return jaxb.marshal(el);
+    protected String riv13606REQUESTEHREXTRACTRequestType(final RIV13606REQUESTEHREXTRACTRequestType request) {
+        final JAXBElement<RIV13606REQUESTEHREXTRACTRequestType> el = enObjectFactory.createRIV13606REQUESTEHREXTRACTRequest(request);
+        return enEhrExtractTypeJaxbUtil.marshal(el);
     }
+
+    //
+    protected GetEhrExtractResponseType ehrExtractResponseType(final XMLStreamReader reader) {
+        try {
+            return (GetEhrExtractResponseType) rivEhrExtractTypeJaxbUtil.unmarshal(reader);
+        } finally {
+            close(reader);
+        }
+    }
+
+    //
+    protected String ehrExtractType(final GetEhrExtractType request) {
+        final JAXBElement<GetEhrExtractType> el = rivEhrExtractTypeObjectFactory.createGetEhrExtract(request);
+        return rivEhrExtractTypeJaxbUtil.marshal(el);
+    }
+
 
     //
     protected void close(final XMLStreamReader reader) {
@@ -177,6 +253,7 @@ public abstract class AbstractMapper {
         return responseType;
     }
 
+
     //
     public static DozerBeanMapper getDozerBeanMapper() {
         return dozerBeanMapper;
@@ -188,13 +265,11 @@ public abstract class AbstractMapper {
      * @param type the input class.
      * @return all list field names.
      */
-    private static List<String> getAllListFields(Class<?> type) {
-        final List<String> fields = new ArrayList<String>();
+    private static List<Field> getAllFields(final Class<?> type) {
+        final List<Field> fields = new ArrayList<Field>();
         for (Class<?> c = type; c != null; c = c.getSuperclass()) {
             for (final Field f : c.getDeclaredFields()) {
-                if (f.getType().isAssignableFrom(List.class)) {
-                    fields.add(f.getName());
-                }
+                fields.add(f);
             }
         }
         return fields;
@@ -257,6 +332,18 @@ public abstract class AbstractMapper {
         } catch(Throwable e) {}
 
         return false;
+    }
+
+    //
+    private static List<Class<?>> classB(final List<Class<?>> classAList) {
+        final List<Class<?>> classBList = new ArrayList<Class<?>>(classAList.size());
+        for (final Class<?> a : classAList) {
+            final Class<?> b = classB(a.getSimpleName());
+            if (b != null) {
+                classBList.add(b);
+            }
+        }
+        return classBList;
     }
 
     /**

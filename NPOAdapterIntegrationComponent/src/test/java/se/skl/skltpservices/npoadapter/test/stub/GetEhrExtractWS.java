@@ -48,11 +48,12 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
         final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = new RIV13606REQUESTEHREXTRACTResponseType();
         riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().add(baseline);
 
-        return AbstractMapper.getDozerBeanMapper().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
+        final GetEhrExtractResponseType responseType = AbstractMapper.getDozerBeanMapper().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
+        return responseType;
     }
 
     protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaslineData(final String infoType) {
-        switch(infoType) {
+        switch (infoType) {
             case "vko":
                 log.info("Received VKO Request");
                 return Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);

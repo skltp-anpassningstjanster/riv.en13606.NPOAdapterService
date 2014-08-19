@@ -20,8 +20,12 @@
 
         <spring:bean id="route-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundRouter">
             <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
+        </spring:bean>
+
+        <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.PreProcessor">
             <spring:property name="router" ref="router" />
         </spring:bean>
+
     </spring:beans>
 
 </mule>

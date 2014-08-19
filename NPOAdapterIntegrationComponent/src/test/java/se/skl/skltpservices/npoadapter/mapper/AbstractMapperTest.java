@@ -40,19 +40,19 @@ public class AbstractMapperTest {
 
     @Test
     public void testLookupMapper() {
-        final Mapper mapper = AbstractMapper.getInstance("GetCareContacts");
+        final Mapper mapper = AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CARECONTACTS_2);
         assertTrue(mapper instanceof CareContactsMapper);
     }
 
 
     @Test(expected = IllegalStateException.class)
     public void testInvalidURNWHenLookupMapper() {
-        final Mapper mapper = AbstractMapper.getInstance("no-urn");
+        final Mapper mapper = AbstractMapper.getInstance("no-ns", "no-ns");
     }
 
     @Test(expected = AssertionError.class)
     public void testWithNull() {
-        AbstractMapper.getInstance(null);
+        AbstractMapper.getInstance(null, null);
     }
 
     @Test

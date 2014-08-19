@@ -35,9 +35,7 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamReader;
 
 import java.util.List;
@@ -57,30 +55,20 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         MEANING_VKO.setCode("vko");
     }
 
-    private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class);
+    private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class, GetCareContactsResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
-
-    private static final JAXBContext jaxbTest;
-
-    static {
-        try {
-            jaxbTest = JAXBContext.newInstance(GetCareContactsType.class);
-        } catch (JAXBException e ) {
-            throw new IllegalStateException(e);
-        }
-    }
 
 
     @Override
     public String mapResponse(XMLStreamReader reader) {
-        final RIV13606REQUESTEHREXTRACTResponseType response = unmarshalEHRResponse(reader);
+        final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(reader);
         return marshal(map(response.getEhrExtract().get(0)));
     }
 
     @Override
     public String mapRequest(XMLStreamReader reader) {
         final GetCareContactsType request = unmarshal(reader);
-        return marshalEHRRequest(map(request));
+        return riv13606REQUESTEHREXTRACTRequestType(map(request));
     }
 
 
@@ -228,7 +216,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         return timePeriodType;
     }
 
-
     //
     protected PersonIdType mapPersonId(final II subjectOfCare) {
         final PersonIdType personIdType = new PersonIdType();
@@ -236,7 +223,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         personIdType.setType(subjectOfCare.getRoot());
         return personIdType;
     }
-
 
     //
     protected HealthcareProfessionalType mapProfessional(final COMPOSITION composition, final List<IDENTIFIEDENTITY> demographics) {

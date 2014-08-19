@@ -17,27 +17,25 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.test.integration;
+package se.skl.skltpservices.npoadapter.mapper;
 
-import org.soitoolkit.commons.mule.test.junit4.AbstractTestCase;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.dozer.BeanFactory;
+import se.rivta.en13606.ehrextract.v11.ObjectFactory;
 
 /**
- * Created by Peter on 2014-08-14.
+ * Created by Peter on 2014-08-18.
  */
-public abstract class AbstractIntegrationTestCase extends AbstractTestCase {
+@Slf4j
+public class DozerBeanFactory implements BeanFactory  {
 
-    public AbstractIntegrationTestCase() {
-        super();
-    }
+    private static final ObjectFactory sourceFactory = new ObjectFactory();
 
     @Override
-    protected String getConfigResources() {
-        return "soitoolkit-mule-jms-connector-activemq-embedded.xml"
-                + ",NPOAdapter-common.xml"
-                + ",NPOAdapter-config.xml"
-                + ",teststub-services/ehrextract-teststub-service.xml"
-                + ",teststub-services/getehrextract-teststub-service.xml"
-                + ",teststub-services/getcarecontacts-teststub-service.xml"
-                + ",teststub-services/takvagval-teststub-service.xml";
+    @SneakyThrows
+    public Object createBean(Object source, Class<?> type, String destType) {
+        log.debug("Create bean: {}", destType);
+        return Class.forName(destType).newInstance();
     }
 }

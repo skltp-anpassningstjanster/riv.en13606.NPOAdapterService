@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +30,6 @@ import javax.xml.stream.XMLStreamReader;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.CVType;
@@ -51,8 +48,7 @@ import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.AD;
-import se.rivta.en13606.ehrextract.v11.ANY;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -77,7 +73,6 @@ import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
 import se.rivta.en13606.ehrextract.v11.TS;
-import se.skl.skltpservices.npoadapter.mule.SOAPHeaderExtractor;
 
 @Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
@@ -109,18 +104,18 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	public String mapRequest(XMLStreamReader reader) {
 		log.debug("Transforming Request");
 		GetCareDocumentationType req = unmarshal(reader);
-		return marshalEHRRequest(map13606Request(req));
+		return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
 	}
 
 	@Override
 	public String mapResponse(XMLStreamReader reader) {
 		log.debug("Transforming Response");
-		final RIV13606REQUESTEHREXTRACTResponseType ehrResp = unmarshalEHRResponse(reader);
-		final GetCareDocumentationResponseType resp = mapResponseType(ehrResp);
-		if(!ehrResp.getResponseDetail().isEmpty()) {
-			resp.setResult(mapResultType(ehrResp.getResponseDetail()));
-		}
-		return marshal(resp);
+		final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(reader);
+        final GetCareDocumentationResponseType responseType = mapResponseType(resp);
+        if (!resp.getResponseDetail().isEmpty()) {
+            responseType.setResult(mapResultType(resp.getResponseDetail()));
+        }
+		return marshal(responseType);
 	}
 		
 	protected GetCareDocumentationType unmarshal(final XMLStreamReader reader) {
@@ -133,7 +128,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	/**
 	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentation
-	 * @param ehrExtract subset from RIV136060REQUESTEHREXTRACT.
+	 * @param riv subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
 	protected GetCareDocumentationResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType riv) {

@@ -19,8 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -34,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
@@ -58,7 +55,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation";
 	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts";
 	
-	private static final String LOGICAL_ADDRESS = "SE123456-00";
+	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
+    private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
 	private static final String INVALID_LOGICAL_ADDRESS = "XX000000-00";
 	
 	
@@ -88,14 +86,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     }
 
     @Test
-    public void GetCareContactsSuccessTest() {
-		GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
+    public void GetCareContactsEN13606SourceSuccessTest() {
+		GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareContact().isEmpty());
+    }
+
+    @Test
+    public void GetEhrCareContactsRIVSourceSuccessTest() {
+        GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getCareContact().isEmpty());
     }
     
     @Test
     public void GetCareDocumentationSuccessTest() {
-		GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
+		GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareDocumentation().isEmpty());
     }
     
@@ -106,9 +110,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Test
     public void GetCareDocumentationBackEndExceptionTest() {
-    	GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
-    	assertNotNull(resp.getResult());
-    	assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
+    	getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
+        GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
+        assertNotNull(resp.getResult());
+        assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
     }
 	
     @Test

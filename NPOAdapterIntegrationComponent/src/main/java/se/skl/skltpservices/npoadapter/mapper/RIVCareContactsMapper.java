@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
@@ -32,20 +33,24 @@ import javax.xml.stream.XMLStreamReader;
 public class RIVCareContactsMapper extends CareContactsMapper {
 
     @Override
-    public String mapResponse(XMLStreamReader reader) {
-        final RIV13606REQUESTEHREXTRACTResponseType response = unmarshalEHRResponse(reader);
-        return marshal(map(response.getEhrExtract().get(0)));
+    public String mapResponse(final XMLStreamReader reader) {
+        final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(reader);
+
+        // map to baseline model
+        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = map(ehrExtractResponseType);
+
+        return marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().get(0)));
     }
 
     @Override
-    public String mapRequest(XMLStreamReader reader) {
+    public String mapRequest(final XMLStreamReader reader) {
         final GetCareContactsType request = unmarshal(reader);
+
+        // map to baseline model
         final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request);
 
-        final GetEhrExtractType rivRequest = map(ehrRequest);
+        final GetEhrExtractType ehrExtractType = map(ehrRequest);
 
-        return "";
+        return ehrExtractType(ehrExtractType);
     }
-
-
 }

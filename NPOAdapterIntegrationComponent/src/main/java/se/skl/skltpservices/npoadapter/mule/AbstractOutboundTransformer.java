@@ -22,8 +22,6 @@ package se.skl.skltpservices.npoadapter.mule;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.Mapper;
 
@@ -55,10 +53,11 @@ public abstract class AbstractOutboundTransformer extends AbstractMessageTransfo
      */
     protected Mapper getMapper(final MuleMessage message) {
         log.debug("Retrieve the actual (SOAP) operation through the CXF message invocation property: " + CXF_OPERATION);
-        final QName operation = message.getInvocationProperty(CXF_OPERATION);
-        if (operation == null) {
-            throw new IllegalStateException("NPOAdapater: Unable to determine operation since the lack of a CXF invocation property in message: " + CXF_OPERATION);
+        final QName targetNS = message.getInvocationProperty(CXF_OPERATION);
+        if (targetNS == null) {
+            throw new IllegalStateException("NPOAdapater: Unable to determine operation because of a missing CXF invocation property in message: " + CXF_OPERATION);
         }
-        return AbstractMapper.getInstance(operation.getLocalPart());
+        final String sourceNS = message.getInvocationProperty(PreProcessor.ROUTE_SERVICE_SOAP_ACTION);
+        return AbstractMapper.getInstance(sourceNS, targetNS.getNamespaceURI());
     }
 }

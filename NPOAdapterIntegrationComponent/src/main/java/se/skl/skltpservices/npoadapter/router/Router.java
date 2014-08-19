@@ -30,8 +30,10 @@ import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +45,8 @@ import java.util.concurrent.TimeUnit;
 public class Router implements MuleContextAware {
 
     static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-    static final String NAMESPCAE_PREFIX = "urn:riv:ehr:patientsummary";
+    static final List<String> CONTRACTS = Arrays.asList("urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21",
+            "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT");
 
     private URL takWSDL;
     private String takCacheFilename;
@@ -99,7 +102,7 @@ public class Router implements MuleContextAware {
         final RouteData routeData = new RouteData();
         final Calendar now = Calendar.getInstance();
         for (final VirtualiseringsInfoType infoType : data.getVirtualiseringsInfo()) {
-            if (isActive(now, infoType) && inNamespace(infoType.getTjansteKontrakt())) {
+            if (isActive(now, infoType) && isTargetContract(infoType.getTjansteKontrakt())) {
                 routeData.setRoute(infoType.getReceiverId(), RouteData.route(infoType.getTjansteKontrakt(), infoType.getAdress()));
             }
         }
@@ -107,8 +110,8 @@ public class Router implements MuleContextAware {
     }
 
     //
-    protected boolean inNamespace(final String namespace) {
-        return (namespace == null) ? false : namespace.startsWith(NAMESPCAE_PREFIX);
+    protected boolean isTargetContract(final String namespace) {
+        return (namespace == null) ? false : CONTRACTS.contains(namespace);
     }
 
     //

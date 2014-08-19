@@ -20,18 +20,18 @@
 package se.skl.skltpservices.npoadapter.router;
 
 import lombok.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.util.HashMap;
 
 /**
  * Created by Peter on 2014-08-12.
  */
+@Slf4j
 public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
-    static final Logger log = LoggerFactory.getLogger(RouteData.class);
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -39,15 +39,15 @@ public class RouteData implements Serializable {
     @Data
     public static class Route implements Serializable {
         static final long serialVersionUID = 1L;
-        private String serviceNamespace;
+        private String soapAction;
         private String url;
     }
 
 
     //
-    public static Route route(final String serviceNamespace, final String url) {
+    public static Route route(final String serviceContract, final String url) {
         final Route route = new Route();
-        route.setServiceNamespace(serviceNamespace);
+        route.setSoapAction(serviceContract);
         route.setUrl(url);
         return route;
     }

@@ -26,25 +26,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mvel2.ast.AssertNode;
 
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
@@ -55,8 +44,6 @@ import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.TS;
-import se.skl.skltpservices.npoadapter.mapper.CareContactsMapperTest.Root;
-import se.skl.skltpservices.npoadapter.mule.SOAPHeaderExtractor;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 public class CareDocumentationMapperTest {

@@ -23,7 +23,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
 import org.mule.api.processor.MessageProcessor;
+import se.skl.skltpservices.npoadapter.router.RouteData;
+import se.skl.skltpservices.npoadapter.router.Router;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -35,13 +38,19 @@ import java.io.ByteArrayInputStream;
  * Created by Peter on 2014-08-12.
  */
 @Slf4j
-public class SOAPHeaderExtractor implements MessageProcessor {
+public class PreProcessor implements MessageProcessor {
+
+    public static final String ROUTE_LOGICAL_ADDRESS = "route-logical-address";
+    public static final String ROUTE_SERVICE_SOAP_ACTION = "route-service-soap-action";
+    public static final String ROUTE_ENDPOINT_URL = "route-endpoint-url";
 
     // shall be thread-safe
     static XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 
     static final String HEADER_EL = "Header";
     static final String LOGICAL_ADDRESS_EL = "LogicalAddress";
+
+    private Router router;
 
     @Override
     @SneakyThrows
@@ -50,7 +59,16 @@ public class SOAPHeaderExtractor implements MessageProcessor {
         final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(new ByteArrayInputStream(payload));
         final String logicalAddress = extractLogicalAddress(reader);
         log.debug("Logical address: " + logicalAddress);
-        event.getMessage().setInvocationProperty("logical-address", (logicalAddress == null) ? "" : logicalAddress);
+
+        final MuleMessage message = event.getMessage();
+        message.setInvocationProperty(ROUTE_LOGICAL_ADDRESS, (logicalAddress == null) ? "" : logicalAddress);
+        final RouteData.Route route = this.router.getRoute(logicalAddress);
+        if (route != null) {
+            message.setInvocationProperty(ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
+            message.setInvocationProperty(ROUTE_ENDPOINT_URL, route.getUrl());
+        } else {
+            log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress);
+        }
 
         return event;
     }
@@ -90,5 +108,11 @@ public class SOAPHeaderExtractor implements MessageProcessor {
         }
 
         return logicalAddress;
+    }
+
+    //
+    public void setRouter(Router router) {
+        log.info("Set router to: " + router);
+        this.router = router;
     }
 }

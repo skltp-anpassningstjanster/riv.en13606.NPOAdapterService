@@ -60,7 +60,7 @@ public class RouteDataTest {
 
         assertEquals(source.getRoute(LOGICAL_ADDRESS1).getUrl(), target.getRoute(LOGICAL_ADDRESS1).getUrl());
         assertEquals(source.getRoute(LOGICAL_ADDRESS2).getUrl(), target.getRoute(LOGICAL_ADDRESS2).getUrl());
-        assertEquals(source.getRoute(LOGICAL_ADDRESS2).getServiceNamespace(), target.getRoute(LOGICAL_ADDRESS2).getServiceNamespace());
+        assertEquals(source.getRoute(LOGICAL_ADDRESS2).getSoapAction(), target.getRoute(LOGICAL_ADDRESS2).getSoapAction());
     }
 
     @Test

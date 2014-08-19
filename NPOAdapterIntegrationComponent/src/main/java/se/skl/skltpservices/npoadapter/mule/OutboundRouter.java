@@ -21,7 +21,6 @@ package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mule.MessageExchangePattern;
-import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.routing.CouldNotRouteOutboundMessageException;
@@ -31,10 +30,6 @@ import org.mule.endpoint.URIBuilder;
 import org.mule.routing.outbound.AbstractRecipientList;
 import org.mule.transformer.simple.MessagePropertiesTransformer;
 import org.mule.transport.http.HttpConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.skl.skltpservices.npoadapter.router.RouteData;
-import se.skl.skltpservices.npoadapter.router.Router;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,18 +52,19 @@ public class OutboundRouter extends AbstractRecipientList {
 
     // configurable properties (externally)
     private int responseTimeout = 5000;
-    private Router router;
 
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
-            final String logicalAddress = event.getMessage().getInvocationProperty("logical-address");
+            final String url = event.getMessage().getInvocationProperty(PreProcessor.ROUTE_ENDPOINT_URL);
 
-            final EndpointBuilder eb = getEndpoint(logicalAddress);
+            final EndpointBuilder eb = getEndpoint(url);
 
             final String originalServiceConsumerId = event.getMessage().getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
 
-            eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId)));
+            final String soapAction = event.getMessage().getInvocationProperty(PreProcessor.ROUTE_SERVICE_SOAP_ACTION);
+
+            eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId, soapAction)));
 
             final List<Object> route = Collections.singletonList((Object) eb.buildOutboundEndpoint());
 
@@ -80,10 +76,10 @@ public class OutboundRouter extends AbstractRecipientList {
         }
     }
 
-    protected HashMap<String, Object> getOutboundProperties(final String originalServiceConsumerId) {
+    protected HashMap<String, Object> getOutboundProperties(final String originalServiceConsumerId, final String soapAction) {
         final HashMap<String, Object> map = new HashMap<String, Object>();
 
-        map.put(SOAP_ACTION, "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT");
+        map.put(SOAP_ACTION, soapAction);
         map.put(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, originalServiceConsumerId);
         map.put(HttpConstants.HEADER_USER_AGENT, "TP-NPO-ADAPTER/1.0");
         map.put(HttpConstants.HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8");
@@ -96,12 +92,10 @@ public class OutboundRouter extends AbstractRecipientList {
      *
      * Also assigns a matching soitoolkit HTTPS or HTTP connector by name.
      *
-     * @param logicalAddress the logical address (service producer).
+     * @param url the endpoint url (service producer).
      * @return the URL (as a string) to the outbound endpoint.
      */
-    protected EndpointBuilder getEndpoint(final String logicalAddress) {
-        final String url = getUrl(logicalAddress);
-
+    protected EndpointBuilder getEndpoint(final String url) {
         final EndpointBuilder eb = new EndpointURIEndpointBuilder(new URIBuilder(url, muleContext));
         eb.setResponseTimeout(responseTimeout);
         eb.setExchangePattern(MessageExchangePattern.REQUEST_RESPONSE);
@@ -134,32 +128,5 @@ public class OutboundRouter extends AbstractRecipientList {
     public void setResponseTimeout(final int responseTimeout) {
         log.info("Set global response timeout to: " + responseTimeout);
         this.responseTimeout = responseTimeout;
-    }
-
-    /**
-     * Returns the URL to the source system in question.
-     *
-     * @return the URL.
-     */
-    public String getUrl(final String logicalAddress) {
-        log.debug("Find route for logiclaAddress: " + logicalAddress);
-        final RouteData.Route route = getRouter().getRoute(logicalAddress);
-        if (route == null) {
-            throw new IllegalArgumentException("NPOAdapter: No route found for logical address: " + logicalAddress);
-        }
-        log.debug("Route for logicalAddress: " + route.getUrl());
-        return route.getUrl();
-    }
-
-    //
-    public Router getRouter() {
-        return router;
-    }
-
-
-    //
-    public void setRouter(Router router) {
-        log.info("Set router to: " + router);
-        this.router = router;
     }
 }
