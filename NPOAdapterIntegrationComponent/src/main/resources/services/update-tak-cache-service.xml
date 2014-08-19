@@ -15,6 +15,7 @@
     <flow name="update-tak-cache-flow">
         <inbound-endpoint ref="quartz-scheduler"/>
         <invoke object-ref="router" method="updateRoutingDataScheduledEvent"/>
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>
 
 </mule>

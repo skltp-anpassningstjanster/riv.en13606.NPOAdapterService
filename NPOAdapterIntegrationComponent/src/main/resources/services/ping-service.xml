@@ -18,6 +18,6 @@
             <return-argument evaluator="string"
                              expression="${PINGSERVICE_RESPONSE}" />
         </expression-transformer>
-
+	<custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>
 </mule>

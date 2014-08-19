@@ -34,6 +34,7 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -60,13 +61,16 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
 
     @Override
-    public String mapResponse(XMLStreamReader reader) {
+    public String mapResponse(XMLStreamReader reader) throws MapperException {
         final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(reader);
+        if(response.getEhrExtract().isEmpty()) {
+        	throw new MapperException("Missing EHRExtract from source system");
+        }
         return marshal(map(response.getEhrExtract().get(0)));
     }
 
     @Override
-    public String mapRequest(XMLStreamReader reader) {
+    public String mapRequest(XMLStreamReader reader) throws MapperException {
         final GetCareContactsType request = unmarshal(reader);
         return riv13606REQUESTEHREXTRACTRequestType(map(request));
     }

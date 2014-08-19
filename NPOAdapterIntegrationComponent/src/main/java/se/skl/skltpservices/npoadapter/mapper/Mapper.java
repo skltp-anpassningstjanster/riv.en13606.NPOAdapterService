@@ -21,6 +21,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import javax.xml.stream.XMLStreamReader;
 
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+
 /**
  * The generic mapper interface.
  *
@@ -36,7 +38,7 @@ public interface Mapper {
      * @param reader the reader to parse the RIV service contract request from.
      * @return the target {@link se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType} as a XML String.
      */
-    String mapRequest(XMLStreamReader reader);
+    String mapRequest(XMLStreamReader reader) throws MapperException;
 
     /**
      * Parses a response from the {@link javax.xml.stream.XMLStreamReader} and maps the object to the actual
@@ -45,5 +47,5 @@ public interface Mapper {
      * @param reader the reader to parse the {@link se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType} from.
      * @return the target RIV service contract as a XML String.
      */
-    String mapResponse(XMLStreamReader reader);
+    String mapResponse(XMLStreamReader reader) throws MapperException;
 }

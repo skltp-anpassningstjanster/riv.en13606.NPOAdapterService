@@ -20,8 +20,11 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.stream.XMLStreamReader;
 
@@ -38,7 +41,11 @@ public class OutboundResponseTransformer extends AbstractOutboundTransformer {
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
         if (message.getPayload() instanceof XMLStreamReader) {
-            return getMapper(message).mapResponse((XMLStreamReader) message.getPayload());
+        	try {
+        		return getMapper(message).mapResponse((XMLStreamReader) message.getPayload());
+        	} catch (MapperException err) {
+        		throw new TransformerException(this, err);
+        	}
         }
         throw new IllegalArgumentException("NPOAdapter: Unexpected type of message payload (an XMLStreamReader was expected): " + message.getPayload());
     }

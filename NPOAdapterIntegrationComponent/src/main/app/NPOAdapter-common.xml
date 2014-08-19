@@ -69,9 +69,9 @@
 
     <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer"
                         name="createCorrId"/>
-
-    <custom-transformer class="org.soitoolkit.commons.mule.soap.CreateSoapFaultIfExceptionTransformer"
-                        name="createSoapFaultIfException"/>
+                                                
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CreateSoapFaultTransformer"
+    					name="createSoapFaultTransformer" />                    
 
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logMsgIn">
         <spring:property name="logType" value="msg-in"/>

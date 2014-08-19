@@ -9,11 +9,13 @@
         ">
 
     <flow name="getcaredocument-adapter-flow">
-    
-
+    		
         <inbound-endpoint address="${ENDPOINT_GETCAREDOCUMENT}"
-                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"/>
-
+                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
+                          responseTransformer-refs="createSoapFaultTransformer"
+                          />
+                          
+        
         <processor ref="pre-processor" />
 
         <cxf:proxy-service namespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21"
@@ -31,7 +33,7 @@
         </response>
 
 		<custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
-
+    	
     </flow>
 
 </mule>

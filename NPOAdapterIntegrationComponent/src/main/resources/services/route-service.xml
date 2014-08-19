@@ -14,7 +14,8 @@
         <cxf:proxy-client payload="body" />
 
         <processor ref="route-processor" />
-
+        
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>
 
 </mule>

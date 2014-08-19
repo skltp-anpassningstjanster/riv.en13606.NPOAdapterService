@@ -30,6 +30,7 @@ import javax.xml.stream.XMLStreamReader;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
+import org.mule.api.transformer.TransformerException;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.CVType;
@@ -73,6 +74,7 @@ import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
 import se.rivta.en13606.ehrextract.v11.TS;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 @Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
@@ -97,18 +99,17 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     //For Test purpose
     protected void setJaxbUtil(JaxbUtil jaxb) {
     	this.jaxb = jaxb;
-    	EHRUtil util = new EHRUtil();
     }
 	
 	@Override
-	public String mapRequest(XMLStreamReader reader) {
+	public String mapRequest(XMLStreamReader reader) throws MapperException {
 		log.debug("Transforming Request");
 		GetCareDocumentationType req = unmarshal(reader);
 		return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
 	}
 
 	@Override
-	public String mapResponse(XMLStreamReader reader) {
+	public String mapResponse(XMLStreamReader reader) throws MapperException {
 		log.debug("Transforming Response");
 		final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(reader);
         final GetCareDocumentationResponseType responseType = mapResponseType(resp);
