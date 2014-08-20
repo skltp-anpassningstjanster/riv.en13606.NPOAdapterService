@@ -45,8 +45,10 @@ import java.util.concurrent.TimeUnit;
 public class Router implements MuleContextAware {
 
     static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-    static final List<String> CONTRACTS = Arrays.asList("urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21",
-            "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT");
+    static final List<String> CONTRACTS = Arrays.asList(
+            "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21",
+            "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT",
+            "http://nationellpatientoversikt.se:SendStatus");
 
     private URL takWSDL;
     private String takCacheFilename;
@@ -64,7 +66,12 @@ public class Router implements MuleContextAware {
 
     //
     public RouteData.Route getRoute(final String logicalAddress) {
-        return getRouteData().getRoute(logicalAddress);
+        return getRoute(logicalAddress, false);
+    }
+
+    //
+    public RouteData.Route getRoute(final String logicalAddress, final boolean callbackRoute) {
+        return getRouteData().getRoute(logicalAddress, callbackRoute);
     }
 
     /**

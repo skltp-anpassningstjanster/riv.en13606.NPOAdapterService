@@ -20,7 +20,6 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
@@ -36,7 +35,7 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
         targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21")
 public class GetCareContactsWS implements GetCareContactsResponderInterface {
     @Override
-    public GetCareContactsResponseType getCareContacts(@WebParam(partName = "LogicalAddress", name = "LogicalAddress", targetNamespace = "urn:riv:itintegration:registry:1", header = true) String logicalAddress, @WebParam(partName = "parameters", name = "GetCareContacts", targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2") GetCareContactsType parameters) {
+    public GetCareContactsResponseType getCareContacts(String logicalAddress, GetCareContactsType parameters) {
         return null;
     }
 

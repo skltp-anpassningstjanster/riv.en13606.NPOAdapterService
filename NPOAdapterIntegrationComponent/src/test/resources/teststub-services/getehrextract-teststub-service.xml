@@ -19,5 +19,8 @@
         <component>
             <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.GetEhrExtractWS"  />
         </component>
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+
     </flow>
 </mule>

@@ -28,4 +28,12 @@
 
     </spring:beans>
 
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.UpdateIndexTransformer" name="update-index-transformer">
+        <spring:property name="eiLogicalAddress" value="${LOGICAL_ADDRESS_EI}" />
+    </custom-transformer>
+
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.SendIndexTransformer" name="send-index-transformer">
+        <spring:property name="router" ref="router" />
+    </custom-transformer>
+
 </mule>

@@ -19,7 +19,16 @@
     <build>
         <resources>
             <resource>
-                <directory>${basedir}/RIV13606</directory>
+                <targetPath>interactions/ehr_extract</targetPath>
+                <directory>${basedir}/interactions/ehr_extract</directory>
+            </resource>
+            <resource>
+                <targetPath>interactions/npo</targetPath>
+                <directory>${basedir}/interactions/npo</directory>
+            </resource>
+            <resource>
+                <targetPath>interactions/care_system</targetPath>
+                <directory>${basedir}/interactions/care_system</directory>
             </resource>
         </resources>
 
@@ -41,7 +50,13 @@
                                             urn:riv13606:v1.1=se.rivta.en13606.ehrextract.v11
                                         </extraarg>
                                     </extraargs>
-                                    <wsdl>${basedir}/RIV13606/RIV13606.wsdl</wsdl>
+                                    <wsdl>${basedir}/interactions/ehr_extract/RIV13606.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/interactions/npo/NPO_1.1.2.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/interactions/care_system/CARE_SYSTEM_1.1.2.wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>

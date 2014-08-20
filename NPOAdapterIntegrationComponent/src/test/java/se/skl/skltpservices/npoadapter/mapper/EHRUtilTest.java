@@ -62,7 +62,7 @@ public class EHRUtilTest {
 	private static final String TEST_VALUE_5 = UUID.randomUUID().toString();
 	
 	private static final int TEST_INT_VALUE_1 = 500;
-	
+
 	
 	@Test
 	public void testIntType() {

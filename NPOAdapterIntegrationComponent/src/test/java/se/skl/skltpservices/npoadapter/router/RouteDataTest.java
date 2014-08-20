@@ -24,8 +24,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Peter on 2014-08-12.
@@ -35,6 +34,8 @@ public class RouteDataTest {
     static final String LOGICAL_ADDRESS1 = "SE123456";
     static final String LOGICAL_ADDRESS2 = "DE123456";
     static final String SERVICE_NAMESPACE = "urn:riv:patientsummary";
+    static final String SERVICE_NAMESPACE_2 = "http://nationellpatientoversikt.se:SendStatus";
+
     static final String TEMP_URL1 = "https://tempurl1.xxx";
     static final String TEMP_URL2 = "https://tempurl2.xxx";
 
@@ -44,8 +45,20 @@ public class RouteDataTest {
 
         routeData.setRoute(LOGICAL_ADDRESS1, RouteData.route(SERVICE_NAMESPACE, TEMP_URL1));
         routeData.setRoute(LOGICAL_ADDRESS2, RouteData.route(SERVICE_NAMESPACE, TEMP_URL2));
+        routeData.setRoute(LOGICAL_ADDRESS1, RouteData.route(SERVICE_NAMESPACE_2, TEMP_URL2));
 
         return routeData;
+    }
+
+    @Test
+    public void testRoute() {
+        final RouteData source = createTestRouteData();
+
+        assertTrue(source.getRoute(LOGICAL_ADDRESS1, true).isCallback());
+        assertFalse(source.getRoute(LOGICAL_ADDRESS1, false).isCallback());
+
+        assertEquals(source.getRoute(LOGICAL_ADDRESS1, false).getUrl(), TEMP_URL1);
+        assertEquals(source.getRoute(LOGICAL_ADDRESS1, true).getUrl(), TEMP_URL2);
     }
 
     @Test

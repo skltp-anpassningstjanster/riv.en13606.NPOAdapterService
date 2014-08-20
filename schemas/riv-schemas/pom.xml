@@ -36,12 +36,16 @@
                 <directory>${interactionsdir}/GetEhrExtractInteraction</directory>
             </resource>
             <resource>
-            	<targetPath>interactions/GetDiagnosisInteraction</targetPath>
-            	<directory>${interactionsdir}/GetDiagnosisInteraction</directory>
+                <targetPath>interactions/UpdateInteraction</targetPath>
+                <directory>${interactionsdir}/UpdateInteraction</directory>
             </resource>
             <resource>
-            	<targetPath>interactions/GetLaboratoryOrderOutcomeInteraction</targetPath>
-            	<directory>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction</directory>
+                <targetPath>interactions/GetDiagnosisInteraction</targetPath>
+                <directory>${interactionsdir}/GetDiagnosisInteraction</directory>
+            </resource>
+            <resource>
+                <targetPath>interactions/GetLaboratoryOrderOutcomeInteraction</targetPath>
+                <directory>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction</directory>
             </resource>
         </resources>
         <plugins>
@@ -61,12 +65,15 @@
                                 <wsdlOption>
                                     <wsdl>${interactionsdir}/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
-								<wsdlOption>
-									<wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
-								</wsdlOption>
-								<wsdlOption>
-									<wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
-								</wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${interactionsdir}/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>

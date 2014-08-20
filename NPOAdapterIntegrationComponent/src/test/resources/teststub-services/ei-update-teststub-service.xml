@@ -2,24 +2,22 @@
 <mule
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
-        xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xmlns="http://www.mulesoft.org/schema/mule/core"
         xsi:schemaLocation="
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
         ">
-    <flow name="tak-teststub-flow" >
+    <flow name="ei-update-teststub-flow" >
 
-        <inbound-endpoint address="${ENDPOINT_TAKVAGVAL_STUB}"
+        <inbound-endpoint address="${ENDPOINT_EI_STUB}"
                           connector-ref="soitoolkit-http-connector"/>
 
         <cxf:jaxws-service
-                serviceClass="se.skl.skltpservices.npoadapter.test.stub.SokVagvalWS"
-                wsdlLocation="classpath:/sokvagval-info-v2.wsdl" />
+                serviceClass="se.skl.skltpservices.npoadapter.test.stub.EiUpdateWS"
+                wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
 
         <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.SokVagvalWS"  />
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.EiUpdateWS"  />
         </component>
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>

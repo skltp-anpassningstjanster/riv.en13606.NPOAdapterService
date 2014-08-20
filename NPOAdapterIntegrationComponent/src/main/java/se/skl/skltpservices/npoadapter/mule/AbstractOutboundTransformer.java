@@ -22,10 +22,12 @@ package se.skl.skltpservices.npoadapter.mule;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
-import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.Mapper;
 
 import javax.xml.namespace.QName;
+
+import static se.skl.skltpservices.npoadapter.mapper.AbstractMapper.getInstance;
+import static se.skl.skltpservices.npoadapter.mule.PreProcessor.*;
 
 /**
  * Abstracts outbound transformers. <p/>
@@ -52,12 +54,21 @@ public abstract class AbstractOutboundTransformer extends AbstractMessageTransfo
      * @throws java.lang.IllegalStateException when no mapper can be found.
      */
     protected Mapper getMapper(final MuleMessage message) {
+        // check thar routing has been done.
+        log.debug("check for route information in message properties");
+        if (message.getInvocationProperty(ROUTE_ENDPOINT_URL) == null) {
+            throw new IllegalArgumentException("Unable to find a route to logical address: " + message.getInvocationProperty((ROUTE_LOGICAL_ADDRESS)));
+        }
         log.debug("Retrieve the actual (SOAP) operation through the CXF message invocation property: " + CXF_OPERATION);
         final QName targetNS = message.getInvocationProperty(CXF_OPERATION);
         if (targetNS == null) {
-            throw new IllegalStateException("NPOAdapater: Unable to determine operation because of a missing CXF invocation property in message: " + CXF_OPERATION);
+            throw new IllegalStateException("Unable locate a mapper. Missing CXF invocation property in message: " + CXF_OPERATION);
         }
-        final String sourceNS = message.getInvocationProperty(PreProcessor.ROUTE_SERVICE_SOAP_ACTION);
-        return AbstractMapper.getInstance(sourceNS, targetNS.getNamespaceURI());
+        final String sourceNS = message.getInvocationProperty(ROUTE_SERVICE_SOAP_ACTION);
+        final Mapper mapper =  getInstance(sourceNS, targetNS.getNamespaceURI());
+        if (mapper == null) {
+            throw new IllegalStateException("Unable to locate a mapper for endpoint to the source system. (Invocation property " + ROUTE_SERVICE_SOAP_ACTION + "=" + sourceNS + ")");
+        }
+        return mapper;
     }
 }

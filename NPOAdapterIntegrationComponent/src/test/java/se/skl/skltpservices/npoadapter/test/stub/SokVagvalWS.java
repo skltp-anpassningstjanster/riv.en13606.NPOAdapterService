@@ -22,7 +22,6 @@ package se.skl.skltpservices.npoadapter.test.stub;
 import lombok.SneakyThrows;
 import skl.tp.vagvalsinfo.v2.*;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -38,7 +37,7 @@ import java.util.GregorianCalendar;
                 portName = "SokVagvalsSoap11LitDocPort")
 public class SokVagvalWS implements SokVagvalsInfoInterface {
     @Override
-    public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(@WebParam(partName = "parameters", name = "hamtaAllaVirtualiseringar", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
+    public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(Object parameters) {
         final HamtaAllaVirtualiseringarResponseType responseType = new HamtaAllaVirtualiseringarResponseType();
         VirtualiseringsInfoType infoType = new VirtualiseringsInfoType();
         infoType.setReceiverId("VS-1");
@@ -60,11 +59,22 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
 
+        infoType = new VirtualiseringsInfoType();
+        infoType.setReceiverId("VS-1");
+        infoType.setRivProfil("RIVEN13606");
+        infoType.setTjansteKontrakt("http://nationellpatientoversikt.se:SendStatus");
+        infoType.setVirtualiseringsInfoId("ID-3");
+        infoType.setAdress("http://localhost:11000/npoadapter/caresystem/stub");
+        infoType.setFromTidpunkt(fromNow(-2));
+        infoType.setTomTidpunkt(null);
+        responseType.getVirtualiseringsInfo().add(infoType);
+
+
         return responseType;
     }
 
     @Override
-    public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(@WebParam(partName = "parameters", name = "hamtaAllaAnropsBehorigheter", targetNamespace = "urn:skl:tp:vagvalsinfo:v2") Object parameters) {
+    public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(Object parameters) {
         throw new IllegalArgumentException("Method is not implemented (not valid in this context)!");
     }
 

@@ -27,7 +27,6 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -40,8 +39,7 @@ import javax.jws.WebService;
         portName = "GetEhrExtractResponderPort")
 public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
     @Override
-    public GetEhrExtractResponseType getEhrExtract(@WebParam(partName = "LogicalAddress", name = "LogicalAddress", targetNamespace = "urn:riv:itintegration:registry:1", header = true) String logicalAddress,
-                                                   @WebParam(partName = "parameters", name = "GetEhrExtract", targetNamespace = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1") GetEhrExtractType request) {
+    public GetEhrExtractResponseType getEhrExtract(String logicalAddress, GetEhrExtractType request) {
 
         final String infoType = request.getMeanings().get(0).getCode();
         final se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = getBaslineData(infoType);

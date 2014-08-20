@@ -109,7 +109,10 @@ public abstract class AbstractMapper {
                 for (final Field field : fields) {
                     if (contains(getAllFields(dst), field.getName())) {
                         final FieldDefinition f = field(field.getName()).accessible();
+
+                        // Correct mapping of Lists (unconventional method names)
                         if (List.class.isAssignableFrom(field.getType())) {
+                            // Correct mapping of IDENTIFIEDENTITY.telecom TEL type (instantiate correct type)
                             if (IDENTIFIEDENTITY.class.isAssignableFrom(src) && "telecom".equals(field.getName())) {
                                 m.fields(f, f, hintA(TEL_IDENTIFIEDENTITY_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(TEL_IDENTIFIEDENTITY_VALUE_HINTS)))));
                             } else {
@@ -117,12 +120,12 @@ public abstract class AbstractMapper {
                             }
                         }
 
-                        // handle exceptions from generic configuration
+                        // Correct mapping of ELEMENT.value ANY type (instantiate correct type)
                         if (src.equals(ELEMENT.class) && "value".equals(field.getName())) {
                             m.fields(f, f, hintA(ANY_ELEMENT_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(ANY_ELEMENT_VALUE_HINTS)))));
                         }
 
-                        // Boolean exception handling
+                        // Correct mapping of Boolean type (use field mapping since getter method might have an unconventional name)
                         if (field.getType().equals(Boolean.class)) {
                             m.fields(f, f, copyByReference());
                         }
@@ -159,11 +162,11 @@ public abstract class AbstractMapper {
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
         // contacts
-        map.put(NS_EN_EXTRACT + "-" + NS_CARECONTACTS_2, new CareContactsMapper());
-        map.put(NS_RIV_EXTRACT + "-" + NS_CARECONTACTS_2, new RIVCareContactsMapper());
+        map.put(mapperKey(NS_EN_EXTRACT, NS_CARECONTACTS_2), new CareContactsMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_CARECONTACTS_2), new RIVCareContactsMapper());
 
         // docs
-        map.put(NS_EN_EXTRACT + "-" + NS_CAREDOCUMENTATION_2, new CareDocumentationMapper());
+        map.put(mapperKey(NS_EN_EXTRACT, NS_CAREDOCUMENTATION_2), new CareDocumentationMapper());
         
         //dia
         map.put(NS_EN_EXTRACT + "-" + NS_DIAGNOSIS_2, new DiagnosisMapper());
@@ -183,7 +186,7 @@ public abstract class AbstractMapper {
      */
     public static Mapper getInstance(final String sourceNS, final String targetNS) {
         assert (sourceNS != null) && (targetNS != null);
-        final String key = sourceNS + "-" + targetNS;
+        final String key = mapperKey(sourceNS, targetNS);
         final Mapper mapper = map.get(key);
         log.debug("Lookup mapper for key: \"{}\" -> {}", key, mapper);
         if (mapper == null) {
@@ -192,7 +195,10 @@ public abstract class AbstractMapper {
         return mapper;
     }
 
-
+    //
+    private static String mapperKey(final String src, final String dst) {
+        return src + "-" + dst;
+    }
     //
     private static Class<?>[] toArray(final List<Class<?>> list) {
         return list.toArray(new Class<?>[0]);
@@ -327,17 +333,14 @@ public abstract class AbstractMapper {
      * @param metadataReader the metadataReader.
      * @return true if the class is candidate, otherwise false.
      */
-    private static boolean isCandidate(final MetadataReader metadataReader)
-    {
-        try {
-            final Class a = Class.forName(metadataReader.getClassMetadata().getClassName());
-            if (!Modifier.isAbstract(a.getModifiers())
-                    && a.getAnnotation(XmlType.class) != null
-                    && classB(a.getSimpleName()) != null) {
-                return true;
-            }
-        } catch(Throwable e) {}
-
+    private static boolean isCandidate(final MetadataReader metadataReader) {
+        final Class a = classForName(metadataReader.getClassMetadata().getClassName());
+        if (a != null
+                && !Modifier.isAbstract(a.getModifiers())
+                && a.getAnnotation(XmlType.class) != null
+                && classB(a.getSimpleName()) != null) {
+            return true;
+        }
         return false;
     }
 

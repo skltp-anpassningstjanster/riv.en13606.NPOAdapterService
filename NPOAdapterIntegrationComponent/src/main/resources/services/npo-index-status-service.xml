@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/jms     http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        ">
+
+
+    <flow name="npo-index-status-flow">
+
+        <jms:inbound-endpoint
+                connector-ref="soitoolkit-jms-connector"
+                queue="${NPO_INDEX_QUEUE}" >
+            <jms:transaction action="ALWAYS_BEGIN" />
+        </jms:inbound-endpoint>
+
+        <echo-component />
+
+        <transformer ref="send-index-transformer" />
+
+        <cxf:proxy-client payload="body" />
+
+        <processor ref="route-processor" />
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+    </flow>
+
+</mule>

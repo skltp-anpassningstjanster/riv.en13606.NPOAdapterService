@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://nationellpatientoversikt.se" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="http://nationellpatientoversikt.se">
+	<s:annotation>
+		<s:documentation>
+
+-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in NPO_1.1.2.wsdl compared to NPO_1.1.1.wsdl
+		
+		The service 'SendIndex' changed name to 'SendIndex2' (needed since the signature of the service
+		changed in version 1.1.0 - the name should have been changed in that version).
+    
+    Version is 1.1.2
+-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in NPO_1.1.1.wsdl compared to NPO_1.1.0.wsdl
+		
+		Removed duplicate declaration of element 'care_giver' in the type 'IndexUpdate_type'.
+    
+    Version is 1.1.1
+-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in NPO_1.1.0.wsdl compared to NPO_1.0.0.wsdl
+		
+		Changes to support care giver (VG) and care unit (VE) - the change affects SendIndex
+		  - The type IndexUpdate_type have three new elements: care_giver, care_unit and org_unit
+    
+    Version is 1.1.0
+-------------------------------------------------------------
+
+		</s:documentation>
+	</s:annotation>
+  <types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://nationellpatientoversikt.se">
+      <s:element name="CheckConsistency">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfparameternpoParameter_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="parameter" nillable="true" type="s0:npoParameter_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="npoParameter_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="name" type="s:string"/>
+          <s:element minOccurs="0" name="value" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CheckConsistencyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="updates" type="s0:ArrayOfcheck_consistencyCheckConsistency_type"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfcheck_consistencyCheckConsistency_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="check_consistency" nillable="true" type="s0:CheckConsistency_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CheckConsistency_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="is_delete" type="s:boolean"/>
+          <s:element minOccurs="0" name="transaction_id" type="s:string"/>
+          <s:element minOccurs="0" name="registration_time" type="s:dateTime"/>
+          <s:element minOccurs="0" name="rc_id" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfresponse_detailnpoResponse_detail_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="response_detail" nillable="true" type="s0:npoResponse_detail_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="npoResponse_detail_type">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="kind">
+              <s:simpleType>
+                <s:restriction base="s:string">
+                  <s:maxLength value="1"/>
+                  <s:enumeration value="E"/>
+                  <s:enumeration value="W"/>
+                  <s:enumeration value="I"/>
+                </s:restriction>
+              </s:simpleType>
+            </s:attribute>
+            <s:attribute name="code" type="s:string"/>
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="GetConsistencyList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetConsistencyListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_ids" type="s0:ArrayOfsubject_of_care_idString"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfsubject_of_care_idString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="subject_of_care_id" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="NotifyAlive">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NotifyAliveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendDeletions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="deletions" type="s0:ArrayOfdeletionDeletion_type"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfdeletionDeletion_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="deletion" nillable="true" type="s0:Deletion_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Deletion_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="rc_id" type="s:string"/>
+          <s:element minOccurs="0" name="info_type_id" type="s:string"/>
+          <s:element minOccurs="0" name="registration_time" type="s:dateTime"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SendDeletionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendIndex2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="index_updates" type="s0:ArrayOfindex_updateIndexUpdate_type"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfindex_updateIndexUpdate_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="index_update" nillable="true" type="s0:IndexUpdate_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndexUpdate_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="info_type_id" type="s:string"/>
+          <s:element minOccurs="0" name="from_date" type="s:date"/>
+          <s:element minOccurs="0" name="to_date" type="s:date"/>
+          <s:element minOccurs="0" name="registration_time" type="s:dateTime"/>
+          <s:element minOccurs="0" name="rc_id" type="s:string"/>
+          <!-- The following three elements are added in order to support VG/VE -->
+          <s:element minOccurs="0" name="care_giver" type="s:string"/>
+          <s:element minOccurs="0" name="care_unit" type="s:string"/>
+          <s:element minOccurs="0" name="org_unit" type="s:string"/>
+        </s:sequence>
+        <s:attribute name="action">
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:maxLength value="1"/>
+              <s:enumeration value="U"/>
+              <s:enumeration value="D"/>
+            </s:restriction>
+          </s:simpleType>
+        </s:attribute>
+      </s:complexType>
+      <s:element name="SendIndex2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSimpleIndex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="info_types" type="s0:ArrayOfinfo_typeInfoType_type"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfinfo_typeInfoType_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="info_type" nillable="true" type="s0:InfoType_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="InfoType_type">
+        <s:attribute name="info_type_id" type="s:string"/>
+        <s:attribute name="exists" type="s:boolean"/>
+      </s:complexType>
+      <s:element name="SendSimpleIndexResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="CheckConsistencySoapIn">
+    <part name="parameters" element="s0:CheckConsistency"/>
+  </message>
+  <message name="CheckConsistencySoapOut">
+    <part name="parameters" element="s0:CheckConsistencyResponse"/>
+  </message>
+  <message name="GetConsistencyListSoapIn">
+    <part name="parameters" element="s0:GetConsistencyList"/>
+  </message>
+  <message name="GetConsistencyListSoapOut">
+    <part name="parameters" element="s0:GetConsistencyListResponse"/>
+  </message>
+  <message name="NotifyAliveSoapIn">
+    <part name="parameters" element="s0:NotifyAlive"/>
+  </message>
+  <message name="NotifyAliveSoapOut">
+    <part name="parameters" element="s0:NotifyAliveResponse"/>
+  </message>
+  <message name="SendDeletionsSoapIn">
+    <part name="parameters" element="s0:SendDeletions"/>
+  </message>
+  <message name="SendDeletionsSoapOut">
+    <part name="parameters" element="s0:SendDeletionsResponse"/>
+  </message>
+  <message name="SendIndex2SoapIn">
+    <part name="parameters" element="s0:SendIndex2"/>
+  </message>
+  <message name="SendIndex2SoapOut">
+    <part name="parameters" element="s0:SendIndex2Response"/>
+  </message>
+  <message name="SendSimpleIndexSoapIn">
+    <part name="parameters" element="s0:SendSimpleIndex"/>
+  </message>
+  <message name="SendSimpleIndexSoapOut">
+    <part name="parameters" element="s0:SendSimpleIndexResponse"/>
+  </message>
+  <portType name="NPOSoap">
+    <operation name="CheckConsistency">
+      <input message="s0:CheckConsistencySoapIn"/>
+      <output message="s0:CheckConsistencySoapOut"/>
+    </operation>
+    <operation name="GetConsistencyList">
+      <input message="s0:GetConsistencyListSoapIn"/>
+      <output message="s0:GetConsistencyListSoapOut"/>
+    </operation>
+    <operation name="NotifyAlive">
+      <input message="s0:NotifyAliveSoapIn"/>
+      <output message="s0:NotifyAliveSoapOut"/>
+    </operation>
+    <operation name="SendDeletions">
+      <input message="s0:SendDeletionsSoapIn"/>
+      <output message="s0:SendDeletionsSoapOut"/>
+    </operation>
+    <operation name="SendIndex2">
+      <input message="s0:SendIndex2SoapIn"/>
+      <output message="s0:SendIndex2SoapOut"/>
+    </operation>
+    <operation name="SendSimpleIndex">
+      <input message="s0:SendSimpleIndexSoapIn"/>
+      <output message="s0:SendSimpleIndexSoapOut"/>
+    </operation>
+  </portType>
+  <binding name="NPOSoap" type="s0:NPOSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="CheckConsistency">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:CheckConsistency" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetConsistencyList">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:GetConsistencyList" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="NotifyAlive">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:NotifyAlive" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SendDeletions">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:SendDeletions" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SendIndex2">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:SendIndex2" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SendSimpleIndex">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:SendSimpleIndex" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="NPO">
+    <port name="NPOSoap" binding="s0:NPOSoap">
+      <soap:address location="NPO.Edge.Service.NPO.cls"/>
+    </port>
+  </service>
+</definitions>

@@ -62,7 +62,7 @@ public class PreProcessor implements MessageProcessor {
 
         final MuleMessage message = event.getMessage();
         message.setInvocationProperty(ROUTE_LOGICAL_ADDRESS, (logicalAddress == null) ? "" : logicalAddress);
-        final RouteData.Route route = this.router.getRoute(logicalAddress);
+        final RouteData.Route route = this.router.getRoute(logicalAddress, false);
         if (route != null) {
             message.setInvocationProperty(ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
             message.setInvocationProperty(ROUTE_ENDPOINT_URL, route.getUrl());

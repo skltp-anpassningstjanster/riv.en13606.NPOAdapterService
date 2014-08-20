@@ -32,6 +32,7 @@ import java.util.HashMap;
 public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
+    public static final String CALLBACK_PREFIX = "callback:";
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -41,6 +42,15 @@ public class RouteData implements Serializable {
         static final long serialVersionUID = 1L;
         private String soapAction;
         private String url;
+        private boolean callback;
+
+        public String key(final String key) {
+            return key(key, isCallback());
+        }
+
+        public static String key(final String key, boolean callback) {
+            return (callback) ? (CALLBACK_PREFIX + key) : key;
+        }
     }
 
 
@@ -49,21 +59,36 @@ public class RouteData implements Serializable {
         final Route route = new Route();
         route.setSoapAction(serviceContract);
         route.setUrl(url);
+        if (serviceContract.startsWith("http://nationellpatientoversikt.se")) {
+            route.setCallback(true);
+        }
+        return route;
+    }
+
+
+    //
+    public Route getRoute(final String logicalAddress) {
+        return getRoute(logicalAddress, false);
+    }
+
+
+    //
+    public Route getRoute(final String logicalAddress, final boolean callbackRoute)  {
+        final Route route = map.get(Route.key(logicalAddress, callbackRoute));
+        if (route == null) {
+            log.error("Routing information not found for logical address: {}, callback: {}", logicalAddress, callbackRoute);
+            log.debug("Route map: {}", map);
+        }
         return route;
     }
 
     //
-    public Route getRoute(final String logicalAddress) {
-        return map.get(logicalAddress);
-    }
-
-    //
     public void setRoute(final String logicalAddress, final Route route) {
-        if (map.containsKey(logicalAddress)) {
+        if (map.containsKey(route.key(logicalAddress))) {
             log.error("NPOAdapter: Duplicate routes exists for: " + logicalAddress + ",and " + route + " has been ignored/skipped");
-            log.info("NPOAdapter: Current route for " + logicalAddress + " is " + getRoute(logicalAddress));
+            log.info("NPOAdapter: Current route for " + logicalAddress + " is " + getRoute(logicalAddress, route.isCallback()));
         } else {
-            map.put(logicalAddress, route);
+            map.put(route.key(logicalAddress), route);
         }
     }
 

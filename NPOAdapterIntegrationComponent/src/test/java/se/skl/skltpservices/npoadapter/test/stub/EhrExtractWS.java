@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -49,12 +48,12 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
         
     @Override
-    public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
+    public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
         return null;
     }
 
     @Override
-    public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(@WebParam(partName = "RIV13606REQUEST_EHR_EXTRACT_request", name = "RIV13606REQUEST_EHR_EXTRACT_request", targetNamespace = "urn:riv13606:v1.1") RIV13606REQUESTEHREXTRACTRequestType request) {
+    public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
     	case PATIENT_ID_TRIGGER_ERROR:

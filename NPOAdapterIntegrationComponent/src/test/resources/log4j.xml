@@ -94,7 +94,7 @@
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <logger name="httpclient.wire.header">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
 	 <!-- Level DEBUG: Log the http content transfered during a request/response -->

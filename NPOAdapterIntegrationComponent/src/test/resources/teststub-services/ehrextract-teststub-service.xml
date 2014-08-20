@@ -17,10 +17,13 @@
 
         <cxf:jaxws-service
                 serviceClass="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"
-                wsdlLocation="classpath:/RIV13606.wsdl" />
+                wsdlLocation="classpath:/interactions/ehr_extract/RIV13606.wsdl" />
 
         <component>
             <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"  />
         </component>
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+
     </flow>
 </mule>
