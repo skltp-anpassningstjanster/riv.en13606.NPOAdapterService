@@ -222,8 +222,9 @@ public class XMLBeanMapper {
         for (final Resource resource : resources) {
             if (resource.isReadable()) {
                 MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                if (isCandidate(metadataReader)) {
-                    candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
+                final Class<?> a = candidate(metadataReader);
+                if (a != null) {
+                    candidates.add(a);
                 }
             }
         }
@@ -246,17 +247,17 @@ public class XMLBeanMapper {
     /**
      * Returns if a classpath resource is a relevant class XML Bean candidate for Dozer mapping.
      * @param metadataReader the metadataReader.
-     * @return true if the class is candidate, otherwise false.
+     * @return the class if the class is an candidate, otherwise null.
      */
-    private static boolean isCandidate(final MetadataReader metadataReader) {
-        final Class a = classForName(metadataReader.getClassMetadata().getClassName());
+    private static Class<?> candidate(final MetadataReader metadataReader) {
+        final Class<?> a = classForName(metadataReader.getClassMetadata().getClassName());
         if (a != null
                 && !Modifier.isAbstract(a.getModifiers())
                 && a.getAnnotation(XmlType.class) != null
                 && classB(a.getSimpleName()) != null) {
-            return true;
+            return a;
         }
-        return false;
+        return null;
     }
 
     //
