@@ -51,7 +51,7 @@ import static org.dozer.loader.api.TypeMappingOptions.mapNull;
  * Based on Dozer mapper, and especially configures Dozer to map XMLBeans between the different schema
  * locations. <p/>
  *
- * Baseline source schema package is "se.rivta.en13606.ehrextract.v11" and target is "riv.ehr.patientsummary....".
+ * Baseline source schema package is "se.rivta.en13606.ehrextract.v11" (A) and target is "riv.ehr.patientsummary...." (B).
  *
  * See also "http://dozer.sourceforge.net"
  */
