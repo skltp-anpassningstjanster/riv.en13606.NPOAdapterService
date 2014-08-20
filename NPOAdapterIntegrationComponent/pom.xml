@@ -43,6 +43,12 @@
         </dependency>
 
         <dependency>
+            <groupId>se.skl.tp</groupId>
+            <artifactId>pingforconfiguration-schemas</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.soitoolkit.commons.components</groupId>
             <artifactId>soitoolkit-commons-mule</artifactId>
         </dependency>

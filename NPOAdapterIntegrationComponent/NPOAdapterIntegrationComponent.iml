@@ -23,6 +23,7 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: se.skl.tp:pingforconfiguration-schemas:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-mule:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.soitoolkit.commons.components:soitoolkit-commons-xml:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" level="project" />

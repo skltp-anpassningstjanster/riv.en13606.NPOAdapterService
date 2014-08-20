@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +41,19 @@ import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
 
 public final class EHRUtil {
-	
+
+    private static ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        public SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyyMMddHHmmss");
+        }
+    };
+
+    //
+    public static String formatTimestamp(Date timestamp) {
+        return formatter.get().format(timestamp);
+    }
+
 	public static String getElementTextValue(final ELEMENT e) {
 		if(e != null && e.getValue() instanceof ST) {
 			ST text = (ST) e.getValue();

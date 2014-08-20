@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
@@ -28,7 +29,13 @@ import riv.itintegration.engagementindex._1.EngagementType;
 import riv.itintegration.engagementindex.updateresponder._1.ObjectFactory;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
+import se.skl.skltpservices.npoadapter.mapper.EHRUtil;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -113,6 +120,30 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
         return update;
     }
 
+   /**
+     * Returns a {@link Date} date and time representation.
+     *
+     * @param cal the actual date and time.
+     * @return the {@link Date} representation.
+     */
+    public static Date toDate(XMLGregorianCalendar cal) {
+        if (cal != null) {
+            final Calendar c = Calendar.getInstance();
+
+            c.set(Calendar.DATE, cal.getDay());
+            c.set(Calendar.MONTH, cal.getMonth() - 1);
+            c.set(Calendar.YEAR, cal.getYear());
+            c.set(Calendar.DAY_OF_MONTH, cal.getDay());
+            c.set(Calendar.HOUR_OF_DAY, cal.getHour());
+            c.set(Calendar.MINUTE, cal.getMinute());
+            c.set(Calendar.SECOND, cal.getSecond());
+            c.set(Calendar.MILLISECOND, cal.getMillisecond());
+
+            return c.getTime();
+        }
+        return null;
+    }
+
     //
     protected UpdateType map(final SendIndex2 sendIndex2, final MuleMessage message) {
         final UpdateType update = of.createUpdateType();
@@ -120,7 +151,14 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
             final EngagementType engagement = domain(
                     create(sendIndex2.getSubjectOfCareId(), sendIndex2.getParameters().getParameter(), message),
                     info.getInfoTypeId());
+
             engagement.setDataController(info.getCareGiver());
+            if (info.getRegistrationTime() != null) {
+                engagement.setMostRecentContent(EHRUtil.formatTimestamp(toDate(info.getRegistrationTime())));
+            }
+            if (info.getRcId() != null) {
+                engagement.setBusinessObjectInstanceIdentifier(info.getRcId());
+            }
             final EngagementTransactionType engagementTransaction = create(false, engagement);
             update.getEngagementTransaction().add(engagementTransaction);
         }
