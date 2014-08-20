@@ -115,8 +115,14 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     }
     
     @Test
-    public void GetCareDocumentationSuccessTest() {
+    public void GetCareDocumentationEN136060SuccessTest() {
 		GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
+		assertFalse(resp.getCareDocumentation().isEmpty());
+    }
+    
+    @Test
+    public void GetCareDocumentationRIVSourceSuccessTest() {
+    	GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareDocumentation().isEmpty());
     }
     
@@ -127,7 +133,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Test
     public void GetCareDocumentationBackEndExceptionTest() {
-    	getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
         GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.TRIGGER_ERROR_MESSAGE));
         assertNotNull(resp.getResult());
         assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
@@ -135,14 +140,26 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     //TODO: When implemented it should not throw SOAPFault
     @Test(expected=SOAPFaultException.class)
-    public void GetDiagnosisSuccessTest() {
+    public void GetDiagnosisEN136060SuccessTest() {
     	getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_1, new GetDiagnosisType());
     }
     
     //TODO: When implemented it should not throw SOAPFault
+    @Test(expected=SOAPFaultException.class)
+    public void GetDiagnosisRIVSuccessTest() {
+    	getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_2, new GetDiagnosisType());
+    }
+    
+    //TODO: When implemented it should not throw SOAPFault
     @Test(expected=SOAPFaultException.class) 
-    public void GetLaboratoryOrderOutcomeSuccessTest() {
+    public void GetLaboratoryOrderOutcomeEN13606SuccessTest() {
     	getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, new GetLaboratoryOrderOutcomeType());
+    }
+    
+    //TODO: When implemented it should not throw SOAPFault
+    @Test(expected=SOAPFaultException.class)
+    public void GetLaboratoryOrderOutcomeRIVSuccessTest() {
+    	getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2, new GetLaboratoryOrderOutcomeType());
     }
     	
 	

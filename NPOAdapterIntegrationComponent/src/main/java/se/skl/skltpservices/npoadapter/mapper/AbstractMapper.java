@@ -167,12 +167,15 @@ public abstract class AbstractMapper {
 
         // docs
         map.put(mapperKey(NS_EN_EXTRACT, NS_CAREDOCUMENTATION_2), new CareDocumentationMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_CAREDOCUMENTATION_2), new RIVCareDocumentationMapper());
         
         //dia
-        map.put(NS_EN_EXTRACT + "-" + NS_DIAGNOSIS_2, new DiagnosisMapper());
+        map.put(mapperKey(NS_EN_EXTRACT, NS_DIAGNOSIS_2), new DiagnosisMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_DIAGNOSIS_2), new RIVDiagnosisMapper());
         
         //lab
-        map.put(NS_EN_EXTRACT + "-" + NS_LABORATORY_3, new LaboratoryOrderOutcomeMapper());
+        map.put(mapperKey(NS_EN_EXTRACT, NS_LABORATORY_3), new LaboratoryOrderOutcomeMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_LABORATORY_3), new RIVLaboratoryOrderOutcomeMapper());
     }
 
 
