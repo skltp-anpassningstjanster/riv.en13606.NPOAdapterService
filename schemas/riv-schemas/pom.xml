@@ -39,6 +39,10 @@
             	<targetPath>interactions/GetDiagnosisInteraction</targetPath>
             	<directory>${interactionsdir}/GetDiagnosisInteraction</directory>
             </resource>
+            <resource>
+            	<targetPath>interactions/GetLaboratoryOrderOutcomeInteraction</targetPath>
+            	<directory>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction</directory>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -59,6 +63,9 @@
                                 </wsdlOption>
 								<wsdlOption>
 									<wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
 								</wsdlOption>
                             </wsdlOptions>
                         </configuration>
