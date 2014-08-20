@@ -58,6 +58,12 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
             case "voo":
                 log.info("Received VOO Request");
                 return Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE);
+            case "dia":
+            	log.info("Recived DIA Request");
+            	return Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
+            case "und-kkm-kli":
+            	log.info("und-kkm-kli");
+            	return Util.loadEhrTestData(Util.LAB_TEST_FILE);
             default:
                 throw new IllegalArgumentException("Unknown information type (meanings code): " + infoType);
         }

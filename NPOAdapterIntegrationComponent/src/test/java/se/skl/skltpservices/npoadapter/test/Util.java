@@ -33,6 +33,8 @@ public class Util {
 
     public static final String CARECONTACS_TEST_FILE = "/data/CareContacts_SSEN13606-2.1.1.xml";
     public static final String CAREDOCUMENTATION_TEST_FILE = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
+    public static final String DIAGNOSIS_TEST_FILE = "/data/Diagnosis_SSEN13606-2.1.1.xml";
+    public static final String LAB_TEST_FILE = "/data/LaboratoryOrderOutcome_SSEN13606-2.1.1.xml";
 
 
     //
