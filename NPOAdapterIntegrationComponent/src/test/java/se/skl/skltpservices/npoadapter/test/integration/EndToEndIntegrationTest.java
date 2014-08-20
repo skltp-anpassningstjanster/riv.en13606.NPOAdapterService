@@ -37,9 +37,13 @@ import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
 import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
+import riv.clinicalprocess.healthcond.description.getdiagnosis._2.rivtabp21.GetDiagnosisResponderInterface;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 
@@ -54,6 +58,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	//TODO: Collect Endpoints from configuration
 	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation";
 	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts";
+	private static final String DIAGNOSIS_ENDPOINT = "http://localhost:11000/npoadapter/getdiagnosis";
+	private static final String LABORATORY_ENDPOINT = "http://localhost:11000/npoadapter/getlaboratoryorderoutcome";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
@@ -62,6 +68,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	
 	private final GetCareDocumentationResponderInterface getCareDocumentationServices;
 	private final GetCareContactsResponderInterface getCareContactsServices;
+	private final GetDiagnosisResponderInterface getDiagnosisServices;
+	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
 
     public EndToEndIntegrationTest() {
     	setDisposeContextPerClass(true);
@@ -78,6 +86,15 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
 		jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
 		getCareDocumentationServices = (GetCareDocumentationResponderInterface) jaxWs.create();
+		
+		jaxWs.setServiceClass(GetDiagnosisResponderInterface.class);
+		jaxWs.setAddress(DIAGNOSIS_ENDPOINT);
+		getDiagnosisServices = (GetDiagnosisResponderInterface) jaxWs.create();
+		
+		jaxWs.setServiceClass(GetLaboratoryOrderOutcomeResponderInterface.class);
+		jaxWs.setAddress(LABORATORY_ENDPOINT);
+		getLaboratoryOrderOutcomeServices = (GetLaboratoryOrderOutcomeResponderInterface) jaxWs.create();
+		
     }
     
     @Before
@@ -115,6 +132,19 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertNotNull(resp.getResult());
         assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
     }
+    
+    //TODO: When implemented it should not throw SOAPFault
+    @Test(expected=SOAPFaultException.class)
+    public void GetDiagnosisSuccessTest() {
+    	getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_1, new GetDiagnosisType());
+    }
+    
+    //TODO: When implemented it should not throw SOAPFault
+    @Test(expected=SOAPFaultException.class) 
+    public void GetLaboratoryOrderOutcomeSuccessTest() {
+    	getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, new GetLaboratoryOrderOutcomeType());
+    }
+    	
 	
     @Test
     public void UpdateTakCacheTest() throws Exception {
