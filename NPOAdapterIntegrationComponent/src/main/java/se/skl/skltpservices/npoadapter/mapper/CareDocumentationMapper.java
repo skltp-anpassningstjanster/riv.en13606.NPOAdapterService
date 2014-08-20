@@ -102,21 +102,29 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     }
 	
 	@Override
-	public String mapRequest(XMLStreamReader reader) throws MapperException {
+	public String mapRequest(final String uniqueId, XMLStreamReader reader) throws MapperException {
 		log.debug("Transforming Request");
-		GetCareDocumentationType req = unmarshal(reader);
-		return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
+		try {
+			GetCareDocumentationType req = unmarshal(reader);
+			return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
+		} catch (Exception err) {
+			throw new MapperException("Exception when mapping request", err);
+		}
 	}
 
 	@Override
-	public String mapResponse(XMLStreamReader reader) throws MapperException {
+	public String mapResponse(final String unqiueId, XMLStreamReader reader) throws MapperException {
 		log.debug("Transforming Response");
-		final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(reader);
-        final GetCareDocumentationResponseType responseType = mapResponseType(resp);
-        if (!resp.getResponseDetail().isEmpty()) {
-            responseType.setResult(mapResultType(resp.getResponseDetail()));
-        }
-		return marshal(responseType);
+		try {
+			final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(reader);
+			final GetCareDocumentationResponseType responseType = mapResponseType(resp);
+			if (!resp.getResponseDetail().isEmpty()) {
+				responseType.setResult(mapResultType(unqiueId, resp.getResponseDetail()));
+			}
+			return marshal(responseType);
+		} catch (Exception err) {
+			throw new MapperException("Exception when mapping response", err);
+		}
 	}
 		
 	protected GetCareDocumentationType unmarshal(final XMLStreamReader reader) {
@@ -171,7 +179,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		return resp;
 	}
 	
-	protected ResultType mapResultType(final List<ResponseDetailType> respDetails) {
+	protected ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
 		if(respDetails.isEmpty() && respDetails.get(0).getTypeCode() != null) {
 			return null;
 		}
@@ -181,7 +189,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			resultType.setMessage(resp.getText().getValue());
 		}
 		//TODO: Add tracablitiy to UUID
-		resultType.setLogId(UUID.randomUUID().toString());
+		resultType.setLogId(uniqueId);
 		resultType.setResultCode(interpret(resp.getTypeCode()));
 		return resultType;
 	}

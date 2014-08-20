@@ -46,7 +46,7 @@ public class OutboundRequestTransformer extends AbstractOutboundTransformer {
             final Object[] payload = (Object[]) message.getPayload();
             if (payload[1] instanceof XMLStreamReader) {
             	try {
-            		final String out = getMapper(message).mapRequest((XMLStreamReader) payload[1]);
+            		final String out = getMapper(message).mapRequest(message.getUniqueId(), (XMLStreamReader) payload[1]);
             		message.setPayload(out);
             		return message;
             	} catch (MapperException err) {

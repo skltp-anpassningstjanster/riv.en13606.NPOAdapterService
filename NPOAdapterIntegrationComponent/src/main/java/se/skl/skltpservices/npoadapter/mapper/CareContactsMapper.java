@@ -61,18 +61,26 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
 
     @Override
-    public String mapResponse(XMLStreamReader reader) throws MapperException {
-        final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(reader);
-        if(response.getEhrExtract().isEmpty()) {
-        	throw new MapperException("Missing EHRExtract from source system");
-        }
-        return marshal(map(response.getEhrExtract().get(0)));
+    public String mapResponse(final String uniqueId, XMLStreamReader reader) throws MapperException {
+    	try {
+    		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(reader);
+    		if(response.getEhrExtract().isEmpty()) {
+    			throw new MapperException("Missing EHRExtract from source system");
+    		}
+    		return marshal(map(response.getEhrExtract().get(0)));
+    	} catch (Exception err) {
+    		throw new MapperException("Error when mapping response", err);
+    	}
     }
 
     @Override
-    public String mapRequest(XMLStreamReader reader) throws MapperException {
-        final GetCareContactsType request = unmarshal(reader);
-        return riv13606REQUESTEHREXTRACTRequestType(map(request));
+    public String mapRequest(final String uniqueId, XMLStreamReader reader) throws MapperException {
+    	try {
+    		final GetCareContactsType request = unmarshal(reader);
+        	return riv13606REQUESTEHREXTRACTRequestType(map(request));
+    	} catch (Exception err) {
+    		throw new MapperException("Error when mapping request", err);
+    	}
     }
 
 

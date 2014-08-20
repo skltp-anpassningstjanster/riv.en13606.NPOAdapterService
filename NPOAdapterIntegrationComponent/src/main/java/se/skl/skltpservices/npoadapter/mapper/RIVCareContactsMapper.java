@@ -33,7 +33,7 @@ import javax.xml.stream.XMLStreamReader;
 public class RIVCareContactsMapper extends CareContactsMapper {
 
     @Override
-    public String mapResponse(final XMLStreamReader reader) {
+    public String mapResponse(final String uniqueId, final XMLStreamReader reader) {
         final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(reader);
 
         // map to baseline model
@@ -43,7 +43,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
     }
 
     @Override
-    public String mapRequest(final XMLStreamReader reader) {
+    public String mapRequest(final String uniqueId, final XMLStreamReader reader) {
         final GetCareContactsType request = unmarshal(reader);
 
         // map to baseline model

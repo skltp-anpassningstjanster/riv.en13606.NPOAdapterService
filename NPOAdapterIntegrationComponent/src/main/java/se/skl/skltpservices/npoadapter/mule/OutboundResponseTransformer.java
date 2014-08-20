@@ -42,7 +42,7 @@ public class OutboundResponseTransformer extends AbstractOutboundTransformer {
     public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
         if (message.getPayload() instanceof XMLStreamReader) {
         	try {
-        		return getMapper(message).mapResponse((XMLStreamReader) message.getPayload());
+        		return getMapper(message).mapResponse(message.getUniqueId(), (XMLStreamReader) message.getPayload());
         	} catch (MapperException err) {
         		throw new TransformerException(this, err);
         	}
