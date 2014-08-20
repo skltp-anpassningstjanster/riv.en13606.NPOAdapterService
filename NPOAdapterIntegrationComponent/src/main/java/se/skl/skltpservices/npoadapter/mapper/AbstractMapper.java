@@ -150,6 +150,7 @@ public abstract class AbstractMapper {
 
     static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
     static final String NS_CAREDOCUMENTATION_2 = "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21";
+    static final String NS_DIAGNOSIS_2 = "urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21";
     static final String NS_EN_EXTRACT = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
     static final String NS_RIV_EXTRACT = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
 
@@ -162,6 +163,9 @@ public abstract class AbstractMapper {
 
         // docs
         map.put(NS_EN_EXTRACT + "-" + NS_CAREDOCUMENTATION_2, new CareDocumentationMapper());
+        
+        //dia
+        map.put(NS_EN_EXTRACT + "-" + NS_DIAGNOSIS_2, new DiagnosisMapper());
 
     }
 
