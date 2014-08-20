@@ -53,33 +53,50 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
 
-        final Object[] objArr = (Object[])message.getPayload();
+        final Object[] payload = (Object[]) message.getPayload();
 
-        UpdateType updateType = null;
+        UpdateType updateRequest = null;
 
-        if (objArr[1] instanceof ArrayOfinfoTypeInfoTypeType) {
+        if (payload[1] instanceof ArrayOfinfoTypeInfoTypeType) {
             log.debug("SimpleIndex to Update");
             final SendSimpleIndex simpleIndex = new SendSimpleIndex();
-            simpleIndex.setSubjectOfCareId((String) objArr[0]);
-            simpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) objArr[1]);
-            simpleIndex.setParameters((ArrayOfparameternpoParameterType) objArr[2]);
-            updateType = map(simpleIndex, message);
-        } else if (objArr[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
+            simpleIndex.setSubjectOfCareId((String) payload[0]);
+            simpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) payload[1]);
+            simpleIndex.setParameters((ArrayOfparameternpoParameterType) payload[2]);
+            updateRequest = map(simpleIndex, message);
+        } else if (payload[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
             log.debug("SendIndex2 to Update");
             final SendIndex2 sendIndex2 = new SendIndex2();
-            sendIndex2.setSubjectOfCareId((String) objArr[0]);
-            sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) objArr[1]);
-            sendIndex2.setParameters((ArrayOfparameternpoParameterType) objArr[2]);
-            updateType = map(sendIndex2, message);
+            sendIndex2.setSubjectOfCareId((String) payload[0]);
+            sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) payload[1]);
+            sendIndex2.setParameters((ArrayOfparameternpoParameterType) payload[2]);
+            updateRequest = map(sendIndex2, message);
+        } else if (payload[1] instanceof UpdateType) {
+            updateRequest = fix(message, (UpdateType) payload[1]);
         } else {
-            throw new IllegalStateException("Unexpected type of message: " + objArr[1]);
+            throw new IllegalStateException("Unexpected type of message: " + payload[1]);
         }
 
-        final Object[] payload = { getEiLogicalAddress(), updateType };
-
-        message.setPayload(payload);
+        message.setPayload(new Object[] { getEiLogicalAddress(), updateRequest });
 
         return message;
+    }
+
+    //
+    private UpdateType fix(final MuleMessage message, final UpdateType updateRequest) {
+        String logicalAddress = null;
+        for (final EngagementTransactionType tx : updateRequest.getEngagementTransaction()) {
+            domain(tx.getEngagement(), tx.getEngagement().getCategorization());
+            if (logicalAddress == null) {
+                logicalAddress = tx.getEngagement().getLogicalAddress();
+            }
+        }
+
+        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id", logicalAddress);
+        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "version", "1.1");
+        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "transaction_id", "NA");
+
+        return updateRequest;
     }
 
     //
@@ -103,7 +120,7 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
             final EngagementType engagement = domain(
                     create(sendIndex2.getSubjectOfCareId(), sendIndex2.getParameters().getParameter(), message),
                     info.getInfoTypeId());
-            engagement.setOwner(info.getCareGiver());
+            engagement.setDataController(info.getCareGiver());
             final EngagementTransactionType engagementTransaction = create(false, engagement);
             update.getEngagementTransaction().add(engagementTransaction);
         }
@@ -127,7 +144,12 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
             case "voo":
                 engagement.setServiceDomain("riv:clinicalprocess:healthcond:description");
                 break;
+            default:
+                throw new IllegalArgumentException("Unable to map NPO info type to a RIV service domain: \"" + infoType + "\"");
         }
+
+        engagement.setCategorization(infoType);
+
         return engagement;
     }
 
@@ -141,9 +163,9 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
 
         final String hsaId = message.getOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id");
 
+        engagement.setLogicalAddress(hsaId);
         engagement.setSourceSystem(hsaId);
         engagement.setDataController(hsaId);
-        engagement.setOwner(hsaId);
 
         return engagement;
     }

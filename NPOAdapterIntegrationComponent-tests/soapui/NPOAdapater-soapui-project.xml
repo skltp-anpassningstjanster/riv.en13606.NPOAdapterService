@@ -29851,7 +29851,7 @@ ISO 2008  All rights reserved
                <!--Optional:-->
                <nat:name>hsa_id</nat:name>
                <!--Optional:-->
-               <nat:value>SE-1234</nat:value>
+               <nat:value>VS-1</nat:value>
             </nat:parameter>
             <nat:parameter>
                <!--Optional:-->
@@ -30052,7 +30052,7 @@ ISO 2008  All rights reserved
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/ei</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:itintegration:engagementindex:UpdateResponder:1:Update" name="Update" bindingOperationName="Update" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/ei</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:engagementindex:UpdateResponder:1" xmlns:urn2="urn:riv:itintegration:engagementindex:1">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/ei</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:itintegration:engagementindex:UpdateResponder:1:Update" name="Update" bindingOperationName="Update" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/update</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:engagementindex:UpdateResponder:1" xmlns:urn2="urn:riv:itintegration:engagementindex:1">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
    </soapenv:Header>
@@ -30064,7 +30064,7 @@ ISO 2008  All rights reserved
             <urn2:engagement>
                <urn2:registeredResidentIdentification>?</urn2:registeredResidentIdentification>
                <urn2:serviceDomain>?</urn2:serviceDomain>
-               <urn2:categorization>?</urn2:categorization>
+               <urn2:categorization>voo</urn2:categorization>
                <urn2:logicalAddress>?</urn2:logicalAddress>
                <urn2:businessObjectInstanceIdentifier>?</urn2:businessObjectInstanceIdentifier>
                <urn2:clinicalProcessInterestId>?</urn2:clinicalProcessInterestId>

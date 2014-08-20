@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/jms     http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        ">
+
+
+    <!--
+    Receives engagement index update requests, and alters the NPO specific domain to match
+    standard aggregated services. See also the re-used outbound flow "ei-outbound-update-flow"
+
+    Might further down the road be updated to also invoke "NPO" in order to keep index in sync.
+    -->
+    <flow name="npo-update-flow">
+
+        <inbound-endpoint address="${ENDPOINT_UPDATE_EI}"
+                          connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response"/>
+
+        <cxf:jaxws-service
+                namespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21"
+                serviceClass="se.skl.skltpservices.npoadapter.ws.UpdateWS"
+                wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
+
+        <set-variable variableName="request" value="#[payload]"/>
+
+        <component>
+            <singleton-object class="se.skl.skltpservices.npoadapter.ws.UpdateWS"  />
+        </component>
+
+        <set-variable variableName="response" value="#[payload]" />
+
+        <set-payload value="#[variable:request]" />
+
+        <flow-ref name="ei-outbound-update-flow" />
+
+        <set-payload value="#[variable:response]" />
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+    </flow>
+
+</mule>

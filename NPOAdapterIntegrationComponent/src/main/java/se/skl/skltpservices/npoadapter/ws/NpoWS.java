@@ -31,7 +31,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Peter on 2014-08-19.
+ * Web Service implementing the NPO API. <p/>
+ *
+ * At this stage are {#sendSimpleIndex, #sendIndex2, and #notifyAlive} supported, and this
+ * service is just a part of a flow and i responsible to validate the incoming request. <p/>
+ *
+ * Please also see the mule flow "npo-index-service.xml" for the full service implementation and
+ * to understand how this Web Service is utilized.
+ *
+ * @author Peter
  */
 @WebService(serviceName = "NPO",
         endpointInterface = "se.nationellpatientoversikt.NPOSoap",

@@ -13,27 +13,7 @@
         ">
 
 
-    <flow name="npo-adapter-flow">
-
-        <inbound-endpoint address="${ENDPOINT_NPO}"
-                          connector-ref="soitoolkit-http-connector"
-                          exchange-pattern="request-response"/>
-
-        <cxf:jaxws-service
-                namespace="http://nationellpatientoversikt.se"
-                serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
-                wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
-
-        <set-variable variableName="request" value="#[payload]"/>
-
-        <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
-        </component>
-
-        <set-variable variableName="response" value="#[payload]" />
-
-        <set-payload value="#[variable:request]" />
-
+    <flow name="ei-outbound-update-flow">
         <transformer ref="update-index-transformer" />
 
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
@@ -49,20 +29,6 @@
                               clientClass="riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderService"
                               wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
         </http:outbound-endpoint>
-
-
-        <set-payload value="#[variable:request]" />
-
-        <transformer ref="send-index-transformer" />
-
-        <jms:outbound-endpoint
-                connector-ref="soitoolkit-jms-connector"
-                queue="${NPO_INDEX_QUEUE}"
-                />
-
-        <set-payload value="#[variable:response]" />
-
-        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
     </flow>
 
 </mule>

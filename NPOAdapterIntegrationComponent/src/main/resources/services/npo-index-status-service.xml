@@ -12,7 +12,10 @@
                 http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
         ">
 
-
+    <!--
+    Reads NPO send index messages from the JMS queue, and invokes a SendStatus operation.
+    Might further down the road be updated to also invoke "NPO" in order to keep index in sync.
+    -->
     <flow name="npo-index-status-flow">
 
         <jms:inbound-endpoint

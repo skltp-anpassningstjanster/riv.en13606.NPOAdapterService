@@ -36,7 +36,11 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
 public class GetCareContactsWS implements GetCareContactsResponderInterface {
     @Override
     public GetCareContactsResponseType getCareContacts(String logicalAddress, GetCareContactsType parameters) {
-        return null;
+        final GetCareContactsResponseType response = new GetCareContactsResponseType();
+
+        response.getCareContact();
+
+        return response;
     }
 
 

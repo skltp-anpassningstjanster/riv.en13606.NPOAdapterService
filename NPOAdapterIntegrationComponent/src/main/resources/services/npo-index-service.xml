@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/jms     http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        ">
+
+    <!--
+    Receives NPO specific send index requests. Then ei update is invoked synchronously.
+    See also the re-used outbound flow "ei-outbound-update-flow".
+
+    On a successful synchronous update of EI the original request is put in queue for an
+    asynchronous acknowledge callback to the care system, and possibly (in backlog) also a forward of the request
+    to the NPO system.
+    -->
+    <flow name="npo-index-flow">
+
+        <inbound-endpoint address="${ENDPOINT_NPO}"
+                          connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response"/>
+
+        <cxf:jaxws-service
+                namespace="http://nationellpatientoversikt.se"
+                serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
+                wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
+
+        <set-variable variableName="request" value="#[payload]"/>
+
+        <component>
+            <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
+        </component>
+
+        <set-variable variableName="response" value="#[payload]" />
+
+        <set-payload value="#[variable:request]" />
+
+        <flow-ref name="ei-outbound-update-flow" />
+
+        <set-payload value="#[variable:request]" />
+
+        <transformer ref="send-index-transformer" />
+
+        <jms:outbound-endpoint
+                connector-ref="soitoolkit-jms-connector"
+                queue="${NPO_INDEX_QUEUE}"
+                />
+
+        <set-payload value="#[variable:response]" />
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+    </flow>
+
+</mule>
