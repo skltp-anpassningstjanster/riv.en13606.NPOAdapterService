@@ -35,6 +35,10 @@
                 <targetPath>interactions/GetEhrExtractInteraction</targetPath>
                 <directory>${interactionsdir}/GetEhrExtractInteraction</directory>
             </resource>
+            <resource>
+            	<targetPath>interactions/GetDiagnosisInteraction</targetPath>
+            	<directory>${interactionsdir}/GetDiagnosisInteraction</directory>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -53,6 +57,9 @@
                                 <wsdlOption>
                                     <wsdl>${interactionsdir}/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
+								<wsdlOption>
+									<wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
+								</wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>
