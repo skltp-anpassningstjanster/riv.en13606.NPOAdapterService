@@ -25,6 +25,7 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 
+
 import javax.xml.stream.XMLStreamReader;
 
 /**
@@ -37,7 +38,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
         final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(reader);
 
         // map to baseline model
-        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = map(ehrExtractResponseType);
+        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrExtractResponseType);
 
         return marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().get(0)));
     }
@@ -49,7 +50,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
         // map to baseline model
         final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request);
 
-        final GetEhrExtractType ehrExtractType = map(ehrRequest);
+        final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 
         return ehrExtractType(ehrExtractType);
     }

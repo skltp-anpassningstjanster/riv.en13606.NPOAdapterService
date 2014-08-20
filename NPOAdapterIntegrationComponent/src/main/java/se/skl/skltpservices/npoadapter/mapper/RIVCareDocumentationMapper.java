@@ -36,7 +36,7 @@ public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 		try {
 			GetCareDocumentationType req = unmarshal(reader);
 			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
-			final GetEhrExtractType ehrExtractType = map(ehrRequest);
+			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			return ehrExtractType(ehrExtractType);
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err);
@@ -47,7 +47,7 @@ public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 	public String mapResponse(String unqiueId, XMLStreamReader reader) throws MapperException {
 		try {
 			final GetEhrExtractResponseType resp = ehrExtractResponseType(reader);
-	        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = map(resp);
+	        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
 			final GetCareDocumentationResponseType responseType = mapResponseType(unqiueId, riv13606REQUESTEHREXTRACTResponseType);
 			return marshal(responseType);
 		} catch (Exception err) {

@@ -68,9 +68,9 @@ public class EhrResponseMappingTest {
 
     //
     public void testEhrExtractMapping(se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline) {
-        final EHREXTRACT target = AbstractMapper.dozerBeanMapper.map(baseline, EHREXTRACT.class);
+        final EHREXTRACT target = XMLBeanMapper.dozerBeanMapper.map(baseline, EHREXTRACT.class);
 
-        final se.rivta.en13606.ehrextract.v11.EHREXTRACT result = AbstractMapper.dozerBeanMapper.map(target, se.rivta.en13606.ehrextract.v11.EHREXTRACT.class);
+        final se.rivta.en13606.ehrextract.v11.EHREXTRACT result = XMLBeanMapper.dozerBeanMapper.map(target, se.rivta.en13606.ehrextract.v11.EHREXTRACT.class);
 
 
         final Root baselineRoot  = new Root(baseline);

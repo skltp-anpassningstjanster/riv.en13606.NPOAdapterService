@@ -25,6 +25,7 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseTyp
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
+import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.jws.WebService;
@@ -46,7 +47,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
         final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = new RIV13606REQUESTEHREXTRACTResponseType();
         riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().add(baseline);
 
-        final GetEhrExtractResponseType responseType = AbstractMapper.getDozerBeanMapper().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
+        final GetEhrExtractResponseType responseType = XMLBeanMapper.getInstance().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
         return responseType;
     }
 

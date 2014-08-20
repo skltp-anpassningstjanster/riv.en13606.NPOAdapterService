@@ -65,9 +65,7 @@ public class AbstractMapperTest {
         source.setMaxRecords(createINT());
         source.getParameters().add(createParameter("enduser_assertion", "...Base64-kodat SAML-intyg..."));
 
-        AbstractMapper mapper = new AbstractMapper() {};
-
-        GetEhrExtractType target = mapper.map(source);
+        GetEhrExtractType target = XMLBeanMapper.getInstance().map(source, GetEhrExtractType.class);
 
         assertNotNull(target.getSubjectOfCareId());
         assertEquals(Integer.valueOf(100), target.getMaxRecords().getValue());
