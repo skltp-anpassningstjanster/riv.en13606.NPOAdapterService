@@ -153,6 +153,7 @@ public abstract class AbstractMapper {
     static final String NS_DIAGNOSIS_2 = "urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21";
     static final String NS_EN_EXTRACT = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
     static final String NS_RIV_EXTRACT = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
+    static final String NS_LABORATORY_3 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21";
 
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
@@ -166,7 +167,9 @@ public abstract class AbstractMapper {
         
         //dia
         map.put(NS_EN_EXTRACT + "-" + NS_DIAGNOSIS_2, new DiagnosisMapper());
-
+        
+        //lab
+        map.put(NS_EN_EXTRACT + "-" + NS_LABORATORY_3, new LaboratoryOrderOutcomeMapper());
     }
 
 
