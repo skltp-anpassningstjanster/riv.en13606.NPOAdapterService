@@ -334,7 +334,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      *
      * @author Peter
      */
-    public static class ContactCodes extends AbstarctCodeMapper<Integer, String> {
+    public static class ContactCodes extends AbstractCodeMapper<Integer, String> {
         public static ContactCodes map = new ContactCodes();
 
         static {
@@ -359,7 +359,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      *
      * @author Peter
      */
-    public static class ContactStatus extends AbstarctCodeMapper<Integer, String> {
+    public static class ContactStatus extends AbstractCodeMapper<Integer, String> {
         public static ContactStatus map = new ContactStatus();
 
         static {

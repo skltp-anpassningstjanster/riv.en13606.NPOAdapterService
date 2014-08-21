@@ -26,7 +26,7 @@ import java.util.HashMap;
  *
  * @author Peter
  */
-public abstract class AbstarctCodeMapper<K, V> {
+public abstract class AbstractCodeMapper<K, V> {
     private HashMap<K, V> map = new HashMap<K, V>();
     private HashMap<V, K> reverseMap = new HashMap<V, K>();
 

@@ -30,7 +30,7 @@ import java.util.Properties;
 /**
  * Overrides Spring configuration to be able to programmatically lookup the actual configuration. <p/>
  *
- * Please note: property values are unresolved. Also makes it possible to override with system properties.
+ * Please note: property values are unresolved.
  *
  * @author Peter
  */
@@ -38,7 +38,7 @@ public class SpringPropertiesUtil extends PropertyPlaceholderConfigurer {
 
     private static Map<String, String> propertiesMap;
     // Default as in PropertyPlaceholderConfigurer
-    private int springSystemPropertiesMode = SYSTEM_PROPERTIES_MODE_OVERRIDE;
+    private int springSystemPropertiesMode = SYSTEM_PROPERTIES_MODE_NEVER;
 
     @Override
     public void setSystemPropertiesMode(int systemPropertiesMode) {
