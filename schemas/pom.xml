@@ -31,7 +31,7 @@
                     <artifactId>cxf-codegen-plugin</artifactId>
                     <version>${cxf.version}</version>
                     <configuration>
-                        <fork>once</fork>
+                        <fork>false</fork>
                         <additionalJvmArgs>-Dfile.encoding=UTF-8</additionalJvmArgs>
                         <sourceRoot>${basedir}/target/generated-sources/src/main/java</sourceRoot>
                     </configuration>
