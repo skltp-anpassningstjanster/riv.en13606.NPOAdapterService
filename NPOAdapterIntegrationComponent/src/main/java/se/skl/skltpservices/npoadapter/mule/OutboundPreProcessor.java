@@ -35,10 +35,13 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
 
 /**
- * Created by Peter on 2014-08-12.
+ * Processes binary XML stream to fetch logical address and also performs routing, i,e,
+ * updates message properties with actual routing data.
+ *
+ * @author Peter
  */
 @Slf4j
-public class PreProcessor implements MessageProcessor {
+public class OutboundPreProcessor implements MessageProcessor {
 
     public static final String ROUTE_LOGICAL_ADDRESS = "route-logical-address";
     public static final String ROUTE_SERVICE_SOAP_ACTION = "route-service-soap-action";

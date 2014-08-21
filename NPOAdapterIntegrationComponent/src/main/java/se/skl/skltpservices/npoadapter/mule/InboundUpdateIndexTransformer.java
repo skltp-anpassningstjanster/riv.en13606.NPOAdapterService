@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
@@ -31,18 +30,21 @@ import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
 import se.skl.skltpservices.npoadapter.mapper.EHRUtil;
 
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Created by Peter on 2014-08-19.
+ * Maps incoming index update requests to standard RIB engagement index requests. <p/>
+ *
+ * Supports NPO SendSimpleIndex, SendIndex2 and Update.
+ *
+ * @author Peter
+ *
  */
 @Slf4j
-public class UpdateIndexTransformer extends AbstractMessageTransformer {
+public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
     private static final ObjectFactory of = new ObjectFactory();
     private static final JaxbUtil jaxbUtil = new JaxbUtil(UpdateType.class);
@@ -99,9 +101,9 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
             }
         }
 
-        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id", logicalAddress);
-        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "version", "1.1");
-        message.setOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "transaction_id", "NA");
+        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id", logicalAddress);
+        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "version", "1.1");
+        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "transaction_id", "NA");
 
         return updateRequest;
     }
@@ -197,9 +199,9 @@ public class UpdateIndexTransformer extends AbstractMessageTransformer {
 
         engagement.setRegisteredResidentIdentification(personId);
 
-        SendIndexTransformer.setParameters(message, parameters);
+        BidirectionalSendIndexTransformer.setParameters(message, parameters);
 
-        final String hsaId = message.getOutboundProperty(SendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id");
+        final String hsaId = message.getOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id");
 
         engagement.setLogicalAddress(hsaId);
         engagement.setSourceSystem(hsaId);

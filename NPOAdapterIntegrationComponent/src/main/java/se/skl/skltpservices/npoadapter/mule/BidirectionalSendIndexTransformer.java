@@ -30,10 +30,15 @@ import se.skl.skltpservices.npoadapter.router.Router;
 import java.util.List;
 
 /**
- * Created by Peter on 2014-08-19.
+ * Transforms from inbound SendSimpleIndex and SendIndex2 JAXB Beans to String representations.
+ * Also creates outbound SendStatus callback requests with the origin request as source. <p/>
+ *
+ * For outbound callbacks routing the message is updated with actual roting data properties.
+ *
+ * @author Peter
  */
 @Slf4j
-public class SendIndexTransformer extends AbstractMessageTransformer {
+public class BidirectionalSendIndexTransformer extends AbstractMessageTransformer {
 
     private static JaxbUtil jabxUtil = new JaxbUtil(SendIndex2.class, SendSimpleIndex.class, SendStatus.class);
 
@@ -112,8 +117,8 @@ public class SendIndexTransformer extends AbstractMessageTransformer {
 
         final RouteData.Route route = this.router.getRoute(logicalAddress.getValue(), true);
         if (route != null) {
-            message.setInvocationProperty(PreProcessor.ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
-            message.setInvocationProperty(PreProcessor.ROUTE_ENDPOINT_URL, route.getUrl());
+            message.setInvocationProperty(OutboundPreProcessor.ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
+            message.setInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL, route.getUrl());
         } else {
             log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress.getValue());
         }
