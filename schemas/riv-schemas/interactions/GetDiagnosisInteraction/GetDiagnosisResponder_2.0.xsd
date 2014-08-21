@@ -18,11 +18,10 @@
  under the License.
  -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2"
-	xmlns:core="urn:riv:clinicalprocess:healthcond:description:2"
-	xmlns:codes="urn:riv:clinicalprocess:healthcond:description:enums:2"
-	targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2"
-	elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+           xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2"
+           xmlns:core="urn:riv:clinicalprocess:healthcond:description:2"
+           targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2"
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
 
 	<xs:import schemaLocation="../../core_components/clinicalprocess_healthcond_description_2.0.xsd"
 		namespace="urn:riv:clinicalprocess:healthcond:description:2"/>

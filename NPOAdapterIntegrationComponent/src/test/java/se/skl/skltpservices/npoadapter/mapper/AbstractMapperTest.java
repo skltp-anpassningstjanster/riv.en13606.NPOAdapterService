@@ -22,16 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 import org.junit.Test;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.*;
-import se.rivta.en13606.ehrextract.v11.CD;
-import se.rivta.en13606.ehrextract.v11.II;
-import se.rivta.en13606.ehrextract.v11.INT;
-import se.rivta.en13606.ehrextract.v11.IVLTS;
-import se.rivta.en13606.ehrextract.v11.ST;
-import se.rivta.en13606.ehrextract.v11.TS;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Peter on 2014-08-01.

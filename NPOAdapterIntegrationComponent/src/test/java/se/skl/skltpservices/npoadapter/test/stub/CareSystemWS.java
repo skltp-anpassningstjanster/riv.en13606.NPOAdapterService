@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import se.nationellpatientoversikt.*;
 
 import javax.jws.WebParam;

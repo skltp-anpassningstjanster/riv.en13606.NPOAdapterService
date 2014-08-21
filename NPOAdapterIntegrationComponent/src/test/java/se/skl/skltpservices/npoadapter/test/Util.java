@@ -22,7 +22,10 @@ package se.skl.skltpservices.npoadapter.test;
 import lombok.SneakyThrows;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 

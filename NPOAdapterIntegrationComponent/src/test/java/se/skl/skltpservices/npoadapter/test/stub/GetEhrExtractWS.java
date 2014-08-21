@@ -24,7 +24,6 @@ import riv.ehr.patientsummary.getehrextract._1.rivtabp21.GetEhrExtractResponderI
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 import se.skl.skltpservices.npoadapter.test.Util;
 

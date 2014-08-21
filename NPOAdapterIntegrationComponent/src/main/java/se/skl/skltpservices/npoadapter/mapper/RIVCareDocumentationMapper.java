@@ -19,8 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import javax.xml.stream.XMLStreamReader;
-
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -28,6 +26,8 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+
+import javax.xml.stream.XMLStreamReader;
 
 public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 

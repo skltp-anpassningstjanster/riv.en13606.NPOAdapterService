@@ -19,32 +19,21 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
+import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
+import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
-import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
-import riv.clinicalprocess.healthcond.description._2.PersonIdType;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
-import se.rivta.en13606.ehrextract.v11.AUDITINFO;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
-import se.rivta.en13606.ehrextract.v11.II;
-import se.rivta.en13606.ehrextract.v11.INT;
-import se.rivta.en13606.ehrextract.v11.IVLTS;
-import se.rivta.en13606.ehrextract.v11.ORGANISATION;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
-import se.rivta.en13606.ehrextract.v11.TS;
-import se.skl.skltpservices.npoadapter.test.Util;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CareDocumentationMapperTest {
 	

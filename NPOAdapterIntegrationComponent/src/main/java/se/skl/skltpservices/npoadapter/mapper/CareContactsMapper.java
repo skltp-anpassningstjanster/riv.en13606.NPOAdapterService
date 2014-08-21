@@ -20,16 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-
-import riv.clinicalprocess.logistics.logistics._2.CVType;
-import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
-import riv.clinicalprocess.logistics.logistics._2.CareContactType;
-import riv.clinicalprocess.logistics.logistics._2.DatePeriodType;
-import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
-import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
-import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
-import riv.clinicalprocess.logistics.logistics._2.PersonIdType;
-import riv.clinicalprocess.logistics.logistics._2.TimePeriodType;
+import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
@@ -38,8 +29,9 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
-
 import java.util.List;
+
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 
 /**
  * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>

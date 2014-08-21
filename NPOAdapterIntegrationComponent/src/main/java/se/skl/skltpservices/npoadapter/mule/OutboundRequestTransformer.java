@@ -20,11 +20,8 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
-import org.mule.config.i18n.Message;
-
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.stream.XMLStreamReader;

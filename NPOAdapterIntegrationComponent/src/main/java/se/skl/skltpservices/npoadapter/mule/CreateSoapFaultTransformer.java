@@ -19,18 +19,14 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import java.text.MessageFormat;
-
 import lombok.extern.slf4j.Slf4j;
-
-import org.mule.DefaultMuleMessage;
 import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
 
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import java.text.MessageFormat;
 
 @Slf4j
 public class CreateSoapFaultTransformer extends AbstractMessageTransformer {

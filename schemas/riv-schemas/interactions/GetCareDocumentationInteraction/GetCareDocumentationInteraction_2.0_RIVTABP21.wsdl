@@ -16,16 +16,15 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.
- -->		
-<wsdl:definitions name='GetCareDocumentationInteraction' 
-	xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' 
-	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' 
-	xmlns:xs='http://www.w3.org/2001/XMLSchema' 
-	xmlns:tjsr='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2' 
-	xmlns:tjsi='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationInitiator:2' 
-	xmlns:tns='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21' 
-	targetNamespace='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21' 
-	xmlns:itr='urn:riv:itintegration:registry:1'>
+ -->
+<wsdl:definitions name='GetCareDocumentationInteraction'
+                  xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+                  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+                  xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                  xmlns:tjsr='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2'
+                  xmlns:tns='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21'
+                  targetNamespace='urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21'
+                  xmlns:itr='urn:riv:itintegration:registry:1'>
 
   <xs:annotation>
     <xs:documentation>

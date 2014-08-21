@@ -42,9 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.dozer.loader.api.FieldsMappingOptions.copyByReference;
-import static org.dozer.loader.api.FieldsMappingOptions.hintA;
-import static org.dozer.loader.api.FieldsMappingOptions.hintB;
+import static org.dozer.loader.api.FieldsMappingOptions.*;
 import static org.dozer.loader.api.TypeMappingOptions.mapNull;
 
 /**

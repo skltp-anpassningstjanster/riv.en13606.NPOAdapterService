@@ -16,13 +16,13 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.
- -->		
+ -->
 <wsdl:definitions name='GetCareContactsInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
-  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema'
-  xmlns:tjsr='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2'
-  xmlns:tjsi='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsInitiator:2'
-  xmlns:tns='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21'
-  targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
+                  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                  xmlns:tjsr='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2'
+                  xmlns:tns='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21'
+                  targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21'
+                  xmlns:itr='urn:riv:itintegration:registry:1'>
   <xs:annotation>
     <xs:documentation>
 			 Tjänsteinteraktionens namn: GetCareContactsInteraction

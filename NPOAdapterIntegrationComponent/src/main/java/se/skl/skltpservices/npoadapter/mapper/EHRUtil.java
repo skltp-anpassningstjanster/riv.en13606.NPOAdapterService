@@ -19,26 +19,12 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.apache.commons.lang.StringUtils;
+import se.rivta.en13606.ehrextract.v11.*;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
-import se.rivta.en13606.ehrextract.v11.CD;
-import se.rivta.en13606.ehrextract.v11.CONTENT;
-import se.rivta.en13606.ehrextract.v11.ELEMENT;
-import se.rivta.en13606.ehrextract.v11.EN;
-import se.rivta.en13606.ehrextract.v11.ENTRY;
-import se.rivta.en13606.ehrextract.v11.ENXP;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
-import se.rivta.en13606.ehrextract.v11.II;
-import se.rivta.en13606.ehrextract.v11.INT;
-import se.rivta.en13606.ehrextract.v11.ITEM;
-import se.rivta.en13606.ehrextract.v11.IVLTS;
-import se.rivta.en13606.ehrextract.v11.ParameterType;
-import se.rivta.en13606.ehrextract.v11.ST;
-import se.rivta.en13606.ehrextract.v11.TS;
 
 public final class EHRUtil {
 

@@ -20,7 +20,10 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 import lombok.SneakyThrows;
-import skl.tp.vagvalsinfo.v2.*;
+import skl.tp.vagvalsinfo.v2.HamtaAllaAnropsBehorigheterResponseType;
+import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
+import skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface;
+import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
 
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeFactory;

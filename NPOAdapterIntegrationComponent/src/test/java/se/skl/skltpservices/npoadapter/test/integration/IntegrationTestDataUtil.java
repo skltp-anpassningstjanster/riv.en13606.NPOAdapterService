@@ -19,11 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
-import java.util.UUID;
-
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
+
+import java.util.UUID;
 
 public final class IntegrationTestDataUtil {
 	private static final String SOURCE_SYSTEM_HSA_ID = UUID.randomUUID().toString();

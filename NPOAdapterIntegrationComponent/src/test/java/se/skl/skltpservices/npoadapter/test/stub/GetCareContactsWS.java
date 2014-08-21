@@ -20,11 +20,11 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 
-import javax.jws.WebService;
-
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+
+import javax.jws.WebService;
 
 /**
  * Created by Peter on 2014-07-30.

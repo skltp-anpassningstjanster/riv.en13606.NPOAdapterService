@@ -19,10 +19,10 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import javax.xml.stream.XMLStreamReader;
-
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
+
+import javax.xml.stream.XMLStreamReader;
 
 public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapper {
 

@@ -27,7 +27,6 @@ import riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderInte
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**

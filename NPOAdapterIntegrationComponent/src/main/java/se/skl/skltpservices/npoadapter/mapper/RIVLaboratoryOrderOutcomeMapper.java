@@ -19,9 +19,9 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import javax.xml.stream.XMLStreamReader;
-
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+
+import javax.xml.stream.XMLStreamReader;
 
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 

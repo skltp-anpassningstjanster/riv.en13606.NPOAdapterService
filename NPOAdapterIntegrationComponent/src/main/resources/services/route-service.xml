@@ -1,13 +1,8 @@
 <mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:spring="http://www.springframework.org/schema/beans"
       xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
       xmlns="http://www.mulesoft.org/schema/mule/core"
-      xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
-      xsi:schemaLocation="
-                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-                http://www.mulesoft.org/schema/mule/core        http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-                http://www.mulesoft.org/schema/mule/cxf         http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-                http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd" >
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core        http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf         http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd">
 
     <flow name="outbound-dynamic-route-flow" >
 

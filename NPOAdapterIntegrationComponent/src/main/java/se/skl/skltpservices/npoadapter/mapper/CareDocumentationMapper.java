@@ -19,62 +19,24 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.stream.XMLStreamReader;
-
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang.StringUtils;
-import org.mule.api.transformer.TransformerException;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-
-import riv.clinicalprocess.healthcond.description._2.CVType;
-import riv.clinicalprocess.healthcond.description._2.CareDocumentationBodyType;
-import riv.clinicalprocess.healthcond.description._2.CareDocumentationType;
-import riv.clinicalprocess.healthcond.description._2.ClinicalDocumentNoteType;
-import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
-import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
-import riv.clinicalprocess.healthcond.description._2.LegalAuthenticatorType;
-import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
-import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
-import riv.clinicalprocess.healthcond.description._2.PersonIdType;
-import riv.clinicalprocess.healthcond.description._2.ResultType;
+import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentNoteCodeEnum;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
-import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
-import se.rivta.en13606.ehrextract.v11.AUDITINFO;
-import se.rivta.en13606.ehrextract.v11.CD;
-import se.rivta.en13606.ehrextract.v11.COMPOSITION;
-import se.rivta.en13606.ehrextract.v11.CONTENT;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.rivta.en13606.ehrextract.v11.ELEMENT;
-import se.rivta.en13606.ehrextract.v11.ENTRY;
-import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
-import se.rivta.en13606.ehrextract.v11.II;
-import se.rivta.en13606.ehrextract.v11.INT;
-import se.rivta.en13606.ehrextract.v11.ITEM;
-import se.rivta.en13606.ehrextract.v11.IVLTS;
-import se.rivta.en13606.ehrextract.v11.ORGANISATION;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
-import se.rivta.en13606.ehrextract.v11.ST;
-import se.rivta.en13606.ehrextract.v11.TEL;
-import se.rivta.en13606.ehrextract.v11.TELEMAIL;
-import se.rivta.en13606.ehrextract.v11.TELPHONE;
-import se.rivta.en13606.ehrextract.v11.TS;
+import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.stream.XMLStreamReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
 
 @Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {

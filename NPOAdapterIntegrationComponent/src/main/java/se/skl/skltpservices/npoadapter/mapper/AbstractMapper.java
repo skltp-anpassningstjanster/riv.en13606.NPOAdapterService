@@ -23,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.ObjectFactory;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamException;

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions 
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
-	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
-	xmlns:tns="urn:riv13606:v1.1" 
-	targetNamespace="urn:riv13606:v1.1" >
+<wsdl:definitions
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="urn:riv13606:v1.1"
+        targetNamespace="urn:riv13606:v1.1">
 	<xs:annotation>
 		<xs:documentation>
 		Rodolfo Garcia

@@ -16,13 +16,12 @@
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.
- -->		
+ -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2"
-    xmlns:core="urn:riv:clinicalprocess:logistics:logistics:2"
-    xmlns:codes="urn:riv:clinicalprocess:logistics:logistics:enums:2"
-    targetNamespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2"
-    elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+           xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2"
+           xmlns:core="urn:riv:clinicalprocess:logistics:logistics:2"
+           targetNamespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2"
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
 
     <xs:import schemaLocation="../../core_components/clinicalprocess_logistics_logistics_2.0.xsd"
         namespace="urn:riv:clinicalprocess:logistics:logistics:2"/>
