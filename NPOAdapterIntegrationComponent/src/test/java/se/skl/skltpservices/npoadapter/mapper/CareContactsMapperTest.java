@@ -19,26 +19,20 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static junit.framework.Assert.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
-import riv.clinicalprocess.logistics.logistics._2.CareContactType;
-import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
-import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
-import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import static junit.framework.Assert.*;
 
 /**
  * Created by Peter on 2014-07-28.
@@ -69,7 +63,7 @@ public class CareContactsMapperTest {
     private void dump(final GetCareContactsResponseType responseType) {
         Root root = new Root();
         root.type = responseType;
-        Util.dump(root);
+        //Util.dump(root);
     }
 
 

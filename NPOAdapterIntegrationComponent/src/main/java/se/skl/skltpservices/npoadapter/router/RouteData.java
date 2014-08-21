@@ -26,13 +26,20 @@ import java.io.*;
 import java.util.HashMap;
 
 /**
- * Created by Peter on 2014-08-12.
+ * Keeps routing information, main routing is from northbound NPO consumer to southbound care system.
+ * Though, a callback flag indicates that itäs about an internal NPO specific route, i.e. the same logical
+ * address can be used for 2 different kinds of routes (a main consumer-producer route, and a callback route). <p/>
+ *
+ * Route data is serialized to a file store.
+ *
+ * @author Peter
  */
 @Slf4j
 public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
     public static final String CALLBACK_PREFIX = "callback:";
+    public static final String NPO_NS = "http://nationellpatientoversikt.se";
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -59,7 +66,7 @@ public class RouteData implements Serializable {
         final Route route = new Route();
         route.setSoapAction(serviceContract);
         route.setUrl(url);
-        if (serviceContract.startsWith("http://nationellpatientoversikt.se")) {
+        if (serviceContract.startsWith(NPO_NS)) {
             route.setCallback(true);
         }
         return route;

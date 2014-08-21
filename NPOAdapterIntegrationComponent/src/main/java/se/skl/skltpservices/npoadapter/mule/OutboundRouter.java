@@ -56,13 +56,13 @@ public class OutboundRouter extends AbstractRecipientList {
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
-            final String url = event.getMessage().getInvocationProperty(PreProcessor.ROUTE_ENDPOINT_URL);
+            final String url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
 
             final EndpointBuilder eb = getEndpoint(url);
 
             final String originalServiceConsumerId = event.getMessage().getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
 
-            final String soapAction = event.getMessage().getInvocationProperty(PreProcessor.ROUTE_SERVICE_SOAP_ACTION);
+            final String soapAction = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_SERVICE_SOAP_ACTION);
 
             eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId, soapAction)));
 

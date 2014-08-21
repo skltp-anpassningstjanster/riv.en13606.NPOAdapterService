@@ -22,17 +22,17 @@
             <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
         </spring:bean>
 
-        <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.PreProcessor">
+        <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor">
             <spring:property name="router" ref="router" />
         </spring:bean>
 
     </spring:beans>
 
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.UpdateIndexTransformer" name="update-index-transformer">
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexTransformer" name="update-index-transformer">
         <spring:property name="eiLogicalAddress" value="${LOGICAL_ADDRESS_EI}" />
     </custom-transformer>
 
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.SendIndexTransformer" name="send-index-transformer">
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.BidirectionalSendIndexTransformer" name="send-index-transformer">
         <spring:property name="router" ref="router" />
     </custom-transformer>
 

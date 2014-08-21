@@ -27,7 +27,7 @@ import se.skl.skltpservices.npoadapter.mapper.Mapper;
 import javax.xml.namespace.QName;
 
 import static se.skl.skltpservices.npoadapter.mapper.AbstractMapper.getInstance;
-import static se.skl.skltpservices.npoadapter.mule.PreProcessor.*;
+import static se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor.*;
 
 /**
  * Abstracts outbound transformers. <p/>
