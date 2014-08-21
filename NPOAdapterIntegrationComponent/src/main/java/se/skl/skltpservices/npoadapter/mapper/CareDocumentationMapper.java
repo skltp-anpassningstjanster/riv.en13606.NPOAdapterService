@@ -205,9 +205,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		header.setPatientId(person);
 		header.setAccountableHealthcareProfessional(mapHealtcareProfessionalType(comp.getComposer(), orgs, hps, comp.getCommittal()));
 		final LegalAuthenticatorType legal = new LegalAuthenticatorType();
-		//Only author time exists.
-		legal.setLegalAuthenticatorHSAId(UNKNOWN_VALUE);
-		legal.setLegalAuthenticatorName(UNKNOWN_VALUE);
 		if(header.getAccountableHealthcareProfessional() != null) {
 			legal.setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
 		}
