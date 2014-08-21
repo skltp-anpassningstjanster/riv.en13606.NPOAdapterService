@@ -7,7 +7,7 @@
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
-    <flow name="ping-for-configuration-flow" >
+    <flow name="PingForConfigurationResponderService-1.0" >
 
         <inbound-endpoint address="${ENDPOINT_PFC}"
                           connector-ref="soitoolkit-http-connector"/>

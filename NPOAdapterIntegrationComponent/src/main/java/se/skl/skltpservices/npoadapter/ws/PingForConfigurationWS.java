@@ -22,18 +22,26 @@ package se.skl.skltpservices.npoadapter.ws;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleContext;
 import org.mule.api.annotations.expressions.Lookup;
+import org.mule.api.construct.FlowConstruct;
+import org.mule.management.stats.FlowConstructStatistics;
 import riv.ehr.patientsummary._1.EHREXTRACT;
 import se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface;
 import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skl.skltpservices.npoadapter.mapper.EHRUtil;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.jws.WebService;
 import java.util.Date;
+import java.util.Map;
 
 /**
- * Created by Peter on 2014-08-20.
+ * Implements standard interface <p/>
+ *
+ * The current configuration is also returned.
+ *
+ * @author Peter
  */
 @Slf4j
 @WebService(serviceName = "PingForConfigurationResponderService",
@@ -54,13 +62,38 @@ public class PingForConfigurationWS implements PingForConfigurationResponderInte
         response.setVersion(EHREXTRACT.class.getPackage().getImplementationVersion());
         response.setPingDateTime(EHRUtil.formatTimestamp(new Date()));
 
-        Object o = muleContext.getRegistry().lookupObject("propertyPlaceholder");
+        // services
+        for (final FlowConstruct flow: muleContext.getRegistry().lookupFlowConstructs()) {
+            response.getConfiguration().add(property(flow.getName(), stats(flow)));
 
-        response.getConfiguration().add(property("propertyPlaceholder", "" + o));
+        }
+
+        // config
+        for (final Map.Entry<String, String> entry : SpringPropertiesUtil.getProperties().entrySet()) {
+            response.getConfiguration().add(property(entry.getKey(), entry.getValue()));
+        }
+
 
         return response;
     }
 
+    //
+    static String stats(FlowConstruct flow) {
+        final FlowConstructStatistics stats = flow.getStatistics();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("enabled=").append(stats.isEnabled())
+                .append(", num_requests=").append(stats.getProcessedEvents())
+                .append(", num_avg_queuesz=").append(stats.getAverageQueueSize())
+                .append(", num_exec_errors=").append(stats.getExecutionErrors())
+                .append(", num_fatal_errors=").append(stats.getFatalErrors())
+                .append(", time_avg=").append(stats.getAverageProcessingTime())
+                .append(", time_max=").append(stats.getMaxProcessingTime())
+                .append(", time_min=").append(stats.getMinProcessingTime())
+                .append(", time_tot=").append(stats.getTotalProcessingTime());
+        return sb.toString();
+    }
+
+    //
     static ConfigurationType property(final String name, final String value) {
         ConfigurationType p = new ConfigurationType();
         p.setName(name);

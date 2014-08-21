@@ -19,7 +19,7 @@
 
     Might further down the road be updated to also invoke "NPO" in order to keep index in sync.
     -->
-    <flow name="npo-update-flow">
+    <flow name="NPO-UpdateResponderService-1.0">
 
         <inbound-endpoint address="${ENDPOINT_UPDATE_EI}"
                           connector-ref="soitoolkit-http-connector"

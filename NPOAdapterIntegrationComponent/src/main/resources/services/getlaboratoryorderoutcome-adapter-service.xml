@@ -8,7 +8,7 @@
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
 
-    <flow name="getlaboratoryorderoutcome-adapter-flow">
+    <flow name="GetLaboratoryOrderOutcomeResponderService-3.0">
     		
         <inbound-endpoint address="${ENDPOINT_GETLABORATORY}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
@@ -25,8 +25,7 @@
 
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 
-        <flow-ref name="outbound-route-flow" />
-        
+        <flow-ref name="outbound-dynamic-route-flow" />
 
         <response>
             <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundResponseTransformer" />

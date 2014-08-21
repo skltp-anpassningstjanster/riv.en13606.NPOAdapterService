@@ -9,7 +9,7 @@
                 http://www.mulesoft.org/schema/mule/cxf         http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
                 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd" >
 
-    <flow name="outbound-route-flow" >
+    <flow name="outbound-dynamic-route-flow" >
 
         <cxf:proxy-client payload="body" />
 

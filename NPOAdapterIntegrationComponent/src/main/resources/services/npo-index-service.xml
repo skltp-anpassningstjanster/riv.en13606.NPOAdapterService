@@ -20,7 +20,7 @@
     asynchronous acknowledge callback to the care system, and possibly (in backlog) also a forward of the request
     to the NPO system.
     -->
-    <flow name="npo-index-flow">
+    <flow name="NPOService-1.1.2">
 
         <inbound-endpoint address="${ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"

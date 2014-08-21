@@ -6,7 +6,7 @@
                 http://www.mulesoft.org/schema/mule/core        http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         ">
 
-    <flow name="NPOAdapter-PingService-flow">
+    <flow name="PingService-http-get">
 
         <inbound-endpoint
                 address="${PINGSERVICE_INBOUND_URL}"

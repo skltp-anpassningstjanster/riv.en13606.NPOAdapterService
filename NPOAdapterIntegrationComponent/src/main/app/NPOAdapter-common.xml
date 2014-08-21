@@ -10,7 +10,7 @@
 
 
     <spring:bean id="propertyPlaceholder"
-                 class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+                 class="se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil">
         <spring:property name="ignoreResourceNotFound" value="true"/>
         <spring:property name="locations">
             <spring:list>
