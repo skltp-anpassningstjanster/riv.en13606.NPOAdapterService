@@ -30,10 +30,11 @@ import java.io.StringWriter;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Peter on 2014-08-15.
+ * Tests XML Bean mapper.
+ *
+ * @author Peter
  */
-
-public class EhrResponseMappingTest {
+public class XMLBeanMapperTest {
 
     @XmlRootElement
     static class Root {
@@ -66,12 +67,15 @@ public class EhrResponseMappingTest {
         testEhrExtractMapping(Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE));
     }
 
-    //
+    /**
+     * Perform a complete round-trip mapping from baseline -> destination -> baseline and check that the source baseline
+     * is the same as the target baseline.
+     *
+     * @param baseline the actual test data baseline.
+     */
     public void testEhrExtractMapping(se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline) {
         final EHREXTRACT target = XMLBeanMapper.dozerBeanMapper.map(baseline, EHREXTRACT.class);
-
         final se.rivta.en13606.ehrextract.v11.EHREXTRACT result = XMLBeanMapper.dozerBeanMapper.map(target, se.rivta.en13606.ehrextract.v11.EHREXTRACT.class);
-
 
         final Root baselineRoot  = new Root(baseline);
         final Root resultRoot = new Root(result);
