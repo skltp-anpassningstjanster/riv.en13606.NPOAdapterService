@@ -37,7 +37,7 @@
 
         <set-payload value="#[variable:request]" />
 
-        <flow-ref name="ei-outbound-update-flow" />
+        <flow-ref name="UpdateResponderService-1.0-Client" />
 
         <set-payload value="#[variable:response]" />
 
