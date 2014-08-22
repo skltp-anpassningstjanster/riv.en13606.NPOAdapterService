@@ -18,8 +18,8 @@
                                 exchange-pattern="request-response"
                                 responseTimeout="${SERVICE_TIMEOUT_MS}" >
 
-            <set-property propertyName="x-vp-instance-id" value="${ADAPTER_HSA_ID}" />
-            <set-property propertyName="x-vp-sender-id" value="${VP_INSTANCE_ID}" />
+            <set-property propertyName="x-vp-instance-id" value="${VP_INSTANCE_ID}" />
+            <set-property propertyName="x-vp-sender-id" value="#[message.inboundProperties['npo_param_hsa_id']]" />
 
             <cxf:jaxws-client port="UpdateResponderPort"
                               operation="Update"
