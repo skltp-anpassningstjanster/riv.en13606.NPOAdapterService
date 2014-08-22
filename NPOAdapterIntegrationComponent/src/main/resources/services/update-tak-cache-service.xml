@@ -12,7 +12,7 @@
         <quartz:event-generator-job/>
     </quartz:endpoint>
 
-    <flow name="update-tak-cache-flow">
+    <flow name="update-tak-cache-cron-flow">
         <inbound-endpoint ref="quartz-scheduler"/>
         <invoke object-ref="router" method="updateRoutingDataScheduledEvent"/>
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />

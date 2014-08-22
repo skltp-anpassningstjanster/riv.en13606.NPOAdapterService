@@ -10,7 +10,7 @@
                 http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
 
-    <flow name="ei-outbound-update-flow">
+    <flow name="UpdateResponderService-1.0-Client">
         <transformer ref="update-index-transformer" />
 
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"

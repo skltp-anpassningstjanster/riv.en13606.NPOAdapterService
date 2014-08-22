@@ -3,7 +3,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core        http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
-    <flow name="PingService-http-get">
+    <flow name="PingService-HTTP-Get">
 
         <inbound-endpoint
                 address="${PINGSERVICE_INBOUND_URL}"

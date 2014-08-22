@@ -16,7 +16,7 @@
     Reads NPO send index messages from the JMS queue, and invokes a SendStatus operation.
     Might further down the road be updated to also invoke "NPO" in order to keep index in sync.
     -->
-    <flow name="SendStatus-1.1.2-async-client">
+    <flow name="SendStatus-1.1.2-Async-Client">
 
         <jms:inbound-endpoint
                 connector-ref="soitoolkit-jms-connector"
