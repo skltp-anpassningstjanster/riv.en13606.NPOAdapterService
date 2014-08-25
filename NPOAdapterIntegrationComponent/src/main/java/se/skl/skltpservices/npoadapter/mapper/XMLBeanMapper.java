@@ -63,7 +63,7 @@ public class XMLBeanMapper {
     static DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
     /** Special hints needed for the ELEMENT.ANY value */
-    static Class<?>[] ANY_ELEMENT_VALUE_HINTS = { ST.class, TS.class };
+    static Class<?>[] ANY_ELEMENT_VALUE_HINTS = { ST.class, TS.class, CD.class };
     /** Special hints needed for the IDENTIFEDENTITY.telecom List value */
     static Class<?>[] TEL_IDENTIFIEDENTITY_VALUE_HINTS = { TELEMAIL.class, TELPHONE.class };
 

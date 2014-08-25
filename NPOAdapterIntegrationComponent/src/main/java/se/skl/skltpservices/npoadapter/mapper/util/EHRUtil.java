@@ -17,9 +17,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.mapper;
+package se.skl.skltpservices.npoadapter.mapper.util;
 
 import org.apache.commons.lang.StringUtils;
+
+import riv.clinicalprocess.healthcond.description._2.ResultType;
+import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.*;
 
 import java.text.SimpleDateFormat;
@@ -118,5 +121,44 @@ public final class EHRUtil {
   			}
   		}
   		return null;
+  	}
+  	
+  	//TODO: Move to documenation-util
+  	public static ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
+		try {
+			switch(code) {
+			case E:
+			case W:
+				return ResultCodeEnum.ERROR;
+			case I:
+				return ResultCodeEnum.INFO;
+			default:
+				return ResultCodeEnum.OK;
+			}
+		} catch (Exception err) {
+			return null;
+		}
+	}
+  	
+  	//TODO: Move to documentaiton-util
+  	public static ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
+		if(respDetails.isEmpty()) {
+			return null;
+		}
+		final ResponseDetailType resp = respDetails.get(0);
+		final ResultType resultType = new ResultType();
+		if(resp.getText() != null) {
+			resultType.setMessage(resp.getText().getValue());
+		}
+		resultType.setLogId(uniqueId);
+		resultType.setResultCode(EHRUtil.interpret(resp.getTypeCode()));
+		return resultType;
+	}
+  	
+  	public static String getSystemHSAId(final EHREXTRACT ehrExtract) {
+		if(ehrExtract.getEhrSystem() != null) {
+			return ehrExtract.getEhrSystem().getExtension();
+		}
+		return null;
   	}
 }

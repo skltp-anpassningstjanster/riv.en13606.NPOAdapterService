@@ -17,10 +17,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.mapper;
+package se.skl.skltpservices.npoadapter.mapper.util;
 
 import org.junit.Test;
+
+
 import se.rivta.en13606.ehrextract.v11.*;
+
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import java.util.ArrayList;
 import java.util.List;

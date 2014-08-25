@@ -20,15 +20,18 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
 import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
+
 import java.util.List;
 
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;

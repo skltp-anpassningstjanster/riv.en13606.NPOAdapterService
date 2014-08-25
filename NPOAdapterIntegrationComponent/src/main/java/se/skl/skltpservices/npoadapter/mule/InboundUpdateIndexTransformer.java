@@ -20,17 +20,20 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
 import riv.itintegration.engagementindex._1.EngagementTransactionType;
 import riv.itintegration.engagementindex._1.EngagementType;
 import riv.itintegration.engagementindex.updateresponder._1.ObjectFactory;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
-import se.skl.skltpservices.npoadapter.mapper.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

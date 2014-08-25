@@ -19,23 +19,203 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import riv.clinicalprocess.healthcond.description._2.CVType;
+import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
+import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
+import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description._2.ResultType;
+import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.HealthcondDescriptionUtil;
 
+import se.rivta.en13606.ehrextract.v11.*;
+
+import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class DiagnosisMapper extends AbstractMapper implements Mapper {
+	
+	private static final JaxbUtil jaxb = new JaxbUtil(GetDiagnosisType.class);
+	private static final ObjectFactory objFactory = new ObjectFactory();
+	private static final int MAX_ROWS = 500;
+	
+	public static final CD MEANING_VOO = new CD();
+    static {
+        MEANING_VOO.setCodeSystem("1.2.752.129.2.2.2.1");
+        MEANING_VOO.setCode("dia");
+    }
+	
+	private static final String TIME_ELEMENT = "dia-dia-tid";
+	private static final String CODE_ELEMENT = "dia-dia-kod";
+	private static final String TYPE_ELEMENT = "dia-dia-typ";
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader)
-			throws MapperException {
-		throw new NotImplementedException("Adapter not implemented");
+	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
+		try {
+			GetDiagnosisType req = unmarshal(reader);
+			return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
+		} catch (Exception err) {
+			log.error("Error when transforming Diagnosis request", err);
+			throw new MapperException("Error when transforming Diagnosis request");
+		}
 	}
 
 	@Override
-	public String mapResponse(String uniqueId, XMLStreamReader reader)
-			throws MapperException {
-		throw new NotImplementedException("Adapter not implemented");
+	public String mapResponse(String uniqueId, XMLStreamReader reader) throws MapperException {
+		try {
+			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(reader);
+			final GetDiagnosisResponseType resp = mapResponseType(ehrResp, uniqueId);
+			return marshal(resp);
+		} catch (Exception err) {
+			log.error("Error when transforming Diagnosis response", err);
+			throw new MapperException("Error when transforming Diagnosis response");
+		}
 	}
+	
+	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req) {
+		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
+		type.getMeanings().add(MEANING_VOO);
+		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
+		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
+		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
+		return type;
+	}
+	
+	protected String marshal(final GetDiagnosisResponseType response) {
+        final JAXBElement<GetDiagnosisResponseType> el = objFactory.createGetDiagnosisResponse(response);
+        return jaxb.marshal(el);
+    }
+	
+	protected GetDiagnosisType unmarshal(final XMLStreamReader reader) {
+        try {
+            return  (GetDiagnosisType) jaxb.unmarshal(reader);
+        } finally {
+            close(reader);
+        }
+    }
+	
+	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
+		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
+		resp.setResult(EHRUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
+		if(ehrResp.getEhrExtract().isEmpty()) {
+			return resp;
+		}
+		
+		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
+		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
+		
+		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
+		
+		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
+			if(entity instanceof ORGANISATION) {
+				final ORGANISATION org = (ORGANISATION) entity;
+				if(org.getExtractId() != null) {
+					orgs.put(org.getExtractId().getExtension(), org);
+				}
+			}
+			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
+				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
+				if(hp.getExtractId() != null) {
+					hps.put(hp.getExtractId().getExtension(), hp);
+				}
+			}
+		}
+		
+		final String systemHSAId = EHRUtil.getSystemHSAId(ehrExtract);
+		final PersonIdType subjectOfCare = HealthcondDescriptionUtil.mapPersonIdType(ehrExtract.getSubjectOfCare());
+		
+		for(COMPOSITION comp : ehrResp.getEhrExtract().get(0).getAllCompositions()) {
+			final DiagnosisType type = new DiagnosisType();
+			type.setDiagnosisHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAId, subjectOfCare, orgs, hps, TIME_ELEMENT));
+			type.setDiagnosisBody(mapDiagnosisBodyType(comp));
+			resp.getDiagnosis().add(type);
+		}
+		
+		return resp;
+	}
+	
+
+	
+	protected DiagnosisBodyType mapDiagnosisBodyType(final COMPOSITION comp) {
+		final DiagnosisBodyType type = new DiagnosisBodyType();
+		
+		for(CONTENT content : comp.getContent()) {
+  			if(content instanceof ENTRY) {
+  				ENTRY e = (ENTRY) content;
+  				for(ITEM item : e.getItems()) {
+  					if(item instanceof ELEMENT) {
+  						ELEMENT elm = (ELEMENT) item;
+  						if(elm.getValue() != null && elm.getMeaning() != null && elm.getMeaning().getCode() != null) {
+  							switch(elm.getMeaning().getCode()) {
+  							case TIME_ELEMENT:
+  								if(elm.getValue() instanceof TS) {
+  									type.setDiagnosisTime(((TS)elm.getValue()).getValue());
+  								}
+  								break;
+  							case TYPE_ELEMENT:
+  								if(elm.getValue() instanceof ST) {
+  									final ST simpleText = (ST) elm.getValue();
+  									type.setTypeOfDiagnosis(interpret(simpleText.getValue()));
+  								}
+  								//TODO: Verify
+  								if(type.getTypeOfDiagnosis() != null) {
+  									type.setChronicDiagnosis(type.getTypeOfDiagnosis() == DiagnosisTypeEnum.HUVUDDIAGNOS);
+  								}
+  								break;
+  							case CODE_ELEMENT:
+  								if(elm.getValue() instanceof CD) {
+  									type.setDiagnosisCode(mapCVType((CD) elm.getValue()));
+  								}
+  								break;
+  							}
+  						}
+  					}
+  				}
+  			}
+  		}
+		
+		//TODO: Not used? verify.
+		//type.getRelatedDiagnosis()
+		return type;
+	}
+	
+	
+	protected DiagnosisTypeEnum interpret(final String diagnosisType) {
+		try {
+			return DiagnosisTypeEnum.fromValue(diagnosisType);
+		} catch (Exception err) {
+			log.warn(String.format("Could not map DiagnosisType of value: %s", diagnosisType));
+			return null;
+		}
+	}
+	
+	protected CVType mapCVType(final CD codeType) {
+		final CVType cv = new CVType();
+		cv.setCode(codeType.getCode());
+		cv.setCodeSystem(codeType.getCodeSystem());
+		if(codeType.getDisplayName() != null) {
+			cv.setDisplayName(codeType.getDisplayName().getValue());
+		}
+		return cv;
+	}
+	
+	
+
 
 }

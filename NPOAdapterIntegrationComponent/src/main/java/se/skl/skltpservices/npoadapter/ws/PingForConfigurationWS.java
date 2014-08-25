@@ -20,19 +20,22 @@
 package se.skl.skltpservices.npoadapter.ws;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleContext;
 import org.mule.api.annotations.expressions.Lookup;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.management.stats.FlowConstructStatistics;
+
 import riv.ehr.patientsummary._1.EHREXTRACT;
 import se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface;
 import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
-import se.skl.skltpservices.npoadapter.mapper.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.jws.WebService;
+
 import java.util.Date;
 import java.util.Map;
 

@@ -19,20 +19,45 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.stream.XMLStreamReader;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RIVDiagnosisMapper extends DiagnosisMapper {
 
 	@Override
 	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
-		return super.mapRequest(uniqueId, reader);
+		try {
+			final GetDiagnosisType req = unmarshal(reader);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
+			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
+			return ehrExtractType(ehrExtractType);
+		} catch (Exception err) {
+			log.error("Error when transforming Diagnosis request", err);
+			throw new MapperException("Error when transforming Diagnosis request");
+		}
 	}
 
 	@Override
 	public String mapResponse(String uniqueId, XMLStreamReader reader) throws MapperException {
-		return super.mapResponse(uniqueId, reader);
+		try {
+			final GetEhrExtractResponseType resp = ehrExtractResponseType(reader);
+			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
+			final GetDiagnosisResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, uniqueId);
+			return marshal(responseType);
+		} catch (Exception err) {
+			log.error("Error when transforming Diagnosis response", err);
+			throw new MapperException("Error when transforming Diagnosis response");
+		}
 	}
 
 }

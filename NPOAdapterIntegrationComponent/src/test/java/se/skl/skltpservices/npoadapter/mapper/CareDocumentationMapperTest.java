@@ -97,35 +97,5 @@ public class CareDocumentationMapperTest {
 		assertEquals(TEST_VALUE_2, type.getSubjectOfCareId().getRoot());
 	}
 	
-	@Test
-	public void mapPersonIdTypeTest() {
-		final II iiNull = new II();
-		iiNull.setExtension(null);
-		iiNull.setRoot(null);
-		
-		PersonIdType type = mapper.mapPersonIdType(iiNull);
-		assertNull(type.getId());
-		assertNull(type.getType());
-		
-		type = mapper.mapPersonIdType(null);
-		assertNull(type.getId());
-		assertNull(type.getType());
-		
-		final II ii = new II();
-		ii.setExtension(TEST_VALUE_1);
-		ii.setRoot(TEST_VALUE_2);
-		type = mapper.mapPersonIdType(ii);
-		assertEquals(TEST_VALUE_1, type.getId());
-		assertEquals(TEST_VALUE_2, type.getType());
-		
-	}
-
-
-	@Test
-	public void mapHealtcareProfessionalTypeTest() {
-		HealthcareProfessionalType type = mapper.mapHealtcareProfessionalType(functionalRole, orgs, pros, audit);
-	}
 	
-	
-
 }
