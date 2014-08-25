@@ -54,7 +54,8 @@
     <!-- Common connectors and endpoints, i.e. that not needs to be changed for different config-files (local unit-test, integration-test or production environments) -->
 
     <spring:beans>
-
+        <!-- import the common logger config -->
+        <spring:import resource="classpath:tp-commons-mule-logging.xml" />
         <spring:import resource="classpath:soitoolkit-mule-http-connector.xml"/>
         <!--
     <spring:import resource="classpath:soitoolkit-mule-https-connector.xml"/>

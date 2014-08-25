@@ -16,6 +16,11 @@
 	</parent>
 
 	<dependencies>
+		<dependency>
+			<groupId>se.skltp.commons</groupId>
+			<artifactId>tp-commons-mule</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>se.skl.skltpservices.npoadapter</groupId>
