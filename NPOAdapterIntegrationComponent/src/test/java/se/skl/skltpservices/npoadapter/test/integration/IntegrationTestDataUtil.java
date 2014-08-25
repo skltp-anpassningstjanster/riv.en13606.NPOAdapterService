@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.test.integration;
 
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
@@ -50,6 +52,14 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(conPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(conDatePeriodType());
+		return type;
+	}
+	
+	public static GetDiagnosisType createGetDiagnosisType(int triggerType) {
+		final GetDiagnosisType type = new GetDiagnosisType();
+		type.setPatientId(docPersonIdType(triggerType));
+		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+		type.setTimePeriod(docDatePeriodType());
 		return type;
 	}
 	
