@@ -42,7 +42,14 @@ import java.util.List;
 import java.util.Map;
 
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
-
+/**
+ * Maps from EHR_EXTRACT (voo v2.1) to RIV GetCareDocumentationResponseType v2.0. <p>
+ *
+ * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
+ * 
+ * @author torbjorncla
+ *
+ */
 @Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	

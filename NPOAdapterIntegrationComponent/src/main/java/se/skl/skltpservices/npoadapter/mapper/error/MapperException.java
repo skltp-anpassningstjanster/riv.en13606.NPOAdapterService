@@ -19,6 +19,14 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.error;
 
+/**
+ * 
+ * Exception thrown by mappers.
+ * Ease the use of shared exception handler.
+ * 
+ * @author torbjorncla
+ *
+ */
 public class MapperException extends Exception {
 	private static final long serialVersionUID = 1L;
 	

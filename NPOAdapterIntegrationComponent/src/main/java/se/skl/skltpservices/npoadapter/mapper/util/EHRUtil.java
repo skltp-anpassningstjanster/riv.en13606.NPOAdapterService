@@ -29,6 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Utility class to create and map common EHR types.
+ * @author torbjorncla
+ *
+ */
 public final class EHRUtil {
 
     private static ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {

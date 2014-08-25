@@ -19,6 +19,14 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+/**
+ * Maps from GetEHRExctract (voo v2.1) to RIV GetCareDocumentationResponseType v2.0. <p>
+ *
+ * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
+ * 
+ * @author torbjorncla
+ *
+ */
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;

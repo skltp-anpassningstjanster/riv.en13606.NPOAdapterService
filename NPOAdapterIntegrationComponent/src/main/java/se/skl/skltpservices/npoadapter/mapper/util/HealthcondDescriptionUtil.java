@@ -42,6 +42,11 @@ import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
 import se.rivta.en13606.ehrextract.v11.TS;
 
+/**
+ * Utility class to create and map elements in the healtcond.description domain.
+ * @author torbjorncla
+ *
+ */
 public final class HealthcondDescriptionUtil {
 	private HealthcondDescriptionUtil() {
 		

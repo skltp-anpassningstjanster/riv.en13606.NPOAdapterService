@@ -19,6 +19,13 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.error;
 
+/**
+ * 
+ * Exception used by mappers when not fully implemented.
+ * 
+ * @author torbjorncla
+ *
+ */
 public class NotImplementedException extends MapperException {
 	public NotImplementedException(final String message) {
 		super(message);

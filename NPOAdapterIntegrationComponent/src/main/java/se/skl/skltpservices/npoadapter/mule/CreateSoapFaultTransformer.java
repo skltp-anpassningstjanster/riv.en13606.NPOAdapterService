@@ -28,6 +28,13 @@ import org.mule.transformer.AbstractMessageTransformer;
 
 import java.text.MessageFormat;
 
+/**
+ * Generate textual soap error message with implemenation specific parameters such as mule-message uniqueId.
+ * 
+ * 
+ * @author torbjorncla
+ *
+ */
 @Slf4j
 public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
 

@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +49,11 @@ import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-
+/**
+ * Header test covered by HealthcondDescriptionUtil.
+ * @author torbjorncla
+ *
+ */
 public class DiagnosisMapperTest {
 	
 	private static final String	UNIQUE_TEST_ID = UUID.randomUUID().toString();
@@ -76,6 +82,7 @@ public class DiagnosisMapperTest {
 	@Test
 	public void testMapResponseType() throws Exception {
 		GetDiagnosisResponseType resp = mapper.mapResponseType(ehrResp, UNIQUE_TEST_ID);
+		assertEquals(ehrExctract.getSubjectOfCare().getExtension(), resp.getDiagnosis().get(0).getDiagnosisHeader().getPatientId().getId());
 	}
 	
 	private void print(GetDiagnosisResponseType resp) throws JAXBException {
@@ -84,7 +91,6 @@ public class DiagnosisMapperTest {
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.marshal(new JAXBElement<GetDiagnosisResponseType>(new QName("uri","local"), GetDiagnosisResponseType.class, resp), System.out);
-		System.out.println("Done");
 	}
 	
 

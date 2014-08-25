@@ -48,6 +48,14 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Maps from EHR_EXTRACT (dia v2.1) to RIV GetDiagnosisResponseType v2.0. <p>
+ *
+ * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
+ * 
+ * @author torbjorncla
+ *
+ */
 @Slf4j
 public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	
@@ -88,6 +96,11 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
+	/**
+	 * Create request type.
+	 * @param req
+	 * @return
+	 */
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
@@ -110,6 +123,14 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
         }
     }
 	
+	/**
+	 * Create response.
+	 * Collects organisation and healthcare-professional into maps with HSAId as key.
+	 * So other functions dont need to itterat over document each time.
+	 * @param ehrResp response to be loaded into soap-payload.
+	 * @param uniqueId mule-message uniqueId.
+	 * @return
+	 */
 	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
 		resp.setResult(EHRUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
@@ -151,7 +172,11 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	}
 	
 
-	
+	/**
+	 * Creates message body.
+	 * @param comp returns new bodyType for ehr composition.
+	 * @return
+	 */
 	protected DiagnosisBodyType mapDiagnosisBodyType(final COMPOSITION comp) {
 		final DiagnosisBodyType type = new DiagnosisBodyType();
 		
@@ -195,7 +220,11 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		return type;
 	}
 	
-	
+	/**
+	 * Mapps enum between different domains.
+	 * @param diagnosisType
+	 * @return
+	 */
 	protected DiagnosisTypeEnum interpret(final String diagnosisType) {
 		try {
 			return DiagnosisTypeEnum.fromValue(diagnosisType);
@@ -205,6 +234,11 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
+	/**
+	 * Helper to map CVType from EHR CD type.
+	 * @param codeType
+	 * @return
+	 */
 	protected CVType mapCVType(final CD codeType) {
 		final CVType cv = new CVType();
 		cv.setCode(codeType.getCode());
