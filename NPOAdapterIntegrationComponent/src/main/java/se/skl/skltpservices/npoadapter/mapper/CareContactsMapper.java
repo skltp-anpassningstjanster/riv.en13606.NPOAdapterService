@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.logistics.logistics._2.*;
@@ -43,6 +44,7 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.Objec
  *
  * @author Peter
  */
+@Slf4j
 public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     public static final CD MEANING_VKO = new CD();
@@ -113,8 +115,14 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
         targetRequest.getMeanings().add(MEANING_VKO);
         targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));
-        // FIXME: get real hsa_id
-        targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", "DUMMY-TEST"));
+        final List<String> ids = careContactsType.getCareUnitHSAId();
+        if (ids.size() > 0) {
+            targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
+            if (ids.size() > 1) {
+                log.warn("RIV request includes several care units (HSAId search criteria), but only 1 (the first) can be mapped: {}", ids);
+            }
+        }
+        targetRequest.getParameters().add(EHRUtil.createParameter("version", "1.1"));
         return targetRequest;
     }
 

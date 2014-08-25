@@ -13,6 +13,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: se.skltp.commons:tp-commons-mule:1.0.1" level="project" />
     <orderEntry type="module" module-name="riv-schemas" />
     <orderEntry type="module" module-name="npo-schemas" />
     <orderEntry type="module" module-name="skltp-schemas" />

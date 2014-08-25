@@ -29857,7 +29857,7 @@ ISO 2008  All rights reserved
                <!--Optional:-->
                <nat:name>transaction_id</nat:name>
                <!--Optional:-->
-               <nat:value>SE-1234</nat:value>
+               <nat:value>TX-1234</nat:value>
             </nat:parameter>
             <nat:parameter>
                <!--Optional:-->
