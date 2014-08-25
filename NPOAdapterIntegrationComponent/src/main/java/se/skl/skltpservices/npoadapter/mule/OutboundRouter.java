@@ -109,8 +109,6 @@ public class OutboundRouter extends AbstractRecipientList {
 
     //
     protected MessagePropertiesTransformer getOutboundTransformer(final HashMap<String, Object> addProperties) {
-        log.info("Outbound message transformers to update/add/remove mule message properties");
-
         final MessagePropertiesTransformer transformer = new MessagePropertiesTransformer();
         transformer.setMuleContext(muleContext);
         transformer.setOverwrite(true);

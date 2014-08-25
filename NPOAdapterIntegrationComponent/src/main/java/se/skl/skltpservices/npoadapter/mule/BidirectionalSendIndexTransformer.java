@@ -55,6 +55,8 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
     }
 
     private Router router;
+    private boolean forwardIndexToNpo;
+
 
     @Override
     public Object transformMessage(MuleMessage message, String encoding) {
@@ -102,6 +104,24 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
 
     //
     private Object transformOutbound(MuleMessage message, String payload) {
+
+        if (!this.forwardIndexToNpo) {
+            return transformOutboundToSendStatus(message);
+        } else {
+            final Object o = jabxUtil.unmarshal(payload);
+
+            if (o instanceof SendSimpleIndex) {
+                message.setPayload(new Object[]{((SendSimpleIndex) o).getSubjectOfCareId(), ((SendSimpleIndex) o).getInfoTypes(), ((SendSimpleIndex) o).getParameters()});
+            } else if (o instanceof SendIndex2) {
+                message.setPayload(new Object[]{((SendIndex2) o).getSubjectOfCareId(), ((SendIndex2) o).getIndexUpdates(), ((SendIndex2) o).getParameters()});
+            }
+
+            return message;
+        }
+    }
+
+    //
+    private Object transformOutboundToSendStatus(MuleMessage message) {
         final String type = message.getInboundProperty("npo_index_type");
         log.info("Prepare for type: {}", type);
 
@@ -150,5 +170,10 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
     //
     public void setRouter(Router router) {
         this.router = router;
+    }
+
+    //
+    public void setForwardIndexToNpo(final boolean forwardIndexToNpo) {
+        this.forwardIndexToNpo = forwardIndexToNpo;
     }
 }

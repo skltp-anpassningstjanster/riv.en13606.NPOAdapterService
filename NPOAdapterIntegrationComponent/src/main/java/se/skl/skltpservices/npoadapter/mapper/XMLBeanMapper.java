@@ -57,7 +57,8 @@ import static org.dozer.loader.api.TypeMappingOptions.mapNull;
 public class XMLBeanMapper {
 
     //
-    static final String[] B_PKGS = { "riv.ehr.patientsummary._1.", "riv.ehr.patientsummary.getehrextractresponder._1." };
+    static final String SRC_PKG = "se.rivta.en13606.ehrextract.v11";
+    static final String[] DST_PKGS = { "riv.ehr.patientsummary._1", "riv.ehr.patientsummary.getehrextractresponder._1" };
 
     //
     static DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
@@ -66,6 +67,7 @@ public class XMLBeanMapper {
     static Class<?>[] ANY_ELEMENT_VALUE_HINTS = { ST.class, TS.class, CD.class };
     /** Special hints needed for the IDENTIFEDENTITY.telecom List value */
     static Class<?>[] TEL_IDENTIFIEDENTITY_VALUE_HINTS = { TELEMAIL.class, TELPHONE.class };
+
 
     static {
         /**
@@ -81,8 +83,8 @@ public class XMLBeanMapper {
             @Override
             protected void configure() {
 
-                for (final Class<?> c : findCandidates("se.rivta.en13606.ehrextract.v11")) {
-                    typeMappingBuilder(c, classB(c.getSimpleName()), getAllFields(c));
+                for (final Class<?> c : findCandidates(SRC_PKG)) {
+                    typeMappingBuilder(c, dstClass(c.getSimpleName()), getAllFields(c));
                 }
             }
 
@@ -111,7 +113,7 @@ public class XMLBeanMapper {
                         if (List.class.isAssignableFrom(field.getType())) {
                             // Correct mapping of IDENTIFIEDENTITY.telecom TEL type (instantiate correct type)
                             if (IDENTIFIEDENTITY.class.isAssignableFrom(src) && "telecom".equals(field.getName())) {
-                                m.fields(f, f, hintA(TEL_IDENTIFIEDENTITY_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(TEL_IDENTIFIEDENTITY_VALUE_HINTS)))));
+                                m.fields(f, f, hintA(TEL_IDENTIFIEDENTITY_VALUE_HINTS), hintB(toArray(dstClass(Arrays.asList(TEL_IDENTIFIEDENTITY_VALUE_HINTS)))));
                             } else {
                                 m.fields(f, f);
                             }
@@ -119,7 +121,7 @@ public class XMLBeanMapper {
 
                         // Correct mapping of ELEMENT.value ANY type (instantiate correct type)
                         if (src.equals(ELEMENT.class) && "value".equals(field.getName())) {
-                            m.fields(f, f, hintA(ANY_ELEMENT_VALUE_HINTS), hintB(toArray(classB(Arrays.asList(ANY_ELEMENT_VALUE_HINTS)))));
+                            m.fields(f, f, hintA(ANY_ELEMENT_VALUE_HINTS), hintB(toArray(dstClass(Arrays.asList(ANY_ELEMENT_VALUE_HINTS)))));
                         }
 
                         // Correct mapping of Boolean type (use field mapping since getter method might have an unconventional name)
@@ -170,12 +172,23 @@ public class XMLBeanMapper {
         return responseType;
     }
 
-    //
+    /**
+     * Returns a class array.
+     *
+     * @param list the list of classes.
+     * @return the array of classes.
+     */
     private static Class<?>[] toArray(final List<Class<?>> list) {
         return list.toArray(new Class<?>[0]);
     }
 
-    //
+    /**
+     * Returns if a @{link Field} list contains a field with a given name.
+     *
+     * @param list the list.
+     * @param name the field name.
+     * @return true if the list contains such a field, otherwise false.
+     */
     protected static boolean contains(final List<Field> list, final String name) {
         for (final Field field : list) {
             if (field.getName().equals((name))) {
@@ -252,39 +265,44 @@ public class XMLBeanMapper {
         if (a != null
                 && !Modifier.isAbstract(a.getModifiers())
                 && a.getAnnotation(XmlType.class) != null
-                && classB(a.getSimpleName()) != null) {
+                && dstClass(a.getSimpleName()) != null) {
             return a;
         }
         return null;
     }
 
-    //
-    private static List<Class<?>> classB(final List<Class<?>> classAList) {
-        final List<Class<?>> classBList = new ArrayList<Class<?>>(classAList.size());
-        for (final Class<?> a : classAList) {
-            final Class<?> b = classB(a.getSimpleName());
+    /**
+     * Returns a list of corresponding destination classes.
+     *
+     * @param srcClassList the source class list.
+     * @return the list of existing destination classes.
+     */
+    private static List<Class<?>> dstClass(final List<Class<?>> srcClassList) {
+        final List<Class<?>> dstClassList = new ArrayList<Class<?>>(srcClassList.size());
+        for (final Class<?> a : srcClassList) {
+            final Class<?> b = dstClass(a.getSimpleName());
             if (b != null) {
-                classBList.add(b);
+                dstClassList.add(b);
             }
         }
-        return classBList;
+        return dstClassList;
     }
 
     /**
-     * Returns the b-class (map destination) if it exists.
+     * Returns the corresponding map destination class (b-class) if any exists.
      *
-     * @param aName the name of the a-class.
-     * @return the b-class or null if no such class exists.
+     * @param aName the name of the source class (a-class).
+     * @return the destination class (b-class) or null if no such class exists.
      */
-    private static Class<?> classB(String aName) {
+    private static Class<?> dstClass(String aName) {
         if ("RIV13606REQUESTEHREXTRACTRequestType".equals(aName)) {
             aName = "GetEhrExtractType";
         } else if ("RIV13606REQUESTEHREXTRACTResponseType".equals(aName)) {
             aName = "GetEhrExtractResponseType";
         }
         Class<?> b = null;
-        for (int i = 0; (i < B_PKGS.length) && (b == null); i++) {
-            b = classForName(B_PKGS[i] + aName);
+        for (int i = 0; (i < DST_PKGS.length) && (b == null); i++) {
+            b = classForName(DST_PKGS[i] + "." + aName);
         }
         if (b == null) {
             log.warn("No destination (b-class) found for source \"" + aName + "\" when configuring Dozer XMLBean namespace mapping");

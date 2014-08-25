@@ -9,19 +9,19 @@
                 http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
 
-    <flow name="caresystem-teststub-flow">
+    <flow name="npo-teststub-flow">
 
-        <inbound-endpoint address="${ENDPOINT_CS_STUB}"
+        <inbound-endpoint address="${ENDPOINT_NPO_OUTBOUND_STUB}"
                           connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"/>
 
         <cxf:jaxws-service
                 namespace="http://nationellpatientoversikt.se"
-                serviceClass="se.skl.skltpservices.npoadapter.test.stub.CareSystemWS"
-                wsdlLocation="classpath:/interactions/care_system/CARE_SYSTEM_1.1.2.wsdl" />
+                serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
+                wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
 
         <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.CareSystemWS"  />
+            <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
         </component>
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
