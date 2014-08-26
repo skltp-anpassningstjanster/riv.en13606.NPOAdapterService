@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.mule.api.MuleMessage;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -26,8 +27,6 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
-
-import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
 /**
@@ -42,12 +41,13 @@ import lombok.extern.slf4j.Slf4j;
 public class RIVDiagnosisMapper extends DiagnosisMapper {
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
-			final GetDiagnosisType req = unmarshal(reader);
+			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
 			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
-			return ehrExtractType(ehrExtractType);
+			message.setPayload(ehrExtractType(ehrExtractType));
+            return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis request", err);
 			throw new MapperException("Error when transforming Diagnosis request");
@@ -55,12 +55,13 @@ public class RIVDiagnosisMapper extends DiagnosisMapper {
 	}
 
 	@Override
-	public String mapResponse(String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		try {
-			final GetEhrExtractResponseType resp = ehrExtractResponseType(reader);
+			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
-			final GetDiagnosisResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, uniqueId);
-			return marshal(responseType);
+			final GetDiagnosisResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, message.getUniqueId());
+			message.setPayload(marshal(responseType));
+            return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis response", err);
 			throw new MapperException("Error when transforming Diagnosis response");

@@ -37,14 +37,11 @@ import javax.xml.stream.XMLStreamReader;
 public class OutboundResponseTransformer extends AbstractOutboundTransformer {
 
     @Override
-    public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
-        if (message.getPayload() instanceof XMLStreamReader) {
-        	try {
-        		return getMapper(message).mapResponse(message.getUniqueId(), (XMLStreamReader) message.getPayload());
-        	} catch (MapperException err) {
-        		throw new TransformerException(this, err);
-        	}
+    public Object transformMessage(final MuleMessage message, final String outputEncoding) throws TransformerException {
+        try {
+            return getMapper(message).mapResponse(message);
+        } catch (MapperException err) {
+            throw new TransformerException(this, err);
         }
-        throw new IllegalArgumentException("NPOAdapter: Unexpected type of message payload (an XMLStreamReader was expected): " + message.getPayload());
     }
 }

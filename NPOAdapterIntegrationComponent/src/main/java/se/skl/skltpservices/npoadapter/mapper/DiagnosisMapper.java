@@ -20,22 +20,18 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.mule.api.MuleMessage;
 import riv.clinicalprocess.healthcond.description._2.CVType;
 import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
 import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
-import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
-import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.HealthcondDescriptionUtil;
 
@@ -74,10 +70,11 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	protected static final String TYPE_ELEMENT = "dia-dia-typ";
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
-			GetDiagnosisType req = unmarshal(reader);
-			return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
+			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req)));
+            return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis request", err);
 			throw new MapperException("Error when transforming Diagnosis request");
@@ -85,11 +82,12 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	}
 
 	@Override
-	public String mapResponse(String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		try {
-			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(reader);
-			final GetDiagnosisResponseType resp = mapResponseType(ehrResp, uniqueId);
-			return marshal(resp);
+			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
+			final GetDiagnosisResponseType resp = mapResponseType(ehrResp, message.getUniqueId());
+			message.setPayload(marshal(resp));
+            return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis response", err);
 			throw new MapperException("Error when transforming Diagnosis response");

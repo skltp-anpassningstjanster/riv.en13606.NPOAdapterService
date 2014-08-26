@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.logistics.logistics._2.*;
@@ -34,8 +35,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
 import java.util.List;
-
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
 
 /**
  * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>
@@ -58,25 +57,27 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
 
     @Override
-    public String mapResponse(final String uniqueId, XMLStreamReader reader) throws MapperException {
+    public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
     	try {
-    		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(reader);
+    		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
     		if(response.getEhrExtract().isEmpty()) {
-    			throw new MapperException("Missing EHRExtract from source system");
+    			throw new MapperException("No EHREXTRACT returned from source system");
     		}
-    		return marshal(map(response.getEhrExtract().get(0)));
+    		message.setPayload(marshal(map(response.getEhrExtract().get(0))));
+            return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping response", err);
+    		throw new MapperException("Error when mapping EHREXTRACT  response", err);
     	}
     }
 
     @Override
-    public String mapRequest(final String uniqueId, XMLStreamReader reader) throws MapperException {
+    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
     	try {
-    		final GetCareContactsType request = unmarshal(reader);
-        	return riv13606REQUESTEHREXTRACTRequestType(map(request));
+    		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
+        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map(request)));
+            return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping request", err);
+    		throw new MapperException("Error when mapping EHREXTRACT request", err);
     	}
     }
 

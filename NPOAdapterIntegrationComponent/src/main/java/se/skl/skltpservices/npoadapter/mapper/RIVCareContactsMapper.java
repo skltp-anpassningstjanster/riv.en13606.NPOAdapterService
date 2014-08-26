@@ -19,13 +19,12 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.mule.api.MuleMessage;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-
-import javax.xml.stream.XMLStreamReader;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -33,24 +32,28 @@ import javax.xml.stream.XMLStreamReader;
 public class RIVCareContactsMapper extends CareContactsMapper {
 
     @Override
-    public String mapResponse(final String uniqueId, final XMLStreamReader reader) {
-        final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(reader);
+    public MuleMessage mapResponse(final MuleMessage message) {
+        final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 
         // map to baseline model
         final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrExtractResponseType);
 
-        return marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().get(0)));
+        message.setPayload(marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().get(0))));
+
+        return message;
     }
 
     @Override
-    public String mapRequest(final String uniqueId, final XMLStreamReader reader) {
-        final GetCareContactsType request = unmarshal(reader);
+    public MuleMessage mapRequest(final MuleMessage message) {
+        final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
 
         // map to baseline model
         final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request);
 
         final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 
-        return ehrExtractType(ehrExtractType);
+        message.setPayload(ehrExtractType(ehrExtractType));
+
+        return message;
     }
 }

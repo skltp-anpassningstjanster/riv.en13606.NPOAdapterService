@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.mule.api.MuleMessage;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
 
@@ -27,13 +28,13 @@ import javax.xml.stream.XMLStreamReader;
 public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapper {
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader)
+	public MuleMessage mapRequest(final MuleMessage message)
 			throws MapperException {
 		throw new NotImplementedException("Adapter not implemented");
 	}
 
 	@Override
-	public String mapResponse(String uniqueId, XMLStreamReader reader)
+	public MuleMessage mapResponse(final MuleMessage message)
 			throws MapperException {
 		throw new NotImplementedException("Adapter not implemented");
 	}

@@ -27,6 +27,7 @@ package se.skl.skltpservices.npoadapter.mapper;
  * @author torbjorncla
  *
  */
+import org.mule.api.MuleMessage;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -35,29 +36,29 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-import javax.xml.stream.XMLStreamReader;
-
 public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
-			GetCareDocumentationType req = unmarshal(reader);
+			GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
 			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
-			return ehrExtractType(ehrExtractType);
+			message.setPayload(ehrExtractType(ehrExtractType));
+            return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err);
 		}
 	}
 
 	@Override
-	public String mapResponse(String unqiueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		try {
-			final GetEhrExtractResponseType resp = ehrExtractResponseType(reader);
+			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 	        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
-			final GetCareDocumentationResponseType responseType = mapResponseType(unqiueId, riv13606REQUESTEHREXTRACTResponseType);
-			return marshal(responseType);
+			final GetCareDocumentationResponseType responseType = mapResponseType(message.getUniqueId(), riv13606REQUESTEHREXTRACTResponseType);
+			message.setPayload(marshal(responseType));
+            return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping response", err);
 		}

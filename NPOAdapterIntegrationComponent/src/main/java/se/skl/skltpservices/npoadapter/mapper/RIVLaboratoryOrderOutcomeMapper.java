@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import org.mule.api.MuleMessage;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.stream.XMLStreamReader;
@@ -26,13 +27,13 @@ import javax.xml.stream.XMLStreamReader;
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 
 	@Override
-	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
-		return super.mapRequest(uniqueId, reader);
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
+		return super.mapRequest(message);
 	}
 
 	@Override
-	public String mapResponse(String uniqueId, XMLStreamReader reader) throws MapperException {
-		return super.mapResponse(uniqueId, reader);
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
+		return super.mapResponse(message);
 	}
 	
 }

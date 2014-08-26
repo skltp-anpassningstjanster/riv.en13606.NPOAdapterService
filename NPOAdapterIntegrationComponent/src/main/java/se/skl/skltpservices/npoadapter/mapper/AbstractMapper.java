@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
@@ -95,6 +96,24 @@ public abstract class AbstractMapper {
             throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + key + "\"");
         }
         return mapper;
+    }
+
+    /**
+     * Returns the {@link javax.xml.stream.XMLStreamReader} from the message.
+     *
+     * @param message the message.
+     * @return the payload as the expected reader.
+     */
+    protected XMLStreamReader payloadAsXMLStreamReader(final MuleMessage message) {
+        if (message.getPayload() instanceof Object[]) {
+            final Object[] payload = (Object[]) message.getPayload();
+            if (payload.length > 1 && payload[1] instanceof XMLStreamReader) {
+                return (XMLStreamReader) payload[1];
+            }
+        } else if (message.getPayload() instanceof  XMLStreamReader) {
+            return (XMLStreamReader) message.getPayload();
+        }
+        throw new IllegalArgumentException("Unexpected type of message payload (an Object[] with XMLStreamReader was expected): " + message.getPayload());
     }
 
     //

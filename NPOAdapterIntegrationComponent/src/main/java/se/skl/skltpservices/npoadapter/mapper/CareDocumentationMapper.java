@@ -21,11 +21,11 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentNoteCodeEnum;
-import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
@@ -38,10 +38,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
 /**
  * Maps from EHR_EXTRACT (voo v2.1) to RIV GetCareDocumentationResponseType v2.0. <p>
  *
@@ -71,23 +69,25 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     
 	
 	@Override
-	public String mapRequest(final String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		log.debug("Transforming Request");
 		try {
-			GetCareDocumentationType req = unmarshal(reader);
-			return riv13606REQUESTEHREXTRACTRequestType(map13606Request(req));
+			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req)));
+            return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err);
 		}
 	}
 
 	@Override
-	public String mapResponse(final String uniqueId, XMLStreamReader reader) throws MapperException {
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		log.debug("Transforming Response");
 		try {
-			final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(reader);
-			final GetCareDocumentationResponseType responseType = mapResponseType(uniqueId, resp);
-			return marshal(responseType);
+			final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
+			final GetCareDocumentationResponseType responseType = mapResponseType(message.getUniqueId(), resp);
+			message.setPayload(marshal(responseType));
+            return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping response", err);
 		}
