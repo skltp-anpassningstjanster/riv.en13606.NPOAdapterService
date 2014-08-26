@@ -69,9 +69,9 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
         MEANING_VOO.setCode("dia");
     }
 	
-	private static final String TIME_ELEMENT = "dia-dia-tid";
-	private static final String CODE_ELEMENT = "dia-dia-kod";
-	private static final String TYPE_ELEMENT = "dia-dia-typ";
+	protected static final String TIME_ELEMENT = "dia-dia-tid";
+	protected static final String CODE_ELEMENT = "dia-dia-kod";
+	protected static final String TYPE_ELEMENT = "dia-dia-typ";
 
 	@Override
 	public String mapRequest(String uniqueId, XMLStreamReader reader) throws MapperException {
