@@ -121,7 +121,14 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		for(COMPOSITION comp : ehrResp.getEhrExtract().get(0).getAllCompositions()) {
 			final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
 			type.setLaboratoryOrderOutcomeHeader(HealthcondActOutcomeUtil.mapHeaderType(comp, systemHSAId, subjectOfCare, orgs, hps));
-			type.setLaboratoryOrderOutcomeBody(mapBodyType(comp));
+			IDENTIFIEDHEALTHCAREPROFESSIONAL healthcareProfessional = null;
+			if(type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional() != null) {
+				final String professionalHSAId = type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId();
+				if(professionalHSAId != null && hps.containsKey(professionalHSAId)) {
+					healthcareProfessional = hps.get(professionalHSAId);
+				}
+			}
+			type.setLaboratoryOrderOutcomeBody(mapBodyType(comp, healthcareProfessional));
 			resp.getLaboratoryOrderOutcome().add(type);
 		}
 		return resp;
@@ -132,7 +139,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	 * @param comp
 	 * @return
 	 */
-	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION comp) {
+	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION comp, final IDENTIFIEDHEALTHCAREPROFESSIONAL healthcareProfessional) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
 		if(comp.getCommittal() != null && comp.getCommittal().getTimeCommitted() != null) {
 			type.setRegistrationTime(comp.getCommittal().getTimeCommitted().getValue());
@@ -169,13 +176,14 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			}
 		}
 		
-		type.setAccountableHeathcareProfessional(mapAccountableHealthcareProfessional());
+		type.setAccountableHeathcareProfessional(mapAccountableHealthcareProfessional(healthcareProfessional));
 		type.setOrder(mapOrder());
 		return type;
 	}
 	
-	protected HealthcareProfessionalType mapAccountableHealthcareProfessional() {
+	protected HealthcareProfessionalType mapAccountableHealthcareProfessional(final IDENTIFIEDHEALTHCAREPROFESSIONAL healthcareProfessional) {
 		final HealthcareProfessionalType type = new HealthcareProfessionalType();
+		type.setHealthcareProfessionalCareGiverHSAId("TRAFF");
 		return type;
 	}
 
