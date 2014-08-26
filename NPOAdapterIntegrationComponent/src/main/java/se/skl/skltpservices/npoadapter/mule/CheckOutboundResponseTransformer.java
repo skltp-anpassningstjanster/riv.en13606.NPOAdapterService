@@ -66,7 +66,7 @@ public class CheckOutboundResponseTransformer extends AbstractMessageTransformer
         } else if (payload instanceof String) {
 
             // extract body object
-            @Cleanup final XMLStreamReader xmlStreamReader = findStatusResponseBody((String) payload, SendStatusResponse.class);
+            @Cleanup final XMLStreamReader xmlStreamReader = findBodyType((String) payload, SendStatusResponse.class);
 
             Object o = BidirectionalSendIndexTransformer.jaxbUtil.unmarshal(xmlStreamReader);
             if (o instanceof SendStatusResponse) {
@@ -88,7 +88,7 @@ public class CheckOutboundResponseTransformer extends AbstractMessageTransformer
      * @return the stream reader positioned at the body object.
      * @throws XMLStreamException when any I/O error occurs.
      */
-    protected XMLStreamReader findStatusResponseBody(final String envelope, final Class<?> type) throws XMLStreamException {
+    protected XMLStreamReader findBodyType(final String envelope, final Class<?> type) throws XMLStreamException {
         final XMLStreamReader xmlStreamReader = OutboundPreProcessor.xmlInputFactory.createXMLStreamReader(new StringReader(envelope));
 
         xmlStreamReader.getEventType();
