@@ -4,12 +4,12 @@
         xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
         xmlns="http://www.mulesoft.org/schema/mule/core"
         xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
-        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:https="http://www.mulesoft.org/schema/mule/https"
         xsi:schemaLocation="
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
                 http://www.mulesoft.org/schema/mule/jms     http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
-                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                http://www.mulesoft.org/schema/mule/https   http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
         ">
 
     <!--
@@ -30,7 +30,7 @@
             <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
                 <logger level="INFO" message="========= Forward Index To NPO ===========" />
 
-                <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
+                <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
                                         address="${ENDPOINT_NPO_OUTBOUND_STUB}"
                                         exchange-pattern="request-response"
                                         responseTimeout="${SERVICE_TIMEOUT_MS}"
@@ -39,7 +39,7 @@
                                       operation="SendSimpleIndex"
                                       clientClass="se.nationellpatientoversikt.NPO"
                                       wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
-                </http:outbound-endpoint>
+                </https:outbound-endpoint>
             </when>
             <otherwise>
                 <logger level="INFO" message="========= Send Status Update to Care System ===========" />

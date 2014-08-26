@@ -12,7 +12,7 @@
     <flow name="caresystem-teststub-flow">
 
         <inbound-endpoint address="${ENDPOINT_CS_STUB}"
-                          connector-ref="soitoolkit-http-connector"
+                          connector-ref="soitoolkit-https-connector"
                           exchange-pattern="request-response"/>
 
         <cxf:jaxws-service

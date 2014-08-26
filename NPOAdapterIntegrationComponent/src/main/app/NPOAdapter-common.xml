@@ -57,9 +57,7 @@
         <!-- import the common logger config -->
         <spring:import resource="classpath:tp-commons-mule-logging.xml" />
         <spring:import resource="classpath:soitoolkit-mule-http-connector.xml"/>
-        <!--
-    <spring:import resource="classpath:soitoolkit-mule-https-connector.xml"/>
-    -->
+        <spring:import resource="classpath:soitoolkit-mule-https-connector.xml"/>
     </spring:beans>
 
     <!-- The common single jaxb-context for this mule-app -->

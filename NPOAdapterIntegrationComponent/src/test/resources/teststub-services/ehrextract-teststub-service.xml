@@ -10,10 +10,8 @@
     <flow name="ehrextract-teststub-flow" >
 
         <inbound-endpoint address="${ENDPOINT_EHR_EXTRACT_STUB}"
-                          connector-ref="soitoolkit-http-connector"/>
-        <!--
-        <custom-transformer class="TestLogger"/>
-        -->
+                          connector-ref="soitoolkit-https-connector"
+                          exchange-pattern="request-response" />
 
         <cxf:jaxws-service
                 serviceClass="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"
