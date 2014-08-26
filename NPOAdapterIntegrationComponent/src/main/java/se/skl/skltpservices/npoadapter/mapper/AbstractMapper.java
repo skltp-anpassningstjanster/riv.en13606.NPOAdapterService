@@ -24,9 +24,9 @@ import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
-import se.rivta.en13606.ehrextract.v11.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamException;
@@ -115,6 +115,18 @@ public abstract class AbstractMapper {
         }
         throw new IllegalArgumentException("Unexpected type of message payload (an Object[] with XMLStreamReader was expected): " + message.getPayload());
     }
+
+    /**
+     * Returns the maximum records to retrieve from source system.
+     *
+     * @param message the message with context.
+     * @return the maximum number of records to accept.
+     */
+    protected int maxEhrExtractRecords(final MuleMessage message) {
+        final int value = message.getInvocationProperty(OutboundPreProcessor.MAX_EHREXTRACT_RECORDS, 500);
+        return value;
+    }
+
 
     //
     private static String mapperKey(final String src, final String dst) {

@@ -48,7 +48,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
         final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
 
         // map to baseline model
-        final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request);
+        final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request, message);
 
         final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 

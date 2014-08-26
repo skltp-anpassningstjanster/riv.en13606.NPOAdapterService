@@ -58,8 +58,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	private static final String TIME_ELEMENT = "voo-voo-tid";
 	private static final String TEXT_ELEMENT = "voo-voo-txt";
-	
-	private static final int MAX_ROWS = 500;
 
 	public static final CD MEANING_VOO = new CD();
     static {
@@ -73,7 +71,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		log.debug("Transforming Request");
 		try {
 			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req, message)));
             return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err);
@@ -169,10 +167,10 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         return jaxb.marshal(el);
     }
 			
-	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req) {
+	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req, final MuleMessage message) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
-		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
+		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
 		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
 		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
 		return type;

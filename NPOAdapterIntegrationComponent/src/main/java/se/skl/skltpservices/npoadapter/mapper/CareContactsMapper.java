@@ -74,7 +74,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
     	try {
     		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
-        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map(request)));
+        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map(request, message)));
             return message;
     	} catch (Exception err) {
     		throw new MapperException("Error when mapping EHREXTRACT request", err);
@@ -110,9 +110,9 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     /**
      * Maps from GetCareContacsRequestType to EHR_EXTRACT request.
      */
-    protected RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType) {
+    protected RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType, final MuleMessage message) {
         final RIV13606REQUESTEHREXTRACTRequestType targetRequest = new RIV13606REQUESTEHREXTRACTRequestType();
-        targetRequest.setMaxRecords(EHRUtil.intType(500));
+        targetRequest.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
         targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
         targetRequest.getMeanings().add(MEANING_VKO);
         targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));

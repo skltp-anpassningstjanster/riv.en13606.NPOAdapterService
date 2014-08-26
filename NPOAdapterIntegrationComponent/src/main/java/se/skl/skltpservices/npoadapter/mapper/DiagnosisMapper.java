@@ -57,8 +57,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	
 	private static final JaxbUtil jaxb = new JaxbUtil(GetDiagnosisType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
-	private static final int MAX_ROWS = 500;
-	
+
 	public static final CD MEANING_VOO = new CD();
     static {
         MEANING_VOO.setCodeSystem("1.2.752.129.2.2.2.1");
@@ -73,7 +72,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req, message)));
             return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis request", err);
@@ -99,10 +98,10 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 * @param req
 	 * @return
 	 */
-	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req) {
+	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req, final MuleMessage message) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
-		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
+		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
 		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
 		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
 		return type;

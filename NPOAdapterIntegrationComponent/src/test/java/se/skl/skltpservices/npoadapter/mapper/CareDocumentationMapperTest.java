@@ -21,8 +21,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.api.MuleMessage;
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
-import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import se.rivta.en13606.ehrextract.v11.*;
@@ -33,7 +33,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CareDocumentationMapperTest {
 	
@@ -55,7 +58,7 @@ public class CareDocumentationMapperTest {
 	private static final String TEST_VALUE_4 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_5 = UUID.randomUUID().toString();
 	
-	private static final int TEST_INT_VALUE_1 = 500;
+	private static final int TEST_INT_VALUE_1 = 225;
 	
 	
 
@@ -89,7 +92,9 @@ public class CareDocumentationMapperTest {
 	
 	@Test
 	public void map13606RequestTest() {
-		RIV13606REQUESTEHREXTRACTRequestType type = mapper.map13606Request(careDocType);
+        MuleMessage message = mock(MuleMessage.class);
+        when(message.getInvocationProperty(anyString(), anyInt())).thenReturn(TEST_INT_VALUE_1);
+		RIV13606REQUESTEHREXTRACTRequestType type = mapper.map13606Request(careDocType, message);
 		assertEquals(TEST_INT_VALUE_1, type.getMaxRecords().getValue().intValue());
 		assertEquals(TEST_CODE, type.getMeanings().get(0).getCode());
 		assertEquals(TEST_CODE_SYSTEM, type.getMeanings().get(0).getCodeSystem());
