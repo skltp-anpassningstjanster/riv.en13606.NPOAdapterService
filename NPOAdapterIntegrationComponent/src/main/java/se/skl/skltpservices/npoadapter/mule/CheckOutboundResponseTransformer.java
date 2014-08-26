@@ -29,7 +29,6 @@ import riv.itintegration.engagementindex._1.ResultCodeEnum;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
 import se.nationellpatientoversikt.SendStatusResponse;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
@@ -46,9 +45,6 @@ import java.io.StringReader;
 @Slf4j
 public class CheckOutboundResponseTransformer extends AbstractMessageTransformer {
 
-
-    //
-    private static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
     @Override
     @SneakyThrows
@@ -93,7 +89,7 @@ public class CheckOutboundResponseTransformer extends AbstractMessageTransformer
      * @throws XMLStreamException when any I/O error occurs.
      */
     protected XMLStreamReader findStatusResponseBody(final String envelope, final Class<?> type) throws XMLStreamException {
-        final XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(new StringReader(envelope));
+        final XMLStreamReader xmlStreamReader = OutboundPreProcessor.xmlInputFactory.createXMLStreamReader(new StringReader(envelope));
 
         xmlStreamReader.getEventType();
 
