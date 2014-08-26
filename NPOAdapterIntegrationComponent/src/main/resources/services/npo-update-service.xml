@@ -39,8 +39,6 @@
 
         <flow-ref name="UpdateResponderService-1.0-Client" />
 
-        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer" />
-
         <set-payload value="#[variable:response]" />
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
