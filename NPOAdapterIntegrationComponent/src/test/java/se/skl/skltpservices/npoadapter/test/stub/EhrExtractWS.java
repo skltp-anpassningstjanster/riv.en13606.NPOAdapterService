@@ -71,19 +71,19 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
-        	log.info("Recived VKO Request");
+        	log.info("Received VKO Request");
         	responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
         	break;
         case VOO:
-        	log.info("Recived VOO Request");
+        	log.info("Received VOO Request");
         	responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
         	break;
         case DIA:
-        	log.info("Recived DIA Request");
+        	log.info("Received DIA Request");
         	responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
         	break;
         case UND_KKM_KLI:
-        	log.info("Recived UND-KKM-KLI Request");
+        	log.info("Received UND-KKM-KLI Request");
         	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
         	break;
         default:
