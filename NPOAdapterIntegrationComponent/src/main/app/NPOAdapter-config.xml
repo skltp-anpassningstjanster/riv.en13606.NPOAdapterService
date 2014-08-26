@@ -6,10 +6,6 @@
 						http://www.mulesoft.org/schema/mule/core       http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
     <spring:beans>
-	    <!-- Connectors and endpoints that that are specific for different config-files (local unit-test, integration-test or production environments) -->
-    	<!-- TODO: Add import of connector specific configuration files here as required -->
-		<!-- <spring:import resource="classpath:NPOAdapter-common.xml"/> -->
-        
      	<!-- Import services -->
         <spring:import resource="classpath:services/*-service.xml"/>
 
@@ -36,5 +32,7 @@
         <spring:property name="router" ref="router" />
         <spring:property name="forwardIndexToNpo" value="${FORWARD_INDEX_TO_NPO}" />
     </custom-transformer>
+    
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer" name="check-response-transformer" />
 
 </mule>

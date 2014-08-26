@@ -40,7 +40,7 @@ import java.util.List;
 @Slf4j
 public class BidirectionalSendIndexTransformer extends AbstractMessageTransformer {
 
-    private static JaxbUtil jabxUtil = new JaxbUtil(SendIndex2.class, SendSimpleIndex.class, SendStatus.class);
+    static JaxbUtil jaxbUtil = new JaxbUtil(SendIndex2.class, SendSimpleIndex.class, SendStatus.class, SendStatusResponse.class);
 
     static final String NPO_PARAM_PREFIX = "npo_param_";
 
@@ -81,7 +81,7 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
             sendSimpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) payload[1]);
             sendSimpleIndex.setParameters((ArrayOfparameternpoParameterType) payload[2]);
             setParameters(message, sendSimpleIndex.getParameters().getParameter());
-            jmsMsg = jabxUtil.marshal(sendSimpleIndex);
+            jmsMsg = jaxbUtil.marshal(sendSimpleIndex);
         } else if (payload[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
             log.debug("Serialize SendIndex2");
             message.setOutboundProperty("npo_index_type", "SendIndex2");
@@ -90,7 +90,7 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
             sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) payload[1]);
             sendIndex2.setParameters((ArrayOfparameternpoParameterType) payload[2]);
             setParameters(message, sendIndex2.getParameters().getParameter());
-            jmsMsg = jabxUtil.marshal(sendIndex2);
+            jmsMsg = jaxbUtil.marshal(sendIndex2);
         } else {
             throw new IllegalStateException("Unexpected type of message: " + payload[1]);
         }
@@ -108,7 +108,7 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
         if (!this.forwardIndexToNpo) {
             return transformOutboundToSendStatus(message);
         } else {
-            final Object o = jabxUtil.unmarshal(payload);
+            final Object o = jaxbUtil.unmarshal(payload);
 
             if (o instanceof SendSimpleIndex) {
                 message.setPayload(new Object[]{((SendSimpleIndex) o).getSubjectOfCareId(), ((SendSimpleIndex) o).getInfoTypes(), ((SendSimpleIndex) o).getParameters()});
@@ -143,7 +143,7 @@ public class BidirectionalSendIndexTransformer extends AbstractMessageTransforme
             log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress.getValue());
         }
 
-        message.setPayload(jabxUtil.marshal(request));
+        message.setPayload(jaxbUtil.marshal(request));
 
         return message;
     }

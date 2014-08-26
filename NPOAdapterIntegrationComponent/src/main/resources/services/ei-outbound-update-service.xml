@@ -16,7 +16,8 @@
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
                                 address="${ENDPOINT_EI}"
                                 exchange-pattern="request-response"
-                                responseTimeout="${SERVICE_TIMEOUT_MS}" >
+                                responseTimeout="${SERVICE_TIMEOUT_MS}"
+                                responseTransformer-refs="check-response-transformer">
 
             <set-property propertyName="x-vp-instance-id" value="${VP_INSTANCE_ID}" />
             <set-property propertyName="x-vp-sender-id" value="#[message.inboundProperties['npo_param_hsa_id']]" />

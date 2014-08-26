@@ -39,7 +39,7 @@
 
         <flow-ref name="UpdateResponderService-1.0-Client" />
 
-        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
+        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer" />
 
         <set-payload value="#[variable:response]" />
 

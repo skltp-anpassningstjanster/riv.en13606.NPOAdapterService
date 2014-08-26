@@ -33,20 +33,20 @@
                 <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
                                         address="${ENDPOINT_NPO_OUTBOUND_STUB}"
                                         exchange-pattern="request-response"
-                                        responseTimeout="${SERVICE_TIMEOUT_MS}" >
+                                        responseTimeout="${SERVICE_TIMEOUT_MS}"
+                                        responseTransformer-refs="check-response-transformer">
                     <cxf:jaxws-client port="NPOSoap"
                                       operation="SendSimpleIndex"
                                       clientClass="se.nationellpatientoversikt.NPO"
                                       wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
                 </http:outbound-endpoint>
-                <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
-                <logger message="============== payload: #[payload]" level="INFO" />
             </when>
             <otherwise>
                 <logger level="INFO" message="========= Send Status Update to Care System ===========" />
                 <cxf:proxy-client payload="body" />
                 <processor ref="route-processor" />
-                <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
+                <object-to-string-transformer encoding="UTF-8" />
+                <transformer ref="check-response-transformer" />
             </otherwise>
         </choice>
 
