@@ -26,6 +26,7 @@
                               clientClass="riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderService"
                               wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
         </http:outbound-endpoint>
+
     </flow>
 
 </mule>

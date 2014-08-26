@@ -39,14 +39,17 @@
                                       clientClass="se.nationellpatientoversikt.NPO"
                                       wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
                 </http:outbound-endpoint>
+                <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
                 <logger message="============== payload: #[payload]" level="INFO" />
             </when>
             <otherwise>
                 <logger level="INFO" message="========= Send Status Update to Care System ===========" />
                 <cxf:proxy-client payload="body" />
                 <processor ref="route-processor" />
+                <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
             </otherwise>
         </choice>
+
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
     </flow>

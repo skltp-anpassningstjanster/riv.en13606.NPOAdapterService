@@ -43,6 +43,8 @@
 
         <flow-ref name="UpdateResponderService-1.0-Client" />
 
+        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckResponseTransformer" />
+
         <set-payload value="#[variable:request]" />
 
         <transformer ref="send-index-transformer" />
