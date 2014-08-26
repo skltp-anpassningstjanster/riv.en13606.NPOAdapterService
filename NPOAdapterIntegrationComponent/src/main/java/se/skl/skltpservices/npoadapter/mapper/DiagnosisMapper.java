@@ -131,7 +131,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 */
 	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
-		resp.setResult(EHRUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
+		resp.setResult(HealthcondDescriptionUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
 		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}

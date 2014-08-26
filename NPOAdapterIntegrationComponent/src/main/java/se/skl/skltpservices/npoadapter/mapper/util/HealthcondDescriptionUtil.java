@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.util;
 
+import java.util.List;
 import java.util.Map;
 
 import riv.clinicalprocess.healthcond.description._2.CVType;
@@ -28,6 +29,8 @@ import riv.clinicalprocess.healthcond.description._2.LegalAuthenticatorType;
 import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
 import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description._2.ResultType;
+import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -37,6 +40,8 @@ import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
@@ -97,20 +102,20 @@ public final class HealthcondDescriptionUtil {
 			final ORGANISATION org = orgs.get(organisationKey);
 			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
 			final OrgUnitType orgUnitType = new OrgUnitType();
+			if(org.getName() != null) {
+				orgUnitType.setOrgUnitName(org.getName().getValue());
+			}
+			for(TEL t : org.getTelecom()) {
+				if(t instanceof TELEMAIL) {
+					orgUnitType.setOrgUnitEmail(((TELEMAIL)t).getValue());
+				}
+				if(t instanceof TELPHONE) {
+					orgUnitType.setOrgUnitTelecom(((TELPHONE)t).getValue());
+				}
+			}
+			orgUnitType.setOrgUnitHSAId(organisationKey);
 			if(!org.getAddr().isEmpty() && !org.getAddr().get(0).getPartOrBrOrAddressLine().isEmpty()) {
-				if(org.getName() != null) {
-					orgUnitType.setOrgUnitName(org.getName().getValue());
-				}
 				orgUnitType.setOrgUnitAddress(org.getAddr().get(0).getPartOrBrOrAddressLine().get(0).getContent());
-				for(TEL t : org.getTelecom()) {
-					if(t instanceof TELEMAIL) {
-						orgUnitType.setOrgUnitEmail(((TELEMAIL)t).getValue());
-					}
-					if(t instanceof TELPHONE) {
-						orgUnitType.setOrgUnitTelecom(((TELPHONE)t).getValue());
-					}
-				}
-				orgUnitType.setOrgUnitHSAId(organisationKey);
 			}
 			type.setHealthcareProfessionalOrgUnit(orgUnitType);
 		}
@@ -161,5 +166,35 @@ public final class HealthcondDescriptionUtil {
 			ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
 		}
 		return ivlts;
+	}
+	
+  	public static ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
+		if(respDetails.isEmpty()) {
+			return null;
+		}
+		final ResponseDetailType resp = respDetails.get(0);
+		final ResultType resultType = new ResultType();
+		if(resp.getText() != null) {
+			resultType.setMessage(resp.getText().getValue());
+		}
+		resultType.setLogId(uniqueId);
+		resultType.setResultCode(interpret(resp.getTypeCode()));
+		return resultType;
+	}
+  	
+  	public static ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
+		try {
+			switch(code) {
+			case E:
+			case W:
+				return ResultCodeEnum.ERROR;
+			case I:
+				return ResultCodeEnum.INFO;
+			default:
+				return ResultCodeEnum.OK;
+			}
+		} catch (Exception err) {
+			return null;
+		}
 	}
 }
