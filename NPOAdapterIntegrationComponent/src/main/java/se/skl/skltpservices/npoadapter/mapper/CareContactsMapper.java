@@ -117,12 +117,12 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         targetRequest.getMeanings().add(MEANING_VKO);
         targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));
         final List<String> ids = careContactsType.getCareUnitHSAId();
-        if (ids.size() > 0) {
+        if (ids.size() == 1) {
             targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
-            if (ids.size() > 1) {
-                log.warn("RIV request includes several care units (HSAId search criteria), but only 1 (the first) can be mapped: {}", ids);
-            }
+        } else if (ids.size() > 1) {
+            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
         }
+
         targetRequest.getParameters().add(EHRUtil.createParameter("version", "1.1"));
         return targetRequest;
     }

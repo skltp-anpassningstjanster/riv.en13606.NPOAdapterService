@@ -90,8 +90,10 @@ public class NpoWS implements NPOSoap {
 
     @Override
     public Boolean sendIndex2(@WebParam(name = "subject_of_care_id", targetNamespace = "http://nationellpatientoversikt.se") String subjectOfCareId, @WebParam(name = "index_updates", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfindexUpdateIndexUpdateType indexUpdates, @WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
-        validate(parameters);
-        return Boolean.TRUE;
+        throw new IllegalArgumentException("Unsupported operation, adapter doesn't support sendIndex2");
+//
+//        validate(parameters);
+//        return Boolean.TRUE;
     }
 
     @Override

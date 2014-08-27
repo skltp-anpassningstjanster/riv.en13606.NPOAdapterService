@@ -29,11 +29,6 @@
         <spring:property name="eiLogicalAddress" value="${LOGICAL_ADDRESS_EI}" />
     </custom-transformer>
 
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.BidirectionalSendIndexTransformer" name="send-index-transformer">
-        <spring:property name="router" ref="router" />
-        <spring:property name="forwardIndexToNpo" value="${FORWARD_INDEX_TO_NPO}" />
-    </custom-transformer>
-    
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer" name="check-response-transformer" />
 
 </mule>

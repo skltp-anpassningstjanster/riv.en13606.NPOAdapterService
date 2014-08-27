@@ -37,8 +37,7 @@ import java.io.StringReader;
  * Checks Outbound Web Service responses. <p/>
  *
  * Different outbound services returns different payloads. EI Update and NPO SendSimpleIndex and SendIndex2 operations returns
- * Java objects according to interfaces while the dynamically routed care system SendStatus callback returns a String with
- * the complete SOAP envelope.
+ * Java objects according to interfaces.
  *
  * @author Peter
  */
@@ -63,18 +62,6 @@ public class CheckOutboundResponseTransformer extends AbstractMessageTransformer
                 throw new OutboundResponseException("Update index operation was rejected by NPO");
             }
             log.debug("NPO SendSimpleIndex/SendIndex2 response is OK");
-        } else if (payload instanceof String) {
-
-            // extract body object
-            @Cleanup final XMLStreamReader xmlStreamReader = findBodyType((String) payload, SendStatusResponse.class);
-
-            Object o = BidirectionalSendIndexTransformer.jaxbUtil.unmarshal(xmlStreamReader);
-            if (o instanceof SendStatusResponse) {
-                if (!((SendStatusResponse) o).isSuccess()) {
-                    throw new OutboundResponseException("SendStatus operation was rejected by the care system");
-                }
-            }
-            log.debug("Care System SendStatus response is OK");
         }
 
         return message;

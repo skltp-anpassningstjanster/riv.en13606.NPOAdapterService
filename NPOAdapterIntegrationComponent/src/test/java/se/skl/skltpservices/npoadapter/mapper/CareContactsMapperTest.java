@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import lombok.Data;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import riv.clinicalprocess.logistics.logistics._2.*;
@@ -29,6 +30,10 @@ import se.skl.skltpservices.npoadapter.test.Util;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 

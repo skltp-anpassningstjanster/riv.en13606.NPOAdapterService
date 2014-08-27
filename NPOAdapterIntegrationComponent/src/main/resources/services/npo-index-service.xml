@@ -3,35 +3,32 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
         xmlns="http://www.mulesoft.org/schema/mule/core"
-        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
-        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:https="http://www.mulesoft.org/schema/mule/https"
         xsi:schemaLocation="
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-                http://www.mulesoft.org/schema/mule/jms     http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
-                http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                http://www.mulesoft.org/schema/mule/https   http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
         ">
 
     <!--
-    Receives NPO specific send index requests. Then ei update is invoked synchronously.
+    Receives NPO specific send index requests. Then NPO and ei update are invoked synchronously.
     See also the re-used outbound flow "ei-outbound-update-flow".
-
-    On a successful synchronous update of EI the original request is put in queue for an
-    asynchronous acknowledge callback to the care system, and possibly (in backlog) also a forward of the request
-    to the NPO system.
     -->
     <flow name="NPOService-1.1.2">
 
         <inbound-endpoint address="${ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"
-                          exchange-pattern="request-response"/>
+                          exchange-pattern="request-response">
 
-        <cxf:jaxws-service
-                namespace="http://nationellpatientoversikt.se"
-                serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
-                wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
+            <cxf:jaxws-service
+                    namespace="http://nationellpatientoversikt.se"
+                    serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
+                    wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
+        </inbound-endpoint>
 
         <set-variable variableName="request" value="#[payload]"/>
+
+        <logger level="INFO" message="=============== Payload: #[variable:request] ==========" />
 
         <component>
             <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
@@ -39,18 +36,34 @@
 
         <set-variable variableName="response" value="#[payload]" />
 
+        <choice>
+            <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
+
+                <logger level="INFO" message="========= Forward Index To NPO ===========" />
+
+                <set-payload value="#[variable:request]" />
+
+                <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
+                                         address="${ENDPOINT_NPO_OUTBOUND_STUB}"
+                                         exchange-pattern="request-response"
+                                         responseTimeout="${SERVICE_TIMEOUT_MS}"
+                                         responseTransformer-refs="check-response-transformer">
+                    <cxf:jaxws-client port="NPOSoap"
+                                      operation="SendSimpleIndex"
+                                      clientClass="se.nationellpatientoversikt.NPO"
+                                      wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
+                </https:outbound-endpoint>
+            </when>
+            <otherwise>
+               <echo-component />
+            </otherwise>
+        </choice>
+
         <set-payload value="#[variable:request]" />
+
+        <logger level="INFO" message="========= Update E-Index ===========" />
 
         <flow-ref name="UpdateResponderService-1.0-Client" />
-
-        <set-payload value="#[variable:request]" />
-
-        <transformer ref="send-index-transformer" />
-
-        <jms:outbound-endpoint
-                connector-ref="soitoolkit-jms-connector"
-                queue="${NPO_INDEX_QUEUE}"
-                />
 
         <set-payload value="#[variable:response]" />
 

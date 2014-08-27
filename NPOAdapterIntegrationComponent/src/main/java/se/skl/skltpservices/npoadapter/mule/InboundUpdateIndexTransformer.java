@@ -49,6 +49,8 @@ import java.util.List;
 @Slf4j
 public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
+    static final String NPO_PARAM_PREFIX = "npo_param_";
+
     private static final ObjectFactory of = new ObjectFactory();
     private static final JaxbUtil jaxbUtil = new JaxbUtil(UpdateType.class);
 
@@ -104,9 +106,9 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
             }
         }
 
-        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id", logicalAddress);
-        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "version", "1.1");
-        message.setOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "transaction_id", "NA");
+        message.setOutboundProperty(NPO_PARAM_PREFIX + "hsa_id", logicalAddress);
+        message.setOutboundProperty(NPO_PARAM_PREFIX + "version", "1.1");
+        message.setOutboundProperty(NPO_PARAM_PREFIX + "transaction_id", "NA");
 
         return updateRequest;
     }
@@ -202,14 +204,21 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
         engagement.setRegisteredResidentIdentification(personId);
 
-        BidirectionalSendIndexTransformer.setParameters(message, parameters);
+        setParameters(message, parameters);
 
-        final String hsaId = message.getOutboundProperty(BidirectionalSendIndexTransformer.NPO_PARAM_PREFIX + "hsa_id");
+        final String hsaId = message.getOutboundProperty(NPO_PARAM_PREFIX + "hsa_id");
 
         engagement.setLogicalAddress(hsaId);
         engagement.setSourceSystem(hsaId);
         engagement.setDataController(hsaId);
 
         return engagement;
+    }
+
+    //
+    static void setParameters(MuleMessage message, List<NpoParameterType> parameters) {
+        for (final NpoParameterType p : parameters) {
+            message.setOutboundProperty(NPO_PARAM_PREFIX + p.getName(), p.getValue());
+        }
     }
 }
