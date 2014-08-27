@@ -20,7 +20,9 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
+import org.mule.util.StringUtils;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.logistics.logistics._2.*;
@@ -261,6 +263,17 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         // FIXME: Missing HSAIds have to be validated!
         // professionalType.setHealthcareProfessionalCareGiverHSAId();
         // professionalType.setHealthcareProfessionalCareUnitHSAId();
+        
+        for(FUNCTIONALROLE careGiver : composition.getOtherParticipations()) {
+			if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+				if(careGiver.getPerformer() != null) {
+					professionalType.setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
+				}
+				if(careGiver.getHealthcareFacility() != null) {
+					professionalType.setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
+				}
+			}
+		}
 
         professionalType.setHealthcareProfessionalOrgUnit(mapOrgUnit(demographics, composition.getComposer().getHealthcareFacility().getExtension()));
 

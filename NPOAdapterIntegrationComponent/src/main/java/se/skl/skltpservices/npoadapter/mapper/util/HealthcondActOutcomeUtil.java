@@ -22,6 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 import java.util.List;
 import java.util.Map;
 
+import org.mule.util.StringUtils;
+
 import riv.clinicalprocess.healthcond.actoutcome._3.CVType;
 import riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType;
 import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
@@ -90,6 +92,16 @@ public final class HealthcondActOutcomeUtil {
 		header.setApprovedForPatient(false);
         header.setNullified(false);
         header.setNullifiedReason(null);
+        for(FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
+			if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+				if(careGiver.getPerformer() != null) {
+					header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
+				}
+				if(careGiver.getHealthcareFacility() != null) {
+					header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
+				}
+			}
+		}
 		return header;
 	}
 	

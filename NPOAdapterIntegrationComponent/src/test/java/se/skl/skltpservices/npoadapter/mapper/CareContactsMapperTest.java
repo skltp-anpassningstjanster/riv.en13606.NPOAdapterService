@@ -110,9 +110,8 @@ public class CareContactsMapperTest {
 
         assertNull(accountableHealthcareProfessional.getHealthcareProfessionalRoleCode());
 
-        // FIXME: According to spec (TKB) these 2 are optional för HealthcareProfessionalType, but mandatory in responseType.
-        assertNull(accountableHealthcareProfessional.getHealthcareProfessionalCareGiverHSAId());
-        assertNull(accountableHealthcareProfessional.getHealthcareProfessionalCareUnitHSAId());
+        assertNotNull(accountableHealthcareProfessional.getHealthcareProfessionalCareGiverHSAId());
+        assertNotNull(accountableHealthcareProfessional.getHealthcareProfessionalCareUnitHSAId());
     }
 
     private void verifyOrgUnit(OrgUnitType healthcareProfessionalOrgUnit) {

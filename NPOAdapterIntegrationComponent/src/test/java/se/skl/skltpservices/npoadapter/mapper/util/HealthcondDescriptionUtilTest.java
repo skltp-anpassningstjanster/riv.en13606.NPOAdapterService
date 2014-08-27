@@ -71,8 +71,6 @@ public class HealthcondDescriptionUtilTest {
 		pros.put(PRO_ID, hcp);
 		
 		HealthcareProfessionalType answer = HealthcondDescriptionUtil.mapHealtcareProfessionalType(composer, orgs, pros, null);
-		assertEquals(pro.getExtension(), answer.getHealthcareProfessionalCareGiverHSAId());
-		assertEquals(fac.getExtension(), answer.getHealthcareProfessionalCareUnitHSAId());
 	}
 
 	@Test

@@ -22,6 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 import java.util.List;
 import java.util.Map;
 
+import org.mule.util.StringUtils;
+
 import riv.clinicalprocess.healthcond.description._2.CVType;
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.HealthcareProfessionalType;
@@ -85,6 +87,16 @@ public final class HealthcondDescriptionUtil {
 		header.setApprovedForPatient(false);
         header.setNullified(false);
         header.setNullifiedReason(null);
+        for(FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
+			if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+				if(careGiver.getPerformer() != null) {
+					header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
+				}
+				if(careGiver.getHealthcareFacility() != null) {
+					header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
+				}
+			}
+		}
 		return header;
 	}
 	
@@ -103,7 +115,7 @@ public final class HealthcondDescriptionUtil {
 		type.setHealthcareProfessionalHSAId(performerKey);
 		if(organisationKey != null && orgs.containsKey(organisationKey)) {
 			final ORGANISATION org = orgs.get(organisationKey);
-			type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
+			//type.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
 			final OrgUnitType orgUnitType = new OrgUnitType();
 			if(org.getName() != null) {
 				orgUnitType.setOrgUnitName(org.getName().getValue());
@@ -127,7 +139,7 @@ public final class HealthcondDescriptionUtil {
 			if(committal != null && committal.getTimeCommitted() != null) {
 				type.setAuthorTime(committal.getTimeCommitted().getValue());
 			}
-			type.setHealthcareProfessionalCareGiverHSAId(hp.getExtractId().getExtension());
+			//type.setHealthcareProfessionalCareGiverHSAId(hp.getExtractId().getExtension());
 			if(!hp.getName().isEmpty() && !hp.getName().get(0).getPart().isEmpty()) {
 				type.setHealthcareProfessionalName(hp.getName().get(0).getPart().get(0).getValue());
 			}
