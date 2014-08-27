@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
@@ -63,6 +64,14 @@ public final class IntegrationTestDataUtil {
 		return type;
 	}
 	
+	public static GetLaboratoryOrderOutcomeType createGetLaboratoryOrderOutcomeType(int triggerType) {
+		final GetLaboratoryOrderOutcomeType type = new GetLaboratoryOrderOutcomeType();
+		type.setPatientId(labPersonIdType());
+		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+		type.setTimePeriod(labDatePeriodType());
+		return type;
+	}
+	
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();
 		personIdType.setId(personId(triggerType));
@@ -89,6 +98,20 @@ public final class IntegrationTestDataUtil {
 		datePeriodType.setEnd(STRING_TEST_DATA_3);
 		datePeriodType.setStart(STRING_TEST_DATA_4);
 		return datePeriodType;
+	}
+	
+	private static riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType labDatePeriodType() {
+		final riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType datePeriodType = new riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType();
+		datePeriodType.setEnd(STRING_TEST_DATA_3);
+		datePeriodType.setStart(STRING_TEST_DATA_4);
+		return datePeriodType;
+	}
+	
+	private static riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType labPersonIdType() {
+		final riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType personIdType = new riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType();
+		personIdType.setId(STRING_TEST_DATA_1);
+		personIdType.setType(STRING_TEST_DATA_2);
+		return personIdType;
 	}
 	
 	private static String personId(int triggerType) {

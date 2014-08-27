@@ -63,6 +63,5 @@ public class LaboratoryOrderOutcomeMapperTest {
 	@Test
 	public void testMapResponseType() throws Exception {
 		final GetLaboratoryOrderOutcomeResponseType type = mapper.mapResponseType(ehrResp, TEST_UNIQUE_ID);
-		
 	}
 }

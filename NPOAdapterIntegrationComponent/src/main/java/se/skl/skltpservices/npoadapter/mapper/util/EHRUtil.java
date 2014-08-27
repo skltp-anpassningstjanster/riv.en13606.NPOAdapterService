@@ -54,6 +54,14 @@ public final class EHRUtil {
 		return null;
 	}
 	
+	public static String getElementTimeValue(final ELEMENT e) {
+		if(e != null && e.getValue() instanceof TS) {
+			TS time = (TS) e.getValue();
+			return time.getValue();
+		}
+		return null;
+	}
+	
 	public static ST stType(final String value) {
         if (value == null) {
             return null;
@@ -122,6 +130,14 @@ public final class EHRUtil {
   					}
   				}
   			}
+  		}
+  		return null;
+  	}
+  	
+  	public static Boolean boolValue(final ELEMENT elm) {
+  		if(elm != null && elm.getValue() instanceof BL) {
+  			BL bl = (BL) elm.getValue();
+  			return bl.isValue();
   		}
   		return null;
   	}

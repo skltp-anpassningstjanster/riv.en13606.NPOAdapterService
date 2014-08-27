@@ -96,7 +96,7 @@ public class CareContactsMapperTest {
         verifyAccountableHealthcareProfessional(careContactHeader.getAccountableHealthcareProfessional());
 
         assertNotNull(careContactHeader.getPatientId());
-        assertTrue(careContactHeader.isApprovedForPatient());
+        assertFalse(careContactHeader.isApprovedForPatient());
         assertFalse(careContactHeader.isNullified());
         assertNull(careContactHeader.getNullifiedReason());
     }

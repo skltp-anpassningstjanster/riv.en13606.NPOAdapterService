@@ -25,11 +25,13 @@ import java.util.Map;
 import riv.clinicalprocess.healthcond.actoutcome._3.CVType;
 import riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType;
 import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
+import riv.clinicalprocess.healthcond.actoutcome._3.IIType;
 import riv.clinicalprocess.healthcond.actoutcome._3.LegalAuthenticatorType;
 import riv.clinicalprocess.healthcond.actoutcome._3.OrgUnitType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
+import riv.clinicalprocess.healthcond.actoutcome._3.TimePeriodType;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.ATTESTATIONINFO;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
@@ -85,6 +87,9 @@ public final class HealthcondActOutcomeUtil {
 		if(!comp.getLinks().isEmpty() && !comp.getLinks().get(0).getTargetId().isEmpty()) {
 			header.setCareContactId(comp.getLinks().get(0).getTargetId().get(0).getExtension());
 		}
+		header.setApprovedForPatient(false);
+        header.setNullified(false);
+        header.setNullifiedReason(null);
 		return header;
 	}
 	
@@ -173,6 +178,65 @@ public final class HealthcondActOutcomeUtil {
 		return ivlts;
 	}
 	
+	public static IIType mapIIType(final II ii) {
+		final IIType type = new IIType();
+		type.setExtension(ii.getExtension());
+		type.setRoot(ii.getRoot());
+		return type;
+	}
+	
+	public static IIType mapIIType(final String extension, final String root) {
+		final IIType type = new IIType();
+		type.setExtension(extension);
+		type.setRoot(root);
+		return type;
+	}
+	
+	public static CVType mapCVType(final II id) {
+		if(id == null) {
+			return null;
+		}
+		final CVType type = new CVType();
+		type.setCode(id.getExtension());
+		type.setCodeSystem(id.getRoot());
+		return type;
+	}
+	
+	public static CVType mapCVType(final String code, final String codeSystem) {
+		final CVType type = new CVType();
+		type.setCode(code);
+		type.setCodeSystem(codeSystem);
+		return type;
+	}
+	
+	public static CVType mapCVType(final CD cd) {
+		if(cd == null) {
+			return null;
+		}
+		final CVType type = new CVType();
+		type.setCode(cd.getCode());
+		type.setCodeSystem(cd.getCodeSystem());
+		if(cd.getDisplayName() != null) {
+			type.setDisplayName(cd.getDisplayName().getValue());
+		}
+		return type;
+	}
+	
+	public static TimePeriodType mapTimePeriodType(final IVLTS ivlts) {
+		if(ivlts == null) {
+			return null;
+		}
+		final TimePeriodType type = new TimePeriodType();
+		if(ivlts.getHigh() != null) {
+			type.setEnd(ivlts.getHigh().getValue());
+		}
+		if(ivlts.getLow() != null) {
+			type.setStart(ivlts.getLow().getValue());
+		}
+		return type;
+	}
+	
+	
 	public static ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
 		if(respDetails.isEmpty()) {
 			return null;
@@ -186,7 +250,7 @@ public final class HealthcondActOutcomeUtil {
 		resultType.setResultCode(interpret(resp.getTypeCode()));
 		return resultType;
 	}
-  	
+	
   	public static ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
 		try {
 			switch(code) {

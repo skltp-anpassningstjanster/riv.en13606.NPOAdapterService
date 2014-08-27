@@ -160,8 +160,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
         headerType.setAccountableHealthcareProfessional(mapProfessional(composition, ehrExtract.getDemographicExtract()));
 
-        // FIXME: Missing input data (default values have to be used, validation is required)
-        headerType.setApprovedForPatient(true);
+        headerType.setApprovedForPatient(false);
         headerType.setNullified(false);
         headerType.setNullifiedReason(null);
 

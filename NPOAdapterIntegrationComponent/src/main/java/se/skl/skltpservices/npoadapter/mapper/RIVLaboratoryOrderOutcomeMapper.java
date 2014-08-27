@@ -20,20 +20,48 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
+
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import javax.xml.stream.XMLStreamReader;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 
 	@Override
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
-		return super.mapRequest(message);
+		try {
+			final GetLaboratoryOrderOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
+			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
+			message.setPayload(ehrExtractType(ehrExtractType));
+			return message;
+		} catch (Exception err) {
+			log.error("Error when transforming LaboratoryOrderOutcome request", err);
+			throw new MapperException("Error when transforming LaboratoryOrderOutcome request");
+		}
 	}
 
 	@Override
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
-		return super.mapResponse(message);
+		try {
+			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
+			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
+			final GetLaboratoryOrderOutcomeResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, message.getUniqueId());
+			message.setPayload(marshal(responseType));
+			return message;
+		} catch (Exception err) {
+			log.error("Error when transforming LaboratoryOrderOutcome response", err);
+			throw new MapperException("Error when transforming LaboratoryOrderoutcome response");
+		}
 	}
 	
 }

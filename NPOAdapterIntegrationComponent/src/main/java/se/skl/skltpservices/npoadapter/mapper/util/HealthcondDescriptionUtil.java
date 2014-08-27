@@ -82,6 +82,9 @@ public final class HealthcondDescriptionUtil {
 		if(!comp.getLinks().isEmpty() && !comp.getLinks().get(0).getTargetId().isEmpty()) {
 			header.setCareContactId(comp.getLinks().get(0).getTargetId().get(0).getExtension());
 		}
+		header.setApprovedForPatient(false);
+        header.setNullified(false);
+        header.setNullifiedReason(null);
 		return header;
 	}
 	

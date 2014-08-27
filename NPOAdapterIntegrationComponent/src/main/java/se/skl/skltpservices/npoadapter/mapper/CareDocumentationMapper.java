@@ -26,6 +26,7 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentNoteCodeEnum;
+import riv.clinicalprocess.healthcond.description.enums._2.ClinicalDocumentTypeCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
@@ -41,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Maps from EHR_EXTRACT (voo v2.1) to RIV GetCareDocumentationResponseType v2.0. <p>
+ * Maps from EHR_EXTRACT (voo v1.1) to RIV GetCareDocumentationResponseType v2.0. <p>
  *
  * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
  * 
@@ -147,12 +148,21 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		final CareDocumentationBodyType type = new CareDocumentationBodyType();
 		final ClinicalDocumentNoteType note = new ClinicalDocumentNoteType();
 		type.setClinicalDocumentNote(note);
-		//TODO:
-		//Are there other supported types?
+
+		if(comp.getMeaning() != null) {
+			final String code = comp.getMeaning().getCode();
+			if(isDocumentNoteCodeEnum(code)) {
+				note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.fromValue(code));
+			} else if(isDocumentTypeCodeEnum(code)) {
+				note.setClinicalDocumentTypeCode(ClinicalDocumentTypeCodeEnum.fromValue(code));
+			} else {
+				log.warn("Not able to map documentcode of value: " + code);
+			}
+		}
+		
+		//Only txt is supported.
 		final ELEMENT txt = EHRUtil.findEntryElement(comp.getContent(), TEXT_ELEMENT);
 		if(txt != null) {
-			//TODO: Mapping between old and new EHR codes
-			note.setClinicalDocumentNoteCode(ClinicalDocumentNoteCodeEnum.UTR);
 			note.setClinicalDocumentNoteText(EHRUtil.getElementTextValue(txt));
 			if(txt.getMeaning() != null && txt.getMeaning().getDisplayName() != null) {				
 				note.setClinicalDocumentNoteTitle(txt.getMeaning().getDisplayName().getValue());
@@ -174,5 +184,23 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
 		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
 		return type;
+	}
+	
+	protected boolean isDocumentTypeCodeEnum(final String code) {
+		try {
+			ClinicalDocumentTypeCodeEnum.fromValue(code);
+			return true;
+		} catch (IllegalArgumentException err) {
+			return false;
+		}
+	}
+	
+	protected boolean isDocumentNoteCodeEnum(final String code) {
+		try {
+			ClinicalDocumentNoteCodeEnum.fromValue(code);
+			return true;
+		} catch (IllegalArgumentException err) {
+			return false;
+		}
 	}
 }

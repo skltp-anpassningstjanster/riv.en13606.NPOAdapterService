@@ -29,6 +29,7 @@ import org.mule.construct.Flow;
 import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
@@ -149,16 +150,18 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	assertFalse(resp.getDiagnosis().isEmpty());
     }
     
-    //TODO: When implemented it should not throw SOAPFault
-    @Test(expected=SOAPFaultException.class) 
+    @Test
     public void GetLaboratoryOrderOutcomeEN13606SuccessTest() {
-    	getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, new GetLaboratoryOrderOutcomeType());
+    	GetLaboratoryOrderOutcomeResponseType resp =  getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, 
+    			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
+    	assertFalse(resp.getLaboratoryOrderOutcome().isEmpty());
     }
     
-    //TODO: When implemented it should not throw SOAPFault
-    @Test(expected=SOAPFaultException.class)
+    @Test
     public void GetLaboratoryOrderOutcomeRIVSuccessTest() {
-    	getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2, new GetLaboratoryOrderOutcomeType());
+    	GetLaboratoryOrderOutcomeResponseType resp = getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2,
+    			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
+    	assertFalse(resp.getLaboratoryOrderOutcome().isEmpty());
     }
     	
 	

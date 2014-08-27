@@ -45,7 +45,7 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Maps from EHR_EXTRACT (dia v2.1) to RIV GetDiagnosisResponseType v2.0. <p>
+ * Maps from EHR_EXTRACT (dia v1.1) to RIV GetDiagnosisResponseType v2.0. <p>
  *
  * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
  * 
@@ -211,9 +211,6 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
   				}
   			}
   		}
-		
-		//TODO: Not used? verify.
-		//type.getRelatedDiagnosis()
 		return type;
 	}
 	
