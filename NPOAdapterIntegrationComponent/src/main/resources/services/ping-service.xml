@@ -6,14 +6,14 @@
     <flow name="PingService-HTTP-Get">
 
         <inbound-endpoint
-                address="${PINGSERVICE_INBOUND_URL}"
+                address="${ENDPOINT_PING}"
                 responseTimeout="${SERVICE_TIMEOUT_MS}"
                 transformer-refs="logReqIn"
                 responseTransformer-refs="logRespOut"/>
 
         <expression-transformer>
             <return-argument evaluator="string"
-                             expression="${PINGSERVICE_RESPONSE}" />
+                             expression="OK" />
         </expression-transformer>
 	<custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>

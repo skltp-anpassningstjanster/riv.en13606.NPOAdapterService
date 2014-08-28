@@ -79,13 +79,13 @@ public class Router implements MuleContextAware {
      *
      * Checkout flow spec in file "update-tak-cache-service.xml"
      */
-    public void updateRoutingDataScheduledEvent() {
-        log.info("NPOAdapter: Received scheduled routing data update event");
-        updateRoutingData0();
+    public void reloadRoutingData() {
+        log.info("NPOAdapter: Received routing data relaod event");
+        reloadRoutingData0();
     }
 
     //
-    protected void updateRoutingData0() {
+    protected void reloadRoutingData0() {
         try {
             log.info("NPOAdapter: Load routing data from TAK");
             final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
@@ -213,7 +213,7 @@ public class Router implements MuleContextAware {
     @Synchronized
     public RouteData getRouteData() {
         if (this.routeData == null) {
-            updateRoutingData0();
+            reloadRoutingData0();
         }
         return this.routeData;
     }

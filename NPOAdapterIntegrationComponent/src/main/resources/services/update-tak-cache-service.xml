@@ -8,14 +8,24 @@
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
     <quartz:endpoint name="quartz-scheduler" jobName="cron-tak-cache-reset"
-                     cronExpression="${CRON_TAK_CACHE_RESET}" responseTimeout="${SERVICE_TIMEOUT_MS}">
+                     cronExpression="${CRON_TAK_CACHE_RELOAD}" responseTimeout="${SERVICE_TIMEOUT_MS}">
         <quartz:event-generator-job/>
     </quartz:endpoint>
 
     <flow name="update-tak-cache-cron-flow">
         <inbound-endpoint ref="quartz-scheduler"/>
-        <invoke object-ref="router" method="updateRoutingDataScheduledEvent"/>
+        <logger level="INFO" message="Reload TAK cache, Cron Request" />
+        <invoke object-ref="router" method="reloadRoutingData"/>
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>
 
+    <flow name="update-tak-cache-http-flow">
+        <inbound-endpoint address="${ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector" exchange-pattern="request-response" />
+        <logger level="INFO" message="Reload TAK cache, HTTP Request" />
+        <invoke object-ref="router" method="reloadRoutingData"/>
+        <expression-transformer>
+            <return-argument evaluator="string"
+                             expression="OK (TAK cache has been successfully reloaded)" />
+        </expression-transformer>
+    </flow>
 </mule>

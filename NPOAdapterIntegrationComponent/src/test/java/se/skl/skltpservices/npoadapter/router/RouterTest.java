@@ -45,7 +45,7 @@ public class RouterTest {
 
         RouteData.save(routeDataSource, router.getTakCacheFilename());
 
-        router.updateRoutingData0();
+        router.reloadRoutingData0();
 
         final RouteData.Route route = router.getRoute(RouteDataTest.LOGICAL_ADDRESS1);
 
