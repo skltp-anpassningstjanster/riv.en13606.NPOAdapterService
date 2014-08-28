@@ -225,25 +225,18 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         if (professional != null) {
             professionalType.setHealthcareProfessionalName(EHRUtil.getPartValue(professional.getName()));
             final HEALTHCAREPROFESSIONALROLE role = EHRUtil.firstItem(professional.getRole());
-            if (role != null && role.getProfession() != null) {
-                final CVType cvType = new CVType();
-                cvType.setCode(EHRUtil.getCDCode(role.getProfession()));
-                cvType.setCodeSystem(role.getProfession().getCodeSystem());
-                cvType.setDisplayName(role.getProfession().getDisplayName().getValue());
+            if (role != null) {
+               final CVType cvType = EHRUtil.cvType(role.getProfession(), CVType.class);
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
             }
         }
 
-        // FIXME: Missing HSAIds have to be validated!
-        // professionalType.setHealthcareProfessionalCareGiverHSAId();
-        // professionalType.setHealthcareProfessionalCareUnitHSAId();
-        
-        for(FUNCTIONALROLE careGiver : composition.getOtherParticipations()) {
-			if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
-				if(careGiver.getPerformer() != null) {
+        for (final FUNCTIONALROLE careGiver : composition.getOtherParticipations()) {
+			if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+				if (careGiver.getPerformer() != null) {
 					professionalType.setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
 				}
-				if(careGiver.getHealthcareFacility() != null) {
+				if (careGiver.getHealthcareFacility() != null) {
 					professionalType.setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
 				}
 			}

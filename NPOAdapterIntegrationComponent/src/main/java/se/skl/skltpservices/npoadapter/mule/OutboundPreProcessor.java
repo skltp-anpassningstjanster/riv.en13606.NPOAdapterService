@@ -61,8 +61,13 @@ public class OutboundPreProcessor implements MessageProcessor {
 
     @Override
     @SneakyThrows
-    public MuleEvent process(MuleEvent event) throws MuleException {
+    public MuleEvent process(final MuleEvent event) throws MuleException {
         final byte[] payload = event.getMessage().getPayloadAsBytes();
+
+        // Ignore HTTP GET operations.
+        if (payload[0] == '/') {
+            return event;
+        }
         final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(new ByteArrayInputStream(payload));
         final String logicalAddress = extractLogicalAddress(reader);
         log.debug("Logical address: " + logicalAddress);
