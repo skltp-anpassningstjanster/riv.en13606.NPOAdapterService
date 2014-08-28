@@ -155,12 +155,7 @@ public final class HealthcondDescriptionUtil {
 	}
 	
 	public static PersonIdType mapPersonIdType(final II elm) {
-		final PersonIdType person = new PersonIdType();
-		if(elm != null) {
-			person.setId(elm.getExtension());
-			person.setType(elm.getRoot());
-		}
-		return person;
+        return EHRUtil.personIdType(elm, PersonIdType.class);
 	}
 	
 	public static II iiType(final PersonIdType idType) {
