@@ -141,8 +141,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		}
 		
 		final String systemHSAId = EHRUtil.getSystemHSAId(ehrExtract);
-		final PersonIdType subjectOfCare = HealthcondActOutcomeUtil.mapPersonIdType(ehrExtract.getSubjectOfCare());
-		
+
 		COMPOSITION und = null;
 		COMPOSITION vbe = null;
 		
@@ -156,7 +155,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			}
 		}
 		final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
-		type.setLaboratoryOrderOutcomeHeader(HealthcondActOutcomeUtil.mapHeaderType(und, systemHSAId, subjectOfCare, orgs, hps));
+		type.setLaboratoryOrderOutcomeHeader(HealthcondActOutcomeUtil.mapHeaderType(und, systemHSAId, ehrExtract.getSubjectOfCare(), orgs, hps));
 		type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
 		resp.getLaboratoryOrderOutcome().add(type);
 		/**

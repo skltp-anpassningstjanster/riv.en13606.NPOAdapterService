@@ -95,10 +95,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
-        final PersonIdType personIdType = new PersonIdType();
-        personIdType.setId(ehrExtract.getSubjectOfCare().getExtension());
-        personIdType.setType(ehrExtract.getSubjectOfCare().getRoot());
-
         for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
             final CareContactType contactType = new CareContactType();
             contactType.setCareContactHeader(mapHeader(ehrExtract, i));
@@ -117,7 +113,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         targetRequest.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
         targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
         targetRequest.getMeanings().add(MEANING_VKO);
-        targetRequest.setTimePeriod(map(careContactsType.getTimePeriod()));
+        targetRequest.setTimePeriod(EHRUtil.IVLTSType(careContactsType.getTimePeriod()));
         final List<String> ids = careContactsType.getCareUnitHSAId();
         if (ids.size() == 1) {
             targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
@@ -158,7 +154,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
         headerType.setDocumentId(composition.getRcId().getExtension());
         headerType.setSourceSystemHSAId(ehrExtract.getEhrSystem().getExtension());
-        headerType.setPatientId(mapPersonId(ehrExtract.getSubjectOfCare()));
+        headerType.setPatientId(EHRUtil.personIdType(ehrExtract.getSubjectOfCare(), PersonIdType.class));
 
         headerType.setAccountableHealthcareProfessional(mapProfessional(composition, ehrExtract.getDemographicExtract()));
 
@@ -205,7 +201,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
                     }
                 }
 
-                bodyType.setCareContactTimePeriod(mapTimePeriod(composition.getSessionTime()));
+                bodyType.setCareContactTimePeriod(EHRUtil.datePeriod(composition.getSessionTime(), TimePeriodType.class));
             }
         }
         return bodyType;
@@ -218,28 +214,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         return value;
     }
 
-    /**
-     * Maps from {@link IVLTS} to {@link riv.clinicalprocess.logistics.logistics._2.TimePeriodType}
-     *
-     * @param sessionTime the source session time.
-     * @return the target time period type.
-     */
-    private TimePeriodType mapTimePeriod(final IVLTS sessionTime) {
-        final TimePeriodType timePeriodType = new TimePeriodType();
-
-        timePeriodType.setStart(sessionTime.getLow().getValue());
-        timePeriodType.setEnd(sessionTime.getHigh().getValue());
-
-        return timePeriodType;
-    }
-
-    //
-    protected PersonIdType mapPersonId(final II subjectOfCare) {
-        final PersonIdType personIdType = new PersonIdType();
-        personIdType.setId(subjectOfCare.getExtension());
-        personIdType.setType(subjectOfCare.getRoot());
-        return personIdType;
-    }
 
     //
     protected HealthcareProfessionalType mapProfessional(final COMPOSITION composition, final List<IDENTIFIEDENTITY> demographics) {
@@ -278,16 +252,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         professionalType.setHealthcareProfessionalOrgUnit(mapOrgUnit(demographics, composition.getComposer().getHealthcareFacility().getExtension()));
 
         return professionalType;
-    }
-
-    protected IVLTS map(final DatePeriodType datePeriodType) {
-        if (datePeriodType == null) {
-            return null;
-        }
-        final IVLTS value = new IVLTS();
-        value.setLow(EHRUtil.tsType((datePeriodType.getStart())));
-        value.setHigh(EHRUtil.tsType(datePeriodType.getEnd()));
-        return value;
     }
     
     /**

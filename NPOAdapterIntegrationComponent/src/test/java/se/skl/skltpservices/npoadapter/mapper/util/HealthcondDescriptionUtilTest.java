@@ -69,8 +69,6 @@ public class HealthcondDescriptionUtilTest {
 		pros.put(UUID.randomUUID().toString(), new IDENTIFIEDHEALTHCAREPROFESSIONAL());
 		pros.put(UUID.randomUUID().toString(), new IDENTIFIEDHEALTHCAREPROFESSIONAL());
 		pros.put(PRO_ID, hcp);
-		
-		HealthcareProfessionalType answer = HealthcondDescriptionUtil.mapHealtcareProfessionalType(composer, orgs, pros, null);
 	}
 
 	@Test

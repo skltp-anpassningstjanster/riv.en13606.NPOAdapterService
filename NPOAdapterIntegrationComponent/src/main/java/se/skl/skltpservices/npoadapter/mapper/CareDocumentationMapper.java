@@ -112,9 +112,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			return resp;
 		}
 		final EHREXTRACT ehrExtract = riv.getEhrExtract().get(0);
-		
-		final PersonIdType person = HealthcondDescriptionUtil.mapPersonIdType(ehrExtract.getSubjectOfCare());
-		
+
 		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
 		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
 		
@@ -136,7 +134,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		final String systemHSAid = EHRUtil.getSystemHSAId(ehrExtract);
 		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			final CareDocumentationType doc = new CareDocumentationType();
-			doc.setCareDocumentationHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAid, person, orgs, hps, TIME_ELEMENT));
+			doc.setCareDocumentationHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAid, ehrExtract.getSubjectOfCare(), orgs, hps, TIME_ELEMENT));
 			doc.setCareDocumentationBody(mapBodyType(comp));
 			resp.getCareDocumentation().add(doc);			
 		}		

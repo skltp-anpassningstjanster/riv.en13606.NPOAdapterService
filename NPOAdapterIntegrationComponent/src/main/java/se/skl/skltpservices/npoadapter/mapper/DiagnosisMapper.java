@@ -156,11 +156,10 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		}
 		
 		final String systemHSAId = EHRUtil.getSystemHSAId(ehrExtract);
-		final PersonIdType subjectOfCare = HealthcondDescriptionUtil.mapPersonIdType(ehrExtract.getSubjectOfCare());
-		
+
 		for(COMPOSITION comp : ehrResp.getEhrExtract().get(0).getAllCompositions()) {
 			final DiagnosisType type = new DiagnosisType();
-			type.setDiagnosisHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAId, subjectOfCare, orgs, hps, TIME_ELEMENT));
+			type.setDiagnosisHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAId, ehrExtract.getSubjectOfCare(), orgs, hps, TIME_ELEMENT));
 			type.setDiagnosisBody(mapDiagnosisBodyType(comp));
 			resp.getDiagnosis().add(type);
 		}
