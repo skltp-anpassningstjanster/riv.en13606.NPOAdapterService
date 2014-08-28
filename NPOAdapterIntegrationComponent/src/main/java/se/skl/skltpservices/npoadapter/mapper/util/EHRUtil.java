@@ -19,9 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.util;
 
+import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -148,4 +150,129 @@ public final class EHRUtil {
 		}
 		return null;
   	}
+
+    //
+    static II iiType(final PersonId personId) {
+        final II ii = new II();
+        if (personId != null) {
+            ii.setRoot(personId.getType());
+            ii.setExtension(personId.getId());
+        }
+        return ii;
+    }
+
+    //
+    public static II iiType(final Object personIdType) {
+        return (personIdType == null) ? null : iiType(XMLBeanMapper.getInstance().map(personIdType, PersonId.class));
+    }
+
+    //
+    static IVLTS IVLTSType(final DatePeriod datePeriod) {
+        final IVLTS ivlts = new IVLTS();
+        if (datePeriod != null) {
+            ivlts.setLow(EHRUtil.tsType(datePeriod.getStart()));
+            ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
+        }
+        return ivlts;
+    }
+
+    //
+    public static IVLTS IVLTSType(final Object datePeriodType) {
+        return (datePeriodType == null) ? null : IVLTSType(XMLBeanMapper.getInstance().map(datePeriodType, DatePeriod.class));
+    }
+
+    //
+    public static <T> T personIdType(final II ii, final Class<T> type) {
+        if (ii == null) {
+            return null;
+        }
+        final PersonId personId = new PersonId();
+        personId.setId(ii.getExtension());
+        personId.setType(ii.getRoot());
+        return XMLBeanMapper.getInstance().map(personId, type);
+    }
+
+    public static <T> T datePeriod(final IVLTS ivlts, final Class<T> type) {
+        if (ivlts == null) {
+            return null;
+        }
+        final DatePeriod datePeriod = new DatePeriod();
+
+        if (ivlts.getHigh() != null) {
+            datePeriod.setEnd(ivlts.getHigh().getValue());
+        }
+        if (ivlts.getLow() != null) {
+            datePeriod.setStart(ivlts.getLow().getValue());
+        }
+
+        return XMLBeanMapper.getInstance().map(datePeriod, type);
+    }
+
+    //
+    public static <T> T resultType(final String logId, final List<ResponseDetailType> details, final Class<T> type) {
+        if (details.isEmpty()) {
+            return null;
+        }
+        final ResponseDetailType resp = details.get(0);
+        final Result result = new Result();
+        if (resp.getText() != null) {
+            result.setMessage(resp.getText().getValue());
+        }
+        result.setLogId(logId);
+        result.setResultCode(interpret(resp.getTypeCode()));
+
+        return XMLBeanMapper.getInstance().map(result, type);
+    }
+
+    //
+    public static ResultCode interpret(final ResponseDetailTypeCodes code) {
+        switch(code) {
+            case E:
+            case W:
+                return ResultCode.ERROR;
+            case I:
+                return ResultCode.INFO;
+            default:
+                return ResultCode.OK;
+        }
+    }
+
+    //
+    @Data
+    public static class Result {
+        protected ResultCode resultCode;
+        protected ErrorCode errorCode;
+        protected String logId;
+        protected String subCode;
+        protected String message;
+    }
+
+    //
+    public static enum ResultCode {
+        OK,
+        ERROR,
+        INFO;
+    }
+
+    //
+    public static enum ErrorCode {
+        INVALID_REQUEST,
+        TRANSFORMATION_ERROR,
+        APPLICATION_ERROR,
+        TECHNICAL_ERROR;
+    }
+
+    //
+    @Data
+    public static class DatePeriod {
+        private String start;
+        private String end;
+    }
+
+    //
+    @Data
+    public static class PersonId {
+        private String id;
+        private String type;
+    }
 }

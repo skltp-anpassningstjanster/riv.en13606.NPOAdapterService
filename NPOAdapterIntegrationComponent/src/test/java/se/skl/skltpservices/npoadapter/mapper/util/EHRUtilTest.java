@@ -22,11 +22,13 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 import org.junit.Test;
 
 
+import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description._2.ResultType;
+import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.*;
 
-import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +48,37 @@ public class EHRUtilTest {
 	
 	private static final int TEST_INT_VALUE_1 = 500;
 
-	
+
+    @Test
+    public void testGenericMapping() {
+        final PersonIdType personIdType1 = new PersonIdType();
+        personIdType1.setType("1234");
+        personIdType1.setId("id");
+        final II ii = EHRUtil.iiType(personIdType1);
+        assertEquals(personIdType1.getId(), ii.getExtension());
+        assertEquals(personIdType1.getType(), ii.getRoot());
+
+        riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType personIdType2 = new riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType();
+        personIdType2.setType(personIdType1.getType());
+        personIdType2.setId(personIdType1.getId());
+        final II ii2 = EHRUtil.iiType(personIdType1);
+        assertEquals(personIdType2.getId(), ii2.getExtension());
+        assertEquals(personIdType2.getType(), ii2.getRoot());
+
+        final ResponseDetailType detail = new ResponseDetailType();
+
+        detail.setText(createST("value"));
+        detail.setTypeCode(ResponseDetailTypeCodes.I);
+
+        final ResultType resultType = EHRUtil.resultType("logId", Arrays.asList(detail), ResultType.class);
+
+        assertEquals(detail.getText().getValue(), resultType.getMessage());
+        assertEquals(ResultCodeEnum.INFO, resultType.getResultCode());
+        assertEquals("logId", resultType.getLogId());
+
+
+    }
+
 	@Test
 	public void testIntType() {
 		INT intType = EHRUtil.intType(TEST_INT_VALUE_1);
@@ -141,4 +173,10 @@ public class EHRUtilTest {
 		cd.setCode(code);
 		return cd;
 	}
+
+    private ST createST(final String value) {
+        final ST st = new ST();
+        st.setValue(value);
+        return st;
+    }
 }

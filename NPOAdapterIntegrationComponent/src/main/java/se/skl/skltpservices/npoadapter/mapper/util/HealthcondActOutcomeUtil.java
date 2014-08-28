@@ -59,10 +59,12 @@ import se.rivta.en13606.ehrextract.v11.TS;
  *
  */
 public final class HealthcondActOutcomeUtil {
-	private HealthcondActOutcomeUtil() {
-		
+
+
+    private HealthcondActOutcomeUtil() {
 	}
-	
+
+    //
 	public static PatientSummaryHeaderType mapHeaderType(final COMPOSITION comp, final String systemHsaId, 
 			final PersonIdType person, final Map<String, ORGANISATION> orgs, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps) {
 		final PatientSummaryHeaderType header = new PatientSummaryHeaderType();
@@ -162,34 +164,13 @@ public final class HealthcondActOutcomeUtil {
 		}
 		return type;
 	}
-	
+
+    //
 	public static PersonIdType mapPersonIdType(final II elm) {
-		final PersonIdType person = new PersonIdType();
-		if(elm != null) {
-			person.setId(elm.getExtension());
-			person.setType(elm.getRoot());
-		}
-		return person;
+	    return EHRUtil.personIdType(elm, PersonIdType.class);
 	}
-	
-	public static II iiType(final PersonIdType idType) {
-		II ii = new II();
-		if(idType != null) {
-			ii.setRoot(idType.getType());
-			ii.setExtension(idType.getId());
-		}
-		return ii;
-	}
-	
-	public static IVLTS IVLTSType(final DatePeriodType datePeriod) {
-		final IVLTS ivlts = new IVLTS();
-		if(datePeriod != null) {
-			ivlts.setLow(EHRUtil.tsType(datePeriod.getStart()));
-			ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
-		}
-		return ivlts;
-	}
-	
+
+    //
 	public static IIType mapIIType(final II ii) {
 		final IIType type = new IIType();
 		type.setExtension(ii.getExtension());
@@ -235,47 +216,12 @@ public final class HealthcondActOutcomeUtil {
 	}
 	
 	public static TimePeriodType mapTimePeriodType(final IVLTS ivlts) {
-		if(ivlts == null) {
-			return null;
-		}
-		final TimePeriodType type = new TimePeriodType();
-		if(ivlts.getHigh() != null) {
-			type.setEnd(ivlts.getHigh().getValue());
-		}
-		if(ivlts.getLow() != null) {
-			type.setStart(ivlts.getLow().getValue());
-		}
-		return type;
+        return EHRUtil.datePeriod(ivlts, TimePeriodType.class);
 	}
 	
 	
 	public static ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
-		if(respDetails.isEmpty()) {
-			return null;
-		}
-		final ResponseDetailType resp = respDetails.get(0);
-		final ResultType resultType = new ResultType();
-		if(resp.getText() != null) {
-			resultType.setMessage(resp.getText().getValue());
-		}
-		resultType.setLogId(uniqueId);
-		resultType.setResultCode(interpret(resp.getTypeCode()));
-		return resultType;
+        return EHRUtil.resultType(uniqueId, respDetails, ResultType.class);
 	}
-	
-  	public static ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
-		try {
-			switch(code) {
-			case E:
-			case W:
-				return ResultCodeEnum.ERROR;
-			case I:
-				return ResultCodeEnum.INFO;
-			default:
-				return ResultCodeEnum.OK;
-			}
-		} catch (Exception err) {
-			return null;
-		}
-	}
+
 }

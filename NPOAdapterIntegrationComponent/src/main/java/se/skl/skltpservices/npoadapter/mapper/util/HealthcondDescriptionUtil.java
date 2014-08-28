@@ -32,7 +32,6 @@ import riv.clinicalprocess.healthcond.description._2.OrgUnitType;
 import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
-import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -43,7 +42,6 @@ import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
@@ -166,50 +164,14 @@ public final class HealthcondDescriptionUtil {
 	}
 	
 	public static II iiType(final PersonIdType idType) {
-		II ii = new II();
-		if(idType != null) {
-			ii.setRoot(idType.getType());
-			ii.setExtension(idType.getId());
-		}
-		return ii;
+        return EHRUtil.iiType(idType);
 	}
 	
 	public static IVLTS IVLTSType(final DatePeriodType datePeriod) {
-		final IVLTS ivlts = new IVLTS();
-		if(datePeriod != null) {
-			ivlts.setLow(EHRUtil.tsType(datePeriod.getStart()));
-			ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
-		}
-		return ivlts;
+        return EHRUtil.IVLTSType(datePeriod);
 	}
 	
   	public static ResultType mapResultType(final String uniqueId, final List<ResponseDetailType> respDetails) {
-		if(respDetails.isEmpty()) {
-			return null;
-		}
-		final ResponseDetailType resp = respDetails.get(0);
-		final ResultType resultType = new ResultType();
-		if(resp.getText() != null) {
-			resultType.setMessage(resp.getText().getValue());
-		}
-		resultType.setLogId(uniqueId);
-		resultType.setResultCode(interpret(resp.getTypeCode()));
-		return resultType;
-	}
-  	
-  	public static ResultCodeEnum interpret(final ResponseDetailTypeCodes code) {
-		try {
-			switch(code) {
-			case E:
-			case W:
-				return ResultCodeEnum.ERROR;
-			case I:
-				return ResultCodeEnum.INFO;
-			default:
-				return ResultCodeEnum.OK;
-			}
-		} catch (Exception err) {
-			return null;
-		}
+        return EHRUtil.resultType(uniqueId, respDetails, ResultType.class);
 	}
 }

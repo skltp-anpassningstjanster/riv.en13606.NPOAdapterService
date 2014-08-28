@@ -25,7 +25,6 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.*;
-import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor;
 
 import javax.xml.bind.JAXBElement;
@@ -93,7 +92,7 @@ public abstract class AbstractMapper {
         final Mapper mapper = map.get(key);
         log.debug("Lookup mapper for key: \"{}\" -> {}", key, mapper);
         if (mapper == null) {
-            throw new IllegalStateException("NPOAdapter: Unable to lookup mapper for operation: \"" + key + "\"");
+            throw new IllegalStateException("Unable to lookup mapper for operation: \"" + key + "\"");
         }
         return mapper;
     }

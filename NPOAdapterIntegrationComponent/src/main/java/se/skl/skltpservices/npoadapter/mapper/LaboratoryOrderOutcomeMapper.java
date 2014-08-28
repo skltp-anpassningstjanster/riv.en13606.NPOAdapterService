@@ -384,8 +384,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING);
 		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
-		type.setSubjectOfCareId(HealthcondActOutcomeUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(HealthcondActOutcomeUtil.IVLTSType(req.getTimePeriod()));
+		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
+		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
 		return type;
 	}
 

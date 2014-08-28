@@ -98,9 +98,9 @@ public class PingForConfigurationWS implements PingForConfigurationResponderInte
 
     //
     static ConfigurationType property(final String name, final String value) {
-        ConfigurationType p = new ConfigurationType();
+        final ConfigurationType p = new ConfigurationType();
         p.setName(name);
-        p.setValue(value);
+        p.setValue(name.toUpperCase().contains("PASSWORD") ? "********" : value);
         return p;
     }
 }
