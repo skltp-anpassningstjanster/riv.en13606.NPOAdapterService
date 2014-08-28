@@ -398,14 +398,15 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(header, type);
     }
 
+    // Generic baseline of data types to be able to convert between schemas (java packages).
     //
     @Data
     public static class Result {
-        protected ResultCode resultCode;
-        protected ErrorCode errorCode;
-        protected String logId;
-        protected String subCode;
-        protected String message;
+        private ResultCode resultCode;
+        private ErrorCode errorCode;
+        private String logId;
+        private String subCode;
+        private String message;
     }
 
     //
