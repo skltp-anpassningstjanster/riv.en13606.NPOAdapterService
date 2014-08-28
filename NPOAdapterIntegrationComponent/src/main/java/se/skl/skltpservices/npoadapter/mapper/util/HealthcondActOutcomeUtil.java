@@ -25,7 +25,6 @@ import java.util.Map;
 import org.mule.util.StringUtils;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.CVType;
-import riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType;
 import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.actoutcome._3.IIType;
 import riv.clinicalprocess.healthcond.actoutcome._3.LegalAuthenticatorType;
@@ -34,23 +33,19 @@ import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome._3.TimePeriodType;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import se.rivta.en13606.ehrextract.v11.ATTESTATIONINFO;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
-import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
 import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.TEL;
 import se.rivta.en13606.ehrextract.v11.TELEMAIL;
 import se.rivta.en13606.ehrextract.v11.TELPHONE;
-import se.rivta.en13606.ehrextract.v11.TS;
 
 /**
  * Helper util for the healthcond.actoutcome domain
@@ -172,47 +167,23 @@ public final class HealthcondActOutcomeUtil {
 
     //
 	public static IIType mapIIType(final II ii) {
-		final IIType type = new IIType();
-		type.setExtension(ii.getExtension());
-		type.setRoot(ii.getRoot());
-		return type;
+        return EHRUtil.iiType(ii, IIType.class);
 	}
 	
 	public static IIType mapIIType(final String extension, final String root) {
-		final IIType type = new IIType();
-		type.setExtension(extension);
-		type.setRoot(root);
-		return type;
+        return EHRUtil.iiType(EHRUtil.iiType(root, extension), IIType.class);
 	}
 	
 	public static CVType mapCVType(final II id) {
-		if(id == null) {
-			return null;
-		}
-		final CVType type = new CVType();
-		type.setCode(id.getExtension());
-		type.setCodeSystem(id.getRoot());
-		return type;
+        return EHRUtil.cvType(id, CVType.class);
 	}
 	
 	public static CVType mapCVType(final String code, final String codeSystem) {
-		final CVType type = new CVType();
-		type.setCode(code);
-		type.setCodeSystem(codeSystem);
-		return type;
+        return EHRUtil.cvType(code, codeSystem, null, CVType.class);
 	}
 	
 	public static CVType mapCVType(final CD cd) {
-		if(cd == null) {
-			return null;
-		}
-		final CVType type = new CVType();
-		type.setCode(cd.getCode());
-		type.setCodeSystem(cd.getCodeSystem());
-		if(cd.getDisplayName() != null) {
-			type.setDisplayName(cd.getDisplayName().getValue());
-		}
-		return type;
+        return EHRUtil.cvType(cd, CVType.class);
 	}
 	
 	public static TimePeriodType mapTimePeriodType(final IVLTS ivlts) {

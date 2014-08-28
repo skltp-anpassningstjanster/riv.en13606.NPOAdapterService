@@ -67,6 +67,17 @@ public class XMLBeanMapperTest {
         testEhrExtractMapping(Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE));
     }
 
+    @Test
+    public void testEhrExtractMapping_Diagnosis() {
+        testEhrExtractMapping(Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE));
+    }
+
+    @Test
+    public void testEhrExtractMapping_Laboratory() {
+        testEhrExtractMapping(Util.loadEhrTestData(Util.LAB_TEST_FILE));
+    }
+
+
     /**
      * Perform a complete round-trip mapping from baseline -> destination -> baseline and check that the source baseline
      * is the same as the target baseline.

@@ -152,18 +152,26 @@ public final class EHRUtil {
   	}
 
     //
-    static II iiType(final PersonId personId) {
+    public static II iiType(final String root, final String extension) {
         final II ii = new II();
-        if (personId != null) {
-            ii.setRoot(personId.getType());
-            ii.setExtension(personId.getId());
-        }
+        ii.setRoot(root);
+        ii.setExtension(extension);
         return ii;
+    }
+
+    //
+    static II iiType(final PersonId personId) {
+        return (personId == null) ? null : iiType(personId.getType(),personId.getId());
     }
 
     //
     public static II iiType(final Object personIdType) {
         return (personIdType == null) ? null : iiType(XMLBeanMapper.getInstance().map(personIdType, PersonId.class));
+    }
+
+    //
+    public static <T> T iiType(final II ii, final Class<T> type) {
+        return XMLBeanMapper.getInstance().map(ii, type);
     }
 
     //
@@ -225,6 +233,27 @@ public final class EHRUtil {
     }
 
     //
+    public static <T> T cvType(final String code, final String codeSystem, final String displayName, Class<T> type) {
+        final CV cv = new CV();
+        cv.setCode(code);
+        cv.setCodeSystem(codeSystem);
+        cv.setDisplayName(displayName);
+        return XMLBeanMapper.getInstance().map(cv, type);
+    }
+
+    //
+    public static <T> T cvType(final II ii, Class<T> type) {
+        return cvType(ii.getExtension(), ii.getRoot(), null, type);
+    }
+
+    //
+    public static <T> T cvType(final CD cd, Class<T> type) {
+        final String displayName = (cd.getDisplayName() == null) ? null : cd.getDisplayName().getValue();
+        return cvType(cd.getCode(), cd.getCodeSystem(), displayName, type);
+    }
+
+
+    //
     public static ResultCode interpret(final ResponseDetailTypeCodes code) {
         switch(code) {
             case E:
@@ -274,5 +303,16 @@ public final class EHRUtil {
     public static class PersonId {
         private String id;
         private String type;
+    }
+
+    //
+    @Data
+    public static class CV {
+        private String code;
+        private String codeSystem;
+        private String codeSystemName;
+        private String codeSystemVersion;
+        private String displayName;
+        private String originalText;
     }
 }
