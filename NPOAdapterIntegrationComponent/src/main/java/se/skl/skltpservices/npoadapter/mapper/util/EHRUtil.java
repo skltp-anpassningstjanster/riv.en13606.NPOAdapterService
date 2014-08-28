@@ -170,8 +170,8 @@ public final class EHRUtil {
     static IVLTS IVLTSType(final DatePeriod datePeriod) {
         final IVLTS ivlts = new IVLTS();
         if (datePeriod != null) {
-            ivlts.setLow(EHRUtil.tsType(datePeriod.getStart()));
-            ivlts.setHigh(EHRUtil.tsType(datePeriod.getEnd()));
+            ivlts.setLow(tsType(datePeriod.getStart()));
+            ivlts.setHigh(tsType(datePeriod.getEnd()));
         }
         return ivlts;
     }
