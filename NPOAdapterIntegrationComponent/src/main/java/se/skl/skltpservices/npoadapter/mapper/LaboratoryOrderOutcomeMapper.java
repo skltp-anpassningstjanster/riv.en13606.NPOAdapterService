@@ -20,23 +20,14 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import riv.clinicalprocess.healthcond.actoutcome._3.AnalysisOutcomeType;
-import riv.clinicalprocess.healthcond.actoutcome._3.AnalysisType;
-import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
-import riv.clinicalprocess.healthcond.actoutcome._3.LaboratoryOrderOutcomeBodyType;
-import riv.clinicalprocess.healthcond.actoutcome._3.LaboratoryOrderOutcomeType;
-import riv.clinicalprocess.healthcond.actoutcome._3.OrderType;
-import riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType;
-import riv.clinicalprocess.healthcond.actoutcome._3.RelationToAnalysisType;
-import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.ErrorCodeEnum;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
+import riv.clinicalprocess.healthcond.actoutcome._3.*;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.*;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.CLUSTER;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -56,8 +47,7 @@ import se.rivta.en13606.ehrextract.v11.ST;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.mapper.util.HealthcondActOutcomeUtil;
-import se.skl.skltpservices.npoadapter.mapper.util.HealthcondDescriptionUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -116,48 +106,27 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	
 	protected GetLaboratoryOrderOutcomeResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetLaboratoryOrderOutcomeResponseType resp = new GetLaboratoryOrderOutcomeResponseType();
-		resp.setResult(HealthcondActOutcomeUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
+		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
 		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
-		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
-		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
 		
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
+		SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
 		
-		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
-			if(entity instanceof ORGANISATION) {
-				final ORGANISATION org = (ORGANISATION) entity;
-				if(org.getExtractId() != null) {
-					orgs.put(org.getExtractId().getExtension(), org);
-				}
-			}
-			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
-				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
-				if(hp.getExtractId() != null) {
-					hps.put(hp.getExtractId().getExtension(), hp);
-				}
-			}
-		}
-		
-		final String systemHSAId = EHRUtil.getSystemHSAId(ehrExtract);
-
-		COMPOSITION und = null;
-		COMPOSITION vbe = null;
-		
-		for(COMPOSITION comp : ehrResp.getEhrExtract().get(0).getAllCompositions()) {
+		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			if(comp.getMeaning() != null) {
-				if(comp.getMeaning().getCode().equalsIgnoreCase("und")) {
-					und = comp;
-				} else if(comp.getMeaning().getCode().equalsIgnoreCase("vbe")) {
-					vbe = comp;
+				if(StringUtils.equals(comp.getMeaning().getCode(), "und")) {
+					final COMPOSITION und = comp;
+					final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), "vbe");
+					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
+					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class));
+					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
+					resp.getLaboratoryOrderOutcome().add(type);
 				}
 			}
 		}
-		final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
-		type.setLaboratoryOrderOutcomeHeader(HealthcondActOutcomeUtil.mapHeaderType(und, systemHSAId, ehrExtract.getSubjectOfCare(), orgs, hps));
-		type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
-		resp.getLaboratoryOrderOutcome().add(type);
+		
 		/**
 		 * TODO: ResultType is mandatory in GetLaboratoryOrderOutcome.
 		 */
@@ -169,6 +138,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		}
 		return resp;
 	}
+	
 	
 	/**
 	 * TODO: Refactor, too complex.
@@ -246,6 +216,9 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	}
 
 	protected OrderType mapOrder(final COMPOSITION vbe) {
+		if(vbe == null) {
+			return null;
+		}
 		final OrderType type = new OrderType();
 		if(vbe.getRcId() != null) {
 			type.setOrderId(vbe.getRcId().getExtension());
@@ -274,12 +247,12 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	 */
 	protected AnalysisType mapAnalysis(final CLUSTER analys) {
 		final AnalysisType type = new AnalysisType();
-		type.setAnalysisId(HealthcondActOutcomeUtil.mapIIType(analys.getRcId()));
+		type.setAnalysisId(EHRUtil.iiType(analys.getRcId(), IIType.class));
 		for(LINK link : analys.getLinks()) {
 			if(!link.getTargetId().isEmpty()) {
 				final RelationToAnalysisType rel = new RelationToAnalysisType();
 				final II ii = link.getTargetId().get(0);
-				rel.setAnalysisId(HealthcondActOutcomeUtil.mapIIType(ii));
+				rel.setAnalysisId(EHRUtil.iiType(ii, IIType.class));
 				type.getRelationToAnalysis().add(rel);
 			}
 		}
@@ -290,15 +263,15 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 					switch(uatElm.getMeaning().getCode()) {
 					case "und-kkm-uat-kod":
 						if(uatElm.getObsTime() != null) {
-							type.setAnalysisTime(HealthcondActOutcomeUtil.mapTimePeriodType(uatElm.getObsTime()));
+							type.setAnalysisTime(EHRUtil.datePeriod(uatElm.getObsTime(), TimePeriodType.class));
 							if(uatElm.getValue() instanceof CD) {
-								type.setAnalysisCode(HealthcondActOutcomeUtil.mapCVType((CD)uatElm.getValue()));
+								type.setAnalysisCode(EHRUtil.cvType((CD)uatElm.getValue(), CVType.class));
 							}
 						}
 						break;
 					case "und-kkm-uat-txt":
 						if(uatElm.getObsTime() != null) {
-							type.setAnalysisTime(HealthcondActOutcomeUtil.mapTimePeriodType(uatElm.getObsTime()));
+							type.setAnalysisTime(EHRUtil.datePeriod(uatElm.getObsTime(), TimePeriodType.class));
 							type.setAnalysisText(EHRUtil.getElementTextValue(uatElm));
 						}
 						break;
@@ -385,6 +358,14 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
 		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
 		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
+		final List<String> ids = req.getCareUnitHSAId();
+        if (ids.size() == 1) {
+            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
+        } else if (ids.size() > 1) {
+            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
+        }
+
+        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
 		return type;
 	}
 

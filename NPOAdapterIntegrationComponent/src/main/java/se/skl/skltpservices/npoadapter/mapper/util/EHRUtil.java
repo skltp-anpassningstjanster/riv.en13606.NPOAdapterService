@@ -20,13 +20,18 @@
 package se.skl.skltpservices.npoadapter.mapper.util;
 
 import lombok.Data;
+
 import org.apache.commons.lang.StringUtils;
 
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 
+import java.io.ObjectInputStream.GetField;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -247,7 +252,7 @@ public final class EHRUtil {
         cv.setDisplayName(displayName);
         return XMLBeanMapper.getInstance().map(cv, type);
     }
-
+    
     //
     public static <T> T cvType(final II ii, Class<T> type) {
         if (ii == null) {
@@ -278,8 +283,47 @@ public final class EHRUtil {
                 return ResultCode.OK;
         }
     }
+    
+    
+    public static String careContactId(final List<LINK> links) {
+    	for(LINK link : links) {
+    		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), "vko")) {
+    			final II id = firstItem(link.getTargetId());
+    			if(id != null) {
+    				return id.getExtension();
+    			}
+    			return null;
+    		}
+    	}
+    	return null;
+    }
+    
+    public static COMPOSITION findCompositionByLink(final List<COMPOSITION> compositions, final List<LINK> links, final String target) {
+    	for(LINK link : links) {
+    		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), target)) {
+    			final II id = firstItem(link.getTargetId());
+    			if(id != null && id.getExtension() != null) {
+    				for(COMPOSITION comp : compositions) {
+    					if(comp.getRcId() != null && StringUtils.equals(comp.getRcId().getExtension(), id.getExtension())) {
+    						return comp;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
+    protected COMPOSITION findCompositionByLink(List<COMPOSITION> compositions, List<LINK> links) {
+		for(LINK link : links) {
+			if(link.getTargetType() != null) {
+				
+			}
+		}
+		return new COMPOSITION();
+	}
+    
 
-    //
     private static HealthcareProfessional healtcareProfessionalType(final FUNCTIONALROLE composer,
                                                   final Map<String, ORGANISATION> orgs,
                                                   final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps,
@@ -293,7 +337,6 @@ public final class EHRUtil {
         if(composer.getPerformer() != null) {
             performerKey = composer.getPerformer().getExtension();
         }
-        //TODO: Fix
         professional.setHealthcareProfessionalHSAId(performerKey);
         if(organisationKey != null && orgs.containsKey(organisationKey)) {
             final ORGANISATION org = orgs.get(organisationKey);
@@ -337,23 +380,16 @@ public final class EHRUtil {
                 professional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
             }
         }
-
         return professional;
     }
 
-    //
-    public static <T> T patientSummaryHeader(final COMPOSITION comp,
-                                                            final String systemHsaId,
-                                                            final II subjectOfCare,
-                                                            final Map<String, ORGANISATION> orgs,
-                                                            final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps,
-                                                            final String timeElement,
-                                                            final Class<T> type) {
-        final PatientSummaryHeader header = new PatientSummaryHeader();
+
+    public static <T> T patientSummaryHeader(final COMPOSITION comp, final SharedHeaderExtract baseHeader, final String timeElement, final Class<T> type) {
+    	final PatientSummaryHeader header = new PatientSummaryHeader();
         if(comp.getRcId() != null) {
             header.setDocumentId(comp.getRcId().getExtension());
         }
-        header.setSourceSystemHSAId(systemHsaId);
+        header.setSourceSystemHSAId(baseHeader.systemHSAId());
         if(comp.getName() != null) {
             header.setDocumentTitle(comp.getName().getValue());
         }
@@ -363,28 +399,22 @@ public final class EHRUtil {
                 header.setDocumentTime(info.getTime().getValue());
             }
         }
-
         if (timeElement != null) {
-            //Which time is to be used? time_created on root-level or time on attestations-level
             final ELEMENT time = EHRUtil.findEntryElement(comp.getContent(), timeElement);
             if (time != null && time.getValue() instanceof TS) {
                 header.setDocumentTime(((TS) time.getValue()).getValue());
-            }
+            } 
         }
 
-        header.setPatientId(personId(subjectOfCare));
-        header.setAccountableHealthcareProfessional(healtcareProfessionalType(comp.getComposer(), orgs, hps, comp.getCommittal()));
+        header.setPatientId(personId(baseHeader.subjectOfCare()));
+        header.setAccountableHealthcareProfessional(healtcareProfessionalType(comp.getComposer(), baseHeader.organisations(), baseHeader.healthcareProfessionals(), comp.getCommittal()));
         final LegalAuthenticator legal = new LegalAuthenticator();
+        
         if(header.getAccountableHealthcareProfessional() != null) {
             legal.setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
         }
         header.setLegalAuthenticator(legal);
-        if(!comp.getLinks().isEmpty() && !comp.getLinks().get(0).getTargetId().isEmpty()) {
-            header.setCareContactId(comp.getLinks().get(0).getTargetId().get(0).getExtension());
-        }
-        header.setApprovedForPatient(false);
-        header.setNullified(false);
-        header.setNullifiedReason(null);
+
         for (FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
             if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
                 if(careGiver.getPerformer() != null) {
@@ -395,6 +425,10 @@ public final class EHRUtil {
                 }
             }
         }
+        //Static values.
+        header.setApprovedForPatient(false);
+        header.setNullified(false);
+        header.setNullifiedReason(null);
         return XMLBeanMapper.getInstance().map(header, type);
     }
 
@@ -436,6 +470,12 @@ public final class EHRUtil {
     public static class PersonId {
         private String id;
         private String type;
+    }
+    
+    @Data
+    public static class IIType {
+    	private String extension;
+    	private String root;
     }
 
     //
@@ -496,4 +536,5 @@ public final class EHRUtil {
         private String legalAuthenticatorName;
         private CV legalAuthenticatorRoleCode;
     }
+    
 }

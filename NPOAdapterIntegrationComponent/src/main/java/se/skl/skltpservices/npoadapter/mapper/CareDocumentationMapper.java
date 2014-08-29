@@ -32,14 +32,13 @@ import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder.
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.mapper.util.HealthcondDescriptionUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Maps from EHR_EXTRACT (voo v1.1) to RIV GetCareDocumentationResponseType v2.0. <p>
@@ -54,8 +53,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	private static JaxbUtil jaxb = new JaxbUtil(GetCareDocumentationType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
-	
-	private static final String UNKNOWN_VALUE = "-- UNKOWN_VALUE -- ";
 	
 	private static final String TIME_ELEMENT = "voo-voo-tid";
 	private static final String TEXT_ELEMENT = "voo-voo-txt";
@@ -105,43 +102,26 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	 * @param riv subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
-	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType riv) {
+	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {
 		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
-		resp.setResult(HealthcondDescriptionUtil.mapResultType(unqiueId, riv.getResponseDetail()));
-		if(riv.getEhrExtract().isEmpty()) {
+		resp.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), ResultType.class));
+		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
-		final EHREXTRACT ehrExtract = riv.getEhrExtract().get(0);
-
-		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
-		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
 		
-		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
-			if(entity instanceof ORGANISATION) {
-				final ORGANISATION org = (ORGANISATION) entity;
-				if(org.getExtractId() != null) {
-					orgs.put(org.getExtractId().getExtension(), org);
-				}
-			}
-			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
-				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
-				if(hp.getExtractId() != null) {
-					hps.put(hp.getExtractId().getExtension(), hp);
-				}
-			}
-		}
+		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
+		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
 		
-		final String systemHSAid = EHRUtil.getSystemHSAId(ehrExtract);
-		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
+		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
 			final CareDocumentationType doc = new CareDocumentationType();
-			doc.setCareDocumentationHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAid, ehrExtract.getSubjectOfCare(), orgs, hps, TIME_ELEMENT));
+			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
+			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(comp.getLinks()));
 			doc.setCareDocumentationBody(mapBodyType(comp));
 			resp.getCareDocumentation().add(doc);			
 		}		
 		return resp;
 	}
 	
-		
 	protected CareDocumentationBodyType mapBodyType(final COMPOSITION comp) {
 		final CareDocumentationBodyType type = new CareDocumentationBodyType();
 		final ClinicalDocumentNoteType note = new ClinicalDocumentNoteType();
@@ -179,8 +159,16 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_VOO);
 		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
-		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
+		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
+		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
+		final List<String> ids = req.getCareUnitHSAid();
+        if (ids.size() == 1) {
+            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
+        } else if (ids.size() > 1) {
+            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
+        }
+
+        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
 		return type;
 	}
 	

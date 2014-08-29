@@ -20,17 +20,23 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstracts all @{link Mapper} implementations.
@@ -170,6 +176,27 @@ public abstract class AbstractMapper {
         } catch (XMLStreamException | NullPointerException e) {
             ;
         }
+    }
+    
+    protected SharedHeaderExtract extractInformation(final EHREXTRACT ehrExtract) {
+    	final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
+		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
+		
+		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
+			if(entity instanceof ORGANISATION) {
+				final ORGANISATION org = (ORGANISATION) entity;
+				if(org.getExtractId() != null) {
+					orgs.put(org.getExtractId().getExtension(), org);
+				}
+			}
+			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
+				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
+				if(hp.getExtractId() != null) {
+					hps.put(hp.getExtractId().getExtension(), hp);
+				}
+			}
+		}
+		return new SharedHeaderExtract(orgs, hps, EHRUtil.getSystemHSAId(ehrExtract), ehrExtract.getSubjectOfCare());
     }
 
 }

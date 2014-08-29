@@ -20,21 +20,19 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mule.api.MuleMessage;
-import riv.clinicalprocess.healthcond.description._2.CVType;
-import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
-import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
-import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+
+import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.mapper.util.HealthcondDescriptionUtil;
-
 import se.rivta.en13606.ehrextract.v11.*;
 
 import javax.xml.bind.JAXBElement;
@@ -58,10 +56,10 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	private static final JaxbUtil jaxb = new JaxbUtil(GetDiagnosisType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
 
-	public static final CD MEANING_VOO = new CD();
+	public static final CD MEANING_DIA = new CD();
     static {
-        MEANING_VOO.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_VOO.setCode("dia");
+        MEANING_DIA.setCodeSystem("1.2.752.129.2.2.2.1");
+        MEANING_DIA.setCode("dia");
     }
 	
 	protected static final String TIME_ELEMENT = "dia-dia-tid";
@@ -100,10 +98,18 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 */
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req, final MuleMessage message) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
-		type.getMeanings().add(MEANING_VOO);
+		type.getMeanings().add(MEANING_DIA);
 		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
-		type.setSubjectOfCareId(HealthcondDescriptionUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(HealthcondDescriptionUtil.IVLTSType(req.getTimePeriod()));
+		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
+		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
+		final List<String> ids = req.getCareUnitHSAId();
+        if (ids.size() == 1) {
+            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
+        } else if (ids.size() > 1) {
+            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
+        }
+
+        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
 		return type;
 	}
 	
@@ -130,41 +136,38 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 */
 	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
-		resp.setResult(HealthcondDescriptionUtil.mapResultType(uniqueId, ehrResp.getResponseDetail()));
+		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
 		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
+				
+		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
+		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
 		
-		final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
-		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
-		
-		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
-		
-		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
-			if(entity instanceof ORGANISATION) {
-				final ORGANISATION org = (ORGANISATION) entity;
-				if(org.getExtractId() != null) {
-					orgs.put(org.getExtractId().getExtension(), org);
-				}
-			}
-			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
-				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
-				if(hp.getExtractId() != null) {
-					hps.put(hp.getExtractId().getExtension(), hp);
-				}
-			}
-		}
-		
-		final String systemHSAId = EHRUtil.getSystemHSAId(ehrExtract);
-
-		for(COMPOSITION comp : ehrResp.getEhrExtract().get(0).getAllCompositions()) {
+		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
 			final DiagnosisType type = new DiagnosisType();
-			type.setDiagnosisHeader(HealthcondDescriptionUtil.mapHeaderType(comp, systemHSAId, ehrExtract.getSubjectOfCare(), orgs, hps, TIME_ELEMENT));
+			type.setDiagnosisHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
+			type.getDiagnosisHeader().setCareContactId(getCareContactId(comp));
 			type.setDiagnosisBody(mapDiagnosisBodyType(comp));
 			resp.getDiagnosis().add(type);
 		}
 		
 		return resp;
+	}
+	
+	/**
+	 * Diagnosis specific method because of careContactId location.
+	 * @param comp
+	 * @return careContactId.
+	 */
+	protected String getCareContactId(final COMPOSITION comp) {
+		for(CONTENT content : comp.getContent()) {
+			if(content instanceof ENTRY) {
+				final ENTRY entry = (ENTRY) content;
+				return EHRUtil.careContactId(entry.getLinks());
+			}
+		}
+		return null;
 	}
 	
 
@@ -175,7 +178,6 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 */
 	protected DiagnosisBodyType mapDiagnosisBodyType(final COMPOSITION comp) {
 		final DiagnosisBodyType type = new DiagnosisBodyType();
-		
 		for(CONTENT content : comp.getContent()) {
   			if(content instanceof ENTRY) {
   				ENTRY e = (ENTRY) content;
