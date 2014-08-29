@@ -235,16 +235,6 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 * @return
 	 */
 	protected CVType mapCVType(final CD codeType) {
-		final CVType cv = new CVType();
-		cv.setCode(codeType.getCode());
-		cv.setCodeSystem(codeType.getCodeSystem());
-		if(codeType.getDisplayName() != null) {
-			cv.setDisplayName(codeType.getDisplayName().getValue());
-		}
-		return cv;
+        return EHRUtil.cvType(codeType, CVType.class);
 	}
-	
-	
-
-
 }

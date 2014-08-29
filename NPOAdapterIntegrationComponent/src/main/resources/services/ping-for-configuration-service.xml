@@ -10,7 +10,11 @@
     <flow name="PingForConfigurationResponderService-1.0" >
 
         <inbound-endpoint address="${ENDPOINT_PFC}"
-                          connector-ref="soitoolkit-http-connector"/>
+                          connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut" />
+
 
         <cxf:jaxws-service
                 serviceClass="se.skl.skltpservices.npoadapter.ws.PingForConfigurationWS"

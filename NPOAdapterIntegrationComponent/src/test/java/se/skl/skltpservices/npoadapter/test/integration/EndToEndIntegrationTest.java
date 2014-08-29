@@ -56,10 +56,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final RecursiveResourceBundle rb = new RecursiveResourceBundle("NPOAdapter-config");
 	
 	//TODO: Collect Endpoints from configuration
-	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation";
-	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts";
-	private static final String DIAGNOSIS_ENDPOINT = "http://localhost:11000/npoadapter/getdiagnosis";
-	private static final String LABORATORY_ENDPOINT = "http://localhost:11000/npoadapter/getlaboratoryorderoutcome";
+	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:11000/npoadapter/getcaredocumentation/v2";
+	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:11000/npoadapter/getcarecontacts/v2";
+	private static final String DIAGNOSIS_ENDPOINT = "http://localhost:11000/npoadapter/getdiagnosis/v2";
+	private static final String LABORATORY_ENDPOINT = "http://localhost:11000/npoadapter/getlaboratoryorderoutcome/v3";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";

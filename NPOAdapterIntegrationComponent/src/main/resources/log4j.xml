@@ -16,7 +16,7 @@
 	</appender>
     
     <appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
-        <param  name="file" value="${mule.home}/logs/mule-app-FkEintygAdapter.log"/>
+        <param  name="file" value="${mule.home}/logs/mule-app-npo-adapter-1.log"/>
         <param name="MaxBackupIndex" value="3" />
         <param name="MaxFileSize" value="1MB" />
         
@@ -85,7 +85,7 @@
     	ERROR will only put errorevents on log queue
     -->
 	<logger name="org.soitoolkit.commons.mule.messageLogger">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	
 	 <logger name="se.skl.skltpservices">
@@ -94,20 +94,19 @@
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <logger name="httpclient.wire.header">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
 	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
     <logger name="httpclient.wire.content">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <root>
        <priority value="INFO" />
-
+        <!--
         <appender-ref ref="CONSOLE"/>
-		<!--
+        -->
         <appender-ref ref="ROLLINGFILE" />
-		-->
     </root>
 </log4j:configuration>

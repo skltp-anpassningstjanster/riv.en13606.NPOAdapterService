@@ -8,7 +8,8 @@
         <inbound-endpoint
                 address="${ENDPOINT_PING}"
                 responseTimeout="${SERVICE_TIMEOUT_MS}"
-                transformer-refs="logReqIn"
+                exchange-pattern="request-response"
+                transformer-refs="create-correlation-id logReqIn"
                 responseTransformer-refs="logRespOut"/>
 
         <expression-transformer>

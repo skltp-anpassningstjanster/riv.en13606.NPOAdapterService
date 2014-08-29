@@ -13,7 +13,8 @@
         <inbound-endpoint address="${ENDPOINT_GETCARECONTACTS}"
                           connector-ref="soitoolkit-http-connector" 
                           exchange-pattern="request-response"
-                          responseTransformer-refs="createSoapFaultTransformer"/>
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut"/>
 
         <processor ref="pre-processor" />
 

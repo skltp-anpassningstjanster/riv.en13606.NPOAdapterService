@@ -18,6 +18,8 @@
 
         <inbound-endpoint address="${ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
                           exchange-pattern="request-response">
 
             <cxf:jaxws-service
@@ -47,7 +49,8 @@
                                          address="${ENDPOINT_NPO_OUTBOUND_STUB}"
                                          exchange-pattern="request-response"
                                          responseTimeout="${SERVICE_TIMEOUT_MS}"
-                                         responseTransformer-refs="check-response-transformer">
+                                         transformer-refs="logReqOut"
+                                         responseTransformer-refs="logRespIn check-response-transformer">
                     <cxf:jaxws-client port="NPOSoap"
                                       operation="SendSimpleIndex"
                                       clientClass="se.nationellpatientoversikt.NPO"

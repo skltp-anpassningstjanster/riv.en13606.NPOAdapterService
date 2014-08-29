@@ -64,23 +64,11 @@
     <!-- Don't create additional jaxb-contexts to avoid problems with implicit jaxb transformations that can't resolve what jaxb-context to use! -->
     <!-- Use ":" as a separator if jaxb-objects from more than one java package will be used by the jaxb-transformers  -->
     <mulexml:jaxb-context name="jaxbContext"
-                          packageNames="org.soitoolkit.commons.logentry.schema.v1:riv.itintegration.registry._1:riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2:riv.clinicalprocess.logistics.logistics._2:se.rivta.en13606.ehrextract.v11:riv.ehr.patientsummary._1:riv.ehr.patientsummary.getehrextractresponder._1:riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2:riv.clinicalprocess.healthcond.description._2:riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2:riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3"/>
-
-    <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer"
-                        name="createCorrId"/>
+                          packageNames="${SOITOOLKIT_JAXB_CONTEXT_PKGS}"/>
                                                 
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CreateSoapFaultTransformer"
     					name="createSoapFaultTransformer" />                    
 
-    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logMsgIn">
-        <spring:property name="logType" value="msg-in"/>
-        <spring:property name="jaxbContext" ref="jaxbContext"/>
-    </custom-transformer>
-
-    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logMsgOut">
-        <spring:property name="logType" value="msg-out"/>
-        <spring:property name="jaxbContext" ref="jaxbContext"/>
-    </custom-transformer>
 
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqIn">
         <spring:property name="logType" value="req-in"/>
@@ -90,6 +78,17 @@
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqOut">
         <spring:property name="logType" value="req-out"/>
         <spring:property name="jaxbContext" ref="jaxbContext"/>
+        <spring:property name="extraInfo">
+            <spring:map>
+                <spring:entry key="adapter" value="adapter-type-1" />
+                <spring:entry key="route_logical_address" value="#[groovy:message.getInvocationProperty('route-logical-address', '')]" />
+                <spring:entry key="route_service_soap_action" value="#[groovy:message.getInvocationProperty('route-service-soap-action', '')]" />
+                <spring:entry key="route_endpoint_url" value="#[groovy:message.getInvocationProperty('route-endpoint-url', '')]" />
+                <spring:entry key="npo_transaction_id" value="#[groovy:message.getOutboundProperty('npo_param_transaction_id', '')]" />
+                <spring:entry key="npo_hsa_id" value="#[groovy:message.getOutboundProperty('npo_param_hsa_id', '')]" />
+                <spring:entry key="npo_version" value="#[groovy:message.getOutboundProperty('npo_param_version', '')]" />
+            </spring:map>
+        </spring:property>
     </custom-transformer>
 
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logRespIn">

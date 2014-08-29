@@ -31,4 +31,9 @@
 
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer" name="check-response-transformer" />
 
+    <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer"
+                        name="create-correlation-id">
+        <spring:property name="integrationScenario" value="npo-adapter-type-1" />
+    </custom-transformer>
+
 </mule>

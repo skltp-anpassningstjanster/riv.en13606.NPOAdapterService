@@ -20,7 +20,9 @@
 
         <inbound-endpoint address="${ENDPOINT_UPDATE_EI}"
                           connector-ref="soitoolkit-http-connector"
-                          exchange-pattern="request-response">
+                          exchange-pattern="request-response"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut" >
 
             <cxf:jaxws-service
                     namespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21"

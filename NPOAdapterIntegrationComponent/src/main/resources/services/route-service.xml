@@ -8,7 +8,9 @@
 
         <cxf:proxy-client payload="body" />
 
-        <processor ref="route-processor" ></processor>
+        <transformer ref="logReqOut" />
+        <processor ref="route-processor" />
+        <transformer ref="logRespIn" />
         
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>

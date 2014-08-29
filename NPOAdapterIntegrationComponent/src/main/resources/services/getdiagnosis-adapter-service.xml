@@ -12,7 +12,8 @@
     		
         <inbound-endpoint address="${ENDPOINT_GETDIAGNOSIS}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
-                          responseTransformer-refs="createSoapFaultTransformer"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
                           />
                           
         
