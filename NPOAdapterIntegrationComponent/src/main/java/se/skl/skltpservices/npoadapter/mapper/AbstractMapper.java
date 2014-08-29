@@ -39,9 +39,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstracts all @{link Mapper} implementations.
+ * Abstracts all mapper implementations.
  *
+ * @see se.skl.skltpservices.npoadapter.mapper.Mapper
  * @see {@link se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper} for bean namespace/package mapping.
+ *
  * @author Peter
  */
 @Slf4j
