@@ -98,8 +98,10 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     }
 	
 	/**
-	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentation
-	 * @param riv subset from RIV136060REQUESTEHREXTRACT.
+	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentation <p/>
+     *
+     * @param unqiueId the unique message correlation id.
+	 * @param ehrResp subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
 	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {

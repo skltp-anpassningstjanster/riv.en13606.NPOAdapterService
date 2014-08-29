@@ -42,7 +42,7 @@ import java.util.Map;
  * Abstracts all mapper implementations.
  *
  * @see se.skl.skltpservices.npoadapter.mapper.Mapper
- * @see {@link se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper} for bean namespace/package mapping.
+ * @see se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper
  *
  * @author Peter
  */

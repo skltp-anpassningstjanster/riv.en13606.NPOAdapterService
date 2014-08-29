@@ -19,44 +19,25 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.mule.api.MuleMessage;
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.clinicalprocess.healthcond.actoutcome._3.*;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.*;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.CD;
-import se.rivta.en13606.ehrextract.v11.CLUSTER;
-import se.rivta.en13606.ehrextract.v11.COMPOSITION;
-import se.rivta.en13606.ehrextract.v11.CONTENT;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.rivta.en13606.ehrextract.v11.ELEMENT;
-import se.rivta.en13606.ehrextract.v11.ENTRY;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
-import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
-import se.rivta.en13606.ehrextract.v11.II;
-import se.rivta.en13606.ehrextract.v11.ITEM;
-import se.rivta.en13606.ehrextract.v11.LINK;
-import se.rivta.en13606.ehrextract.v11.ORGANISATION;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
-import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
-import se.skl.skltpservices.npoadapter.mapper.error.NotImplementedException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.mule.api.MuleMessage;
-import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-
-import lombok.extern.slf4j.Slf4j;
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory;
 
 /**
  * Maps from EHR_EXTRACT (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType v3.0. <p>
@@ -140,11 +121,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	}
 	
 	
-	/**
-	 * TODO: Refactor, too complex.
-	 * @param comp
-	 * @return
-	 */
+	 // TODO: Refactor, too complex.
 	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healtcareProfessional) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
 		if(und.getCommittal() != null && und.getCommittal().getTimeCommitted() != null) {
@@ -199,10 +176,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		return type;
 	}
 	
-	/**
-	 * @param healthcareProfessional
-	 * @return
-	 */
+	//
 	protected HealthcareProfessionalType mapAccountableHealthcareProfessional(final String authorTime, final HealthcareProfessionalType healtcareProfessional) {
 		final HealthcareProfessionalType type = new HealthcareProfessionalType();
 		type.setAuthorTime(authorTime);
@@ -240,11 +214,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		return type;
 	}
 	
-	/**
-	 * according to spec und-kkm-uat-kod or und-kkm-uat-txt is sent.
-	 * @param analys
-	 * @return
-	 */
+	//
 	protected AnalysisType mapAnalysis(final CLUSTER analys) {
 		final AnalysisType type = new AnalysisType();
 		type.setAnalysisId(EHRUtil.iiType(analys.getRcId(), IIType.class));

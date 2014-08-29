@@ -24,12 +24,10 @@ import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-import javax.xml.stream.XMLStreamReader;
-
 /**
  * Transforms standard RIV Service Contract requests from consumers to a corresponding EHR_EXTRACT request. <p/>
  *
- * @see {@link se.skl.skltpservices.npoadapter.mapper.AbstractMapper}
+ * @see se.skl.skltpservices.npoadapter.mapper.AbstractMapper
  *
  * @author Peter
  *

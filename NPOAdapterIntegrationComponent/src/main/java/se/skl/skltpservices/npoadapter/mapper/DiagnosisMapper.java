@@ -19,28 +19,24 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
-
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
-import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
-import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
+import java.util.List;
 
-import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
-
-import lombok.extern.slf4j.Slf4j;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 
 /**
  * Maps from EHR_EXTRACT (dia v1.1) to RIV GetDiagnosisResponseType v2.0. <p>
@@ -91,11 +87,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
-	/**
-	 * Create request type.
-	 * @param req
-	 * @return
-	 */
+	//
 	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req, final MuleMessage message) {
 		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
 		type.getMeanings().add(MEANING_DIA);
@@ -132,7 +124,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 * So other functions dont need to itterat over document each time.
 	 * @param ehrResp response to be loaded into soap-payload.
 	 * @param uniqueId mule-message uniqueId.
-	 * @return
+	 * @return a diagnosis response.
 	 */
 	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
@@ -171,11 +163,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	}
 	
 
-	/**
-	 * Creates message body.
-	 * @param comp returns new bodyType for ehr composition.
-	 * @return
-	 */
+	//
 	protected DiagnosisBodyType mapDiagnosisBodyType(final COMPOSITION comp) {
 		final DiagnosisBodyType type = new DiagnosisBodyType();
 		for(CONTENT content : comp.getContent()) {
@@ -218,7 +206,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	/**
 	 * Mapps enum between different domains.
 	 * @param diagnosisType
-	 * @return
+	 * @return the actual enum, or null if none matches.
 	 */
 	protected DiagnosisTypeEnum interpret(final String diagnosisType) {
 		try {
@@ -231,8 +219,8 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	
 	/**
 	 * Helper to map CVType from EHR CD type.
-	 * @param codeType
-	 * @return
+	 * @param codeType the code type.
+	 * @return the corresponding cv object.
 	 */
 	protected CVType mapCVType(final CD codeType) {
         return EHRUtil.cvType(codeType, CVType.class);
