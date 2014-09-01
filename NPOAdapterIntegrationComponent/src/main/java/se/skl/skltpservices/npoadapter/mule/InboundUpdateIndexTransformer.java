@@ -53,6 +53,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
     private static final ObjectFactory of = new ObjectFactory();
     private static final JaxbUtil jaxbUtil = new JaxbUtil(UpdateType.class);
+    public static final String NOT_AVAILABLE = "NA";
 
     private String eiLogicalAddress;
 
@@ -163,9 +164,6 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
             if (info.getRegistrationTime() != null) {
                 engagement.setMostRecentContent(EHRUtil.formatTimestamp(toDate(info.getRegistrationTime())));
             }
-            if (info.getRcId() != null) {
-                engagement.setBusinessObjectInstanceIdentifier(info.getRcId());
-            }
             final EngagementTransactionType engagementTransaction = create(false, engagement);
             update.getEngagementTransaction().add(engagementTransaction);
         }
@@ -182,17 +180,24 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
     //
     protected EngagementType domain(final EngagementType engagement, final String infoType) {
+
         switch (infoType) {
             case "vko":
                 engagement.setServiceDomain("riv:clinicalprocess:logistics:logistics");
                 break;
             case "voo":
+            case "dia":
                 engagement.setServiceDomain("riv:clinicalprocess:healthcond:description");
+                break;
+            case "und-kkm-kli":
+                engagement.setServiceDomain("riv:clinicalprocess:healthcond:actoutcome");
                 break;
             default:
                 throw new IllegalArgumentException("Unable to map NPO info type to a RIV service domain: \"" + infoType + "\"");
         }
 
+        engagement.setBusinessObjectInstanceIdentifier(NOT_AVAILABLE);
+        engagement.setClinicalProcessInterestId(NOT_AVAILABLE);
         engagement.setCategorization(infoType);
 
         return engagement;
@@ -210,6 +215,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
         engagement.setLogicalAddress(hsaId);
         engagement.setSourceSystem(hsaId);
+        // TODO: might change in the future (currently the responsible org. is not available)
         engagement.setDataController(hsaId);
 
         return engagement;

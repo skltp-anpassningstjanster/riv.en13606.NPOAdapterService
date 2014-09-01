@@ -21,7 +21,7 @@
                                 responseTransformer-refs="logRespIn check-response-transformer">
 
             <set-property propertyName="x-vp-instance-id" value="${VP_INSTANCE_ID}" />
-            <set-property propertyName="x-vp-sender-id" value="#[message.inboundProperties['npo_param_hsa_id']]" />
+            <set-property propertyName="x-vp-sender-id" value="#[groovy:message.getOutboundProperty('npo_param_hsa_id')]" />
 
             <cxf:jaxws-client port="UpdateResponderPort"
                               operation="Update"
