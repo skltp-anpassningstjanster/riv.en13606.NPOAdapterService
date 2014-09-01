@@ -22,7 +22,7 @@
 -->
 
     <flow name="update-tak-cache-http-flow">
-        <inbound-endpoint address="${ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector"
+        <inbound-endpoint address="${IN_ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="logRespOut" />

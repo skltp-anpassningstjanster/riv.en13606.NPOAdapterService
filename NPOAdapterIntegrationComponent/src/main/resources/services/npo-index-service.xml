@@ -16,7 +16,7 @@
     -->
     <flow name="NPOService-1.1.2">
 
-        <inbound-endpoint address="${ENDPOINT_NPO}"
+        <inbound-endpoint address="${IN_ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="createSoapFaultTransformer logRespOut"
@@ -46,7 +46,7 @@
                 <set-payload value="#[variable:request]" />
 
                 <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
-                                         address="${ENDPOINT_NPO_OUTBOUND}"
+                                         address="${OUT_ENDPOINT_NPO}"
                                          exchange-pattern="request-response"
                                          responseTimeout="${SERVICE_TIMEOUT_MS}"
                                          transformer-refs="logReqOut"

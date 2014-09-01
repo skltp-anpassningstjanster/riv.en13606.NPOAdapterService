@@ -14,7 +14,7 @@
         <transformer ref="update-index-transformer" />
 
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
-                                address="${ENDPOINT_EI}"
+                                address="${OUT_ENDPOINT_EI}"
                                 exchange-pattern="request-response"
                                 responseTimeout="${SERVICE_TIMEOUT_MS}"
                                 transformer-refs="logReqOut"

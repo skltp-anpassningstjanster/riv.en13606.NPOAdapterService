@@ -6,7 +6,7 @@
     <flow name="PingService-HTTP-Get">
 
         <inbound-endpoint
-                address="${ENDPOINT_PING}"
+                address="${IN_ENDPOINT_PING}"
                 responseTimeout="${SERVICE_TIMEOUT_MS}"
                 exchange-pattern="request-response"
                 transformer-refs="create-correlation-id logReqIn"

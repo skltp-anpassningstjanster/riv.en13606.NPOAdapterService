@@ -10,7 +10,7 @@
 
     <flow name="GetCareContactsResponderService-2.0">
 
-        <inbound-endpoint address="${ENDPOINT_GETCARECONTACTS}"
+        <inbound-endpoint address="${IN_ENDPOINT_GETCARECONTACTS}"
                           connector-ref="soitoolkit-http-connector" 
                           exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"

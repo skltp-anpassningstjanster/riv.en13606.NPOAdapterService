@@ -10,7 +10,7 @@
 
     <flow name="GetLaboratoryOrderOutcomeResponderService-3.0">
     		
-        <inbound-endpoint address="${ENDPOINT_GETLABORATORY}"
+        <inbound-endpoint address="${IN_ENDPOINT_GETLABORATORYORDEROUTCOME}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="createSoapFaultTransformer logRespOut"

@@ -9,7 +9,7 @@
         ">
     <flow name="PingForConfigurationResponderService-1.0" >
 
-        <inbound-endpoint address="${ENDPOINT_PFC}"
+        <inbound-endpoint address="${IN_ENDPOINT_PFC}"
                           connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"

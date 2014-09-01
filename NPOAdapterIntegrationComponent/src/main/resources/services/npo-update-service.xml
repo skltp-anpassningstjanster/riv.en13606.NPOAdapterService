@@ -18,7 +18,7 @@
     -->
     <flow name="NPO-UpdateResponderService-1.0">
 
-        <inbound-endpoint address="${ENDPOINT_UPDATE_EI}"
+        <inbound-endpoint address="${IN_ENDPOINT_UPDATE_EI}"
                           connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
