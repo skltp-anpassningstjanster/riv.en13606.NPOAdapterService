@@ -46,7 +46,7 @@
                 <set-payload value="#[variable:request]" />
 
                 <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
-                                         address="${ENDPOINT_NPO_OUTBOUND_STUB}"
+                                         address="${ENDPOINT_NPO_OUTBOUND}"
                                          exchange-pattern="request-response"
                                          responseTimeout="${SERVICE_TIMEOUT_MS}"
                                          transformer-refs="logReqOut"

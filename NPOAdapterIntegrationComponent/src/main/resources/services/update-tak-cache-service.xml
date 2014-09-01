@@ -7,6 +7,7 @@
         http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
+<!-- Disable scheduled update for now, since it's impossible to determine if the TAK state is correct
     <quartz:endpoint name="quartz-scheduler" jobName="cron-tak-cache-reset"
                      cronExpression="${CRON_TAK_CACHE_RELOAD}" responseTimeout="${SERVICE_TIMEOUT_MS}">
         <quartz:event-generator-job/>
@@ -18,6 +19,7 @@
         <invoke object-ref="router" method="reloadRoutingData"/>
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
     </flow>
+-->
 
     <flow name="update-tak-cache-http-flow">
         <inbound-endpoint address="${ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector"
