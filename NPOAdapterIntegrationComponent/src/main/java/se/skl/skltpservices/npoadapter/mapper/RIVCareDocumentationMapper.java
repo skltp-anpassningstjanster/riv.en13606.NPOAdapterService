@@ -28,6 +28,7 @@ package se.skl.skltpservices.npoadapter.mapper;
  *
  */
 import org.mule.api.MuleMessage;
+
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -35,6 +36,7 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 
@@ -42,7 +44,7 @@ public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req, message);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_VOO);
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;

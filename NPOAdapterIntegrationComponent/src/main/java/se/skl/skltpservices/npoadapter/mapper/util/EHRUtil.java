@@ -22,10 +22,12 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 import lombok.Data;
 
 import org.apache.commons.lang.StringUtils;
+import org.dozer.CustomConverter;
 
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import java.io.ObjectInputStream.GetField;
 import java.text.SimpleDateFormat;
@@ -42,6 +44,13 @@ import java.util.Map;
  */
 public final class EHRUtil {
 
+	private static final ParameterType versionParameter = new ParameterType();
+	
+	static {
+		versionParameter.setName(stType("version"));
+		versionParameter.setValue(stType("1.1"));
+	}
+	
     private static ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
         public SimpleDateFormat initialValue() {
@@ -253,6 +262,19 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(cv, type);
     }
     
+    public static String linkTargetIdExtension(final List<LINK> links, final String targetTypeCode) {
+    	for(LINK link : links) {
+    		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), targetTypeCode)) {
+    			final II targetId = firstItem(link.getTargetId());
+    			if(targetId != null) {
+    				return targetId.getExtension();
+    			}
+    			return null;
+    		}
+    	}
+    	return null;
+    }
+    
     //
     public static <T> T cvType(final II ii, Class<T> type) {
         if (ii == null) {
@@ -356,11 +378,15 @@ public final class EHRUtil {
             }
             orgUnitType.setOrgUnitHSAId(organisationKey);
 
-            final AD ad = firstItem(org.getAddr());
-            final ADXP adxp = (ad == null) ? null : firstItem(ad.getPartOrBrOrAddressLine());
-
-            if (adxp != null) {
-                orgUnitType.setOrgUnitAddress(adxp.getContent());
+            for(AD ad : org.getAddr()) {
+            	for(ADXP adxp : ad.getPartOrBrOrAddressLine()) {
+            		if(adxp.getType() == AddressPartType.AL) {
+            			orgUnitType.setOrgUnitAddress(adxp.getContent());
+            		}
+            		if(adxp.getType() == AddressPartType.CEN) {
+            			orgUnitType.setOrgUnitLocation(adxp.getContent());
+            		}
+            	}
             }
 
             professional.setHealthcareProfessionalOrgUnit(orgUnitType);
@@ -431,6 +457,27 @@ public final class EHRUtil {
         header.setNullifiedReason(null);
         return XMLBeanMapper.getInstance().map(header, type);
     }
+    
+    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(T rivRequestType, final CD meaning) throws MapperException {
+    	final RIV13606REQUESTEHREXTRACTRequestType request = new RIV13606REQUESTEHREXTRACTRequestType();
+    	Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
+
+    	request.getMeanings().add(meaning);
+    	request.setSubjectOfCareId(iiType(mapperRequest.patientId));
+    	request.setTimePeriod(IVLTSType(mapperRequest.timePeriod));
+    	
+    	if(mapperRequest.getCareUnitHSAId().isEmpty()) {
+    		throw new MapperException("careUnitHSAId element is missing");
+    	} else if(mapperRequest.getCareUnitHSAId().size() > 1) {
+    		throw new MapperException("Only one careUnitHSAId element is allowed");
+    	}
+    	final ParameterType hsaId = new ParameterType();
+    	hsaId.setName(stType("hsa_id"));
+    	hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
+    	request.getParameters().add(hsaId);
+    	request.getParameters().add(versionParameter);
+    	return request;
+    }
 
     // Generic baseline of data types to be able to convert between schemas (java packages).
     //
@@ -456,6 +503,13 @@ public final class EHRUtil {
         TRANSFORMATION_ERROR,
         APPLICATION_ERROR,
         TECHNICAL_ERROR;
+    }
+    
+    @Data
+    public static class Request {
+    	private PersonId patientId;
+    	private DatePeriod timePeriod;
+    	private List<String> careUnitHSAId;
     }
 
     //

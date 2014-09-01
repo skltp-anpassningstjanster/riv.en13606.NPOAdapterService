@@ -28,6 +28,7 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.stream.XMLStreamReader;
 
@@ -40,7 +41,7 @@ public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMappe
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetLaboratoryOrderOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map13606Request(req);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING);
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
 			return message;

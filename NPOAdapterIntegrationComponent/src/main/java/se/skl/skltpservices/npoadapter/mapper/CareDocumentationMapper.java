@@ -69,7 +69,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		log.debug("Transforming Request");
 		try {
 			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req, message)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO)));
             return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err);
@@ -157,23 +157,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         return jaxb.marshal(el);
     }
 			
-	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetCareDocumentationType req, final MuleMessage message) {
-		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
-		type.getMeanings().add(MEANING_VOO);
-		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
-		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
-		final List<String> ids = req.getCareUnitHSAid();
-        if (ids.size() == 1) {
-            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
-        } else if (ids.size() > 1) {
-            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
-        }
-
-        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
-		return type;
-	}
-	
 	protected boolean isDocumentTypeCodeEnum(final String code) {
 		try {
 			ClinicalDocumentTypeCodeEnum.fromValue(code);

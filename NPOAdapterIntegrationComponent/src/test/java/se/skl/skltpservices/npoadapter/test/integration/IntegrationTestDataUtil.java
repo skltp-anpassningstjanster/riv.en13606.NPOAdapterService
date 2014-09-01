@@ -26,6 +26,8 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public final class IntegrationTestDataUtil {
@@ -34,6 +36,7 @@ public final class IntegrationTestDataUtil {
 	private static final String STRING_TEST_DATA_2 = UUID.randomUUID().toString();
 	private static final String STRING_TEST_DATA_3 = UUID.randomUUID().toString();
 	private static final String STRING_TEST_DATA_4 = UUID.randomUUID().toString();
+	private static final String CARE_UNIT_HSA_ID = UUID.randomUUID().toString();
 	
 	public static final int TRIGGER_INFO_MESSAGE = 0;
 	public static final int TRIGGER_WARNING_MESSAGE = 1;
@@ -45,6 +48,7 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(docPersonIdType(triggerType));
 		type.setSourceSystemHSAid(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(docDatePeriodType());
+		type.getCareUnitHSAid().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	
@@ -53,6 +57,7 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(conPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(conDatePeriodType());
+		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	
@@ -61,6 +66,7 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(docPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(docDatePeriodType());
+		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	
@@ -69,6 +75,7 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(labPersonIdType());
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(labDatePeriodType());
+		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	

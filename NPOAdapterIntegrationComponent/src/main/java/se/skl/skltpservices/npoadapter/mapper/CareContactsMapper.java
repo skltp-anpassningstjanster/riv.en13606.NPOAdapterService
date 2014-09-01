@@ -76,7 +76,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
     	try {
     		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
-        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map(request, message)));
+        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO)));
             return message;
     	} catch (Exception err) {
     		throw new MapperException("Error when mapping EHREXTRACT request", err);
@@ -103,26 +103,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         }
 
         return responseType;
-    }
-
-    /**
-     * Maps from GetCareContacsRequestType to EHR_EXTRACT request.
-     */
-    protected RIV13606REQUESTEHREXTRACTRequestType map(final GetCareContactsType careContactsType, final MuleMessage message) {
-        final RIV13606REQUESTEHREXTRACTRequestType targetRequest = new RIV13606REQUESTEHREXTRACTRequestType();
-        targetRequest.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
-        targetRequest.setSubjectOfCareId(map(careContactsType.getPatientId()));
-        targetRequest.getMeanings().add(MEANING_VKO);
-        targetRequest.setTimePeriod(EHRUtil.IVLTSType(careContactsType.getTimePeriod()));
-        final List<String> ids = careContactsType.getCareUnitHSAId();
-        if (ids.size() == 1) {
-            targetRequest.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
-        } else if (ids.size() > 1) {
-            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
-        }
-
-        targetRequest.getParameters().add(EHRUtil.createParameter("version", "1.1"));
-        return targetRequest;
     }
 
     //

@@ -52,7 +52,6 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	
 	private static final JaxbUtil jaxb = new JaxbUtil(GetLaboratoryOrderOutcomeType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
-	private static final int MAX_ROWS = 500;
 	
 	public static final CD MEANING = new CD();
     static {
@@ -64,7 +63,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetLaboratoryOrderOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING)));
 			return message;
 		} catch (Exception err) {
 			log.error("Error when transforming LaboratoryOrderOutcome request", err);
@@ -103,6 +102,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
 					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class));
 					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
+					type.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
 					resp.getLaboratoryOrderOutcome().add(type);
 				}
 			}
@@ -124,6 +124,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	 // TODO: Refactor, too complex.
 	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healtcareProfessional) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
+		//TODO: Verify if this is commital time from und or vbe
 		if(und.getCommittal() != null && und.getCommittal().getTimeCommitted() != null) {
 			type.setRegistrationTime(und.getCommittal().getTimeCommitted().getValue());
 		}
@@ -321,22 +322,5 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
             close(reader);
         }
     }
-	
-	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetLaboratoryOrderOutcomeType req) {
-		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
-		type.getMeanings().add(MEANING);
-		type.setMaxRecords(EHRUtil.intType(MAX_ROWS));
-		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
-		final List<String> ids = req.getCareUnitHSAId();
-        if (ids.size() == 1) {
-            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
-        } else if (ids.size() > 1) {
-            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
-        }
-
-        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
-		return type;
-	}
 
 }

@@ -66,8 +66,8 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(map13606Request(req, message)));
-            return message;
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_DIA)));
+			return message;
 		} catch (Exception err) {
 			log.error("Error when transforming Diagnosis request", err);
 			throw new MapperException("Error when transforming Diagnosis request");
@@ -87,23 +87,6 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
-	//
-	protected RIV13606REQUESTEHREXTRACTRequestType map13606Request(final GetDiagnosisType req, final MuleMessage message) {
-		final RIV13606REQUESTEHREXTRACTRequestType type = new RIV13606REQUESTEHREXTRACTRequestType();
-		type.getMeanings().add(MEANING_DIA);
-		type.setMaxRecords(EHRUtil.intType(maxEhrExtractRecords(message)));
-		type.setSubjectOfCareId(EHRUtil.iiType(req.getPatientId()));
-		type.setTimePeriod(EHRUtil.IVLTSType(req.getTimePeriod()));
-		final List<String> ids = req.getCareUnitHSAId();
-        if (ids.size() == 1) {
-            type.getParameters().add(EHRUtil.createParameter("hsa_id", EHRUtil.firstItem(ids)));
-        } else if (ids.size() > 1) {
-            throw new IllegalArgumentException("Request includes several care units (HSAId search criteria), but only 1 is allowed by the source system: " + ids);
-        }
-
-        type.getParameters().add(EHRUtil.createParameter("version", "1.1"));
-		return type;
-	}
 	
 	protected String marshal(final GetDiagnosisResponseType response) {
         final JAXBElement<GetDiagnosisResponseType> el = objFactory.createGetDiagnosisResponse(response);
@@ -191,7 +174,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
   								break;
   							case CODE_ELEMENT:
   								if(elm.getValue() instanceof CD) {
-  									type.setDiagnosisCode(mapCVType((CD) elm.getValue()));
+  									type.setDiagnosisCode(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
   								}
   								break;
   							}
@@ -215,14 +198,5 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 			log.warn(String.format("Could not map DiagnosisType of value: %s", diagnosisType));
 			return null;
 		}
-	}
-	
-	/**
-	 * Helper to map CVType from EHR CD type.
-	 * @param codeType the code type.
-	 * @return the corresponding cv object.
-	 */
-	protected CVType mapCVType(final CD codeType) {
-        return EHRUtil.cvType(codeType, CVType.class);
 	}
 }

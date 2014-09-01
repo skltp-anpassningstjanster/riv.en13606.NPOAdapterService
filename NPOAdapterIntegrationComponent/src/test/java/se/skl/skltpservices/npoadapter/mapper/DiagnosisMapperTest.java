@@ -128,10 +128,8 @@ public class DiagnosisMapperTest {
 					}
 				}
 			}
-			Mockito.verify(mapper, Mockito.times(1)).mapCVType(cd);
 			assertTrue(typeTouch);
 		}
-		Mockito.verify(mapper, Mockito.times(amountOfCompositions)).mapCVType(Mockito.<CD>anyObject());
 	}
 	
 

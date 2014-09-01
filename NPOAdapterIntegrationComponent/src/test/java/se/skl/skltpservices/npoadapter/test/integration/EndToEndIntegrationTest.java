@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
@@ -163,7 +164,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(resp.getLaboratoryOrderOutcome().isEmpty());
     }
-    	
 	
     @Test
     public void UpdateTakCacheTest() throws Exception {

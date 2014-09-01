@@ -90,17 +90,7 @@ public class CareDocumentationMapperTest {
 	public void mapResponseTypeTest() {
 	}
 	
-	@Test
-	public void map13606RequestTest() {
-        MuleMessage message = mock(MuleMessage.class);
-        when(message.getInvocationProperty(anyString(), anyInt())).thenReturn(TEST_INT_VALUE_1);
-		RIV13606REQUESTEHREXTRACTRequestType type = mapper.map13606Request(careDocType, message);
-		assertEquals(TEST_INT_VALUE_1, type.getMaxRecords().getValue().intValue());
-		assertEquals(TEST_CODE, type.getMeanings().get(0).getCode());
-		assertEquals(TEST_CODE_SYSTEM, type.getMeanings().get(0).getCodeSystem());
-		assertEquals(TEST_VALUE_1, type.getSubjectOfCareId().getExtension());
-		assertEquals(TEST_VALUE_2, type.getSubjectOfCareId().getRoot());
-	}
+
 	
 	
 }

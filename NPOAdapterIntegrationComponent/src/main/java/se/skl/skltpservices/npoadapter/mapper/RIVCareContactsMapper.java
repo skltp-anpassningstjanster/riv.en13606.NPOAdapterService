@@ -20,11 +20,14 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
+
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -32,7 +35,7 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 public class RIVCareContactsMapper extends CareContactsMapper {
 
     @Override
-    public MuleMessage mapResponse(final MuleMessage message) {
+    public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
         final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 
         // map to baseline model
@@ -44,11 +47,11 @@ public class RIVCareContactsMapper extends CareContactsMapper {
     }
 
     @Override
-    public MuleMessage mapRequest(final MuleMessage message) {
+    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
 
         // map to baseline model
-        final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = map(request, message);
+        final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(request, MEANING_VKO);
 
         final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 

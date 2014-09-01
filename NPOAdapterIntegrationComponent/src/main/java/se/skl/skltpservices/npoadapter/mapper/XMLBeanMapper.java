@@ -21,10 +21,12 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldDefinition;
 import org.dozer.loader.api.TypeMappingBuilder;
+import org.dozer.loader.api.TypeMappingOptions;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -33,9 +35,13 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
+
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.bind.annotation.XmlType;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -70,6 +76,7 @@ public class XMLBeanMapper {
 
 
     static {
+
         /**
          * Configures Dozer to map XmlType beans from baseline package "se.rivta.en13606.ehrextract.v11"
          * to and from corresponding RIV domain schemas defined above {@link B_PKGS}. <p/>
@@ -137,8 +144,21 @@ public class XMLBeanMapper {
             }
 
         };
-
+        
+        
+        /**
+         * Used since their are type-o's in the schemas.
+         */
+        final BeanMappingBuilder diffMappingBuilder = new BeanMappingBuilder() {
+			@Override
+			protected void configure() {
+				mapping(EHRUtil.Request.class, GetCareDocumentationType.class, mapNull(true)).fields("careUnitHSAId", "careUnitHSAid");
+			}
+        	
+        };
+        
         dozerBeanMapper.addMapping(builder);
+        dozerBeanMapper.addMapping(diffMappingBuilder);
     }
 
     /**

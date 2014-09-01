@@ -220,6 +220,20 @@
 					<rc_id extension="SE2321000164-1002Kem09042908060036603115" root="1.2.752.129.2.1.2.1"/>
 					<synthesised nullFlavor="NA"/>
 					<structure_type nullFlavor="NA"/>
+					<!-- Test Start -->
+					<links>
+						<follow_link value="false"/>
+						<nature code="LINK-A1"/>
+						<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="test"/>
+						<target_id root="testRoot" extension="testExtentsion"/>
+					</links>
+					<links>
+						<follow_link value="false"/>
+						<nature code="LINK-A2"/>
+						<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="test"/>
+						<target_id root="testRootSecond" extension="testExtentsionSecond"/>
+					</links>
+					<!-- Start End -->
 					<parts xsi:type="ELEMENT">
 						<meaning code="und-kkm-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
 							<displayName value="Åtgärdskod"/>

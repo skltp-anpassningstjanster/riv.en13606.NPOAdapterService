@@ -21,10 +21,12 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 
 import org.junit.Test;
 
-
+import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import se.rivta.en13606.ehrextract.v11.*;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public class EHRUtilTest {
 	
@@ -179,4 +182,40 @@ public class EHRUtilTest {
         st.setValue(value);
         return st;
     }
+    
+	@Test
+	public void testRequestType() throws Exception {
+		final CD purpose = new CD();
+		purpose.setCode("codeUnitTest");
+		purpose.setCodeSystem("codeSystemUnitTest");
+		GetDiagnosisType req = new GetDiagnosisType();
+		req.setPatientId(new PersonIdType());
+		req.getPatientId().setId("PatientIdUnitTest");
+		req.getPatientId().setType("PatientTypeUnitTest");
+		req.setSourceSystemHSAId("SourceSystemHSAUnitTest");
+		req.setTimePeriod(new DatePeriodType());
+		req.getTimePeriod().setEnd("EndUnitTest");
+		req.getTimePeriod().setStart("StartUnitTest");
+		req.getCareUnitHSAId().add("CareUnitHSAIdUnitTest");
+		
+		RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+		
+		assertEquals(reqOut.getMeanings().get(0).getCode(), purpose.getCode());
+		assertEquals(reqOut.getMeanings().get(0).getCodeSystem(), purpose.getCodeSystem());
+		assertEquals(reqOut.getSubjectOfCareId().getRoot(), req.getPatientId().getType());
+		assertEquals(reqOut.getSubjectOfCareId().getExtension(), req.getPatientId().getId());
+		assertEquals(reqOut.getTimePeriod().getHigh().getValue(), req.getTimePeriod().getEnd());
+		assertEquals(reqOut.getTimePeriod().getLow().getValue(), req.getTimePeriod().getStart());
+		assertEquals(2, reqOut.getParameters().size());
+		for(ParameterType param : reqOut.getParameters()) {
+			if(param.getName().getValue().equals("version")) {
+				assertEquals("1.1", param.getValue().getValue());
+			} else if(param.getName().getValue().equals("hsa_id")) {
+				assertEquals(req.getCareUnitHSAId().get(0), param.getValue().getValue());
+			} else {
+				fail(String.format("Expected paramaters are version or hsa_id got: <%s>", param.getName().getValue()));
+			}
+		}
+	}
+    
 }
