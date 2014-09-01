@@ -262,6 +262,24 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(cv, type);
     }
     
+    public static <T> T healthcareProfessionalRoleCode(final CD cd, Class<T> type) {
+    	if(cd == null) {
+    		return null;
+    	}
+    	final CV cv = new CV();
+    	cv.setCode(cd.getCode());;
+    	cv.setCodeSystem(cd.getCodeSystem());
+    	cv.setCodeSystemName(cd.getCodeSystemName());
+    	cv.setCodeSystemVersion(cd.getCodeSystemVersion());
+    	if(cd.getDisplayName() != null) {
+    		cv.setDisplayName(cd.getDisplayName().getValue());
+    	}
+    	if(cd.getOriginalText() != null) { 
+    		cv.setOriginalText(cd.getOriginalText().getValue());
+    	}
+    	return XMLBeanMapper.getInstance().map(cv, type);
+    }
+    
     public static String linkTargetIdExtension(final List<LINK> links, final String targetTypeCode) {
     	for(LINK link : links) {
     		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), targetTypeCode)) {
@@ -291,7 +309,7 @@ public final class EHRUtil {
         final String displayName = (cd.getDisplayName() == null) ? null : cd.getDisplayName().getValue();
         return cvType(cd.getCode(), cd.getCodeSystem(), displayName, type);
     }
-
+    
 
     //
     public static ResultCode interpret(final ResponseDetailTypeCodes code) {
@@ -403,7 +421,7 @@ public final class EHRUtil {
 
             final HEALTHCAREPROFESSIONALROLE role = firstItem(hp.getRole());
             if (role != null) {
-                professional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
+                professional.setHealthcareProfessionalRoleCode(healthcareProfessionalRoleCode(role.getProfession(), CV.class));
             }
         }
         return professional;

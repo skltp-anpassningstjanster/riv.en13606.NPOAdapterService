@@ -195,7 +195,7 @@
 		</name>
 		<role>
 			<profession code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.4">
-				<displayName value=""/>
+				<displayName value="TestDisplayName"/>
 			</profession>
 			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
 		</role>
@@ -208,7 +208,7 @@
 		</name>
 		<role>
 			<profession code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.4">
-				<displayName value=""/>
+				<displayName value="TestTvaDisplayName"/>
 			</profession>
 			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
 		</role>

@@ -147,7 +147,7 @@ public class XMLBeanMapper {
         
         
         /**
-         * Used since their are type-o's in the schemas.
+         * Used since there are type-o's in the schemas.
          */
         final BeanMappingBuilder diffMappingBuilder = new BeanMappingBuilder() {
 			@Override
