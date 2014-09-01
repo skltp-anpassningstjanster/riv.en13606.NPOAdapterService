@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.test.stub;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.nationellpatientoversikt.NpoParameterType;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.test.Util;
 
@@ -44,7 +45,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     
     //Public accessible for testing.
     public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
-    public static final String INTEGRATION_TEST_ERROR_TEXT = "This is a error message";
+    public static final String INTEGRATION_TEST_ERROR_TEXT = "This is an error message";
     public static final String PATIENT_ID_TRIGGER_ERROR = "triggerError";
     public static final String PATIENT_ID_TRIGGER_WARNING = "triggerWarning";
     public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
@@ -56,6 +57,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
+        //validate(request);
+
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
     	case PATIENT_ID_TRIGGER_ERROR:
@@ -65,8 +68,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     	case PATIENT_ID_TRIGGER_INFO:
     		return createAlternativeResponse(ResponseDetailTypeCodes.I, NOT_IMPLEMENTED_YET_TEXT);
     	}
-    	
-    	
+
+
     	//Return testdata
     	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
         switch(request.getMeanings().get(0).getCode()) {
@@ -91,11 +94,41 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         }
         return responseType;
     }
-    
+
+    //
+    private void validate(final RIV13606REQUESTEHREXTRACTRequestType request) {
+        String version = null;
+        String hsaId = null;
+        for (final ParameterType param : request.getParameters()) {
+            if ("version".equals(param.getName())) {
+                version = param.getValue().getValue();
+            }
+            if ("hsa_id".equals(param.getName())) {
+                if (hsaId == null) {
+                    hsaId = param.getValue().getValue();
+                }
+            }
+        }
+        if (request.getSubjectOfCareId() == null) {
+            throw new IllegalArgumentException("Subject of care must be defined");
+        }
+        if (!"1.1".equals(version)) {
+            throw new IllegalArgumentException("Invalid version parameter: " + version);
+        }
+        if (request.getMeanings().size() != 1) {
+            throw new IllegalArgumentException("Invalid size of meanings list (exactly 1 meaning must be defined): " + request.getMeanings());
+        }
+        if (request.getMaxRecords() != null) {
+            throw new IllegalArgumentException("Max records shall not be defined");
+        }
+    }
+
+    //
     protected EHREXTRACT getTestData(final String path) {
     	return Util.loadEhrTestData(path);
     }
-    
+
+    //
     protected RIV13606REQUESTEHREXTRACTResponseType createAlternativeResponse(final ResponseDetailTypeCodes code, final String msg) {
     	final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
     	final ResponseDetailType detail = new ResponseDetailType();

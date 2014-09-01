@@ -167,7 +167,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	
     @Test
     public void UpdateTakCacheTest() throws Exception {
-    	Flow flow = (Flow) getFlowConstruct("update-tak-cache-cron-flow");
+    	Flow flow = (Flow) getFlowConstruct("update-tak-cache-http-flow");
     	MuleEvent event = getTestEvent("", flow);
     	flow.process(event);
     }
