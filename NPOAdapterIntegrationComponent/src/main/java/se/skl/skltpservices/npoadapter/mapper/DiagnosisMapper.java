@@ -34,9 +34,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
-import java.util.List;
-
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 
 /**
  * Maps from EHR_EXTRACT (dia v1.1) to RIV GetDiagnosisResponseType v2.0. <p>

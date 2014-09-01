@@ -25,14 +25,11 @@ import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -182,24 +179,53 @@ public class EHRUtilTest {
         st.setValue(value);
         return st;
     }
-    
-	@Test
+
+    //
+    private GetDiagnosisType createDiagnosisTestRequest() {
+        GetDiagnosisType req = new GetDiagnosisType();
+        req.setPatientId(new PersonIdType());
+        req.getPatientId().setId("PatientIdUnitTest");
+        req.getPatientId().setType("PatientTypeUnitTest");
+        req.setSourceSystemHSAId("SourceSystemHSAUnitTest");
+        req.setTimePeriod(new DatePeriodType());
+        req.getTimePeriod().setEnd("EndUnitTest");
+        req.getTimePeriod().setStart("StartUnitTest");
+        req.getCareUnitHSAId().add("CareUnitHSAIdUnitTest");
+        return req;
+    }
+
+    @Test(expected = MapperException.class)
+    public void testRequestWithTooManyHSAId() throws MapperException {
+        final CD purpose = createCD("codeUnitTest");
+        purpose.setCodeSystem("codeSystemUnitTest");
+
+        final GetDiagnosisType req = createDiagnosisTestRequest();
+
+        req.getCareUnitHSAId().add("anotherCareUnitHSAIdUnitTest");
+        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+    }
+
+    @Test
+    public void testRequestWithNoneHSAId() throws MapperException {
+        final CD purpose = createCD("codeUnitTest");
+        purpose.setCodeSystem("codeSystemUnitTest");
+
+
+        final GetDiagnosisType req = createDiagnosisTestRequest();
+        req.getCareUnitHSAId().clear();
+        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+        assertEquals(1, reqOut.getParameters().size());
+    }
+
+    @Test
 	public void testRequestType() throws Exception {
-		final CD purpose = new CD();
-		purpose.setCode("codeUnitTest");
-		purpose.setCodeSystem("codeSystemUnitTest");
-		GetDiagnosisType req = new GetDiagnosisType();
-		req.setPatientId(new PersonIdType());
-		req.getPatientId().setId("PatientIdUnitTest");
-		req.getPatientId().setType("PatientTypeUnitTest");
-		req.setSourceSystemHSAId("SourceSystemHSAUnitTest");
-		req.setTimePeriod(new DatePeriodType());
-		req.getTimePeriod().setEnd("EndUnitTest");
-		req.getTimePeriod().setStart("StartUnitTest");
-		req.getCareUnitHSAId().add("CareUnitHSAIdUnitTest");
-		
-		RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
-		
+        final CD purpose = createCD("codeUnitTest");
+        purpose.setCodeSystem("codeSystemUnitTest");
+
+        final GetDiagnosisType req = createDiagnosisTestRequest();
+
+		final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+
 		assertEquals(reqOut.getMeanings().get(0).getCode(), purpose.getCode());
 		assertEquals(reqOut.getMeanings().get(0).getCodeSystem(), purpose.getCodeSystem());
 		assertEquals(reqOut.getSubjectOfCareId().getRoot(), req.getPatientId().getType());

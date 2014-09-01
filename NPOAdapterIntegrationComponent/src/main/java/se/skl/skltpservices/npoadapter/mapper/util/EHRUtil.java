@@ -22,19 +22,13 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 import lombok.Data;
 
 import org.apache.commons.lang.StringUtils;
-import org.dozer.CustomConverter;
-import org.mule.transformer.simple.RemovePropertyTransformer;
 
 import se.rivta.en13606.ehrextract.v11.*;
-import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-import java.io.ObjectInputStream.GetField;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -347,10 +341,10 @@ public final class EHRUtil {
     }
     
 
-    private static HealthcareProfessional healtcareProfessionalType(final FUNCTIONALROLE composer,
-                                                  final Map<String, ORGANISATION> orgs,
-                                                  final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps,
-                                                  final AUDITINFO committal) {
+    private static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer,
+                                                                     final Map<String, ORGANISATION> orgs,
+                                                                     final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps,
+                                                                     final AUDITINFO committal) {
         final HealthcareProfessional professional = new HealthcareProfessional();
         String organisationKey = null;
         String performerKey = null;
@@ -364,33 +358,24 @@ public final class EHRUtil {
         if(organisationKey != null && orgs.containsKey(organisationKey)) {
             final ORGANISATION org = orgs.get(organisationKey);
             professional.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
-            final OrgUnit orgUnitType = new OrgUnit();
+            final OrgUnit orgUnit = new OrgUnit();
 
             if(org.getName() != null) {
-                orgUnitType.setOrgUnitName(org.getName().getValue());
+                orgUnit.setOrgUnitName(org.getName().getValue());
             }
-            for(TEL t : org.getTelecom()) {
+            for(final TEL t : org.getTelecom()) {
                 if(t instanceof TELEMAIL) {
-                	orgUnitType.setOrgUnitEmail(removePrefix(t.getValue(), "mailto:"));
+                    orgUnit.setOrgUnitEmail(removePrefix(t.getValue(), "mailto:"));
                 }
                 if(t instanceof TELPHONE) {
-                	orgUnitType.setOrgUnitTelecom(removePrefix(t.getValue(), "tel:"));
+                    orgUnit.setOrgUnitTelecom(removePrefix(t.getValue(), "tel:"));
                 }
             }
-            orgUnitType.setOrgUnitHSAId(organisationKey);
+            orgUnit.setOrgUnitHSAId(organisationKey);
 
-            for(AD ad : org.getAddr()) {
-            	for(ADXP adxp : ad.getPartOrBrOrAddressLine()) {
-            		if(adxp.getType() == AddressPartType.AL) {
-            			orgUnitType.setOrgUnitAddress(adxp.getContent());
-            		}
-            		if(adxp.getType() == AddressPartType.CEN) {
-            			orgUnitType.setOrgUnitLocation(adxp.getContent());
-            		}
-            	}
-            }
+            mapAddress(orgUnit, org);
 
-            professional.setHealthcareProfessionalOrgUnit(orgUnitType);
+            professional.setHealthcareProfessionalOrgUnit(orgUnit);
         }
         if(performerKey != null && hps.containsKey(performerKey)) {
             final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = hps.get(performerKey);
@@ -410,6 +395,36 @@ public final class EHRUtil {
         return professional;
     }
 
+    //
+    protected static OrgUnit mapAddress(final OrgUnit orgUnit, final ORGANISATION organisation) {
+        for (final AD ad : organisation.getAddr())
+            for (final ADXP adxp : ad.getPartOrBrOrAddressLine()) {
+                switch (adxp.getType()) {
+                    case AL:
+                        orgUnit.setOrgUnitAddress(adxp.getContent());
+                        break;
+                    case CEN:
+                        orgUnit.setOrgUnitLocation(adxp.getContent());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        return orgUnit;
+    }
+
+
+
+    /**
+     * Removes a string prefix on match.
+     *
+     * @param value the string.
+     * @param prefix the prefix to remove.
+     * @return the string without prefix, i.e. unchanged if the prefix doesn't match.
+     */
+    public static String removePrefix(final String value, final String prefix) {
+        return (value == null) ? null : value.replaceFirst(prefix, "");
+    }
 
     public static <T> T patientSummaryHeader(final COMPOSITION comp, final SharedHeaderExtract baseHeader, final String timeElement, final Class<T> type) {
     	final PatientSummaryHeader header = new PatientSummaryHeader();
@@ -434,7 +449,7 @@ public final class EHRUtil {
         }
 
         header.setPatientId(personId(baseHeader.subjectOfCare()));
-        header.setAccountableHealthcareProfessional(healtcareProfessionalType(comp.getComposer(), baseHeader.organisations(), baseHeader.healthcareProfessionals(), comp.getCommittal()));
+        header.setAccountableHealthcareProfessional(healthcareProfessionalType(comp.getComposer(), baseHeader.organisations(), baseHeader.healthcareProfessionals(), comp.getCommittal()));
         final LegalAuthenticator legal = new LegalAuthenticator();
         
         if(header.getAccountableHealthcareProfessional() != null) {
@@ -461,27 +476,23 @@ public final class EHRUtil {
     
     public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(T rivRequestType, final CD meaning) throws MapperException {
     	final RIV13606REQUESTEHREXTRACTRequestType request = new RIV13606REQUESTEHREXTRACTRequestType();
-    	Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
+    	final Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
 
     	request.getMeanings().add(meaning);
     	request.setSubjectOfCareId(iiType(mapperRequest.patientId));
     	request.setTimePeriod(IVLTSType(mapperRequest.timePeriod));
     	
-    	if(mapperRequest.getCareUnitHSAId().isEmpty()) {
-    		throw new MapperException("careUnitHSAId element is missing");
-    	} else if(mapperRequest.getCareUnitHSAId().size() > 1) {
-    		throw new MapperException("Only one careUnitHSAId element is allowed");
-    	}
-    	final ParameterType hsaId = new ParameterType();
-    	hsaId.setName(stType("hsa_id"));
-    	hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
-    	request.getParameters().add(hsaId);
-    	request.getParameters().add(versionParameter);
-    	return request;
-    }
-    
-    protected static String removePrefix(final String value, final String prefix) {
-        return (value == null) ? null : value.replaceFirst(prefix, "");
+    	if (mapperRequest.getCareUnitHSAId().size() > 1) {
+    		throw new MapperException("Only one careUnitHSAId element can be handled");
+    	} else if (mapperRequest.getCareUnitHSAId().size() == 1) {
+            final ParameterType hsaId = new ParameterType();
+            hsaId.setName(stType("hsa_id"));
+            hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
+            request.getParameters().add(hsaId);
+        }
+        request.getParameters().add(versionParameter);
+
+        return request;
     }
 
     // Generic baseline of data types to be able to convert between schemas (java packages).

@@ -89,7 +89,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      * Maps from EHR_EXTRACT (vko) to GetCareContactsResponseType.
      *
      * @param ehrExtract the EHR_EXTRACT XML Java bean.
-     * @return the corresponding {@link riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType} response type
+     * @return the corresponding riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType response type
      */
     protected GetCareContactsResponseType map(final EHREXTRACT ehrExtract) {
 
@@ -186,14 +186,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         }
         return bodyType;
     }
-    
-    protected II map(final PersonIdType personIdType) {
-        final II value= new II();
-        value.setRoot(personIdType.getType());
-        value.setExtension(personIdType.getId());
-        return value;
-    }
-
 
     //
     protected HealthcareProfessionalType mapProfessional(final COMPOSITION composition, final List<IDENTIFIEDENTITY> demographics) {
@@ -226,25 +218,15 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
         return professionalType;
     }
-    
-    /**
-     * Removes a string prefix on match.
-     *
-     * @param value the string.
-     * @param prefix the prefix to remove.
-     * @return the string without prefix, i.e. unchanged if the prefix doesn't match.
-     */
-    protected String removePrefix(final String value, final String prefix) {
-        return (value == null) ? null : value.replaceFirst(prefix, "");
-    }
 
     //
     protected OrgUnitType mapTel(final OrgUnitType orgUnitType, final ORGANISATION organisation) {
+
         for (final TEL item : organisation.getTelecom()) {
             if (item instanceof TELEMAIL) {
-                orgUnitType.setOrgUnitEmail(removePrefix(item.getValue(), "mailto:"));
+                orgUnitType.setOrgUnitEmail(EHRUtil.removePrefix(item.getValue(), "mailto:"));
             } else if (item instanceof TELPHONE) {
-                orgUnitType.setOrgUnitTelecom(removePrefix(item.getValue(), "tel:"));
+                orgUnitType.setOrgUnitTelecom(EHRUtil.removePrefix(item.getValue(), "tel:"));
             }
         }
         return orgUnitType;
