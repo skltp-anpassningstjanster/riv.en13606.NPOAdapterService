@@ -23,6 +23,7 @@ import lombok.Data;
 
 import org.apache.commons.lang.StringUtils;
 import org.dozer.CustomConverter;
+import org.mule.transformer.simple.RemovePropertyTransformer;
 
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
@@ -262,7 +263,7 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(cv, type);
     }
     
-    public static <T> T healthcareProfessionalRoleCode(final CD cd, Class<T> type) {
+    public static <T> T cvType(final CD cd, Class<T> type) {
     	if(cd == null) {
     		return null;
     	}
@@ -301,15 +302,6 @@ public final class EHRUtil {
         return cvType(ii.getExtension(), ii.getRoot(), null, type);
     }
 
-    //
-    public static <T> T cvType(final CD cd, Class<T> type) {
-        if (cd == null) {
-            return null;
-        }
-        final String displayName = (cd.getDisplayName() == null) ? null : cd.getDisplayName().getValue();
-        return cvType(cd.getCode(), cd.getCodeSystem(), displayName, type);
-    }
-    
 
     //
     public static ResultCode interpret(final ResponseDetailTypeCodes code) {
@@ -354,15 +346,6 @@ public final class EHRUtil {
     	return null;
     }
     
-    protected COMPOSITION findCompositionByLink(List<COMPOSITION> compositions, List<LINK> links) {
-		for(LINK link : links) {
-			if(link.getTargetType() != null) {
-				
-			}
-		}
-		return new COMPOSITION();
-	}
-    
 
     private static HealthcareProfessional healtcareProfessionalType(final FUNCTIONALROLE composer,
                                                   final Map<String, ORGANISATION> orgs,
@@ -388,10 +371,10 @@ public final class EHRUtil {
             }
             for(TEL t : org.getTelecom()) {
                 if(t instanceof TELEMAIL) {
-                    orgUnitType.setOrgUnitEmail(((TELEMAIL)t).getValue());
+                	orgUnitType.setOrgUnitEmail(removePrefix(t.getValue(), "mailto:"));
                 }
                 if(t instanceof TELPHONE) {
-                    orgUnitType.setOrgUnitTelecom(((TELPHONE)t).getValue());
+                	orgUnitType.setOrgUnitTelecom(removePrefix(t.getValue(), "tel:"));
                 }
             }
             orgUnitType.setOrgUnitHSAId(organisationKey);
@@ -421,7 +404,7 @@ public final class EHRUtil {
 
             final HEALTHCAREPROFESSIONALROLE role = firstItem(hp.getRole());
             if (role != null) {
-                professional.setHealthcareProfessionalRoleCode(healthcareProfessionalRoleCode(role.getProfession(), CV.class));
+                professional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
             }
         }
         return professional;
@@ -495,6 +478,10 @@ public final class EHRUtil {
     	request.getParameters().add(hsaId);
     	request.getParameters().add(versionParameter);
     	return request;
+    }
+    
+    protected static String removePrefix(final String value, final String prefix) {
+        return (value == null) ? null : value.replaceFirst(prefix, "");
     }
 
     // Generic baseline of data types to be able to convert between schemas (java packages).
