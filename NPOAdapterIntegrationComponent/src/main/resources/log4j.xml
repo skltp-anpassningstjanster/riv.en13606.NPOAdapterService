@@ -16,9 +16,9 @@
 	</appender>
     
     <appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
-        <param  name="file" value="${mule.home}/logs/mule-app-npo-adapter-1.log"/>
-        <param name="MaxBackupIndex" value="3" />
-        <param name="MaxFileSize" value="1MB" />
+        <param  name="file" value="${mule.home}/logs/mule-app-npo-adapter.log"/>
+        <param name="MaxBackupIndex" value="7" />
+        <param name="MaxFileSize" value="50MB" />
         
         <!-- The threshold level for this appender. -->
         <!-- <param name="Threshold" value="ERROR"/> -->
