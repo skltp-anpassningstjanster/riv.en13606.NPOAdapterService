@@ -20,8 +20,11 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
 import riv.clinicalprocess.healthcond.description._2.*;
 import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
@@ -58,6 +61,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	protected static final String TIME_ELEMENT = "dia-dia-tid";
 	protected static final String CODE_ELEMENT = "dia-dia-kod";
 	protected static final String TYPE_ELEMENT = "dia-dia-typ";
+	protected static final String CHRONIC_DIAGNOSIS = "Kronisk diagnos";
 
 	@Override
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
@@ -162,11 +166,12 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
   							case TYPE_ELEMENT:
   								if(elm.getValue() instanceof ST) {
   									final ST simpleText = (ST) elm.getValue();
-  									type.setTypeOfDiagnosis(interpret(simpleText.getValue()));
-  								}
-  								//TODO: Verify
-  								if(type.getTypeOfDiagnosis() != null) {
-  									type.setChronicDiagnosis(type.getTypeOfDiagnosis() == DiagnosisTypeEnum.HUVUDDIAGNOS);
+  									if(StringUtils.equalsIgnoreCase(simpleText.getValue(), CHRONIC_DIAGNOSIS)) {
+  										type.setTypeOfDiagnosis(DiagnosisTypeEnum.HUVUDDIAGNOS);
+  										type.setChronicDiagnosis(true);
+  									} else {
+  										type.setTypeOfDiagnosis(interpret(simpleText.getValue()));
+  									}
   								}
   								break;
   							case CODE_ELEMENT:
