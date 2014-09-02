@@ -46,7 +46,6 @@ public class OutboundPreProcessor implements MessageProcessor {
     public static final String ROUTE_LOGICAL_ADDRESS = "route-logical-address";
     public static final String ROUTE_SERVICE_SOAP_ACTION = "route-service-soap-action";
     public static final String ROUTE_ENDPOINT_URL = "route-endpoint-url";
-    public static final String MAX_EHREXTRACT_RECORDS = "max-ehrextract-records";
 
     // shall be thread-safe
     static XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -56,8 +55,6 @@ public class OutboundPreProcessor implements MessageProcessor {
 
     // properties.
     private Router router;
-    private int maxEhrExtractRecords = 500;
-
 
     @Override
     @SneakyThrows
@@ -81,7 +78,6 @@ public class OutboundPreProcessor implements MessageProcessor {
         } else {
             log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress);
         }
-        message.setInvocationProperty(MAX_EHREXTRACT_RECORDS, this.maxEhrExtractRecords);
         return event;
     }
 
@@ -126,9 +122,5 @@ public class OutboundPreProcessor implements MessageProcessor {
     public void setRouter(Router router) {
         log.info("Set router to: " + router);
         this.router = router;
-    }
-
-    public void setMaxEhrExtractRecords(int maxEhrExtractRecords) {
-        this.maxEhrExtractRecords = maxEhrExtractRecords;
     }
 }
