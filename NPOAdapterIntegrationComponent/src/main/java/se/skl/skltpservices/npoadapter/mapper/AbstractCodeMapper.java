@@ -30,11 +30,24 @@ public abstract class AbstractCodeMapper<K, V> {
     private HashMap<K, V> map = new HashMap<K, V>();
     private HashMap<V, K> reverseMap = new HashMap<V, K>();
 
+    /**
+     * Adds a key value pair to the code mapper.
+     *
+     * @param key the key.
+     * @param value the value.
+     */
     protected void add(K key, V value) {
         map.put(key, value);
         reverseMap.put(value, key);
     }
 
+    /**
+     * Returns value for key.
+     *
+     * @param key the key.
+     * @param defaultValue the default value.
+     * @return the value or null if no such key exists.
+     */
     protected V value(K key, V defaultValue) {
         if (key == null) {
             return defaultValue;
@@ -43,11 +56,18 @@ public abstract class AbstractCodeMapper<K, V> {
         return (value == null) ? defaultValue : value;
     }
 
-    protected K key(V key, K defaultValue) {
-        if (key == null) {
-            return defaultValue;
+    /**
+     * Returns key for value.
+     *
+     * @param value the value.
+     * @param defaultKey the default key.
+     * @return the key for value or null if no such value exists.
+     */
+    protected K key(V value, K defaultKey) {
+        if (value == null) {
+            return defaultKey;
         }
-        final K value = reverseMap.get(key);
-        return (value == null) ? defaultValue : value;
+        final K key = reverseMap.get(value);
+        return (key == null) ? defaultKey : key;
     }
 }

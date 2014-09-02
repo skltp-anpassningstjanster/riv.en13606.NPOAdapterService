@@ -60,7 +60,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	public static final CD MEANING_VOO = new CD();
     static {
         MEANING_VOO.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_VOO.setCode("voo");
+        MEANING_VOO.setCode(INFO_VOO);
     }
     
 	

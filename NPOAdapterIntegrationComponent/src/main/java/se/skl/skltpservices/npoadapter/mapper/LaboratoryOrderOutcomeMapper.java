@@ -56,7 +56,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	public static final CD MEANING = new CD();
     static {
         MEANING.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING.setCode("und-kkm-kli");
+        MEANING.setCode(INFO_UND_KKM_KLI);
     }
 
 	@Override

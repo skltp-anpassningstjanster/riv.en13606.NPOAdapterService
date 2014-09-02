@@ -24,6 +24,7 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
@@ -313,7 +314,7 @@ public final class EHRUtil {
     
     public static String careContactId(final List<LINK> links) {
     	for(LINK link : links) {
-    		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), "vko")) {
+    		if(link.getTargetType() != null && StringUtils.equals(link.getTargetType().getCode(), AbstractMapper.INFO_VKO)) {
     			final II id = firstItem(link.getTargetId());
     			if(id != null) {
     				return id.getExtension();

@@ -55,7 +55,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	public static final CD MEANING_DIA = new CD();
     static {
         MEANING_DIA.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_DIA.setCode("dia");
+        MEANING_DIA.setCode(INFO_DIA);
     }
 	
 	protected static final String TIME_ELEMENT = "dia-dia-tid";

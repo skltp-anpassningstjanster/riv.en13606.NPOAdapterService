@@ -30,6 +30,7 @@ import riv.itintegration.engagementindex._1.EngagementType;
 import riv.itintegration.engagementindex.updateresponder._1.ObjectFactory;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
+import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -182,14 +183,14 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     protected EngagementType domain(final EngagementType engagement, final String infoType) {
 
         switch (infoType) {
-            case "vko":
+            case AbstractMapper.INFO_VKO:
                 engagement.setServiceDomain("riv:clinicalprocess:logistics:logistics");
                 break;
-            case "voo":
-            case "dia":
+            case AbstractMapper.INFO_VOO:
+            case AbstractMapper.INFO_DIA:
                 engagement.setServiceDomain("riv:clinicalprocess:healthcond:description");
                 break;
-            case "und-kkm-kli":
+            case AbstractMapper.INFO_UND_KKM_KLI:
                 engagement.setServiceDomain("riv:clinicalprocess:healthcond:actoutcome");
                 break;
             default:

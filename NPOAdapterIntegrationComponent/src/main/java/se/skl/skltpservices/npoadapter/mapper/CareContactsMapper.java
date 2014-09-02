@@ -51,7 +51,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public static final CD MEANING_VKO = new CD();
     static {
         MEANING_VKO.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_VKO.setCode("vko");
+        MEANING_VKO.setCode(INFO_VKO);
     }
 
     private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class, GetCareContactsResponseType.class);

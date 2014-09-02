@@ -56,6 +56,11 @@ public abstract class AbstractMapper {
     private static final JaxbUtil rivEhrExtractTypeJaxbUtil = new JaxbUtil("riv.itintegration.registry._1:riv.ehr.patientsummary._1:riv.ehr.patientsummary.getehrextractresponder._1");
     private static final riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory rivEhrExtractTypeObjectFactory = new riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory();
 
+    // main supported information types,
+    public static final String INFO_VKO = "vko";
+    public static final String INFO_VOO = "voo";
+    public static final String INFO_DIA = "dia";
+    public static final String INFO_UND_KKM_KLI = "und-kkm-kli";
 
     static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
     static final String NS_CAREDOCUMENTATION_2 = "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21";
