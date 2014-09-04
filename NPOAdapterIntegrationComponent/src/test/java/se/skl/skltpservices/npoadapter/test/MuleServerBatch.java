@@ -37,7 +37,7 @@ public class MuleServerBatch {
                 log.info("Startup...");
                 start();
             }
-        };
+        }.run();
     }
 
 }
