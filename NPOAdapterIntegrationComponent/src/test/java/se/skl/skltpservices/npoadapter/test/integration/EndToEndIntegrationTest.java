@@ -21,9 +21,12 @@ package se.skl.skltpservices.npoadapter.test.integration;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
@@ -31,13 +34,11 @@ import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
-import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosis._2.rivtabp21.GetDiagnosisResponderInterface;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 
@@ -72,29 +73,44 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private final GetDiagnosisResponderInterface getDiagnosisServices;
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
 
+
+
+    //
+    static Object create(JaxWsProxyFactoryBean jaxWs) {
+        final HTTPClientPolicy policy = new HTTPClientPolicy();
+        policy.setConnectionTimeout(120000);
+        policy.setReceiveTimeout(180000);
+        final Object service = jaxWs.create();
+        final Client client = ClientProxy.getClient(service);
+        ((HTTPConduit) client.getConduit()).setClient(policy);
+        return service;
+    }
+
     public EndToEndIntegrationTest() {
     	setDisposeContextPerClass(true);
-    	
+
     	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
     	final Map<String, Object> props = new HashMap<String, Object>();
     	props.put("schema-validation-enabled", true);
     	jaxWs.setProperties(props);
+
     	
 		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
 		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
-		getCareContactsServices = (GetCareContactsResponderInterface) jaxWs.create();
+
+		getCareContactsServices = (GetCareContactsResponderInterface) create(jaxWs);
 		
 		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
 		jaxWs.setAddress(CARE_DOCUMENTATION_ENDPOINT);
-		getCareDocumentationServices = (GetCareDocumentationResponderInterface) jaxWs.create();
+		getCareDocumentationServices = (GetCareDocumentationResponderInterface) create(jaxWs);
 		
 		jaxWs.setServiceClass(GetDiagnosisResponderInterface.class);
 		jaxWs.setAddress(DIAGNOSIS_ENDPOINT);
-		getDiagnosisServices = (GetDiagnosisResponderInterface) jaxWs.create();
+		getDiagnosisServices = (GetDiagnosisResponderInterface) create(jaxWs);
 		
 		jaxWs.setServiceClass(GetLaboratoryOrderOutcomeResponderInterface.class);
 		jaxWs.setAddress(LABORATORY_ENDPOINT);
-		getLaboratoryOrderOutcomeServices = (GetLaboratoryOrderOutcomeResponderInterface) jaxWs.create();
+		getLaboratoryOrderOutcomeServices = (GetLaboratoryOrderOutcomeResponderInterface) create(jaxWs);
 		
     }
     
