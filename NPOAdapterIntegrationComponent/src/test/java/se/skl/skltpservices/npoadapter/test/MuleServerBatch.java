@@ -29,7 +29,20 @@ import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
 @Slf4j
 public class MuleServerBatch {
     public static void main(String[] args) throws Exception {
-        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true).start();
+        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true) {
+            @Override
+            @SneakyThrows
+            public void run() {
+                // Start me up...
+                log.info("Startup...");
+                start();
+                synchronized(this) {
+                    while (true) {
+                        this.wait();
+                    }
+                }
+            }
+        }.run();
     }
 
 }
