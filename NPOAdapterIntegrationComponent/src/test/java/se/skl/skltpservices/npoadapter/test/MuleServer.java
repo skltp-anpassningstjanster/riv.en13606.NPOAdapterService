@@ -19,14 +19,39 @@
  */
 package se.skl.skltpservices.npoadapter.test;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
 
 /**
- * SOI toolkit embedded test mule server.
+ * SOI toolkit embedded test mule server. <p/>
+ *
+ * Set system property batchMode to true in order to run in batch mode, default is console mode
+ * and to stop server by pressing any key.
+ *
  */
+@Slf4j
 public class MuleServer {
     //
     public static void main(String[] args) throws Exception {
-        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true).run();
+        final boolean batchMode =  Boolean.valueOf(System.getProperty("batchMode"));
+        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true) {
+            @Override
+            @SneakyThrows
+            public void run() {
+                if (batchMode) {
+                    // Start me up...
+                    log.info("Starting up in batch mode...");
+                    start();
+                    // wait until interrupted
+                    synchronized (this) {
+                        wait();
+                    }
+                } else {
+                    log.info("Starting up in console mode...");
+                    super.run();
+                }
+            }
+        }.run();
     }
 }
