@@ -26,6 +26,9 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.jws.WebService;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Test stub always returning a fix response.
@@ -49,6 +52,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     public static final String PATIENT_ID_TRIGGER_ERROR = "triggerError";
     public static final String PATIENT_ID_TRIGGER_WARNING = "triggerWarning";
     public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
+
+    static Map<String, EHREXTRACT> responseCache = Collections.synchronizedMap(new HashMap<String, EHREXTRACT>());
         
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
@@ -125,7 +130,12 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     //
     protected EHREXTRACT getTestData(final String path) {
-    	return Util.loadEhrTestData(path);
+        EHREXTRACT ehrextract = responseCache.get(path);
+        if (ehrextract == null) {
+            ehrextract = Util.loadEhrTestData(path);
+            responseCache.put(path, ehrextract);
+        }
+    	return ehrextract;
     }
 
     //
