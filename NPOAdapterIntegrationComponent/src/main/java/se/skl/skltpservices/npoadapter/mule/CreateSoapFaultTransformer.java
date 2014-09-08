@@ -20,11 +20,15 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
+
+import se.skl.skltpservices.npoadapter.router.Router;
 
 import java.text.MessageFormat;
 
@@ -70,14 +74,14 @@ public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
 		Throwable e = (ep.getRootException() != null) ? ep.getRootException()
 				: ep.getException();
 
-		final String errMsg = e.getMessage();
+		final String errMsg = StringEscapeUtils.escapeXml(e.getMessage());
 		final String endpoint = getEndpoint().getEndpointURI().getAddress();
 		final String id = message.getUniqueId();
 		return createSoapFault(errMsg, endpoint, id);
 	}
 
-	protected String createSoapFault(String errMsg, String endpoint,
-			String id) {
+	protected String createSoapFault(final String errMsg, final String endpoint,
+			final String id) {
 		return MessageFormat.format(SOAP_FAULT_V11, errMsg, endpoint, id);
 	}
 
