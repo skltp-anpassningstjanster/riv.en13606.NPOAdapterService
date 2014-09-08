@@ -343,7 +343,7 @@
 		<committal>
 			<committer nullFlavor="NA"/>
 			<ehr_system nullFlavor="NA"/>
-			<time_committed nullFlavor="NA"/>
+			<time_committed value="20090429132009"/>
 		</committal>
 		<composer>
 			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
