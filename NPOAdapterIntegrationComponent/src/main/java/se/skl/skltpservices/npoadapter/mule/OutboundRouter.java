@@ -24,12 +24,14 @@ import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.routing.CouldNotRouteOutboundMessageException;
+import org.mule.api.routing.RoutingException;
 import org.mule.api.transport.PropertyScope;
 import org.mule.endpoint.EndpointURIEndpointBuilder;
 import org.mule.endpoint.URIBuilder;
 import org.mule.routing.outbound.AbstractRecipientList;
 import org.mule.transformer.simple.MessagePropertiesTransformer;
 import org.mule.transport.http.HttpConstants;
+import se.skl.skltpservices.npoadapter.util.Sample;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,10 +55,15 @@ public class OutboundRouter extends AbstractRecipientList {
     // configurable properties (externally)
     private int responseTimeout = 5000;
 
+    //
+    final static ThreadLocal<Sample> localSample = new ThreadLocal<Sample>();
+
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
             final String url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
+
+            localSample.set(new Sample(url));
 
             final EndpointBuilder eb = getEndpoint(url);
 
@@ -76,6 +83,20 @@ public class OutboundRouter extends AbstractRecipientList {
         }
     }
 
+    @Override
+    public MuleEvent route(MuleEvent event) throws RoutingException {
+        localSample.remove();
+        try {
+            return super.route(event);
+        } finally {
+            final Sample sample = localSample.get();
+            if (sample != null) {
+                sample.end();
+            }
+        }
+    }
+
+    //
     protected HashMap<String, Object> getOutboundProperties(final String originalServiceConsumerId, final String soapAction) {
         final HashMap<String, Object> map = new HashMap<String, Object>();
 

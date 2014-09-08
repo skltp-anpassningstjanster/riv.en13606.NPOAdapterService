@@ -22,7 +22,9 @@ package se.skl.skltpservices.npoadapter.mule;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import se.skl.skltpservices.npoadapter.mapper.Mapper;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.util.Sample;
 
 /**
  * Transforms standard RIV Service Contract requests from consumers to a corresponding EHR_EXTRACT request. <p/>
@@ -38,7 +40,13 @@ public class OutboundRequestTransformer extends AbstractOutboundTransformer {
     @Override
     public Object transformMessage(final MuleMessage message, final String outputEncoding) throws TransformerException {
         try {
-            return getMapper(message).mapRequest(message);
+            final Mapper mapper = getMapper(message);
+            final Sample sample = new Sample(mapper.getClass().getSimpleName() + ".mapRequest");
+            try {
+                return mapper.mapRequest(message);
+            } finally {
+                sample.end();
+            }
         } catch (MapperException err) {
             throw new TransformerException(this, err);
         }
