@@ -125,8 +125,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healtcareProfessional) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
 		//TODO: Verify if this is commital time from und or vbe
-		if(und.getCommittal() != null && und.getCommittal().getTimeCommitted() != null) {
-			type.setRegistrationTime(und.getCommittal().getTimeCommitted().getValue());
+		if(vbe.getCommittal() != null && vbe.getCommittal().getTimeCommitted() != null) {
+			type.setRegistrationTime(vbe.getCommittal().getTimeCommitted().getValue());
 		}
 		for(CONTENT content : und.getContent()) {
 			if(content instanceof ENTRY) {
