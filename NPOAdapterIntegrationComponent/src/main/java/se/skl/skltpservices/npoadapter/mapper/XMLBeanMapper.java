@@ -36,7 +36,10 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
+import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
@@ -152,9 +155,14 @@ public class XMLBeanMapper {
         final BeanMappingBuilder diffMappingBuilder = new BeanMappingBuilder() {
 			@Override
 			protected void configure() {
-				mapping(EHRUtil.Request.class, GetCareDocumentationType.class, mapNull(true)).fields("careUnitHSAId", "careUnitHSAid");
-			}
-        	
+                final FieldDefinition f = field("careUnitHSAId").accessible();
+                mapping(GetCareDocumentationType.class, EHRUtil.Request.class,  mapNull(false)).fields(field("careUnitHSAid").accessible(), f);
+                /*
+                mapping(GetCareContactsType.class, EHRUtil.Request.class, mapNull(false)).fields(f, f);
+                mapping(GetDiagnosisType.class, EHRUtil.Request.class,  mapNull(false)).fields(f, f);
+                mapping(GetLaboratoryOrderOutcomeType.class, EHRUtil.Request.class, mapNull(false)).fields(f, f);
+                */
+            }
         };
         
         dozerBeanMapper.addMapping(builder);

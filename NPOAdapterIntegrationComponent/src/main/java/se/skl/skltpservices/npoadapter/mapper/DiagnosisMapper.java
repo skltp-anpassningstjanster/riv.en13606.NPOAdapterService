@@ -70,8 +70,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_DIA)));
 			return message;
 		} catch (Exception err) {
-			log.error("Error when transforming Diagnosis request", err);
-			throw new MapperException("Error when transforming Diagnosis request");
+            throw new MapperException("Exception when mapping request", err);
 		}
 	}
 
@@ -83,8 +82,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 			message.setPayload(marshal(resp));
             return message;
 		} catch (Exception err) {
-			log.error("Error when transforming Diagnosis response", err);
-			throw new MapperException("Error when transforming Diagnosis response");
+            throw new MapperException("Exception when mapping response", err);
 		}
 	}
 	

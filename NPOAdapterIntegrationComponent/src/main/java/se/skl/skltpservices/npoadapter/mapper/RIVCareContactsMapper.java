@@ -41,7 +41,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
         // map to baseline model
         final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrExtractResponseType);
 
-        message.setPayload(marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().get(0))));
+        message.setPayload(marshal(map(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract())));
 
         return message;
     }

@@ -19,27 +19,29 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.nationellpatientoversikt.NpoParameterType;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.jws.WebService;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Test stub always returning a fix response.
  */
+@Slf4j
 @WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service",
         endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType",
         portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
         targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
-    //
-    static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
 
     private static final String VKO = "vko";
     private static final String VOO = "voo";
@@ -77,6 +79,17 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     	//Return testdata
     	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
+        if (!request.getSubjectOfCareId().getExtension().startsWith("19")) {
+            return responseType;
+        }
+
+        if (request.getTimePeriod() != null) {
+            final Date ts = EHRUtil.parseTimestamp(request.getTimePeriod().getLow().getValue());
+            if (ts.after(new Date())) {
+                return responseType;
+            }
+        }
+
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
         	log.info("Received VKO Request");

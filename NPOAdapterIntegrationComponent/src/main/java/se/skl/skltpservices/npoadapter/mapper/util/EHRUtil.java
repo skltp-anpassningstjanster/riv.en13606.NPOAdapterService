@@ -21,14 +21,15 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 
 import lombok.Data;
 
+import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,12 @@ public final class EHRUtil {
         return formatter.get().format(timestamp);
     }
 
+    //
+    @SneakyThrows
+    public static Date parseTimestamp(String timestamp) {
+        return formatter.get().parse(timestamp);
+    }
+
     public static String getElementTextValue(final ELEMENT e) {
         if(e != null && e.getValue() instanceof ST) {
             ST text = (ST) e.getValue();
@@ -85,6 +92,9 @@ public final class EHRUtil {
     }
 
     public static TS tsType(final String value) {
+        if (value == null) {
+            return null;
+        }
         final TS ts = new TS();
         ts.setValue(value);
         return ts;
@@ -187,11 +197,12 @@ public final class EHRUtil {
 
     //
     static IVLTS IVLTSType(final DatePeriod datePeriod) {
-        final IVLTS ivlts = new IVLTS();
-        if (datePeriod != null) {
-            ivlts.setLow(tsType(datePeriod.getStart()));
-            ivlts.setHigh(tsType(datePeriod.getEnd()));
+        if (datePeriod == null) {
+            return null;
         }
+        final IVLTS ivlts = new IVLTS();
+        ivlts.setLow(tsType(datePeriod.getStart()));
+        ivlts.setHigh(tsType(datePeriod.getEnd()));
         return ivlts;
     }
 
@@ -474,17 +485,19 @@ public final class EHRUtil {
         header.setNullifiedReason(null);
         return XMLBeanMapper.getInstance().map(header, type);
     }
-    
-    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(T rivRequestType, final CD meaning) throws MapperException {
+
+    //
+    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(final T rivRequestType, final CD meaning) {
     	final RIV13606REQUESTEHREXTRACTRequestType request = new RIV13606REQUESTEHREXTRACTRequestType();
     	final Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
 
     	request.getMeanings().add(meaning);
-    	request.setSubjectOfCareId(iiType(mapperRequest.patientId));
-    	request.setTimePeriod(IVLTSType(mapperRequest.timePeriod));
+    	request.setSubjectOfCareId(iiType(mapperRequest.getPatientId()));
+    	request.setTimePeriod(IVLTSType(mapperRequest.getTimePeriod()));
+
     	
     	if (mapperRequest.getCareUnitHSAId().size() > 1) {
-    		throw new MapperException("Only one careUnitHSAId element can be handled");
+    		throw new IllegalArgumentException("Only one careUnitHSAId element can be handled");
     	} else if (mapperRequest.getCareUnitHSAId().size() == 1) {
             final ParameterType hsaId = new ParameterType();
             hsaId.setName(stType("hsa_id"));
@@ -527,6 +540,13 @@ public final class EHRUtil {
     	private PersonId patientId;
     	private DatePeriod timePeriod;
     	private List<String> careUnitHSAId;
+
+        public List<String> getCareUnitHSAId() {
+            if (careUnitHSAId == null) {
+                careUnitHSAId = new ArrayList<String>();
+            }
+            return careUnitHSAId;
+        }
     }
 
     //

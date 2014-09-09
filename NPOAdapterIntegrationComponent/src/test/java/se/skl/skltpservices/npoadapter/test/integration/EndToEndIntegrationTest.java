@@ -41,6 +41,7 @@ import riv.clinicalprocess.healthcond.description.getdiagnosis._2.rivtabp21.GetD
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -125,6 +126,16 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 		assertFalse(resp.getCareContact().isEmpty());
     }
 
+
+    @Test
+    public void GetCareContactsNotFoundTest() {
+        GetCareContactsType req = IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER);
+        req.getPatientId().setId("200112121212");
+        GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_1, req);
+        assertTrue(resp.getCareContact().isEmpty());
+    }
+
+
     @Test
     public void GetEhrCareContactsRIVSourceSuccessTest() {
         GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
@@ -166,7 +177,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	GetDiagnosisResponseType resp = getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetDiagnosisType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(resp.getDiagnosis().isEmpty());
     }
-    
+
     @Test
     public void GetLaboratoryOrderOutcomeEN13606SuccessTest() {
     	GetLaboratoryOrderOutcomeResponseType resp =  getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, 

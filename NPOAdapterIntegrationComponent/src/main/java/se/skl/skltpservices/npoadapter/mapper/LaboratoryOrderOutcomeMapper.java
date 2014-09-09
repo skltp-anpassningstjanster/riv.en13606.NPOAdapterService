@@ -66,8 +66,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING)));
 			return message;
 		} catch (Exception err) {
-			log.error("Error when transforming LaboratoryOrderOutcome request", err);
-			throw new MapperException("Error when transforming LaboratoryOrderOutcome request");
+            throw new MapperException("Exception when mapping response", err);
 		}
 	}
 
@@ -79,8 +78,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
-			log.error("Error when transforming LaboratoryOrderOutcome response", err);
-			throw new MapperException("Error when transforming LaboratoryOrderOutcome response");
+            throw new MapperException("Exception when mapping response", err);
 		}
 	}
 	

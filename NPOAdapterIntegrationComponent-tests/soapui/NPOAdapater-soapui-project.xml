@@ -15460,7 +15460,7 @@ xmlns:urn="urn:riv13606:v1.1">
       <xs:any maxOccurs="unbounded" minOccurs="0" serviceNamespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" name="GetCareContacts" bindingOperationName="GetCareContacts" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Success"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/logistics/logistics/GetCareContacts/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" name="GetCareContacts" bindingOperationName="GetCareContacts" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="TF1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
@@ -15470,11 +15470,114 @@ xmlns:urn="urn:riv13606:v1.1">
          <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
          <urn1:patientId>
             <urn2:id>191212121212</urn2:id>
-            <urn2:type>?</urn2:type>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
       </urn1:GetCareContacts>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetEhrExtractResponderBinding" type="wsdl" bindingName="{urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21}GetEhrExtractResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/getehrextract/stub?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/getehrextract/stub?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/getehrextract/stub?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetEhrExtractInteraction" targetNamespace="urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:ehr:patientsummary:GetEhrExtractInitiator:1" xmlns:tjsr="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" xmlns:tns="urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>201212121212</urn2:id>
+             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+        </urn1:patientId>
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+                  <!--Optional:-->
+         <urn1:timePeriod>
+            <urn2:start>20160101000000</urn2:start>
+         </urn1:timePeriod>
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>triggerErrror</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+        <urn1:careUnitHSAId>EN-1</urn1:careUnitHSAId>
+         <urn1:careUnitHSAId>EN-2</urn1:careUnitHSAId>
+          <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 6"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>?</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>?</urn2:id>
+            <urn2:type>?</urn2:type>
+         </urn1:patientId>
+         <!--Optional:-->
+         <urn1:timePeriod>
+            <urn2:start>?</urn2:start>
+            <urn2:end>?</urn2:end>
+         </urn1:timePeriod>
+         <!--Optional:-->
+         <urn1:sourceSystemHSAId>?</urn1:sourceSystemHSAId>
+         <!--Zero or more repetitions:-->
+         <urn1:careContactId>?</urn1:careContactId>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF7"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcarecontacts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareContacts>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+                  <!--Optional:-->
+         <urn1:timePeriod>
+            <urn2:start>xxx</urn2:start>
+         </urn1:timePeriod>
+      </urn1:GetCareContacts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetEhrExtractResponderBinding" type="wsdl" bindingName="{urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21}GetEhrExtractResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/getehrextract/stub?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/getehrextract/stub?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/getehrextract/stub?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetEhrExtractInteraction" targetNamespace="urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:ehr:patientsummary:GetEhrExtractInitiator:1" xmlns:tjsr="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" xmlns:tns="urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21">
       <xs:import namespace="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" schemaLocation="http://localhost:11000/npoadapter/getehrextract/stub?xsd=GetEhrExtractResponder_0.99.xsd"/>
@@ -29829,7 +29932,7 @@ ISO 2008  All rights reserved
          </nat:parameters>
       </nat:SendIndex2>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendIndex2"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:SendSimpleIndex" name="SendSimpleIndex" bindingOperationName="SendSimpleIndex" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.0.174:33001/npoadapter/pfc</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendIndex2"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:SendSimpleIndex" name="SendSimpleIndex" bindingOperationName="SendSimpleIndex" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="TF8"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/npo/v1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
    <soapenv:Header/>
    <soapenv:Body>
       <nat:SendSimpleIndex>
@@ -29864,7 +29967,77 @@ ISO 2008  All rights reserved
          </nat:parameters>
       </nat:SendSimpleIndex>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendSimpleIndex"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="UpdateResponderBinding" type="wsdl" bindingName="{urn:riv:itintegration:engagementindex:Update:1:rivtabp21}UpdateResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/ei?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/ei?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/ei?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="UpdateInteraction" targetNamespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:itintegration:engagementindex:UpdateInitiator:1" xmlns:tjsr="urn:riv:itintegration:engagementindex:UpdateResponder:1" xmlns:tns="urn:riv:itintegration:engagementindex:Update:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendSimpleIndex"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF9"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/npo/v1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:SendSimpleIndex>
+         <!--Optional:-->
+         <nat:subject_of_care_id>191212121212</nat:subject_of_care_id>
+         <!--Optional:-->
+         <nat:info_types>
+            <!--Zero or more repetitions:-->
+            <nat:info_type info_type_id="xxx" exists="true"/>
+         </nat:info_types>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>hsa_id</nat:name>
+               <!--Optional:-->
+               <nat:value>VS-1</nat:value>
+            </nat:parameter>
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>transaction_id</nat:name>
+               <!--Optional:-->
+               <nat:value>TX-1234</nat:value>
+            </nat:parameter>
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>version</nat:name>
+               <!--Optional:-->
+               <nat:value>1.1</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+      </nat:SendSimpleIndex>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendSimpleIndex"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF10"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/npo/v1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:SendSimpleIndex>
+         <!--Optional:-->
+         <nat:subject_of_care_id>191212121212</nat:subject_of_care_id>
+         <!--Optional:-->
+         <nat:info_types>
+            <!--Zero or more repetitions:-->
+            <nat:info_type info_type_id="vko" exists="true"/>
+         </nat:info_types>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>hsa_id</nat:name>
+               <!--Optional:-->
+               <nat:value>VS-1</nat:value>
+            </nat:parameter>
+            <!--
+            <nat:parameter>
+               <nat:name>transaction_id</nat:name>
+               <nat:value>TX-1234</nat:value>
+            </nat:parameter>
+            -->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>version</nat:name>
+               <!--Optional:-->
+               <nat:value>1.1</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+      </nat:SendSimpleIndex>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendSimpleIndex"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="UpdateResponderBinding" type="wsdl" bindingName="{urn:riv:itintegration:engagementindex:Update:1:rivtabp21}UpdateResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/ei?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/ei?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/ei?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="UpdateInteraction" targetNamespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:itintegration:engagementindex:UpdateInitiator:1" xmlns:tjsr="urn:riv:itintegration:engagementindex:UpdateResponder:1" xmlns:tns="urn:riv:itintegration:engagementindex:Update:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21">
       <xs:import namespace="urn:riv:itintegration:engagementindex:UpdateResponder:1" schemaLocation="http://localhost:11000/npoadapter/ei?xsd=UpdateResponder_1.0.xsd"/>
@@ -30702,7 +30875,7 @@ ISO 2008  All rights reserved
   <xs:simpleType name="LogicalAddressType">
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/pfc</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration" name="PingForConfiguration" bindingOperationName="PingForConfiguration" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://riv13606.callistasoftware.org:8080/npoadapter/pfc</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/pfc</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration" name="PingForConfiguration" bindingOperationName="PingForConfiguration" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.0.180:33001/npoadapter/pfc</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
    </soapenv:Header>
@@ -30711,7 +30884,7 @@ ISO 2008  All rights reserved
          <!--You may enter ANY elements at this point-->
       </urn1:PingForConfiguration>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetCareDocumentationResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21}GetCareDocumentationResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/getcaredocument/?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/getcaredocument/?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/getcaredocument/?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetCareDocumentationInteraction" targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsr="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetCareDocumentationResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21}GetCareDocumentationResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/getcaredocument/?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/getcaredocument/?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/getcaredocument/?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetCareDocumentationInteraction" targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsr="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21">
       <xs:import namespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" schemaLocation="http://localhost:11000/npoadapter/getcaredocument/?xsd=GetCareDocumentationResponder_2.0.xsd"/>
@@ -31733,21 +31906,83 @@ ISO 2008  All rights reserved
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/getcaredocument/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation" name="GetCareDocumentation" bindingOperationName="GetCareDocumentation" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Success"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetCareDocumentation/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/getcaredocument/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation" name="GetCareDocumentation" bindingOperationName="GetCareDocumentation" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="TF1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcaredocumentation/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
    <soapenv:Body>
       <urn1:GetCareDocumentation>
-           <!--Zero or more repetitions:-->
-         <urn1:careUnitHSAId>No Idea</urn1:careUnitHSAId>
          <urn1:patientId>
-            <urn2:id>1212121212</urn2:id>
-            <urn2:type>?</urn2:type>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
       </urn1:GetCareDocumentation>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetDiagnosisResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21}GetDiagnosisResponderBinding" soapVersion="1_1" anonymous="optional" definition="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl"><con:part><con:url>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetDiagnosisInteraction" targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisInitiator:2" xmlns:tjsr="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcaredocumentation/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareDocumentation>
+         <urn1:patientId>
+            <urn2:id>triggerError</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetCareDocumentation>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF5"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcaredocumentation/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>XXX</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareDocumentation>
+         <urn1:patientId>
+            <urn2:id>triggerError</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetCareDocumentation>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcaredocumentation/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareDocumentation>
+         <urn1:careUnitHSAid>EN-1</urn1:careUnitHSAid>
+         <urn1:careUnitHSAid>EN-2</urn1:careUnitHSAid>
+         <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetCareDocumentation>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 5"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getcaredocument/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetCareDocumentation>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAid>?</urn1:careUnitHSAid>
+         <urn1:patientId>
+            <urn2:id>?</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+         <!--Optional:-->
+         <urn1:timePeriod>
+            <urn2:start>?</urn2:start>
+            <urn2:end>?</urn2:end>
+            <!--You may enter ANY elements at this point-->
+         </urn1:timePeriod>
+         <!--Optional:-->
+         <urn1:sourceSystemHSAid>?</urn1:sourceSystemHSAid>
+         <!--Zero or more repetitions:-->
+         <urn1:careContactId>?</urn1:careContactId>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetCareDocumentation>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetDiagnosisResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21}GetDiagnosisResponderBinding" soapVersion="1_1" anonymous="optional" definition="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl"><con:part><con:url>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetDiagnosisInteraction" targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisInitiator:2" xmlns:tjsr="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:tns="urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21">
       <xs:import namespace="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" schemaLocation="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21?xsd=GetDiagnosisResponder_2.0.xsd"/>
@@ -32769,7 +33004,7 @@ ISO 2008  All rights reserved
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis" name="GetDiagnosis" bindingOperationName="GetDiagnosis" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Success"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis" name="GetDiagnosis" bindingOperationName="GetDiagnosis" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Success"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
@@ -32781,6 +33016,21 @@ ISO 2008  All rights reserved
             <!--You may enter ANY elements at this point-->
          </urn1:patientId>
          <!--You may enter ANY elements at this point-->
+      </urn1:GetDiagnosis>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getdiagnosis/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetDiagnosis>
+          <!--Zero or more repetitions:-->
+        <urn1:careUnitHSAId>EN-1</urn1:careUnitHSAId>
+        <urn1:careUnitHSAId>EN-2</urn1:careUnitHSAId>
+          <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
       </urn1:GetDiagnosis>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetLaboratoryOrderOutcomeResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21}GetLaboratoryOrderOutcomeResponderBinding" soapVersion="1_1" anonymous="optional" definition="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21?wsdl"><con:part><con:url>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetLaboratoryOrderOutcomenteraction" targetNamespace="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeInitiator:3" xmlns:tjsr="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:tns="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -34292,7 +34542,7 @@ ISO 2008  All rights reserved
       <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome" name="GetLaboratoryOrderOutcome" bindingOperationName="GetLaboratoryOrderOutcome" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Sucess"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/getlaboratoryorderoutcome/v3</con:endpoint><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome" name="GetLaboratoryOrderOutcome" bindingOperationName="GetLaboratoryOrderOutcome" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Sucess"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
@@ -34305,7 +34555,22 @@ ISO 2008  All rights reserved
          </urn1:patientId>
       </urn1:GetLaboratoryOrderOutcome>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite name="SImpleTests"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase Perf 1" searchProperties="true" id="962a07ce-d7c7-4e95-a0d3-d2ce3b4cb601"><con:settings/><con:testStep type="request" name="GetCareContacts - Success" id="82bfce4f-45cb-40fd-94ab-1477d07c7edd"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareContactsResponderBinding</con:interface><con:operation>GetCareContacts</con:operation><con:request name="GetCareContacts - Success" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/logistics/logistics/GetCareContacts/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome"/><con:wsrmConfig version="1.2"/></con:call><con:call name="TF6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/getlaboratoryorderoutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetLaboratoryOrderOutcome>
+         <!--Zero or more repetitions:-->
+        <urn1:careUnitHSAId>EN-1</urn1:careUnitHSAId>
+         <urn1:careUnitHSAId>EN-2</urn1:careUnitHSAId>         
+          <urn1:patientId>
+            <urn2:id>191212121212</urn2:id>
+            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+      </urn1:GetLaboratoryOrderOutcome>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite name="SImpleTests"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase Perf 1" searchProperties="true" id="962a07ce-d7c7-4e95-a0d3-d2ce3b4cb601"><con:settings/><con:testStep type="request" name="GetCareContacts - Success" id="82bfce4f-45cb-40fd-94ab-1477d07c7edd"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareContactsResponderBinding</con:interface><con:operation>GetCareContacts</con:operation><con:request name="GetCareContacts - Success" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/logistics/logistics/GetCareContacts/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:urn2="urn:riv:clinicalprocess:logistics:logistics:2">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
@@ -34319,7 +34584,7 @@ ISO 2008  All rights reserved
          </urn1:patientId>
       </urn1:GetCareContacts>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetCareDocumentation - Success" id="d6afbb42-84f6-4e1b-8dda-36b43bb49234"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="GetCareDocumentation - Success" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.174:20000/vp/clinicalprocess/healthcond/description/GetCareDocumentation/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetCareDocumentation - Success" id="d6afbb42-84f6-4e1b-8dda-36b43bb49234"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="GetCareDocumentation - Success" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/healthcond/description/GetCareDocumentation/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
@@ -34333,4 +34598,31 @@ ISO 2008  All rights reserved
          </urn1:patientId>
       </urn1:GetCareDocumentation>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest Perf 1"><con:settings/><con:threadCount>5</con:threadCount><con:startDelay>100</con:startDelay><con:sampleInterval>1000</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>10000</con:testLimit><con:limitType>COUNT</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>3000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:statisticsLogFolder/><con:statisticsLogInterval>0</con:statisticsLogInterval><con:logStatisticsOnThreadChange>false</con:logStatisticsOnThreadChange><con:cancelOnReachedLimit>false</con:cancelOnReachedLimit><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval><con:updateStatisticsPerTestStep>false</con:updateStatisticsPerTestStep></con:loadTest><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetDiagnosis - Success"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="GetDiagnosis - Success" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetDiagnosis>
+         <urn1:patientId>
+            <urn2:id>1912121212</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetDiagnosis>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetLaboratoryOrderOutcome - Sucess"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetLaboratoryOrderOutcomeResponderBinding</con:interface><con:operation>GetLaboratoryOrderOutcome</con:operation><con:request name="GetLaboratoryOrderOutcome - Sucess" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://192.168.0.180:20000/vp/clinicalprocess/healthcond/actoutcome/GetLaboratoryOrderOutcome/3/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetLaboratoryOrderOutcome>
+         <urn1:patientId>
+            <urn2:id>1911212121212</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+      </urn1:GetLaboratoryOrderOutcome>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest Perf 1"><con:settings/><con:threadCount>10</con:threadCount><con:startDelay>100</con:startDelay><con:sampleInterval>1000</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>1000</con:testLimit><con:limitType>COUNT_PER_THREAD</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>2000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:statisticsLogFolder/><con:statisticsLogInterval>0</con:statisticsLogInterval><con:logStatisticsOnThreadChange>false</con:logStatisticsOnThreadChange><con:cancelOnReachedLimit>false</con:cancelOnReachedLimit><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval><con:updateStatisticsPerTestStep>false</con:updateStatisticsPerTestStep></con:loadTest><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

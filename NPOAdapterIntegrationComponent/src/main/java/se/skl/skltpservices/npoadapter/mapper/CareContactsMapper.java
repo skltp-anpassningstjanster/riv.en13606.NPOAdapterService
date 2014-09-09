@@ -25,6 +25,7 @@ import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
@@ -62,13 +63,10 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
     	try {
     		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-    		if(response.getEhrExtract().isEmpty()) {
-    			throw new MapperException("No EHREXTRACT returned from source system");
-    		}
-    		message.setPayload(marshal(map(response.getEhrExtract().get(0))));
+            message.setPayload(marshal(map(response.getEhrExtract())));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping EHREXTRACT  response", err);
+    		throw new MapperException("Error when mapping response", err);
     	}
     }
 
@@ -79,7 +77,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO)));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping EHREXTRACT request", err);
+    		throw new MapperException("Error when mapping request", err);
     	}
     }
 
@@ -88,18 +86,21 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     /**
      * Maps from EHR_EXTRACT (vko) to GetCareContactsResponseType.
      *
-     * @param ehrExtract the EHR_EXTRACT XML Java bean.
+     * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return the corresponding riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType response type
      */
-    protected GetCareContactsResponseType map(final EHREXTRACT ehrExtract) {
+    protected GetCareContactsResponseType map(final List<EHREXTRACT> ehrExtractList) {
 
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
-        for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
-            final CareContactType contactType = new CareContactType();
-            contactType.setCareContactHeader(mapHeader(ehrExtract, i));
-            contactType.setCareContactBody(mapBody(ehrExtract, i));
-            responseType.getCareContact().add(contactType);
+        if (!ehrExtractList.isEmpty()) {
+            final EHREXTRACT ehrExtract = ehrExtractList.get(0);
+            for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
+                final CareContactType contactType = new CareContactType();
+                contactType.setCareContactHeader(mapHeader(ehrExtract, i));
+                contactType.setCareContactBody(mapBody(ehrExtract, i));
+                responseType.getCareContact().add(contactType);
+            }
         }
 
         return responseType;

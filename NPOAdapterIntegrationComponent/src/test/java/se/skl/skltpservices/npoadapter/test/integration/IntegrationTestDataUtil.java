@@ -21,21 +21,18 @@ package se.skl.skltpservices.npoadapter.test.integration;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public final class IntegrationTestDataUtil {
 	private static final String SOURCE_SYSTEM_HSA_ID = UUID.randomUUID().toString();
-	private static final String STRING_TEST_DATA_1 = UUID.randomUUID().toString();
-	private static final String STRING_TEST_DATA_2 = UUID.randomUUID().toString();
-	private static final String STRING_TEST_DATA_3 = UUID.randomUUID().toString();
-	private static final String STRING_TEST_DATA_4 = UUID.randomUUID().toString();
+	private static final String PERSON_ID = "191212121212";
+	private static final String PERSON_ID_TYPE = "1.2.752.129.2.1.3";
+	private static final String TIME_START = "20100101000000";
+	private static final String TIME_END = "21160101235959";
 	private static final String CARE_UNIT_HSA_ID = UUID.randomUUID().toString();
 	
 	public static final int TRIGGER_INFO_MESSAGE = 0;
@@ -82,42 +79,42 @@ public final class IntegrationTestDataUtil {
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();
 		personIdType.setId(personId(triggerType));
-		personIdType.setType(STRING_TEST_DATA_2);
+		personIdType.setType(PERSON_ID_TYPE);
 		return personIdType;
 	}
 	
 	private static riv.clinicalprocess.healthcond.description._2.DatePeriodType docDatePeriodType() {
 		final riv.clinicalprocess.healthcond.description._2.DatePeriodType datePeriodType = new riv.clinicalprocess.healthcond.description._2.DatePeriodType();
-		datePeriodType.setEnd(STRING_TEST_DATA_3);
-		datePeriodType.setStart(STRING_TEST_DATA_4);
+		datePeriodType.setEnd(TIME_END);
+		datePeriodType.setStart(TIME_START);
 		return datePeriodType;
 	}
 	
 	private static riv.clinicalprocess.logistics.logistics._2.PersonIdType conPersonIdType(int triggerType) {
 		final riv.clinicalprocess.logistics.logistics._2.PersonIdType personIdType = new riv.clinicalprocess.logistics.logistics._2.PersonIdType();
 		personIdType.setId(personId(triggerType));
-		personIdType.setType(STRING_TEST_DATA_2);
+		personIdType.setType(PERSON_ID_TYPE);
 		return personIdType;
 	}
 	
 	private static riv.clinicalprocess.logistics.logistics._2.DatePeriodType conDatePeriodType() {
 		final riv.clinicalprocess.logistics.logistics._2.DatePeriodType datePeriodType = new riv.clinicalprocess.logistics.logistics._2.DatePeriodType();
-		datePeriodType.setEnd(STRING_TEST_DATA_3);
-		datePeriodType.setStart(STRING_TEST_DATA_4);
+        datePeriodType.setEnd(TIME_END);
+        datePeriodType.setStart(TIME_START);
 		return datePeriodType;
 	}
 	
 	private static riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType labDatePeriodType() {
 		final riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType datePeriodType = new riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType();
-		datePeriodType.setEnd(STRING_TEST_DATA_3);
-		datePeriodType.setStart(STRING_TEST_DATA_4);
+        datePeriodType.setEnd(TIME_END);
+        datePeriodType.setStart(TIME_START);
 		return datePeriodType;
 	}
 	
 	private static riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType labPersonIdType() {
 		final riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType personIdType = new riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType();
-		personIdType.setId(STRING_TEST_DATA_1);
-		personIdType.setType(STRING_TEST_DATA_2);
+		personIdType.setId(PERSON_ID);
+		personIdType.setType(PERSON_ID_TYPE);
 		return personIdType;
 	}
 	
@@ -130,7 +127,7 @@ public final class IntegrationTestDataUtil {
 		case TRIGGER_WARNING_MESSAGE:
 			return EhrExtractWS.PATIENT_ID_TRIGGER_WARNING;
 		default:
-			return STRING_TEST_DATA_1;		
+			return PERSON_ID;
 		}
 	}
 }

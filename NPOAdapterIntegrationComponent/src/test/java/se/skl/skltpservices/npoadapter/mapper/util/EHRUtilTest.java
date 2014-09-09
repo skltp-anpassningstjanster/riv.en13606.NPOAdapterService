@@ -90,7 +90,7 @@ public class EHRUtilTest {
 		TS ts = EHRUtil.tsType(TEST_VALUE_1);
 		assertEquals(ts.getValue(), TEST_VALUE_1);
 		ts = EHRUtil.tsType(null);
-		assertNull(ts.getValue());
+		assertNull(ts);
 	}
 
 	@Test
@@ -194,7 +194,7 @@ public class EHRUtilTest {
         return req;
     }
 
-    @Test(expected = MapperException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testRequestWithTooManyHSAId() throws MapperException {
         final CD purpose = createCD("codeUnitTest");
         purpose.setCodeSystem("codeSystemUnitTest");

@@ -36,6 +36,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static junit.framework.Assert.*;
 
@@ -75,7 +77,7 @@ public class CareContactsMapperTest {
     @Test
     public void testMapFromEhrToCareContratcs() {
         CareContactsMapper mapper = new CareContactsMapper();
-        GetCareContactsResponseType responseType = mapper.map(ehrextract);
+        GetCareContactsResponseType responseType = mapper.map(Arrays.asList(ehrextract));
         assertNotNull(responseType);
 
         dump(responseType);

@@ -107,7 +107,8 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {
 		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
 		resp.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), ResultType.class));
-		if(ehrResp.getEhrExtract().isEmpty()) {
+
+        if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
 		
