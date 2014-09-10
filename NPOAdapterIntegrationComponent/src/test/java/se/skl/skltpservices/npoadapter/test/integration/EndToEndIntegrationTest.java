@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
-import org.soitoolkit.commons.mule.util.RecursiveResourceBundle;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
