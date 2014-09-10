@@ -28,7 +28,7 @@ import java.util.*;
  */
 public class Sample {
     private long createdTimestamp;
-    private Samples timer;
+    private Samples samples;
     private static Map<String, Samples> samplesMap = Collections.synchronizedMap(new HashMap<String, Samples>());
 
     /**
@@ -38,22 +38,22 @@ public class Sample {
      */
     public Sample(final String name) {
         this.createdTimestamp = System.currentTimeMillis();
-        this.timer = timer(name);
+        this.samples = samples(name);
     }
 
     //
-    private Samples timer(final String name) {
-        Samples timer = samplesMap.get(name);
-        if (timer == null) {
-            timer = new Samples(name, 1000);
-            samplesMap.put(name, timer);
+    private Samples samples(final String name) {
+        Samples s = samplesMap.get(name);
+        if (s == null) {
+            s = new Samples(name, 1000);
+            samplesMap.put(name, s);
         }
-        return timer;
+        return s;
     }
 
     //
     public String name() {
-        return timer.name();
+        return samples.name();
     }
 
     //
@@ -68,7 +68,7 @@ public class Sample {
      * @return the message.
      */
     public <T> T ok(final T message) {
-        this.timer.ok();
+        this.samples.ok();
         return message;
     }
 
@@ -80,7 +80,7 @@ public class Sample {
     public long end() {
         final long time = (System.currentTimeMillis() - createdTimestamp);
         final long elapsed = (time < 0) ? 0 : time;
-        this.timer.add(elapsed);
+        this.samples.add(elapsed);
         return elapsed;
     }
 }

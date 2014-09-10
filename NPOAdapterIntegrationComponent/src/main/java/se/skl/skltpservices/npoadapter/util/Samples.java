@@ -50,11 +50,13 @@ public class Samples extends Timer {
     }
 
     //
-    public synchronized void add(long t) {
-        if (ofs >= len) {
-            ofs = 0;
+    public void add(long t) {
+        synchronized (this) {
+            if (ofs >= len) {
+                ofs = 0;
+            }
+            history[ofs++] = t;
         }
-        history[ofs++] = t;
         total.getAndIncrement();
     }
 
