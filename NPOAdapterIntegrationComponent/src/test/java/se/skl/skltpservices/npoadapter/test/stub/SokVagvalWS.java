@@ -47,7 +47,7 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType.setRivProfil("RIVEN13606");
         infoType.setTjansteKontrakt("urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT");
         infoType.setVirtualiseringsInfoId("ID-1");
-        infoType.setAdress("https://localhost:12000/npoadapter/ehrextract/stub");
+        infoType.setAdress("https://localhost:33002/npoadapter/ehrextract/stub");
         infoType.setFromTidpunkt(fromNow(-2));
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
@@ -57,7 +57,7 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType.setRivProfil("RIVTABP21");
         infoType.setTjansteKontrakt("urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21");
         infoType.setVirtualiseringsInfoId("ID-2");
-        infoType.setAdress("http://localhost:11000/npoadapter/getehrextract/stub");
+        infoType.setAdress("http://localhost:33001/npoadapter/getehrextract/stub");
         infoType.setFromTidpunkt(fromNow(-2));
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
@@ -67,7 +67,7 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType.setRivProfil("RIVEN13606");
         infoType.setTjansteKontrakt("http://nationellpatientoversikt.se:SendStatus");
         infoType.setVirtualiseringsInfoId("ID-3");
-        infoType.setAdress("https://localhost:12000/npoadapter/caresystem/stub");
+        infoType.setAdress("https://localhost:33002/npoadapter/caresystem/stub");
         infoType.setFromTidpunkt(fromNow(-2));
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
