@@ -32,7 +32,7 @@ import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.util.HistoryTimer;
+import se.skl.skltpservices.npoadapter.util.Samples;
 import se.skl.skltpservices.npoadapter.util.Sample;
 import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
@@ -69,9 +69,9 @@ public class PingForConfigurationWS implements PingForConfigurationResponderInte
 
 
         // instrumentation.
-        for (final HistoryTimer timer: Sample.timers()) {
-            timer.recalc();
-            response.getConfiguration().add(property(timer.name(), timer.toString()));
+        for (final Samples samples: Sample.samples()) {
+            samples.recalc();
+            response.getConfiguration().add(property(samples.name(), samples.toString()));
         }
 
         // services

@@ -22,7 +22,7 @@ package se.skl.skltpservices.npoadapter.util;
 import java.io.Serializable;
 
 /**
- * Keeps timing statistics.
+ * Keeps timed statistics.
  *
  * @author Peter
  */

@@ -24,11 +24,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Keeps timing history.
+ * Keeps stats and timing history.
  *
  * @author Peter
  */
-public class HistoryTimer extends Timer {
+public class Samples extends Timer {
     private static final long serialVersionUID = 1L;
     private int len;
     private int ofs = 0;
@@ -37,7 +37,7 @@ public class HistoryTimer extends Timer {
     private AtomicLong success = new AtomicLong (0);
 
     //
-    public HistoryTimer(String name, int len) {
+    public Samples(String name, int len) {
         super(name);
         this.len = len;
         this.history = new long[len];

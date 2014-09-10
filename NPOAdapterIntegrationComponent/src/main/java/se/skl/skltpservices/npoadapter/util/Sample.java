@@ -22,14 +22,14 @@ package se.skl.skltpservices.npoadapter.util;
 import java.util.*;
 
 /**
- * Instruments points of interests, sample timing statistics.
+ * Instruments points of interests, and samples timed statistics.
  *
  * @author Peter
  */
 public class Sample {
     private long createdTimestamp;
-    private HistoryTimer timer;
-    private static Map<String, HistoryTimer> timerMap = Collections.synchronizedMap(new HashMap<String, HistoryTimer>());
+    private Samples timer;
+    private static Map<String, Samples> samplesMap = Collections.synchronizedMap(new HashMap<String, Samples>());
 
     /**
      * Creates and starts a sample.
@@ -42,11 +42,11 @@ public class Sample {
     }
 
     //
-    private HistoryTimer timer(final String name) {
-        HistoryTimer timer = timerMap.get(name);
+    private Samples timer(final String name) {
+        Samples timer = samplesMap.get(name);
         if (timer == null) {
-            timer = new HistoryTimer(name, 1000);
-            timerMap.put(name, timer);
+            timer = new Samples(name, 1000);
+            samplesMap.put(name, timer);
         }
         return timer;
     }
@@ -57,8 +57,8 @@ public class Sample {
     }
 
     //
-    public static Collection<HistoryTimer> timers() {
-        return timerMap.values();
+    public static Collection<Samples> samples() {
+        return samplesMap.values();
     }
 
     /**
