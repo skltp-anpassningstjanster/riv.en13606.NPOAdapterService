@@ -86,10 +86,15 @@ public class OutboundRouter extends AbstractRecipientList {
     @Override
     public MuleEvent route(MuleEvent event) throws RoutingException {
         localSample.remove();
+        Sample sample = null;
         try {
-            return super.route(event);
+            MuleEvent r = super.route(event);
+            sample = localSample.get();
+            if (sample != null) {
+                sample.ok();
+            }
+            return r;
         } finally {
-            final Sample sample = localSample.get();
             if (sample != null) {
                 sample.end();
             }

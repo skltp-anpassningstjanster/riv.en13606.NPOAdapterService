@@ -30,7 +30,11 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 /**
- * Created by Peter on 2014-08-14.
+ * Maps from GetEhrExtract(vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>
+ *
+ * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalpocess_logistics_logistics_2.0.0.zip"
+ *
+ * @author Peter
  */
 public class RIVCareContactsMapper extends CareContactsMapper {
 

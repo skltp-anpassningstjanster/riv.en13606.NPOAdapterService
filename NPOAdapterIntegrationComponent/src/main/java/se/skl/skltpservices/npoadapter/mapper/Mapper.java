@@ -26,15 +26,17 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import javax.xml.stream.XMLStreamReader;
 
 /**
- * The generic mapper interface.
+ * The generic mapper interface. <p/>
+ *
+ * All mappers have to be stateless and thread-safe.
  *
  * @author Peter
  */
 public interface Mapper {
 
     /**
-     * Parses a RIV service contract request from the {@link javax.xml.stream.XMLStreamReader} and maps
-     * the object to the actual {@link se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType} representation
+     * Parses a RIV service contract request from the javax.xml.stream.XMLStreamReader and maps
+     * the object to the actual se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType representation
      * which is returned as a XML String
      *
      * @param message the message to parse the RIV service contract request from.
@@ -43,10 +45,10 @@ public interface Mapper {
     MuleMessage mapRequest(MuleMessage message) throws MapperException;
 
     /**
-     * Parses a response from the {@link javax.xml.stream.XMLStreamReader} and maps the object to the actual
-     * RIV service contract representation from {@link se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType}.
+     * Parses a response from the javax.xml.stream.XMLStreamReader and maps the object to the actual
+     * RIV service contract representation from se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType
      *
-     * @param message the message to parse the {@link se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType} from.
+     * @param message the message to parse the se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType from.
      * @return the target message with payload as specified by the actual the RIV service contract.
      */
     MuleMessage mapResponse(MuleMessage message) throws MapperException;

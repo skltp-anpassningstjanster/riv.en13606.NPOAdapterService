@@ -32,7 +32,7 @@ import static se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor.*;
 /**
  * Abstracts outbound transformers. <p/>
  *
- * Provides a method to lookup a valid {@link se.skl.skltpservices.npoadapter.mapper.Mapper} implementation.
+ * Provides a method to lookup a valid se.skl.skltpservices.npoadapter.mapper.Mapper implementation.
  *
  * @author Peter
  */

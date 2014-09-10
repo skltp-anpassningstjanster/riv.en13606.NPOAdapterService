@@ -33,7 +33,7 @@ import se.skl.skltpservices.npoadapter.router.Router;
 import java.text.MessageFormat;
 
 /**
- * Generate textual soap error message with implemenation specific parameters such as mule-message uniqueId.
+ * Generate textual soap error message with implementation specific parameters such as mule-message uniqueId.
  * 
  * 
  * @author torbjorncla

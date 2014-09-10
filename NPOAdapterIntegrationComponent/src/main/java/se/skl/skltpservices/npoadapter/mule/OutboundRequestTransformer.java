@@ -43,7 +43,9 @@ public class OutboundRequestTransformer extends AbstractOutboundTransformer {
             final Mapper mapper = getMapper(message);
             final Sample sample = new Sample(mapper.getClass().getSimpleName() + ".mapRequest");
             try {
-                return mapper.mapRequest(message);
+                Object obj = mapper.mapRequest(message);
+                sample.ok();
+                return obj;
             } finally {
                 sample.end();
             }

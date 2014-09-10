@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.util;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Keeps timing history.
@@ -31,6 +33,8 @@ public class HistoryTimer extends Timer {
     private int len;
     private int ofs = 0;
     private long[] history;
+    private AtomicLong total = new AtomicLong (0);
+    private AtomicLong success = new AtomicLong (0);
 
     //
     public HistoryTimer(String name, int len) {
@@ -41,11 +45,17 @@ public class HistoryTimer extends Timer {
     }
 
     //
-    public void add(long t) {
+    public void ok() {
+        success.getAndIncrement();
+    }
+
+    //
+    public synchronized void add(long t) {
         if (ofs >= len) {
             ofs = 0;
         }
         history[ofs++] = t;
+        total.getAndIncrement();
     }
 
     //
@@ -58,6 +68,9 @@ public class HistoryTimer extends Timer {
 
     @Override
     public synchronized String toString() {
-        return String.format("samples=%d, time_avg=%d, time_max=%d, time_min=%d", n(), avg(), max(), min());
+        final long num = total.get();
+        final long err = num - success.get();
+        return String.format("num_req=%d, num_err=%d, timed_stats=(history=%d, time_avg=%d, time_max=%d, time_min=%d)",
+                num, err, n(), avg(), max(), min());
     }
 }

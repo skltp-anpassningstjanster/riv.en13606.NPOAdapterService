@@ -34,6 +34,14 @@ import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Maps from GetEhrExtract (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType v3.0. <p>
+ *
+ * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_actoutcome_3.0_RC1.zip"
+ *
+ * @author torbjorncla
+ *
+ */
 @Slf4j
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 

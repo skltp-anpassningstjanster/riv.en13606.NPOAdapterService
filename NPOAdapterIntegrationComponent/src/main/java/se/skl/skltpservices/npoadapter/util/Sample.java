@@ -62,6 +62,13 @@ public class Sample {
     }
 
     /**
+     * Makes sample marked as ok/successful.
+     */
+    public void ok() {
+        this.timer.ok();
+    }
+
+    /**
      * Ends sample.
      *
      * @return the elapsed time in millis.

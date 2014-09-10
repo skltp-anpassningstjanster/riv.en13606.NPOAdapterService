@@ -157,11 +157,6 @@ public class XMLBeanMapper {
 			protected void configure() {
                 final FieldDefinition f = field("careUnitHSAId").accessible();
                 mapping(GetCareDocumentationType.class, EHRUtil.Request.class,  mapNull(false)).fields(field("careUnitHSAid").accessible(), f);
-                /*
-                mapping(GetCareContactsType.class, EHRUtil.Request.class, mapNull(false)).fields(f, f);
-                mapping(GetDiagnosisType.class, EHRUtil.Request.class,  mapNull(false)).fields(f, f);
-                mapping(GetLaboratoryOrderOutcomeType.class, EHRUtil.Request.class, mapNull(false)).fields(f, f);
-                */
             }
         };
         
