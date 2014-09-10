@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>se.skltp.adapterservices.npo</groupId>
+	<groupId>se.skltp.adapterservices.npoadapter</groupId>
 	<artifactId>NPOAdapterIntegrationComponent</artifactId>
 	<name>${project.artifactId}</name>
 
 	<packaging>mule</packaging>
 
 	<parent>
-		<groupId>se.skl.skltpservices.npoadapter</groupId>
+		<groupId>se.skltp.adapterservices.npoadapter</groupId>
 		<artifactId>NPOAdapter</artifactId>
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
@@ -23,17 +23,17 @@
 		</dependency>
 
 		<dependency>
-			<groupId>se.skl.skltpservices.npoadapter</groupId>
+			<groupId>se.skltp.adapterservices.npoadapter</groupId>
 			<artifactId>riv-schemas</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>se.skl.skltpservices.npoadapter</groupId>
+			<groupId>se.skltp.adapterservices.npoadapter</groupId>
 			<artifactId>npo-schemas</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>se.skl.skltpservices.npoadapter</groupId>
+			<groupId>se.skltp.adapterservices.npoadapter</groupId>
 			<artifactId>skltp-schemas</artifactId>
 		</dependency>
 

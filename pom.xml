@@ -11,7 +11,7 @@
         <version>0.6.0</version>
     </parent>
 
-    <groupId>se.skl.skltpservices.npoadapter</groupId>
+    <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
     <version>0.9.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -42,19 +42,19 @@
         <dependencies>
 
              <dependency>
-               <groupId>se.skl.skltpservices.npoadapter</groupId>
+               <groupId>se.skltp.adapterservices.npoadapter</groupId>
                <artifactId>riv-schemas</artifactId>
                <version>${project.version}</version>
              </dependency>
 
              <dependency>
-               <groupId>se.skl.skltpservices.npoadapter</groupId>
+               <groupId>se.skltp.adapterservices.npoadapter</groupId>
                <artifactId>npo-schemas</artifactId>
                <version>${project.version}</version>
              </dependency>
 
             <dependency>
-                <groupId>se.skl.skltpservices.npoadapter</groupId>
+                <groupId>se.skltp.adapterservices.npoadapter</groupId>
                 <artifactId>skltp-schemas</artifactId>
                 <version>${project.version}</version>
             </dependency>
