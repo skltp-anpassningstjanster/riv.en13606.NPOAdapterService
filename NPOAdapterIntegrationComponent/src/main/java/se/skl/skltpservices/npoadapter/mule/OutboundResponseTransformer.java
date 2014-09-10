@@ -44,9 +44,7 @@ public class OutboundResponseTransformer extends AbstractOutboundTransformer {
             if (message.getExceptionPayload() != null || "500".equals(message.getInboundProperty("http.status"))) {
                 return message;
             }
-            Object obj = mapper.mapResponse(message);
-            sample.ok();
-            return obj;
+            return sample.ok(mapper.mapResponse(message));
         } catch (MapperException err) {
             throw new TransformerException(this, err);
         } finally {

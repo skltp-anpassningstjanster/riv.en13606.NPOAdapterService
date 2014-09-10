@@ -88,12 +88,9 @@ public class OutboundRouter extends AbstractRecipientList {
         localSample.remove();
         Sample sample = null;
         try {
-            MuleEvent r = super.route(event);
+            final MuleEvent r = super.route(event);
             sample = localSample.get();
-            if (sample != null) {
-                sample.ok();
-            }
-            return r;
+            return (sample == null) ? r : sample.ok(r);
         } finally {
             if (sample != null) {
                 sample.end();

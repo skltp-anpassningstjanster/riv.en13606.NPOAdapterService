@@ -62,10 +62,14 @@ public class Sample {
     }
 
     /**
-     * Makes sample marked as ok/successful.
+     * Returns message and marks sample as successful.
+     * @param message the message.
+     *
+     * @return the message.
      */
-    public void ok() {
+    public <T> T ok(final T message) {
         this.timer.ok();
+        return message;
     }
 
     /**
