@@ -77,11 +77,14 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     //
     static Object create(JaxWsProxyFactoryBean jaxWs) {
         final HTTPClientPolicy policy = new HTTPClientPolicy();
-        policy.setConnectionTimeout(120000);
+        policy.setConnectionTimeout(0);
         policy.setReceiveTimeout(180000);
+        policy.setAllowChunking(true);
+
         final Object service = jaxWs.create();
         final Client client = ClientProxy.getClient(service);
         ((HTTPConduit) client.getConduit()).setClient(policy);
+
         return service;
     }
 
