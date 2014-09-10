@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +64,16 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     }
 
     @Override
+    @SneakyThrows
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
-        //validate(request);
+        final String hsaId = validate(request);
+
+        // sleep between 5 and 10 seconds
+        if ("slow".equals(hsaId)) {
+            final long t = 5000 + (long)(Math.random() * 5000);
+            log.info("Slow response, sleep for {} millis", t);
+            Thread.sleep(t);
+        }
 
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
@@ -77,15 +86,17 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     	}
 
 
-    	//Return testdata
+    	// Return testdata
     	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
         if (!request.getSubjectOfCareId().getExtension().startsWith("19")) {
+            log.info("SubjectOfCareId doesn't start with 19, simulate not found and return an empty response...");
             return responseType;
         }
 
         if (request.getTimePeriod() != null) {
             final Date ts = EHRUtil.parseTimestamp(request.getTimePeriod().getLow().getValue());
             if (ts.after(new Date())) {
+                log.info("Start time after current time, simulate not found and return an empty response...");
                 return responseType;
             }
         }
@@ -113,15 +124,21 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         return responseType;
     }
 
-    //
-    private void validate(final RIV13606REQUESTEHREXTRACTRequestType request) {
+    /**
+     * Validates request.
+     * @param request the request.
+     *
+     * @return the HSA_ID if any.
+     */
+    private String validate(final RIV13606REQUESTEHREXTRACTRequestType request) {
         String version = null;
         String hsaId = null;
         for (final ParameterType param : request.getParameters()) {
-            if ("version".equals(param.getName())) {
+            log.debug("RIV13606REQUESTEHREXTRACTRequestType.parameter {}: {}", param.getName().getValue(), param.getValue().getValue());
+            if ("version".equals(param.getName().getValue())) {
                 version = param.getValue().getValue();
             }
-            if ("hsa_id".equals(param.getName())) {
+            if ("hsa_id".equals(param.getName().getValue())) {
                 if (hsaId == null) {
                     hsaId = param.getValue().getValue();
                 }
@@ -139,6 +156,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         if (request.getMaxRecords() != null) {
             throw new IllegalArgumentException("Max records shall not be defined");
         }
+
+        return hsaId;
     }
 
     //
@@ -153,7 +172,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     //
     protected RIV13606REQUESTEHREXTRACTResponseType createAlternativeResponse(final ResponseDetailTypeCodes code, final String msg) {
-    	final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
+        log.info("Trigger detected to return an alternative response {}: {}", code, msg);
+        final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
     	final ResponseDetailType detail = new ResponseDetailType();
     	final ST st = new ST();
     	final CD cd = new CD();
