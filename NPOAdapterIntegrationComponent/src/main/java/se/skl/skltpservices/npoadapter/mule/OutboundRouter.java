@@ -22,7 +22,10 @@ package se.skl.skltpservices.npoadapter.mule;
 import lombok.extern.slf4j.Slf4j;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
+import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.EndpointBuilder;
+import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.routing.CouldNotRouteOutboundMessageException;
 import org.mule.api.routing.RoutingException;
 import org.mule.api.transport.PropertyScope;
@@ -61,26 +64,27 @@ public class OutboundRouter extends AbstractRecipientList {
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
         try {
-            final String url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
-
-            localSample.set(new Sample(url));
-
-            final EndpointBuilder eb = getEndpoint(url);
-
-            final String originalServiceConsumerId = event.getMessage().getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
-
-            final String soapAction = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_SERVICE_SOAP_ACTION);
-
-            eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId, soapAction)));
-
-            final List<Object> route = Collections.singletonList((Object) eb.buildOutboundEndpoint());
-
-            log.debug("router: " + route.get(0));
-
-            return route;
+            final Object url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
+            localSample.set(new Sample(url.toString()));
+            return Collections.singletonList(url);
         } catch (Throwable e) {
             throw new CouldNotRouteOutboundMessageException(event, this, e);
         }
+    }
+
+    @Override
+    protected OutboundEndpoint getRecipientEndpointFromString(final MuleMessage message, final String url)
+            throws MuleException {
+
+        final EndpointBuilder eb = getEndpoint(url);
+
+        final String originalServiceConsumerId = message.getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
+
+        final String soapAction = message.getInvocationProperty(OutboundPreProcessor.ROUTE_SERVICE_SOAP_ACTION);
+
+        eb.addMessageProcessor(getOutboundTransformer(getOutboundProperties(originalServiceConsumerId, soapAction)));
+
+        return eb.buildOutboundEndpoint();
     }
 
     @Override
