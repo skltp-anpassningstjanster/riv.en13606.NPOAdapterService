@@ -63,19 +63,19 @@ public class OutboundRouter extends AbstractRecipientList {
 
     @Override
     protected List<Object> getRecipients(MuleEvent event) throws CouldNotRouteOutboundMessageException {
-        final Object url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
+        final String url = event.getMessage().getInvocationProperty(OutboundPreProcessor.ROUTE_ENDPOINT_URL);
         if (url == null) {
             throw new CouldNotRouteOutboundMessageException(event, this, new IllegalStateException("Outbound endpoint not set"));
         }
-        localSample.set(new Sample(url.toString()));
-        return Collections.singletonList(url);
+        localSample.set(new Sample(url));
+        return Collections.singletonList((Object) url);
     }
 
     @Override
-    protected OutboundEndpoint getRecipientEndpointFromString(final MuleMessage message, final String url)
+    protected OutboundEndpoint getRecipientEndpoint(final MuleMessage message, final Object url)
             throws MuleException {
 
-        final EndpointBuilder eb = getEndpoint(url);
+        final EndpointBuilder eb = getEndpoint((String) url);
 
         final String originalServiceConsumerId = message.getInboundProperty(X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID, "");
 
