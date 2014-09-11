@@ -19,8 +19,9 @@
  */
 package se.skl.skltpservices.npoadapter.util;
 
+import lombok.Synchronized;
+
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -37,31 +38,42 @@ public class Samples extends Timer {
     private AtomicLong success = new AtomicLong (0);
 
     //
-    public Samples(String name, int len) {
+    public Samples(final String name, final int historyLength) {
         super(name);
-        this.len = len;
-        this.history = new long[len];
+        this.len = historyLength;
+        this.history = new long[historyLength];
         Arrays.fill(history, -1);
     }
 
     //
-    public void ok() {
+    void ok() {
         success.getAndIncrement();
     }
 
     //
-    public void add(long t) {
-        synchronized (this) {
-            if (ofs >= len) {
-                ofs = 0;
-            }
-            history[ofs++] = t;
+    @Synchronized
+    private void add0(final long t) {
+        if (ofs >= len) {
+            ofs = 0;
         }
+        history[ofs++] = t;
+    }
+
+    /**
+     * Add elapsed time.
+     *
+     * @param t the time in millis.
+     */
+    public void add(final long t) {
+        add0(t);
         total.getAndIncrement();
     }
 
-    //
-    public synchronized void recalc() {
+    /**
+     * Calculate stats over sampled history.
+     */
+    @Synchronized
+    public void recalc() {
         reset();
         for (int i = 0; i < len && history[i] >= 0; i++) {
             super.add(history[i]);
@@ -69,7 +81,8 @@ public class Samples extends Timer {
     }
 
     @Override
-    public synchronized String toString() {
+    @Synchronized
+    public String toString() {
         final long num = total.get();
         final long err = num - success.get();
         return String.format("num_req=%d, num_err=%d, timed_stats=(history=%d, time_avg=%d, time_max=%d, time_min=%d)",

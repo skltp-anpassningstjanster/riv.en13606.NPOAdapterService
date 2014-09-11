@@ -29,6 +29,10 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -243,5 +247,13 @@ public class EHRUtilTest {
 			}
 		}
 	}
+
+    @Test
+    public void xmlGregorianCalendarToDateTest() throws DatatypeConfigurationException {
+        final GregorianCalendar cal = new GregorianCalendar();
+        final XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        final Date date = EHRUtil.toDate(xmlCal);
+        assertEquals(cal.getTime(), date);
+    }
     
 }

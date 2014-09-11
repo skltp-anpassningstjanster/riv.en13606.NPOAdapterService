@@ -28,11 +28,9 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Utility class to create and map common EHR types.
@@ -507,6 +505,31 @@ public final class EHRUtil {
         request.getParameters().add(versionParameter);
 
         return request;
+    }
+
+
+    /**
+     * Returns a {@link Date} date and time representation.
+     *
+     * @param cal the actual date and time.
+     * @return the {@link Date} representation.
+     */
+    public static Date toDate(XMLGregorianCalendar cal) {
+        if (cal != null) {
+            final Calendar c = Calendar.getInstance();
+
+            c.set(Calendar.DATE, cal.getDay());
+            c.set(Calendar.MONTH, cal.getMonth() - 1);
+            c.set(Calendar.YEAR, cal.getYear());
+            c.set(Calendar.DAY_OF_MONTH, cal.getDay());
+            c.set(Calendar.HOUR_OF_DAY, cal.getHour());
+            c.set(Calendar.MINUTE, cal.getMinute());
+            c.set(Calendar.SECOND, cal.getSecond());
+            c.set(Calendar.MILLISECOND, cal.getMillisecond());
+
+            return c.getTime();
+        }
+        return null;
     }
 
     // Generic baseline of data types to be able to convert between schemas (java packages).

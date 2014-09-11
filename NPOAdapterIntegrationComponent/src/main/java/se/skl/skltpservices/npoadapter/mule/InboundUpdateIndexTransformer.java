@@ -33,10 +33,6 @@ import se.nationellpatientoversikt.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -129,30 +125,6 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
         return update;
     }
 
-   /**
-     * Returns a {@link Date} date and time representation.
-     *
-     * @param cal the actual date and time.
-     * @return the {@link Date} representation.
-     */
-    public static Date toDate(XMLGregorianCalendar cal) {
-        if (cal != null) {
-            final Calendar c = Calendar.getInstance();
-
-            c.set(Calendar.DATE, cal.getDay());
-            c.set(Calendar.MONTH, cal.getMonth() - 1);
-            c.set(Calendar.YEAR, cal.getYear());
-            c.set(Calendar.DAY_OF_MONTH, cal.getDay());
-            c.set(Calendar.HOUR_OF_DAY, cal.getHour());
-            c.set(Calendar.MINUTE, cal.getMinute());
-            c.set(Calendar.SECOND, cal.getSecond());
-            c.set(Calendar.MILLISECOND, cal.getMillisecond());
-
-            return c.getTime();
-        }
-        return null;
-    }
-
     //
     protected UpdateType map(final SendIndex2 sendIndex2, final MuleMessage message) {
         final UpdateType update = of.createUpdateType();
@@ -163,7 +135,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 
             engagement.setDataController(info.getCareGiver());
             if (info.getRegistrationTime() != null) {
-                engagement.setMostRecentContent(EHRUtil.formatTimestamp(toDate(info.getRegistrationTime())));
+                engagement.setMostRecentContent(EHRUtil.formatTimestamp(EHRUtil.toDate(info.getRegistrationTime())));
             }
             final EngagementTransactionType engagementTransaction = create(false, engagement);
             update.getEngagementTransaction().add(engagementTransaction);
