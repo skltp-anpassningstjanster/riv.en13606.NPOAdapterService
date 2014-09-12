@@ -13,7 +13,7 @@
 
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
-    <version>0.9.1-RC2-SNAPSHOT</version>
+    <version>0.9.1-RC2</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
@@ -27,9 +27,9 @@
     </properties>
 
     <scm>
-		<connection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</connection>
-		<developerConnection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</developerConnection>
-		<url>https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</url>
+		<connection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/tags/NPOAdapter-0.9.1-RC2</connection>
+		<developerConnection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/tags/NPOAdapter-0.9.1-RC2</developerConnection>
+		<url>https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/tags/NPOAdapter-0.9.1-RC2</url>
     </scm>
 
 
