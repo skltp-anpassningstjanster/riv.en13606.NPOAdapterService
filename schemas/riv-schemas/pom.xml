@@ -69,13 +69,29 @@
                             <wsdlOptions>
                             	<wsdlOption>
                                     <wsdl>${interactionsdir}/GetCareContactsInteraction/GetCareContactsInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                 	<wsdl>${interactionsdir}/GetImagingOutcomeInteraction/GetImagingOutcomeInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                 	<wsdl>${interactionsdir}/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                 	<wsdl>${interactionsdir}/GetAlertInformationInteraction/GetAlertInformationInteraction_2.0_RIVTABP21.wsdl</wsdl>
                             	</wsdlOption>
                             </wsdlOptions>
