@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. Inera licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->		
+<wsdl:definitions name='GetMedicationHistoryInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema'
+  xmlns:tjsr='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2'
+  xmlns:tjsi='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryInitiator:2'
+  xmlns:tns='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21'
+  targetNamespace='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21'
+  xmlns:itr='urn:riv:itintegration:registry:1'>
+  <xs:annotation>
+    <xs:documentation>
+			 Tjänsteinteraktionens namn: GetMedicationHistoryInteraction
+			 Beskrivning: 
+			   
+			 Revisioner: 
+			 Tjänstedomän: activityprescription:actoutcome
+			 Tjänsteinteraktionstyp: Fråga-Svar
+			 WS-profil: RIVTABP21
+			 Förvaltas av: Inera
+			 </xs:documentation>
+  </xs:annotation>
+  <wsdl:types>
+    <xs:schema targetNamespace='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21'>
+      <xs:import schemaLocation='GetMedicationHistoryResponder_2.0.xsd' namespace='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2' />
+      <xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd' namespace='urn:riv:itintegration:registry:1' />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name='GetMedicationHistoryRequest'>
+    <wsdl:part name='LogicalAddress' element='itr:LogicalAddress'>
+      <wsdl:documentation></wsdl:documentation>
+    </wsdl:part>
+    <wsdl:part name='parameters' element='tjsr:GetMedicationHistory' />
+  </wsdl:message>
+  <wsdl:message name='GetMedicationHistoryResponse'>
+    <wsdl:part name='parameters' element='tjsr:GetMedicationHistoryResponse' />
+  </wsdl:message>
+  <wsdl:portType name='GetMedicationHistoryResponderInterface'>
+    <wsdl:operation name='GetMedicationHistory'>
+      <wsdl:input message='tns:GetMedicationHistoryRequest' />
+      <wsdl:output message='tns:GetMedicationHistoryResponse' />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name='GetMedicationHistoryResponderBinding' type='tns:GetMedicationHistoryResponderInterface'>
+    <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http' />
+    <wsdl:operation name='GetMedicationHistory'>
+      <soap:operation soapAction='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory' style='document' />
+      <wsdl:input>
+        <soap:header use='literal' message='tns:GetMedicationHistoryRequest' part='LogicalAddress' />
+        <soap:body use='literal' parts='parameters' />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use='literal' />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name='GetMedicationHistoryResponderService'>
+    <wsdl:port name='GetMedicationHistoryResponderPort' binding='tns:GetMedicationHistoryResponderBinding'>
+      <soap:address location='http://tempuri.org' />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
