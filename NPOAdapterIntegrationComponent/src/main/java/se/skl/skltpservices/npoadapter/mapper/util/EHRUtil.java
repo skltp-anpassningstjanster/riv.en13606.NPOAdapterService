@@ -397,10 +397,10 @@ public final class EHRUtil {
         final HealthcareProfessional professional = new HealthcareProfessional();
         String organisationKey = null;
         String performerKey = null;
-        if(composer.getHealthcareFacility() != null) {
+        if (composer != null && composer.getHealthcareFacility() != null) {
             organisationKey = composer.getHealthcareFacility().getExtension();
         }
-        if(composer.getPerformer() != null) {
+        if (composer!= null && composer.getPerformer() != null) {
             performerKey = composer.getPerformer().getExtension();
         }
         professional.setHealthcareProfessionalHSAId(performerKey);

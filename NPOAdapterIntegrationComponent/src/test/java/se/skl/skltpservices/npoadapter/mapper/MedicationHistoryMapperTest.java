@@ -19,39 +19,29 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.Data;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
-import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
-import riv.clinicalprocess.logistics.logistics._2.*;
-import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.skl.skltpservices.npoadapter.test.Util;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
+import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * @author Martin
  */
 public class MedicationHistoryMapperTest {
-
 
     private static SimpleDateFormat timeStampFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
     static {
@@ -82,16 +72,17 @@ public class MedicationHistoryMapperTest {
     @Test
     public void testMapFromEhrToMedicationHistory() {
         MedicationHistoryMapper mapper = new MedicationHistoryMapper();
-        GetMedicationHistoryResponseType responseType = mapper.map(Arrays.asList(ehrextract));
+        GetMedicationHistoryResponseType responseType = mapper.map(Arrays
+                .asList(ehrextract));
         assertNotNull(responseType);
         dump(responseType);
         List<MedicationMedicalRecordType> mmrs = responseType.getMedicationMedicalRecord();
-        
+
         assertTrue(mmrs.size() == 4);
-        
+
         for (MedicationMedicalRecordType mmr : mmrs) {
-        	mmr.getMedicationMedicalRecordHeader();
-        	mmr.getMedicationMedicalRecordBody();
+            mmr.getMedicationMedicalRecordHeader();
+            mmr.getMedicationMedicalRecordBody();
         }
     }
 }

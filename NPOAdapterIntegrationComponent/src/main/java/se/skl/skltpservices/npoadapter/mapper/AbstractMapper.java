@@ -60,6 +60,9 @@ public abstract class AbstractMapper {
     public static final String INFO_VKO = "vko";
     public static final String INFO_VOO = "voo";
     public static final String INFO_DIA = "dia";
+    public static final String INFO_LKF = "lkf";
+    public static final String INFO_LKM = "lkm";
+    public static final String INFO_LKO = "lko";
     public static final String INFO_UND_KKM_KLI = "und-kkm-kli";
     public static final String INFO_UND_BDI = "und-bdi";
     public static final String INFO_UPP = "upp";
