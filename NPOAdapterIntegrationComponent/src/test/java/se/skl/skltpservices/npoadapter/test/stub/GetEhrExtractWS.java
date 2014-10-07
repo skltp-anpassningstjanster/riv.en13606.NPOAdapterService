@@ -64,6 +64,9 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
             case "und-kkm-kli":
             	log.info("und-kkm-kli");
             	return Util.loadEhrTestData(Util.LAB_TEST_FILE);
+            case "upp":
+            	log.info("Recived UPP Request");
+            	return Util.loadEhrTestData(Util.ALERT_TEST_FILE);
             default:
                 throw new IllegalArgumentException("Unknown information type (meanings code): " + infoType);
         }

@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.test.integration;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
+import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
@@ -72,6 +73,15 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(labPersonIdType());
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(labDatePeriodType());
+		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
+		return type;
+	}
+	
+	public static GetAlertInformationType createAlertInformationType(int triggerType) {
+		final GetAlertInformationType type = new GetAlertInformationType();
+		type.setPatientId(docPersonIdType(triggerType));
+		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+		type.setTimePeriod(docDatePeriodType());
 		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}

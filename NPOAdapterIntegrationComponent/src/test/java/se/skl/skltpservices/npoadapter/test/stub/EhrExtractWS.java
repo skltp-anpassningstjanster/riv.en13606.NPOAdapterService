@@ -48,6 +48,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String VOO = "voo";
     private static final String DIA = "dia";
     private static final String UND_KKM_KLI = "und-kkm-kli";
+    private static final String UPP = "upp";
     
     //Public accessible for testing.
     public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
@@ -117,6 +118,10 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         case UND_KKM_KLI:
         	log.info("Received UND-KKM-KLI Request");
         	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
+        	break;
+        case UPP:
+        	log.info("Recived UPP Request");
+        	responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));
         	break;
         default:
         	return createAlternativeResponse(ResponseDetailTypeCodes.E, NOT_IMPLEMENTED_YET_TEXT);

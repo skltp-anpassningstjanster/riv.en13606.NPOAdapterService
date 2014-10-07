@@ -61,6 +61,8 @@ public abstract class AbstractMapper {
     public static final String INFO_VOO = "voo";
     public static final String INFO_DIA = "dia";
     public static final String INFO_UND_KKM_KLI = "und-kkm-kli";
+    public static final String INFO_UND_BDI = "und-bdi";
+    public static final String INFO_UPP = "upp";
 
     static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
     static final String NS_CAREDOCUMENTATION_2 = "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21";
@@ -68,7 +70,9 @@ public abstract class AbstractMapper {
     static final String NS_EN_EXTRACT = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
     static final String NS_RIV_EXTRACT = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
     static final String NS_LABORATORY_3 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21";
-
+    static final String NS_IMAGING_1 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcome:1:rivtabp21";
+    static final String NS_ALERT_2 = "urn:riv:clinicalprocess:healthcond:description:GetAlertInformation:2:rivtabp21";
+    
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
@@ -87,6 +91,14 @@ public abstract class AbstractMapper {
         //lab
         map.put(mapperKey(NS_EN_EXTRACT, NS_LABORATORY_3), new LaboratoryOrderOutcomeMapper());
         map.put(mapperKey(NS_RIV_EXTRACT, NS_LABORATORY_3), new RIVLaboratoryOrderOutcomeMapper());
+        
+        //imaging
+        map.put(mapperKey(NS_EN_EXTRACT, NS_IMAGING_1), new ImagingOutcomeMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_IMAGING_1), new RIVImagingOutcomeMapper());
+        
+        //alertinfo
+        map.put(mapperKey(NS_EN_EXTRACT, NS_ALERT_2), new AlertInformationMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_ALERT_2), new RIVAlertInformationMapper());
     }
 
 

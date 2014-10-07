@@ -79,7 +79,7 @@ public final class EHRUtil {
         }
         return null;
     }
-
+    
     public static ST stType(final String value) {
         if (value == null) {
             return null;
@@ -241,6 +241,22 @@ public final class EHRUtil {
 
         return XMLBeanMapper.getInstance().map(datePeriod, type);
     }
+    
+    public static <T> T timePeriod(final IVLTS ivlts, final Class<T> type) {
+    	if(ivlts == null) {
+    		return null;
+    	}
+    	final TimePeriod timePeriod = new TimePeriod();
+
+        if (ivlts.getHigh() != null) {
+            timePeriod.setEnd(ivlts.getHigh().getValue());
+        }
+        if (ivlts.getLow() != null) {
+            timePeriod.setStart(ivlts.getLow().getValue());
+        }
+
+        return XMLBeanMapper.getInstance().map(timePeriod, type);
+    }
 
     //
     public static <T> T resultType(final String logId, final List<ResponseDetailType> details, final Class<T> type) {
@@ -281,6 +297,29 @@ public final class EHRUtil {
     	}
     	if(cd.getOriginalText() != null) { 
     		cv.setOriginalText(cd.getOriginalText().getValue());
+    	}
+    	return XMLBeanMapper.getInstance().map(cv, type);
+    }
+    
+    public static <T> T cvTypeWithSTValue(final ELEMENT elm, Class<T> type) {
+    	if(elm == null || elm.getMeaning() == null) {
+    		return null;
+    	}
+    	final CV cv = new CV();
+    	final CD cd = elm.getMeaning();
+    	cv.setCode(cd.getCode());;
+    	cv.setCodeSystem(cd.getCodeSystem());
+    	cv.setCodeSystemName(cd.getCodeSystemName());
+    	cv.setCodeSystemVersion(cd.getCodeSystemVersion());
+    	if(cd.getDisplayName() != null) {
+    		cv.setDisplayName(cd.getDisplayName().getValue());
+    	}
+    	if(cd.getOriginalText() != null) { 
+    		cv.setOriginalText(cd.getOriginalText().getValue());
+    	}
+    	//Set OriginalValue
+    	if(elm.getValue() != null && elm.getValue() instanceof ST) {
+    		cv.setOriginalText(((ST)elm.getValue()).getValue());
     	}
     	return XMLBeanMapper.getInstance().map(cv, type);
     }
@@ -556,6 +595,12 @@ public final class EHRUtil {
         TRANSFORMATION_ERROR,
         APPLICATION_ERROR,
         TECHNICAL_ERROR;
+    }
+    
+    @Data
+    public static class TimePeriod {
+    	private String start;
+    	private String end;
     }
     
     @Data

@@ -34,6 +34,8 @@ import org.mule.construct.Flow;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
+import riv.clinicalprocess.healthcond.description.getalertinformation._2.rivtabp21.GetAlertInformationResponderInterface;
+import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationResponseType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtabp21.GetCareDocumentationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosis._2.rivtabp21.GetDiagnosisResponderInterface;
@@ -60,6 +62,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final String CARE_CONTACTS_ENDPOINT = "http://localhost:33001/npoadapter/getcarecontacts/v2";
 	private static final String DIAGNOSIS_ENDPOINT = "http://localhost:33001/npoadapter/getdiagnosis/v2";
 	private static final String LABORATORY_ENDPOINT = "http://localhost:33001/npoadapter/getlaboratoryorderoutcome/v3";
+	private static final String ALERT_INFORMATION_ENDPOINT = "http://localhost:33001/npoadapter/getalertinformation/v2";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
@@ -70,6 +73,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private final GetCareContactsResponderInterface getCareContactsServices;
 	private final GetDiagnosisResponderInterface getDiagnosisServices;
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
+	private final GetAlertInformationResponderInterface getAlertInformationResponderInterface;
 
 
 
@@ -112,6 +116,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 		jaxWs.setServiceClass(GetLaboratoryOrderOutcomeResponderInterface.class);
 		jaxWs.setAddress(LABORATORY_ENDPOINT);
 		getLaboratoryOrderOutcomeServices = (GetLaboratoryOrderOutcomeResponderInterface) create(jaxWs);
+		
+		jaxWs.setServiceClass(GetAlertInformationResponderInterface.class);
+		jaxWs.setAddress(ALERT_INFORMATION_ENDPOINT);
+		getAlertInformationResponderInterface = (GetAlertInformationResponderInterface) create(jaxWs);
 		
     }
     
@@ -190,6 +198,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	GetLaboratoryOrderOutcomeResponseType resp = getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2,
     			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(resp.getLaboratoryOrderOutcome().isEmpty());
+    }
+    
+    @Test
+    public void GetAlertInformationEN13606SuccessTest() {
+    	GetAlertInformationResponseType resp = getAlertInformationResponderInterface.getAlertInformation(
+    			LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
+    	assertFalse(resp.getAlertInformation().isEmpty());
+    }
+    
+    @Test
+    public void GetAlertInformationRIVSuccessTest() {
+    	GetAlertInformationResponseType resp = getAlertInformationResponderInterface.getAlertInformation(
+    			LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
+    	assertFalse(resp.getAlertInformation().isEmpty());
     }
 	
     @Test
