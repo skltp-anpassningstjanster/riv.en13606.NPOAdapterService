@@ -72,8 +72,7 @@ public class MedicationHistoryMapperTest {
     @Test
     public void testMapFromEhrToMedicationHistory() {
         MedicationHistoryMapper mapper = new MedicationHistoryMapper();
-        GetMedicationHistoryResponseType responseType = mapper.map(Arrays
-                .asList(ehrextract));
+        GetMedicationHistoryResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
         assertNotNull(responseType);
         dump(responseType);
         List<MedicationMedicalRecordType> mmrs = responseType.getMedicationMedicalRecord();

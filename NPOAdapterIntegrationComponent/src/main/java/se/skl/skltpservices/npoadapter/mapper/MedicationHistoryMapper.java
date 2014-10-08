@@ -40,6 +40,8 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.DrugArticleType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.GenericsType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessionalType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.IIType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordBodyType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
@@ -47,10 +49,13 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.MerchandiseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.PrescriptionReasonType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.ResultCodeEnum;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory;
@@ -120,12 +125,25 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
 
 
     @Override
+    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
+        try {
+            final GetMedicationHistoryType request = unmarshal(payloadAsXMLStreamReader(message));
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM)));
+            return message;
+        } catch (Exception err) {
+            throw new MapperException("Error when mapping request", err);
+        }
+    }
+
+    
+    @Override
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
     	try {
     		final RIV13606REQUESTEHREXTRACTResponseType ehrResponse 
     		   = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-    		GetMedicationHistoryResponseType rivtaResponse = map(ehrResponse.getEhrExtract());
-            rivtaResponse.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResponse.getResponseDetail(), ResultType.class));
+    		
+    		GetMedicationHistoryResponseType rivtaResponse = map(ehrResponse, message.getUniqueId());
+    		
             message.setPayload(marshal(rivtaResponse));
             return message;
     	} catch (Exception err) {
@@ -133,30 +151,34 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     	}
     }
 
-    @Override
-    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
-    	try {
-    		final GetMedicationHistoryType request = unmarshal(payloadAsXMLStreamReader(message));
-        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM)));
-        	return message;
-    	} catch (Exception err) {
-    		throw new MapperException("Error when mapping request", err);
-    	}
-    }
-
-    
     /**
      * Maps from EHR_EXTRACT (lko/lkf) to GetMedicationHistoryResponseType.
      *
      * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return GetMedicationHistoryResponseType response type
      */
-    protected GetMedicationHistoryResponseType map(final List<EHREXTRACT> ehrExtractList) {
+    protected GetMedicationHistoryResponseType map(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, String uniqueId) {
 
-        final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
-        
+        final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         log.debug("list of EHREXTRACT - " + ehrExtractList.size());
-
+        GetMedicationHistoryResponseType responseType = mapEhrExtract(ehrExtractList);
+        
+        responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
+        if (responseType.getResult() == null) {
+            responseType.setResult(new ResultType());
+        }
+        if (responseType.getResult().getResultCode() == null) {
+            responseType.getResult().setResultCode(ResultCodeEnum.OK); // TODO ok?
+        }
+        if (StringUtils.isEmpty(responseType.getResult().getLogId())) {
+            responseType.getResult().setLogId("TODO log id");
+        }
+        return responseType;
+    }
+    
+    
+    public GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList) {
+        GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if (!ehrExtractList.isEmpty()) {
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
             for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
@@ -166,9 +188,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 responseType.getMedicationMedicalRecord().add(medicationMedicalRecordType);
             }
         }
-
         return responseType;
     }
+
+
 
     protected GetMedicationHistoryType unmarshal(final XMLStreamReader reader) {
         try {
@@ -196,7 +219,16 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             log.warn("composition " + compositionIndex + " has a null composer"); // lkf has no composer
         }
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
-        return (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class);
+        PatientSummaryHeaderType p = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class);
+        if (StringUtils.isBlank(p.getAccountableHealthcareProfessional().getAuthorTime())) {
+            p.getAccountableHealthcareProfessional().setAuthorTime("TODO - author time");   
+        }
+        
+        if (StringUtils.isBlank(p.getLegalAuthenticator().getSignatureTime())) {
+            p.getLegalAuthenticator().setSignatureTime("TODO - signature time");
+        }
+        
+        return p;
     }
     
     
@@ -231,6 +263,17 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         MedicationPrescriptionType mpt = new MedicationPrescriptionType();
         
+        mpt.setPrescriptionId(new IIType());
+        mpt.getPrescriptionId().setRoot(INFO_LKM);
+        mpt.getPrescriptionId().setExtension("extension");
+        
+        mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.INSÄTTNING);
+        
+        mpt.setPrescriptionStatus(new CVType());
+        mpt.getPrescriptionStatus().setCode("kfj");
+        
+        
+        
         if (ehr13606values.containsKey("lkm-dst-bet-low")) {
             mpt.setStartOfTreatment(ehr13606values.get("lkm-dst-bet-low"));
         } else if (ehr13606values.containsKey("lkm-for-tid")) {
@@ -248,6 +291,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                     ehr13606values.get("lkm-lva-kom"));
         }
         
+        mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
+        mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
+        mpt.getPrincipalPrescriptionReason().get(0).getReason().setCode("rrr");
+        
         mpt.setEvaluationTime  (ehr13606values.get("lkm-ord-utv"));
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
         
@@ -257,6 +304,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.setDrug(new DrugChoiceType());
 
         mpt.getDrug().setDrug(new DrugType());
+        
+        mpt.getDrug().getDrug().setNplId(new CVType());
+        
+        mpt.getDrug().getDrug().getNplId().setCode("TODO");
         
         mpt.getDrug().getDosage().add(new DosageType());
         mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
@@ -275,9 +326,14 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
             "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
         }
+        if (StringUtils.isEmpty(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText())) {
+            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText("TODO - unstructured dosage information text");
+        }
+        
         
         mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
         mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
+        mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
         if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
@@ -363,6 +419,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             if (ehr13606values.containsKey("lkm-for-tot")) {
                 mpt.getDispensationAuthorization().setTotalAmount(new Double(ehr13606values.get("lkm-for-tot")));
             }
+            
+            mpt.getDispensationAuthorization().setDispensationAuthorizationId(new IIType());
+            mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("TODO authorization id");
+            
+            mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
+            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
+            mpt.getDispensationAuthorization().setPrescriptionSignatura("TODO signatura");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
                     (ehr13606values.containsKey("lkm-for-uiv") ? "lkm-for-uiv:utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +

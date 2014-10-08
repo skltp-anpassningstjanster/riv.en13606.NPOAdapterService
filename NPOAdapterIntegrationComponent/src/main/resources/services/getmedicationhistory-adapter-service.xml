@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+        ">
+
+    <flow name="GetMedicationHistoryResponderService-2.0">
+    		
+        <inbound-endpoint address="${IN_ENDPOINT_GETMEDICATIONHISTORY}"
+                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
+                          />
+                          
+        
+        <processor ref="pre-processor" />
+        
+        
+        <cxf:proxy-service namespace="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21"
+                           payload="body"
+                           service="GetMedicationHistoryResponderService"
+                           wsdlLocation="classpath:/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryInteraction_2.0_RIVTABP21.wsdl" />
+
+        <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
+
+        <flow-ref name="outbound-dynamic-route-flow" />
+
+        <response>
+            <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundResponseTransformer" />
+        </response>
+
+		<custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
+    	
+    </flow>
+
+</mule>

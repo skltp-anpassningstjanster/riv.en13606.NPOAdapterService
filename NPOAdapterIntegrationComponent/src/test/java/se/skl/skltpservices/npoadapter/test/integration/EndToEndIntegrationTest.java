@@ -31,6 +31,8 @@ import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
 
+import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
+import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
@@ -63,6 +65,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final String DIAGNOSIS_ENDPOINT = "http://localhost:33001/npoadapter/getdiagnosis/v2";
 	private static final String LABORATORY_ENDPOINT = "http://localhost:33001/npoadapter/getlaboratoryorderoutcome/v3";
 	private static final String ALERT_INFORMATION_ENDPOINT = "http://localhost:33001/npoadapter/getalertinformation/v2";
+    private static final String MEDICATION_HISTORY_ENDPOINT = "http://localhost:33001/npoadapter/getmedicationhistory/v2";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
@@ -74,6 +77,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private final GetDiagnosisResponderInterface getDiagnosisServices;
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
 	private final GetAlertInformationResponderInterface getAlertInformationResponderInterface;
+    private final GetMedicationHistoryResponderInterface getMedicationHistoryResponderInterface;
 
 
 
@@ -121,6 +125,9 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 		jaxWs.setAddress(ALERT_INFORMATION_ENDPOINT);
 		getAlertInformationResponderInterface = (GetAlertInformationResponderInterface) create(jaxWs);
 		
+        jaxWs.setServiceClass(GetMedicationHistoryResponderInterface.class);
+        jaxWs.setAddress(MEDICATION_HISTORY_ENDPOINT);
+        getMedicationHistoryResponderInterface = (GetMedicationHistoryResponderInterface) create(jaxWs);
     }
     
     @Before
@@ -214,6 +221,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	assertFalse(resp.getAlertInformation().isEmpty());
     }
 	
+    @Test
+    public void GetMedicationHistoryEN13606SuccessTest() {
+        GetMedicationHistoryResponseType resp = getMedicationHistoryResponderInterface.getMedicationHistory(
+                LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getMedicationMedicalRecord().isEmpty());
+    }
+    
+    @Test
+    public void GetMedicationHistoryRIVSuccessTest() {
+        GetMedicationHistoryResponseType resp = getMedicationHistoryResponderInterface.getMedicationHistory(
+                LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getMedicationMedicalRecord().isEmpty());
+    }
+    
     @Test
     public void UpdateTakCacheTest() throws Exception {
     	Flow flow = (Flow) getFlowConstruct("update-tak-cache-http-flow");

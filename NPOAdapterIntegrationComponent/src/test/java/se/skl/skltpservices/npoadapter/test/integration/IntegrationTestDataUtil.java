@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
+import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
@@ -86,6 +87,16 @@ public final class IntegrationTestDataUtil {
 		return type;
 	}
 	
+    public static GetMedicationHistoryType createMedicationHistoryType(
+            int triggerType) {
+        final GetMedicationHistoryType type = new GetMedicationHistoryType();
+        type.setPatientId(actPersonIdType(triggerType));
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setDatePeriod(actDatePeriodType());
+        type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
+        return type;
+    }
+    
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();
 		personIdType.setId(personId(triggerType));
@@ -127,6 +138,23 @@ public final class IntegrationTestDataUtil {
 		personIdType.setType(PERSON_ID_TYPE);
 		return personIdType;
 	}
+	
+    private static riv.clinicalprocess.activityprescription.actoutcome._2.PersonIdType actPersonIdType(int triggerType) {
+        final riv.clinicalprocess.activityprescription.actoutcome._2.PersonIdType personIdType = new riv.clinicalprocess.activityprescription.actoutcome._2.PersonIdType();
+        personIdType.setId(personId(triggerType));
+        personIdType.setType(PERSON_ID_TYPE);
+        return personIdType;
+    }
+    
+    private static riv.clinicalprocess.activityprescription.actoutcome._2.DatePeriodType actDatePeriodType() {
+        final riv.clinicalprocess.activityprescription.actoutcome._2.DatePeriodType datePeriodType = new riv.clinicalprocess.activityprescription.actoutcome._2.DatePeriodType();
+        datePeriodType.setEnd(TIME_END);
+        datePeriodType.setStart(TIME_START);
+        return datePeriodType;
+    }
+    
+    
+	
 	
 	private static String personId(int triggerType) {
 		switch(triggerType) {
