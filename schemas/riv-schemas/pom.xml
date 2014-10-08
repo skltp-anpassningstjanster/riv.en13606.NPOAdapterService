@@ -35,7 +35,7 @@
                 <directory>${interactionsdir}/GetEhrExtractInteraction</directory>
             </resource>
             <resource>
-                <targetPath>interactions/GetMedicalHistoryInteraction</targetPath>
+                <targetPath>interactions/GetMedicationHistoryInteraction</targetPath>
                 <directory>${interactionsdir}/GetMedicationHistoryInteraction</directory>
             </resource>
             <resource>
