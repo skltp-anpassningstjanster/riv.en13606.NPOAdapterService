@@ -43,11 +43,6 @@ import se.skl.skltpservices.npoadapter.test.Util;
  */
 public class MedicationHistoryMapperTest {
 
-    private static SimpleDateFormat timeStampFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
-    static {
-        timeStampFormatter.setLenient(false);
-    }
-
     private static EHREXTRACT ehrextract;
 
     @BeforeClass
@@ -63,6 +58,7 @@ public class MedicationHistoryMapperTest {
     }
 
     //
+    @SuppressWarnings("unused")
     private void dump(final GetMedicationHistoryResponseType responseType) {
         Root root = new Root();
         root.type = responseType;
@@ -74,14 +70,16 @@ public class MedicationHistoryMapperTest {
         MedicationHistoryMapper mapper = new MedicationHistoryMapper();
         GetMedicationHistoryResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
         assertNotNull(responseType);
-        dump(responseType);
+
+        // dump(responseType);
+        
         List<MedicationMedicalRecordType> mmrs = responseType.getMedicationMedicalRecord();
 
         assertTrue(mmrs.size() == 4);
 
         for (MedicationMedicalRecordType mmr : mmrs) {
-            mmr.getMedicationMedicalRecordHeader();
-            mmr.getMedicationMedicalRecordBody();
+            assertNotNull(mmr.getMedicationMedicalRecordHeader());
+            assertNotNull(mmr.getMedicationMedicalRecordBody());
         }
     }
 }
