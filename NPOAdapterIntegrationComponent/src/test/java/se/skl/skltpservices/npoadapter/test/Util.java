@@ -19,15 +19,16 @@
  */
 package se.skl.skltpservices.npoadapter.test;
 
-import lombok.SneakyThrows;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+
+import lombok.SneakyThrows;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
 /**
  * Created by Peter on 2014-07-30.
@@ -39,9 +40,10 @@ public class Util {
     public static final String DIAGNOSIS_TEST_FILE         = "/data/Diagnosis_SSEN13606-2.1.1.xml";
     public static final String LAB_TEST_FILE               = "/data/LaboratoryOrderOutcome_SSEN13606-2.1.1.xml";
     public static final String MEDICALHISTORY_TEST_FILE    = "/data/Lkemedelsordination_SSEN13606-2.1.2.xml";
-    public static final String IMAGE_TEST_FILE = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
-    public static final String ALERT_TEST_FILE = "/data/AlertInformation_SSEN13606-2.1.1.xml";
-
+    public static final String IMAGE_TEST_FILE             = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
+    public static final String ALERT_TEST_FILE             = "/data/AlertInformation_SSEN13606-2.1.1.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE   = "/data/Underskning_SSEN13606-2.1.1.xml";
+    
     //
     @SneakyThrows
     public static EHREXTRACT loadEhrTestData(final String fileName) {
@@ -54,9 +56,10 @@ public class Util {
         final JAXBContext context = JAXBContext.newInstance(contextPath);
         final Unmarshaller unmarshaller;
         unmarshaller = context.createUnmarshaller();
+        @SuppressWarnings("unchecked")
         final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(Util.class.getResourceAsStream(fileName));
         final EHREXTRACT ehrextract = root.getValue();
-        ehrextract.setRmId("EN 13606"); // hard coded value
+        ehrextract.setRmId("EN 13606"); // hardcoded value
         return ehrextract;
     }
 
