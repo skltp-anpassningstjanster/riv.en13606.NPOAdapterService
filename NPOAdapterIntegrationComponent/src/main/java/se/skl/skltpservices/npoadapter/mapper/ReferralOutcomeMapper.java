@@ -33,13 +33,15 @@ import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
+import riv.clinicalprocess.healthcond.actoutcome._3.ActCodeType;
+import riv.clinicalprocess.healthcond.actoutcome._3.ActType;
 import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeBodyType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory;
@@ -52,8 +54,10 @@ import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
@@ -61,22 +65,19 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 /**
  * Input
- *  lkm
- *  lko
- *   Läkemedel ordination
- *  lkf
- *   Läkemedel förskrivning
+ *  und-kon
+ *   Undersökning resultat
  *   
  * Output
  *  riv:clinicalprocess:activityprescription:actoutcome
  *   GetReferralOutcome
  * 
- * Maps from EHR_EXTRACT to RIV GetReferralOutcomeResponseType v2.0. 
+ * Maps from EHR_EXTRACT to RIV GetReferralOutcomeResponseType v3.0. 
  * <p>
  * Riv contract spec : 
  * http://rivta.se/downloads/ServiceContracts_clinicalpocess_activityprescription_actoutcome_3.0_RC1.zip
  *
- * @author Martin
+ * @author Martin Flower
  */
 @Slf4j
 public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
@@ -85,11 +86,10 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     
     static {
         MEANING_UND.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_UND.setCode(INFO_LKM);
+        MEANING_UND.setCode(INFO_UND_KON);
     }
 
-    private static final JaxbUtil jaxb 
-      = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
+    private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
@@ -150,6 +150,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         
         // TODO - investigate why this code is necessary - if EHRUtil.resultType cannot handle this message,
         // then maybe we shouldn't be trying to do any extra processing here.
+        /*
         if (responseType.getResult() == null) {
             responseType.setResult(new ResultType());
         }
@@ -159,6 +160,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if (StringUtils.isEmpty(responseType.getResult().getLogId())) {
             responseType.getResult().setLogId("TODO log id");
         }
+        */
         return responseType;
     }
     
@@ -167,12 +169,10 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         GetReferralOutcomeResponseType responseType = new GetReferralOutcomeResponseType();
         if (!ehrExtractList.isEmpty()) {
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-            for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
-                final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
-                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(ehrExtract, i));
-                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(ehrExtract, i));
-                responseType.getReferralOutcome().add(referralOutcomeRecordType);
-            }
+            final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
+            referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(ehrExtract));
+            referralOutcomeRecordType.setReferralOutcomeBody(mapBody(ehrExtract));
+            responseType.getReferralOutcome().add(referralOutcomeRecordType);
         }
         return responseType;
     }
@@ -184,14 +184,18 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * @param compositionIndex the actual composition in the list.
      * @return the target header information.
      */
-    private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract, final int compositionIndex) {
-        final COMPOSITION composition = ehrExtract.getAllCompositions().get(compositionIndex);
+    private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract) {
+        final COMPOSITION composition = ehrExtract.getAllCompositions().get(0);
+        /*
         if (composition.getComposer() == null) {
             log.warn("composition " + compositionIndex + " has a null composer"); // TODO lkf has no composer
         }
-        final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+        */
         
+        final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class);
+
+        /*
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
             patient.getAccountableHealthcareProfessional().setAuthorTime("TODO - author time");   
         }
@@ -199,24 +203,42 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
             patient.getLegalAuthenticator().setSignatureTime("TODO - signature time");
         }
+        */
         return patient;
     }
     
     
     /**
      * Create a ReferralOutcomeRecord using the information
-     * in the current ehr13606 composition.
+     * in the first and second compositions.
      *
      * @param ehrExtract the extract containing the current composition
-     * @param compositionIndex the actual composition in the list.
-     * @return a new ReferralOutcomeRecord
+     * @return a new ReferralOutcomeBodyTypeRecord
      */
-    private ReferralOutcomeBodyType mapBody(final EHREXTRACT ehrExtract, final int compositionIndex) {
-    
-        final COMPOSITION composition = ehrExtract.getAllCompositions().get(compositionIndex);
+    private ReferralOutcomeBodyType mapBody(final EHREXTRACT ehrExtract) {
         
-        // parse this composition into values stored in a Map
-        Map<String,String> ehr13606values = retrieveValues(composition, compositionIndex);
+        Map<String,String> ehr13606values = new LinkedHashMap<String,String>();
+        
+        if (ehrExtract.getAllCompositions().size() > 0) {
+            final COMPOSITION composition0 = ehrExtract.getAllCompositions().get(0);
+            if (composition0 != null) {
+                // parse this composition into values stored in a Map
+                retrieveValues(composition0, ehr13606values);
+            
+                if (ehrExtract.getAllCompositions().size() > 1) {
+                    final COMPOSITION composition1 = ehrExtract.getAllCompositions().get(1);
+                    retrieveValues(composition1, ehr13606values);
+                }
+                
+                if (log.isDebugEnabled()) {
+                    Iterator<String> it = ehr13606values.keySet().iterator();
+                    while (it.hasNext()) {
+                        String key = it.next();
+                        log.debug("|" + key + "|" + ehr13606values.get(key) + "|");
+                    }
+                }
+            }
+        }
         
         // use the ehr values to build a medication medical history record body
         return buildBody(ehr13606values);
@@ -232,43 +254,76 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     */
     private ReferralOutcomeBodyType buildBody (Map<String, String> ehr13606values) {
         
-        ReferralType mpt = new ReferralType();
-        
-        mpt.setCareContactId("TODO care contact id");
-        mpt.setReferralAuthor(new HealthcareProfessionalType());
-        mpt.setReferralId("TODO referral id");
-        mpt.setReferralReason("TODO referral reason");
-        mpt.setReferralTime("TODO referral time");
-        
-        // ---
-
         final ReferralOutcomeBodyType bodyType = new ReferralOutcomeBodyType();
-        bodyType.setReferral(mpt);
+        
+        if ("DEF".equals(ehr13606values.get("und-und-ure-typ"))) {
+            bodyType.setReferralOutcomeTypeCode(ReferralOutcomeTypeCodeEnum.SS);
+        }
+        bodyType.setReferralOutcomeTitle("TODO");
+        bodyType.setReferralOutcomeText(ehr13606values.get("und-und-ure-utl"));
+        if (StringUtils.isBlank(bodyType.getReferralOutcomeText())) {
+            bodyType.setReferralOutcomeText("TODO"); // is this an error?
+        }
+        
+        bodyType.getClinicalInformation(); // nothing to do here
+
+        bodyType.getAct().add(new ActType());
+        bodyType.getAct().get(0).setActCode(new ActCodeType());
+        bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
+        bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod"));
+        bodyType.getAct().get(0).setActId("TODO");
+        bodyType.getAct().get(0).setActText(ehr13606values.get("und-kon-ure-kty"));
+        bodyType.getAct().get(0).setActTime(ehr13606values.get("und-kon-ure-kty-high"));
+        
+        ReferralType rt = new ReferralType();
+
+        rt.setReferralId(ehr13606values.get("vbe-rc-id"));
+        rt.setReferralReason(ehr13606values.get("vbe-vbe-fst"));
+        rt.setReferralTime(ehr13606values.get("vbe-committal-timecommitted"));
+        
+        rt.setReferralAuthor(new HealthcareProfessionalType());
+        
+        // <performer root="1.2.752.129.2.1.2.1" extension="SONSVE"/>
+        rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root")));
+        
+        
+        rt.setCareContactId(null);
+
+        bodyType.setReferral(rt);
         return bodyType;
     }
 
     
     // Retrieve ehr values from message and store in a map
-    private Map<String,String> retrieveValues(COMPOSITION composition, int compositionIndex) {
-        
-        Map<String,String> values = new LinkedHashMap<String,String>(); // Linked in order to preserve order of insertion
+    private void retrieveValues(COMPOSITION composition, Map<String,String> values) {
         for (final CONTENT content : composition.getContent()) {
             for (final ITEM item : ((ENTRY) content).getItems()) {
                 retrieveItemValue(item, values);
             }
         }
         
-        if (log.isDebugEnabled()) {
-            log.debug("incoming composition : " + compositionIndex);
-            Iterator<String> it = values.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                log.debug("|" + key + "|" + values.get(key) + "|");
+        if ("vbe".equals(composition.getMeaning().getCode())) {
+            if (composition.getRcId() != null) {
+                if (StringUtils.isNotBlank(composition.getRcId().getRoot())) {
+                    values.put("vbe-rc-id", composition.getRcId().getRoot());
+                }
+            }
+            
+            if (composition.getCommittal() != null) {
+                if (composition.getCommittal().getTimeCommitted() != null) {
+                    if (StringUtils.isNotBlank(composition.getCommittal().getTimeCommitted().getValue())) {
+                        values.put("vbe-committal-timecommitted", composition.getCommittal().getTimeCommitted().getValue()); 
+                    }
+                }
+            }
+            
+            if (composition.getComposer() != null) {
+                if (composition.getComposer().getPerformer() != null) {
+                    values.put("vbe-composer-performer-root", composition.getComposer().getPerformer().getRoot());
+                }
             }
         }
-        
-        return values;
-     }
+    }
 
     /*
      * Retrieve item values from incoming message and store 
@@ -289,38 +344,37 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                     if (value != null) {
                                if (value instanceof ST) {
                             text = ((ST)value).getValue();
-/*                      } else if (value instanceof PQ) {
-                            text = ((PQ)value).getValue().toString();
-                        } else if (value instanceof INT) {
-                            text = ((INT)value).getValue().toString();
                         } else if (value instanceof TS) {
                             text = ((TS)value).getValue();
-                        } else if (value instanceof BL) {
-                            text = ((BL)value).isValue().toString();
-                        } else if (value instanceof CD) {
-                            text = ((CD)value).getCode();
-                        } else if (value instanceof II) {
-                            text = ((II)value).getRoot();
-                        } else if (value instanceof IVLTS) {
-                            // lkm-dst-bet is more complex
-                            // split into two String values
-                            // lkm-dst-bet-low, lkm-dst-bet-hiugh
-                            String low = ((IVLTS)value).getLow().getValue();
-                            if (StringUtils.isNotBlank(low)) {
-                                values.put(code + "-low", low);
-                            }
-                            if (((IVLTS)value).getHigh().getNullFlavor() == null ) {
-                                String high = ((IVLTS)value).getHigh().getValue();
-                                if (StringUtils.isNotBlank(high)) {
-                                    values.put(code + "-high", high);
-                                }
-                            }
-*/                      } else {
+                        } else {
                             log.error("Code " + code + " has unknown value type " + value.getClass().getCanonicalName());
                         }
                                
                         if (StringUtils.isNotBlank(text)) {
                            values.put(code, text);
+                        }
+                        
+                        // ----------
+                        
+                        // obs time requires special handling
+                        if (((ELEMENT)item).getObsTime() != null) {
+                            IVLTS ivlts = ((ELEMENT)item).getObsTime();
+                            if (ivlts != null) {
+                                TS tsLow  = ivlts.getLow();
+                                if (StringUtils.isNotBlank(tsLow.getValue())) {
+                                    values.put(code + "-low", tsLow.getValue());
+                                }
+                                TS tsHigh = ivlts.getHigh();
+                                if (StringUtils.isNotBlank(tsHigh.getValue())) {
+                                    values.put(code + "-high", tsHigh.getValue());
+                                }
+                                if (ivlts.isLowClosed() != null) {
+                                    values.put(code + "-lowClosed", ivlts.isLowClosed().toString());
+                                }
+                                if (ivlts.isHighClosed() != null) {
+                                    values.put(code + "-highClosed", ivlts.isHighClosed().toString());
+                                }
+                            }
                         }
                     }
                 } else if (item instanceof CLUSTER) {

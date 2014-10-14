@@ -57,7 +57,6 @@ public class ReferralOutcomeMapperTest {
     }
 
     //
-    @SuppressWarnings("unused")
     private void dump(final GetReferralOutcomeResponseType responseType) {
         Root root = new Root();
         root.type = responseType;
@@ -70,11 +69,11 @@ public class ReferralOutcomeMapperTest {
         GetReferralOutcomeResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
         assertNotNull(responseType);
 
-        // dump(responseType);
+        dump(responseType);
         
         List<ReferralOutcomeType> ros = responseType.getReferralOutcome();
         
-        assertTrue(ros.size() == 2);
+        assertTrue(ros.size() == 1);
 
         for (ReferralOutcomeType ro : ros) {
             assertNotNull(ro.getReferralOutcomeHeader());

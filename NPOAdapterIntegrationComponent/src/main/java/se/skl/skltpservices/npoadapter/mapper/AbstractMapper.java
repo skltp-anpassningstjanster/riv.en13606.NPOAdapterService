@@ -65,6 +65,7 @@ public abstract class AbstractMapper {
     public static final String INFO_LKO = "lko";
     public static final String INFO_UND_KKM_KLI = "und-kkm-kli";
     public static final String INFO_UND_BDI = "und-bdi";
+    public static final String INFO_UND_KON = "und-kon";
     public static final String INFO_UPP = "upp";
 
     static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
