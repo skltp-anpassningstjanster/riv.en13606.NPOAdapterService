@@ -47,7 +47,6 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String UND_KKM_KLI = "und-kkm-kli";
     private static final String UPP = "upp";
     private static final String LKM = "lkm";
-    private static final String UND = "und";
     private static final String UND_KON = "und-kon";
     
     //Public accessible for testing.
@@ -127,9 +126,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             log.info("Received LKM Request");
             responseType.getEhrExtract().add(getTestData(Util.MEDICALHISTORY_TEST_FILE));
             break;
-        case UND:
         case UND_KON:
-            log.info("Received UND-KON Request " + request.getMeanings().get(0).getCode());
+            log.info("Received UND-KON Request");
             responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
             break;
         default:
