@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
@@ -95,8 +96,14 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
     // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
+        
+        log.debug("unmarshall");
         try {
             return  (GetReferralOutcomeType) jaxb.unmarshal(reader);
+        } catch (NullPointerException n) {
+            // Cannot see how to intercept payloads with null xml message.
+            // Throwing a new exception is better than returning a NullPointerException.
+            throw new IllegalArgumentException("Payload contains a null xml message");
         } finally {
             close(reader);
         }

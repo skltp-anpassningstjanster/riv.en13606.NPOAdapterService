@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
+import org.springframework.remoting.soap.SoapFaultException;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -242,6 +243,16 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetReferralOutcomeType type = IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
         GetReferralOutcomeResponseType resp = getReferralOutcomeResponderInterface.getReferralOutcome(LOGICAL_ADDRESS_VS_1, type);
         assertFalse(resp.getReferralOutcome().isEmpty());
+    }
+    
+    @Test
+    public void GetReferralOutcomeEN13606NullTest() {
+        try {
+            @SuppressWarnings("unused")
+            GetReferralOutcomeResponseType notused = getReferralOutcomeResponderInterface.getReferralOutcome(LOGICAL_ADDRESS_VS_1, null);
+            fail("Expected SOAPFaultException");
+        } catch (SOAPFaultException sfee) {
+        } 
     }
     
     @Test
