@@ -19,8 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
@@ -35,6 +33,9 @@ import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory.
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcome._3.rivtabp21.GetReferralOutcomeResponderInterface;
+import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.description.getalertinformation._2.rivtabp21.GetAlertInformationResponderInterface;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationResponseType;
@@ -56,7 +57,6 @@ import static org.junit.Assert.*;
 /**
  * Created by Peter on 2014-08-14.
  */
-@Slf4j
 public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
 	//TODO: Collect Endpoints from configuration
@@ -66,6 +66,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final String LABORATORY_ENDPOINT = "http://localhost:33001/npoadapter/getlaboratoryorderoutcome/v3";
 	private static final String ALERT_INFORMATION_ENDPOINT = "http://localhost:33001/npoadapter/getalertinformation/v2";
     private static final String MEDICATION_HISTORY_ENDPOINT = "http://localhost:33001/npoadapter/getmedicationhistory/v2";
+    private static final String REFERRAL_OUTCOME_ENDPOINT = "http://localhost:33001/npoadapter/getreferraloutcome/v3";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
@@ -78,8 +79,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
 	private final GetAlertInformationResponderInterface getAlertInformationResponderInterface;
     private final GetMedicationHistoryResponderInterface getMedicationHistoryResponderInterface;
-
-
+    private final GetReferralOutcomeResponderInterface getReferralOutcomeResponderInterface;
 
     //
     static Object create(JaxWsProxyFactoryBean jaxWs) {
@@ -103,10 +103,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	props.put("schema-validation-enabled", true);
     	jaxWs.setProperties(props);
 
-    	
 		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
 		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
-
 		getCareContactsServices = (GetCareContactsResponderInterface) create(jaxWs);
 		
 		jaxWs.setServiceClass(GetCareDocumentationResponderInterface.class);
@@ -128,6 +126,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         jaxWs.setServiceClass(GetMedicationHistoryResponderInterface.class);
         jaxWs.setAddress(MEDICATION_HISTORY_ENDPOINT);
         getMedicationHistoryResponderInterface = (GetMedicationHistoryResponderInterface) create(jaxWs);
+        
+        jaxWs.setServiceClass(GetReferralOutcomeResponderInterface.class);
+        jaxWs.setAddress(REFERRAL_OUTCOME_ENDPOINT);
+        getReferralOutcomeResponderInterface = (GetReferralOutcomeResponderInterface) create(jaxWs);
     }
     
     @Before
@@ -233,6 +235,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetMedicationHistoryResponseType resp = getMedicationHistoryResponderInterface.getMedicationHistory(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(resp.getMedicationMedicalRecord().isEmpty());
+    }
+    
+    @Test
+    public void GetReferralOutcomeEN13606SuccessTest() {
+        GetReferralOutcomeType type = IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        GetReferralOutcomeResponseType resp = getReferralOutcomeResponderInterface.getReferralOutcome(LOGICAL_ADDRESS_VS_1, type);
+        assertFalse(resp.getReferralOutcome().isEmpty());
+    }
+    
+    @Test
+    public void GetReferralOutcomeRIVSuccessTest() {
+        GetReferralOutcomeResponseType resp = getReferralOutcomeResponderInterface.getReferralOutcome(
+                LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getReferralOutcome().isEmpty());
     }
     
     @Test

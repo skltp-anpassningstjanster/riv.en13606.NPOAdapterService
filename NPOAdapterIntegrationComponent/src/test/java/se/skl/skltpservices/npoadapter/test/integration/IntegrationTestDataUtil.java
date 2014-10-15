@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.test.integration;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
+import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
@@ -97,6 +98,17 @@ public final class IntegrationTestDataUtil {
         return type;
     }
     
+    
+    public static GetReferralOutcomeType createReferralOutcomeType(int triggerType) {
+        GetReferralOutcomeType type = new GetReferralOutcomeType();
+        type.setPatientId(undPersonIdType(triggerType));
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setDatePeriod(undDatePeriodType());
+        type.getCareUnitHSAid().add(CARE_UNIT_HSA_ID);
+        return type;
+    }
+    
+    
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();
 		personIdType.setId(personId(triggerType));
@@ -152,10 +164,22 @@ public final class IntegrationTestDataUtil {
         datePeriodType.setStart(TIME_START);
         return datePeriodType;
     }
-    
-    
 	
-	
+    
+    private static riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType undPersonIdType(int triggerType) {
+        final riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType personIdType = new riv.clinicalprocess.healthcond.actoutcome._3.PersonIdType();
+        personIdType.setId(personId(triggerType));
+        personIdType.setType(PERSON_ID_TYPE);
+        return personIdType;
+    }
+    
+    private static riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType undDatePeriodType() {
+        final riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType datePeriodType = new riv.clinicalprocess.healthcond.actoutcome._3.DatePeriodType();
+        datePeriodType.setEnd(TIME_END);
+        datePeriodType.setStart(TIME_START);
+        return datePeriodType;
+    }
+    
 	private static String personId(int triggerType) {
 		switch(triggerType) {
 		case TRIGGER_ERROR_MESSAGE:
@@ -168,4 +192,5 @@ public final class IntegrationTestDataUtil {
 			return PERSON_ID;
 		}
 	}
+
 }

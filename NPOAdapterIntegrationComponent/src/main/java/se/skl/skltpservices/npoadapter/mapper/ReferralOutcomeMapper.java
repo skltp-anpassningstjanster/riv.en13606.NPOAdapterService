@@ -42,6 +42,7 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory;
@@ -92,6 +93,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
         try {
             return  (GetReferralOutcomeType) jaxb.unmarshal(reader);
@@ -150,7 +152,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         
         // TODO - investigate why this code is necessary - if EHRUtil.resultType cannot handle this message,
         // then maybe we shouldn't be trying to do any extra processing here.
-        /*
+
         if (responseType.getResult() == null) {
             responseType.setResult(new ResultType());
         }
@@ -160,7 +162,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if (StringUtils.isEmpty(responseType.getResult().getLogId())) {
             responseType.getResult().setLogId("TODO log id");
         }
-        */
+
         return responseType;
     }
     
@@ -270,7 +272,14 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         bodyType.getAct().add(new ActType());
         bodyType.getAct().get(0).setActCode(new ActCodeType());
         bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
+        if (StringUtils.isBlank(bodyType.getAct().get(0).getActCode().getCode())) {
+            bodyType.getAct().get(0).getActCode().setCode("TODO");
+        }
         bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod"));
+        if (StringUtils.isBlank(bodyType.getAct().get(0).getActCode().getCodeSystem())) {
+            bodyType.getAct().get(0).getActCode().setCodeSystem("TODO");
+        }
+        
         bodyType.getAct().get(0).setActId("TODO");
         bodyType.getAct().get(0).setActText(ehr13606values.get("und-kon-ure-kty"));
         bodyType.getAct().get(0).setActTime(ehr13606values.get("und-kon-ure-kty-high"));
@@ -285,6 +294,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         
         // <performer root="1.2.752.129.2.1.2.1" extension="SONSVE"/>
         rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root")));
+        rt.getReferralAuthor().setAuthorTime("TODO");
         
         
         rt.setCareContactId(null);

@@ -21,9 +21,6 @@ package se.skl.skltpservices.npoadapter.test.stub;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.nationellpatientoversikt.NpoParameterType;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
@@ -50,6 +47,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String UND_KKM_KLI = "und-kkm-kli";
     private static final String UPP = "upp";
     private static final String LKM = "lkm";
+    private static final String UND = "und";
+    private static final String UND_KON = "und-kon";
     
     //Public accessible for testing.
     public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
@@ -121,14 +120,20 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
         	break;
         case UPP:
-        	log.info("Recived UPP Request");
+        	log.info("Received UPP Request");
         	responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));
         	break;
         case LKM:
-            log.info("Recived LKM Request");
+            log.info("Received LKM Request");
             responseType.getEhrExtract().add(getTestData(Util.MEDICALHISTORY_TEST_FILE));
             break;
+        case UND:
+        case UND_KON:
+            log.info("Received UND-KON Request " + request.getMeanings().get(0).getCode());
+            responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
+            break;
         default:
+            log.error("Received unexpected request " + request.getMeanings().get(0).getCode());
         	return createAlternativeResponse(ResponseDetailTypeCodes.E, NOT_IMPLEMENTED_YET_TEXT);
         }
         return responseType;

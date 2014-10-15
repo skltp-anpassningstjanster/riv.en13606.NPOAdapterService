@@ -77,6 +77,8 @@ public abstract class AbstractMapper {
     static final String NS_IMAGING_1 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcome:1:rivtabp21";
     static final String NS_ALERT_2 = "urn:riv:clinicalprocess:healthcond:description:GetAlertInformation:2:rivtabp21";
     static final String NS_MEDICATIONHISTORY = "urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21";
+    static final String NS_REFERRALOUTCOME = "urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcome:3:rivtabp21";
+
     
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
@@ -107,7 +109,11 @@ public abstract class AbstractMapper {
         
         //medicationhistory
         map.put(mapperKey(NS_EN_EXTRACT, NS_MEDICATIONHISTORY), new MedicationHistoryMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_MEDICATIONHISTORY), new RIVMedicationHistoryMapper()); // TODO
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_MEDICATIONHISTORY), new RIVMedicationHistoryMapper());
+        
+        //referraloutcome
+        map.put(mapperKey(NS_EN_EXTRACT, NS_REFERRALOUTCOME), new ReferralOutcomeMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_REFERRALOUTCOME), new RIVReferralOutcomeMapper());
     }
 
 
