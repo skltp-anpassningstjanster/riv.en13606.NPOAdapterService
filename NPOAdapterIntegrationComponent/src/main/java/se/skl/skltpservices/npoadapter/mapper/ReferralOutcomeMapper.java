@@ -178,24 +178,8 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      */
     private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract) {
         final COMPOSITION composition = ehrExtract.getAllCompositions().get(0);
-        /*
-        if (composition.getComposer() == null) {
-            log.warn("composition " + compositionIndex + " has a null composer"); // TODO lkf has no composer
-        }
-        */
-        
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class);
-
-        /*
-        if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            patient.getAccountableHealthcareProfessional().setAuthorTime("TODO - author time");   
-        }
-        
-        if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            patient.getLegalAuthenticator().setSignatureTime("TODO - signature time");
-        }
-        */
         return patient;
     }
     
@@ -232,7 +216,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
         
-        // use the ehr values to build a medication medical history record body
+        // use the ehr values to build a referral outcome body
         return buildBody(ehr13606values);
     }
 
@@ -251,7 +235,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if ("DEF".equals(ehr13606values.get("und-und-ure-typ"))) {
             bodyType.setReferralOutcomeTypeCode(ReferralOutcomeTypeCodeEnum.SS);
         }
-        bodyType.setReferralOutcomeTitle("TODO");
+        bodyType.setReferralOutcomeTitle(ehr13606values.get("und-kon-ure-kty"));
         bodyType.setReferralOutcomeText(ehr13606values.get("und-und-ure-utl"));
         if (StringUtils.isBlank(bodyType.getReferralOutcomeText())) {
             bodyType.setReferralOutcomeText("TODO"); // is this an error?
@@ -270,22 +254,23 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             bodyType.getAct().get(0).getActCode().setCodeSystem("TODO");
         }
         
-        bodyType.getAct().get(0).setActId("TODO");
+        bodyType.getAct().get(0).setActId(ehr13606values.get("vbe-rc-id"));
         bodyType.getAct().get(0).setActText(ehr13606values.get("und-kon-ure-kty"));
         bodyType.getAct().get(0).setActTime(ehr13606values.get("und-kon-ure-kty-high"));
         
         ReferralType rt = new ReferralType();
 
-        rt.setReferralId(ehr13606values.get("vbe-rc-id"));
+        rt.setReferralId(ehr13606values.get("und-kon-ure"));
+        if (StringUtils.isBlank(rt.getReferralId())) {
+            rt.setReferralId("TODO");
+        }
         rt.setReferralReason(ehr13606values.get("vbe-vbe-fst"));
         rt.setReferralTime(ehr13606values.get("vbe-committal-timecommitted"));
         
         rt.setReferralAuthor(new HealthcareProfessionalType());
         
-        // <performer root="1.2.752.129.2.1.2.1" extension="SONSVE"/>
-        rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root")));
-        rt.getReferralAuthor().setAuthorTime("TODO");
-        
+        rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root"))); // root="1.2.752.129.2.1.2.1" extension="SONSVE"
+        rt.getReferralAuthor().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
         
         rt.setCareContactId(null);
 
