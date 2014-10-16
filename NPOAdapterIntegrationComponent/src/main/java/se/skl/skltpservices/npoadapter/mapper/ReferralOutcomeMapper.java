@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +42,6 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory;
@@ -144,7 +142,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
     
     /**
-     * Maps from EHR_EXTRACT (lko/lkf) to GetReferralOutcomeResponseType.
+     * Maps from EHR_EXTRACT (und-kon) to GetReferralOutcomeResponseType.
      *
      * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return GetReferralOutcomeResponseType response type
@@ -154,22 +152,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         log.debug("list of EHREXTRACT - " + ehrExtractList.size());
         GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList);
-        
         responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
-        
-        // TODO - investigate why this code is necessary - if EHRUtil.resultType cannot handle this message,
-        // then maybe we shouldn't be trying to do any extra processing here.
-
-        if (responseType.getResult() == null) {
-            responseType.setResult(new ResultType());
-        }
-        if (responseType.getResult().getResultCode() == null) {
-            responseType.getResult().setResultCode(ResultCodeEnum.OK); // TODO ok?
-        }
-        if (StringUtils.isEmpty(responseType.getResult().getLogId())) {
-            responseType.getResult().setLogId("TODO log id");
-        }
-
         return responseType;
     }
     

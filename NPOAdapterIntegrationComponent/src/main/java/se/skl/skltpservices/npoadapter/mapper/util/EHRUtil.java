@@ -20,8 +20,8 @@
 package se.skl.skltpservices.npoadapter.mapper.util;
 
 import lombok.Data;
-
 import lombok.SneakyThrows;
+
 import org.apache.commons.lang.StringUtils;
 
 import se.rivta.en13606.ehrextract.v11.*;
@@ -29,6 +29,7 @@ import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -260,17 +261,21 @@ public final class EHRUtil {
 
     //
     public static <T> T resultType(final String logId, final List<ResponseDetailType> details, final Class<T> type) {
-        if (details.isEmpty()) {
-            return null;
-        }
-        final ResponseDetailType resp = details.get(0);
+        
         final Result result = new Result();
-        if (resp.getText() != null) {
-            result.setMessage(resp.getText().getValue());
+        if (details.isEmpty()) {
+            result.setResultCode(ResultCode.OK);
+            result.setLogId("0");
+        } else {
+            final ResponseDetailType resp = details.get(0);
+            if (resp.getText() != null) {
+                result.setMessage(resp.getText().getValue());
+            }
+            result.setLogId(logId);
+            result.setResultCode(interpret(resp.getTypeCode()));
         }
-        result.setLogId(logId);
-        result.setResultCode(interpret(resp.getTypeCode()));
 
+        // map from result object to a new object of type type
         return XMLBeanMapper.getInstance().map(result, type);
     }
 

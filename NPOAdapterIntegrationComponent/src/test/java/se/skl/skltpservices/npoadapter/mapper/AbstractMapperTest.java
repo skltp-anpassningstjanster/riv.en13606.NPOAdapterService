@@ -22,6 +22,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by Peter on 2014-08-01.
@@ -40,9 +41,12 @@ public class AbstractMapperTest {
         AbstractMapper.getInstance("no-ns", "no-ns");
     }
 
-    @Test(expected = AssertionError.class)
     public void testWithNull() {
-        AbstractMapper.getInstance(null, null);
+        try {
+            AbstractMapper.getInstance(null, null);
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException ie) {
+        }
     }
 
 
