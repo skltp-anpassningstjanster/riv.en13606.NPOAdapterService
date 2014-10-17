@@ -43,6 +43,7 @@ public class Util {
     public static final String IMAGE_TEST_FILE             = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
     public static final String ALERT_TEST_FILE             = "/data/AlertInformation_SSEN13606-2.1.1.xml";
     public static final String REFERRALOUTCOME_TEST_FILE   = "/data/Underskning_SSEN13606-2.1.1.xml";
+    public static final String IMAGINGOUTCOME_TEST_FILE    = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
     
     //
     @SneakyThrows

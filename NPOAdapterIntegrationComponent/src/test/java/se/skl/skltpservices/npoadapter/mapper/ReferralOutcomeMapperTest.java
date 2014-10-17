@@ -38,7 +38,7 @@ import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
- * @author Martin F
+ * @author Martin Flower
  */
 public class ReferralOutcomeMapperTest {
 

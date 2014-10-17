@@ -19,17 +19,18 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.UUID;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
@@ -48,17 +49,36 @@ public class ImagingOutcomeMapperTest {
 		ehrResp.getEhrExtract().add(ehrExtract);
 	}
 	
+
+    // Make it easy to dump the resulting response
+    @XmlRootElement
+    static class Root {
+        @XmlElement
+        private GetImagingOutcomeResponseType type;
+    }
+
+    //
+    private void dump(final GetImagingOutcomeResponseType responseType) {
+        Root root = new Root();
+        root.type = responseType;
+        Util.dump(root);
+    }
 	
-	@Test
-	public void testMapResponseType() throws JAXBException {
-		final GetImagingOutcomeResponseType resp = mapper.mapResponseType(ehrResp, UUID.randomUUID().toString());
-	}
 	
-	private void print(GetImagingOutcomeResponseType resp) throws JAXBException {
-		JAXBContext context =
-		        JAXBContext.newInstance(GetImagingOutcomeResponseType.class);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(new JAXBElement<GetImagingOutcomeResponseType>(new QName("uri","local"), GetImagingOutcomeResponseType.class, resp), System.out);
-	}
+    @Test
+    public void testMapFromEhrToImagingOutcome() {
+        GetImagingOutcomeResponseType responseType = mapper.mapResponseType(ehrResp,"uniqueId");
+        assertNotNull(responseType);
+
+        dump(responseType);
+        
+        List<ImagingOutcomeType> ros = responseType.getImagingOutcome();
+        
+        assertTrue(ros.size() == 4);
+
+        for (ImagingOutcomeType ro : ros) {
+            assertNotNull(ro.getImagingOutcomeHeader());
+            assertNotNull(ro.getImagingOutcomeBody());
+        }
+    }
 }

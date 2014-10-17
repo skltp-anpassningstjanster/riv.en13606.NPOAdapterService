@@ -48,6 +48,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String UPP = "upp";
     private static final String LKM = "lkm";
     private static final String UND_KON = "und-kon";
+    private static final String UND_BDI = "und-bdi";
     
     //Public accessible for testing.
     public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
@@ -129,6 +130,10 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         case UND_KON:
             log.info("Received UND-KON Request");
             responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
+            break;
+        case UND_BDI:
+            log.info("Received UND-BDI Request");
+            responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
             break;
         default:
             log.error("Received unexpected request " + request.getMeanings().get(0).getCode());

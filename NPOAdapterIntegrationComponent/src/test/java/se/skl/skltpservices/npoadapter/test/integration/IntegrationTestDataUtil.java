@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.test.integration;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
@@ -108,6 +109,16 @@ public final class IntegrationTestDataUtil {
         return type;
     }
     
+    
+    public static GetImagingOutcomeType createImagingOutcomeType(int triggerType) {
+        GetImagingOutcomeType type = new GetImagingOutcomeType();
+        type.setPatientId(undPersonIdType(triggerType));
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setDatePeriod(undDatePeriodType());
+        type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
+        return type;
+    }
+
     
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();

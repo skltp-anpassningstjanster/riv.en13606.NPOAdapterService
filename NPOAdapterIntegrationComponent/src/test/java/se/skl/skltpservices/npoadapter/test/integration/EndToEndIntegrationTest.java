@@ -19,19 +19,33 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
-import org.springframework.remoting.soap.SoapFaultException;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcome._1.rivtabp21.GetImagingOutcomeResponderInterface;
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcome._3.rivtabp21.GetLaboratoryOrderOutcomeResponderInterface;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcome._3.rivtabp21.GetReferralOutcomeResponderInterface;
@@ -48,13 +62,6 @@ import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetC
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 
-import javax.xml.ws.soap.SOAPFaultException;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-
 /**
  * Created by Peter on 2014-08-14.
  */
@@ -68,19 +75,21 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	private static final String ALERT_INFORMATION_ENDPOINT = "http://localhost:33001/npoadapter/getalertinformation/v2";
     private static final String MEDICATION_HISTORY_ENDPOINT = "http://localhost:33001/npoadapter/getmedicationhistory/v2";
     private static final String REFERRAL_OUTCOME_ENDPOINT = "http://localhost:33001/npoadapter/getreferraloutcome/v3";
+    private static final String IMAGING_OUTCOME_ENDPOINT = "http://localhost:33001/npoadapter/getimagingoutcome/v1";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
 	private static final String INVALID_LOGICAL_ADDRESS = "XX000000-00";
 	
 	
-	private final GetCareDocumentationResponderInterface getCareDocumentationServices;
-	private final GetCareContactsResponderInterface getCareContactsServices;
-	private final GetDiagnosisResponderInterface getDiagnosisServices;
+	private final GetCareDocumentationResponderInterface      getCareDocumentationServices;
+	private final GetCareContactsResponderInterface           getCareContactsServices;
+	private final GetDiagnosisResponderInterface              getDiagnosisServices;
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
-	private final GetAlertInformationResponderInterface getAlertInformationResponderInterface;
-    private final GetMedicationHistoryResponderInterface getMedicationHistoryResponderInterface;
-    private final GetReferralOutcomeResponderInterface getReferralOutcomeResponderInterface;
+	private final GetAlertInformationResponderInterface       getAlertInformationResponderInterface;
+    private final GetMedicationHistoryResponderInterface      getMedicationHistoryResponderInterface;
+    private final GetReferralOutcomeResponderInterface        getReferralOutcomeResponderInterface;
+    private final GetImagingOutcomeResponderInterface         getImagingOutcomeResponderInterface;
 
     //
     static Object create(JaxWsProxyFactoryBean jaxWs) {
@@ -131,6 +140,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         jaxWs.setServiceClass(GetReferralOutcomeResponderInterface.class);
         jaxWs.setAddress(REFERRAL_OUTCOME_ENDPOINT);
         getReferralOutcomeResponderInterface = (GetReferralOutcomeResponderInterface) create(jaxWs);
+        
+        jaxWs.setServiceClass(GetImagingOutcomeResponderInterface.class);
+        jaxWs.setAddress(IMAGING_OUTCOME_ENDPOINT);
+        getImagingOutcomeResponderInterface = (GetImagingOutcomeResponderInterface) create(jaxWs);
     }
     
     @Before
@@ -223,6 +236,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     			LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(resp.getAlertInformation().isEmpty());
     }
+    
+    // ---
 	
     @Test
     public void GetMedicationHistoryEN13606SuccessTest() {
@@ -237,6 +252,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(resp.getMedicationMedicalRecord().isEmpty());
     }
+    
+    // ---
     
     @Test
     public void GetReferralOutcomeEN13606SuccessTest() {
@@ -261,6 +278,26 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(resp.getReferralOutcome().isEmpty());
     }
+    
+    // ---
+    
+    @Ignore
+    @Test
+    public void GetImagingOutcomeEN13606SuccessTest() {
+        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
+        assertFalse(resp.getImagingOutcome().isEmpty());
+    }
+    
+    @Ignore
+    @Test
+    public void GetImagingOutcomeRIVSuccessTest() {
+        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(
+                LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getImagingOutcome().isEmpty());
+    }
+
+    // ---
     
     @Test
     public void UpdateTakCacheTest() throws Exception {

@@ -73,6 +73,9 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
             case "und-kon":
                 log.info("Received UND-KON Request");
                 return Util.loadEhrTestData(Util.REFERRALOUTCOME_TEST_FILE);
+            case "und-bdi":
+                log.info("Received UND-BDI Request");
+                return Util.loadEhrTestData(Util.IMAGINGOUTCOME_TEST_FILE);
             default:
                 throw new IllegalArgumentException("Unknown information type (meanings code): " + infoType);
         }
