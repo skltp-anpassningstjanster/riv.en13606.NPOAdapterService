@@ -281,7 +281,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     // ---
     
-    @Ignore
     @Test
     public void GetImagingOutcomeEN13606SuccessTest() {
         GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
