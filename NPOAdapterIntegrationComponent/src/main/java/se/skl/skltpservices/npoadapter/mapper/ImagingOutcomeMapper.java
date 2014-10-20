@@ -131,6 +131,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		final GetImagingOutcomeResponseType resp = new GetImagingOutcomeResponseType();
 		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
 		if (ehrResp.getEhrExtract().isEmpty()) {
+			log.debug("Empty ehrResp");
 			return resp;
 		}
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);

@@ -285,7 +285,8 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     public void GetImagingOutcomeEN13606SuccessTest() {
         GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
         GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
-        assertFalse(resp.getImagingOutcome().isEmpty());
+        assertTrue (resp.getImagingOutcome().size() == 4);
+        assertEquals("", "Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", resp.getImagingOutcome().get(0).getImagingOutcomeBody().getResultReport());
     }
     
     @Test
