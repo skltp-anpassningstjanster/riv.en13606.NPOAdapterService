@@ -19,6 +19,50 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
+import lombok.extern.slf4j.Slf4j;
 
+import org.mule.api.MuleMessage;
+
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
+import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
+import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+
+@Slf4j
+public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
+	
+	@Override
+	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
+		try {
+			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_UND_BDI);
+			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
+			message.setPayload(ehrExtractType(ehrExtractType));
+            return message;
+		} catch (Exception err) {
+			log.error("Error when transforming ImagingOutcome request", err);
+			throw new MapperException("Error when transforming ImagingOutcome request");
+		}
+	}
+	
+	
+	@Override
+	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
+		try {
+			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
+			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
+			final GetImagingOutcomeResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, message.getUniqueId());
+			message.setPayload(marshal(responseType));
+            return message;
+		} catch (Exception err) {
+			log.error("Error when transforming ImagingOutcome response", err);
+			throw new MapperException("Error when transforming ImagingOutcome response");
+		}
+	}
+
+	
 }

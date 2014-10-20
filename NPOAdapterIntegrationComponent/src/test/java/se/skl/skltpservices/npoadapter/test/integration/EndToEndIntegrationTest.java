@@ -288,11 +288,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertFalse(resp.getImagingOutcome().isEmpty());
     }
     
-    @Ignore
     @Test
     public void GetImagingOutcomeRIVSuccessTest() {
-        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(
-                LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
+    	GetImagingOutcomeType giot = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_2, giot);
         assertFalse(resp.getImagingOutcome().isEmpty());
     }
 

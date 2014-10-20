@@ -76,7 +76,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final JaxbUtil jaxb = new JaxbUtil(GetImagingOutcomeType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
 	
-	private static final CD MEANING_UND_BDI = new CD();
+	protected static final CD MEANING_UND_BDI = new CD();
 	static {
 		MEANING_UND_BDI.setCodeSystem("1.2.752.129.2.2.2.1");
         MEANING_UND_BDI.setCode(INFO_UND_BDI);
@@ -87,10 +87,25 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
 	
 	
+	protected String marshal(final GetImagingOutcomeResponseType resp) {
+		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
+		return jaxb.marshal(el);
+	}
+
+	
+	protected GetImagingOutcomeType unmarshal(final XMLStreamReader reader) {
+		try {
+			return (GetImagingOutcomeType) jaxb.unmarshal(reader);
+		} finally {
+			close(reader);
+		}
+	}
+
+	
 	@Override
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
-			final GetImagingOutcomeType req = unmarshall(payloadAsXMLStreamReader(message));
+			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UND_BDI)));
 			return message;
 		}
@@ -315,19 +330,4 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
     }
-	
-	
-	protected String marshal(final GetImagingOutcomeResponseType resp) {
-		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
-		return jaxb.marshal(el);
-	}
-	
-	protected GetImagingOutcomeType unmarshall(final XMLStreamReader reader) {
-		try {
-			return (GetImagingOutcomeType) jaxb.unmarshal(reader);
-		} finally {
-			close(reader);
-		}
-	}
-
 }

@@ -95,7 +95,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
         
-        log.debug("unmarshall");
+        log.debug("unmarshal");
         try {
             return  (GetReferralOutcomeType) jaxb.unmarshal(reader);
         } catch (NullPointerException n) {
