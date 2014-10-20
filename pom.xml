@@ -27,12 +27,6 @@
     </properties>
 
     <scm>
-		<connection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</connection>
-		<developerConnection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</developerConnection>
-		<url>https://skltpservices.googlecode.com/svn/AdapterServices/riv.en13606/NPOAdapterService/trunk/</url>
-    </scm>
-
-    <scm>
       <url>http://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService</url>
       <connection>scm:git:git://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService.git</connection>
       <developerConnection>scm:git:git://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService.git</developerConnection>
