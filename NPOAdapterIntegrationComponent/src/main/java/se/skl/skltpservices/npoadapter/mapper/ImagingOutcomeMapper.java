@@ -128,6 +128,9 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 				final ImagingOutcomeType type = new ImagingOutcomeType();
 
 				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class));
+				if (StringUtils.isEmpty(type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().getAuthorTime())) {
+				    type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().setAuthorTime("TODO");
+				}
 		        
 				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
 		        type.setImagingOutcomeBody(mapBody(ehr13606values));
@@ -171,11 +174,12 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         body.getImageRecording().get(0).setExaminationUnit(ehr13606values.get("und-bdi-ure-lab"));
         
         body.getImageRecording().get(0).setAccountableHealthcareProfessional(new HealthcareProfessionalType());
-        body.getImageRecording().get(0).getAccountableHealthcareProfessional().setAuthorTime(ehr13606values.get("TODO"));
+        body.getImageRecording().get(0).getAccountableHealthcareProfessional().setAuthorTime("TODO");
 
         body.getImageRecording().get(0).getImageStructuredData().add(new ImageStructuredDataType());
         body.getImageRecording().get(0).getImageStructuredData().get(0).setImageData(new ImageDataType());
         body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setReference(ehr13606values.get("und-und-res-und")); // TODO
+        body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setMediaType("TODO");
         
         // ---
         
@@ -186,6 +190,9 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 
         body.getReferral().setAccountableHealthcareProfessional(new HealthcareProfessionalType());
         body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
+        if (StringUtils.isBlank(body.getReferral().getAccountableHealthcareProfessional().getAuthorTime())) {
+            body.getReferral().getAccountableHealthcareProfessional().setAuthorTime("TODO");
+        }
 
         // --- 
         
