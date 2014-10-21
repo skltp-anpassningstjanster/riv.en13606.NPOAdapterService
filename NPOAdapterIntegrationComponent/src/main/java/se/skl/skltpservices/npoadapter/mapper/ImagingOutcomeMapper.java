@@ -137,6 +137,8 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
 		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
 		
+		// Process a list of compositions.
+		// Compositions come in pairs ("und","vbe")
 		for (COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			if (StringUtils.equals(EHRUtil.getCDCode(comp.getMeaning()), UNDERSOKNINGS_RESULTAT)) {
 				final COMPOSITION und = comp;
