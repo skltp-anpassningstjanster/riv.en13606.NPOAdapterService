@@ -152,7 +152,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		        
 				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
 		        type.setImagingOutcomeBody(mapBody(ehr13606values));
-				
 		        resp.getImagingOutcome().add(type);
 			}
 		}
@@ -161,14 +160,14 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	
 	
     private ImagingBodyType mapBody(Map<String, String> ehr13606values) {
-
+    	
         ImagingBodyType body = new ImagingBodyType();
 
         if (ehr13606values.containsKey("und-und-ure-typ")) {
             try {
                 body.setTypeOfResult(TypeOfResultCodeEnum.valueOf(ehr13606values.get("und-und-ure-typ")));
             } catch (IllegalArgumentException iae) {
-                log.error("Received unexpected Svarstype und-und-ure-typ:" + ehr13606values.get("und-und-ure-typ"));
+                log.error("Received unexpected Svarstyp und-und-ure-typ:" + ehr13606values.get("und-und-ure-typ"));
             }
         }
         
@@ -190,9 +189,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-high"));
         
         body.getImageRecording().get(0).setExaminationUnit(ehr13606values.get("und-bdi-ure-lab"));
-        
-        body.getImageRecording().get(0).setAccountableHealthcareProfessional(new HealthcareProfessionalType());
-        body.getImageRecording().get(0).getAccountableHealthcareProfessional().setAuthorTime("TODO");
 
         body.getImageRecording().get(0).getImageStructuredData().add(new ImageStructuredDataType());
         body.getImageRecording().get(0).getImageStructuredData().get(0).setImageData(new ImageDataType());
