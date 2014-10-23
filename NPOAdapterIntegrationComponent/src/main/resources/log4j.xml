@@ -16,7 +16,7 @@
 	</appender>
     
     <appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
-        <param  name="file" value="${mule.home}/logs/mule-app-npo-adapter.log"/>
+        <param  name="file" value="${mule.home}/logs/mule-app-NPOAdapterIntegrationComponent.log"/>
         <param name="MaxBackupIndex" value="7" />
         <param name="MaxFileSize" value="50MB" />
         
@@ -31,7 +31,6 @@
 		Loglevels: {OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL} See:
 		http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html
 	-->
-	
 
     <logger name="org.apache.cxf">
         <level value="WARN" />
@@ -91,6 +90,15 @@
 	 <logger name="se.skl.skltpservices">
         <level value="INFO"/>
     </logger>
+    
+    
+    <logger name="se.skl.skltpservices.npoadapter">
+        <level value="DEBUG"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        	 <param name="ConversionPattern" value="%d %-5p %-30C - %m%n ehr13606 - adapter: " />
+        </layout>
+    </logger>
+    
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <logger name="httpclient.wire.header">
