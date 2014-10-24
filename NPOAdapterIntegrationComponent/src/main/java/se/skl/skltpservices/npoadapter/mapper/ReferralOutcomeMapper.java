@@ -236,6 +236,9 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         final ReferralOutcomeBodyType bodyType = new ReferralOutcomeBodyType();
         
         bodyType.setReferralOutcomeTypeCode(interpretOutcomeType(ehr13606values.get("und-und-ure-typ")));
+        if(bodyType.getReferralOutcomeTypeCode() == null) {
+        	log.warn("Missing mandatory field ReferralOutcomeTypeCode");
+        }
         bodyType.setReferralOutcomeTitle(ehr13606values.get("und-kon-ure-kty"));
         bodyType.setReferralOutcomeText(ehr13606values.get("und-und-ure-utl"));
         if (StringUtils.isBlank(bodyType.getReferralOutcomeText())) {
