@@ -64,6 +64,7 @@ import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 /**
  * Transformer for RIV-TA GetImagingOutcome -> EN13606 Informationsmangd UND-BDI
@@ -108,9 +109,12 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UND_BDI)));
 			return message;
-		}
-		catch (Exception err) {
-			throw new MapperException("Exception when mapping request", err);
+		} catch (Exception err) {
+			if (err instanceof MapperException) {
+				throw err;
+			} else {
+				throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
+			}
 		}
 	}
 	
@@ -123,13 +127,18 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
-			throw new MapperException("Exception when mapping response", err);
+			if (err instanceof MapperException) {
+				throw err;
+			} else {
+				throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
+			}
 		}
 	}
 	
 	public GetImagingOutcomeResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
 		final GetImagingOutcomeResponseType resp = new GetImagingOutcomeResponseType();
 		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
+		
 		if (ehrResp.getEhrExtract().isEmpty()) {
 			log.debug("Empty ehrResp");
 			return resp;

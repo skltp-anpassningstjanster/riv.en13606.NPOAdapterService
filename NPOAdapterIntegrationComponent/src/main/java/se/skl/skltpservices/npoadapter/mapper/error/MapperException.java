@@ -19,21 +19,33 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.error;
 
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
+
 /**
- * 
  * Exception thrown by mappers.
  * Ease the use of shared exception handler.
  * 
  * @author torbjorncla
- *
  */
 public class MapperException extends Exception {
 	private static final long serialVersionUID = 1L;
+	private Ehr13606AdapterError error = Ehr13606AdapterError.UNDEFINED;
 	
 	public MapperException(final String message) {
 		super(message);
 	}
 	public MapperException(final String message, final Exception cause) {
 		super(message, cause);
+	}
+	public MapperException(final String message, final Ehr13606AdapterError error) {
+		super(message);
+		this.error = error;
+	}
+	public MapperException(final String message, final Exception cause, final Ehr13606AdapterError errorCode) {
+		super(message, cause);
+		this.error = errorCode;
+	}
+	public Ehr13606AdapterError getEhr13606AdapterError() {
+		return error;
 	}
 }

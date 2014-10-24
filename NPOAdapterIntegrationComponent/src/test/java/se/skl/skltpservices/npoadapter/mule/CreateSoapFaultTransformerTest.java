@@ -20,8 +20,10 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.UUID;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,10 +42,9 @@ import org.mule.message.DefaultExceptionPayload;
 
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-
 public class CreateSoapFaultTransformerTest {
 	
-	private static CreateSoapFaultTransformer soap;
+	private static CreateSoapFaultTransformer transformer;
 	
 	private static final String TEST_ADDRESS = "ThisIsATestAddress";
 	private static final String TEST_EXCEPTION_MESSAGE = "ThisIsATestExceptionMessage";
@@ -51,34 +52,45 @@ public class CreateSoapFaultTransformerTest {
 	
 	private static ImmutableEndpoint endpoint;
 	private static EndpointURI uri;
-	private static MuleMessage message;
+	private static MuleMessage messageContainingExceptionPayload;
 	private static ExceptionPayload payload;
 	private static MuleContext ctx;
 	
 	
 	@BeforeClass
 	public static void init() throws InitialisationException, EndpointException, MuleException {
-		soap = new CreateSoapFaultTransformer();
+		transformer = new CreateSoapFaultTransformer();
 		ctx = Mockito.mock(MuleContext.class);
 		
-		message = new DefaultMuleMessage("payload", ctx);
-		UNIQUE_ID = message.getUniqueId();
+		messageContainingExceptionPayload = new DefaultMuleMessage("payload", ctx);
+		UNIQUE_ID = messageContainingExceptionPayload.getUniqueId();
 		
 		payload = new DefaultExceptionPayload(new MapperException(TEST_EXCEPTION_MESSAGE));
-		message.setExceptionPayload(payload);
+		messageContainingExceptionPayload.setExceptionPayload(payload);
 
 		uri = Mockito.mock(EndpointURI.class);
 		Mockito.when(uri.getAddress()).thenReturn(TEST_ADDRESS);
 		endpoint = Mockito.mock(DefaultOutboundEndpoint.class);
 		Mockito.when(endpoint.getEndpointURI()).thenReturn(uri);
-		soap.setEndpoint(endpoint);
-		
+		transformer.setEndpoint(endpoint);
 	}
 
 	@Test
 	public void testTransformMessage() throws Exception {
-		MuleMessage muleMessage = (MuleMessage) soap.transformMessage(message, "");
-		assertEquals(soap.createSoapFault(TEST_EXCEPTION_MESSAGE, TEST_ADDRESS, UNIQUE_ID), (String) muleMessage.getPayload());
-	}
 
+	    // exercise public method
+		MuleMessage muleMessage = (MuleMessage) transformer.transformMessage(messageContainingExceptionPayload, "UTF-8");
+		
+        final Map<String,String> details = new LinkedHashMap<String,String>();
+        details.put("id", UNIQUE_ID);
+		
+        // exercise protected method
+		String soapFaultString = transformer.createSoapFaultString("Server", CreateSoapFaultTransformer.ERRORMESSAGEPREFIX + " " + TEST_EXCEPTION_MESSAGE, TEST_ADDRESS, details);
+		
+		// compare results
+		assertEquals(soapFaultString, (String) muleMessage.getPayload());
+		assertTrue(((String)muleMessage.getPayload()).contains(CreateSoapFaultTransformer.ERRORMESSAGEPREFIX));
+		assertTrue(((String)muleMessage.getPayload()).contains("faultcode"));
+		assertTrue(((String)muleMessage.getPayload()).contains("faultstring"));
+	}
 }

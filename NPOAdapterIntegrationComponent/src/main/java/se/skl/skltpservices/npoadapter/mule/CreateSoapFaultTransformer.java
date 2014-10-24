@@ -19,70 +19,164 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.namespace.QName;
+import javax.xml.soap.Detail;
+import javax.xml.soap.DetailEntry;
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFault;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleMessage;
-import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
 
-import se.skl.skltpservices.npoadapter.router.Router;
-
-import java.text.MessageFormat;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 /**
- * Generate textual soap error message with implementation specific parameters such as mule-message uniqueId.
+ * Convert a MuleMessage with exception payload to a MuleMessage with a soap fault payload.
  * 
+ * Soap fault contains textual information, including implementation specific parameters such as mule-message uniqueId.
+ * 
+ * Generally the Adapter should avoid returning faults. As far as possible we want to transform the data
+ * in the message, and pass the message on. But if we are unable to pass the message on, then return a fault 
+ * containing as much useful information as possible in order to help locate where the problem is.
  * 
  * @author torbjorncla
- *
  */
 @Slf4j
 public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
-
-	private static final String SOAP_FAULT_V11 = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
-			+ "  <soapenv:Header/>"
-			+ "  <soapenv:Body>"
-			+ "    <soap:Fault xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
-			+ "      <faultcode>soap:Server</faultcode>\n"
-			+ "      <faultstring>{0}</faultstring>\n"
-			+ "      <faultactor>{1}</faultactor>\n"
-			+ "      <detail>\n"
-			+ "        <id>{2}</id>\n"
-			+ "      </detail>\n"
-			+ "    </soap:Fault>" + "  </soapenv:Body>" + "</soapenv:Envelope>";
+	
+	protected static final String ERRORMESSAGEPREFIX = "[ehr13606 adapter]"; 
 
 	@Override
-	public Object transformMessage(MuleMessage message, String outputEncoding)
-			throws TransformerException {
-		ExceptionPayload ep = message.getExceptionPayload();
+	public Object transformMessage(MuleMessage message, String outputEncoding) throws org.mule.api.transformer.TransformerException {
+
+	    ExceptionPayload ep = message.getExceptionPayload();
 		if (ep == null) {
 			return message;
 		}
-
-		String soapFault = createSoapFaultFromExceptionPayload(ep, message);
-
+		
+        message.setPayload(createSoapFaultStringFromExceptionPayload(ep, message));
 		message.setExceptionPayload(null);
 		message.setProperty("http.status", 500, PropertyScope.OUTBOUND);
-		message.setPayload(soapFault);
 		return message;
 	}
 
-	protected String createSoapFaultFromExceptionPayload(ExceptionPayload ep, MuleMessage message) {
-		Throwable e = (ep.getRootException() != null) ? ep.getRootException()
-				: ep.getException();
-
-		final String errMsg = StringEscapeUtils.escapeXml(e.getMessage());
+	
+	protected String createSoapFaultStringFromExceptionPayload(ExceptionPayload ep, MuleMessage message) {
+	    
+		Throwable e = (ep.getRootException() != null) ? ep.getRootException() : ep.getException();
+		
+		String errorMessage = ERRORMESSAGEPREFIX + " " + e.getMessage();
+		
+		// prepend the error code from the exception, if there is one
+		if (e instanceof MapperException) {
+			Ehr13606AdapterError error = ((MapperException)e).getEhr13606AdapterError();
+			if (error.isDefinedError()) {
+			    errorMessage = "[errorCode:" + error.getErrorCode() + "] " + errorMessage;
+			}
+		}
+		
 		final String endpoint = getEndpoint().getEndpointURI().getAddress();
-		final String id = message.getUniqueId();
-		return createSoapFault(errMsg, endpoint, id);
+		
+		final Map<String,String> detail = new LinkedHashMap<String,String>();
+		detail.put("id", message.getUniqueId());
+		// possible to add further fields into detail
+		
+		// set all faults to faultcode 'Server' 
+		// (although a validation or data error would be faultcode 'Client')
+		return createSoapFaultString("Server", errorMessage, endpoint, detail);
 	}
 
-	protected String createSoapFault(final String errMsg, final String endpoint,
-			final String id) {
-		return MessageFormat.format(SOAP_FAULT_V11, errMsg, endpoint, id);
+	
+    // --- --------------------------------------------------------------------
+	// xml String is xmlEncoded by the SOAPMessage.
+	//
+	// faultcode
+	//   one of VersionMismatch, MustUnderstand, Client, Server
+	// faultstring
+	//   human readable error message
+	// faultactor
+	//   The value of the faultactor attribute is a URI identifying the source.
+	//   The URI of the invoked Web service.
+	// details
+	//   Holds a list of detail entries.
+	//   Holds application specific error information related to the Body element.
+	//   Indicates that the Body element was processed.
+	// --- --------------------------------------------------------------------
+	protected String createSoapFaultString(final String faultcode, final String faultstring, final String faultactor, final Map<String,String> details) {
+
+	    String soapFaultAsString = "";
+	    
+        try {
+            MessageFactory mf = MessageFactory.newInstance();
+            SOAPMessage soapMessage = mf.createMessage();
+            SOAPFault sft = soapMessage.getSOAPBody().addFault();
+            sft.setFaultCode(new QName(SOAPConstants.URI_NS_SOAP_ENVELOPE, faultcode));
+            sft.setFaultString(faultstring);
+            sft.setFaultActor(faultactor);
+            
+            if (details != null && !details.isEmpty()) {
+                Detail detail = sft.addDetail();
+                Iterator<Entry<String, String>> it = details.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<String,String> pair = (Map.Entry<String,String>)it.next();
+                    QName entryName = new QName(pair.getKey());
+                    DetailEntry entry = detail.addDetailEntry(entryName);
+                    entry.addTextNode(pair.getValue());
+                }
+            }
+            
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            soapMessage.writeTo(os);
+            soapFaultAsString = new String(os.toByteArray(),"UTF-8");
+        } catch (IOException | SOAPException e) {
+            throw new RuntimeException("Fatal exception attempting to create soap fault", e);
+        }
+        
+        if (logger.isDebugEnabled()) {
+            prettyprintXml(soapFaultAsString);
+        }
+        
+        return soapFaultAsString;
 	}
 
+	
+    // 
+	private void prettyprintXml(String soapFaultString) {
+        try {
+            Source xmlInput = new StreamSource(new StringReader(soapFaultString));
+            StringWriter stringWriter = new StringWriter();
+            StreamResult xmlOutput = new StreamResult(stringWriter);
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer(); 
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(xmlInput, xmlOutput);
+            logger.debug("\n" + xmlOutput.getWriter().toString());        
+        } catch (javax.xml.transform.TransformerException ioe) {
+            log.error("Unexpected exception in prettyprintXml", ioe);
+        }
+    }
 }

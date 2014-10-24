@@ -21,19 +21,29 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 public class ImagingOutcomeMapperTest {
@@ -80,5 +90,24 @@ public class ImagingOutcomeMapperTest {
             assertNotNull(ro.getImagingOutcomeHeader());
             assertNotNull(ro.getImagingOutcomeBody());
         }
+    }
+    
+    @Test
+    public void testException() {
+    	MuleMessage mockMuleMessage = Mockito.mock(MuleMessage.class);
+    	try {
+    		Reader stringReader = new StringReader("abc");
+    		XMLInputFactory factory = XMLInputFactory.newInstance();
+    		try {
+				XMLStreamReader sr = factory.createXMLStreamReader(stringReader);
+	    		when(mockMuleMessage.getPayload()).thenReturn(sr);
+				mapper.mapResponse(mockMuleMessage);
+				fail("Exception expected");
+			} catch (MapperException e) {
+				assertTrue(e.getCause().getMessage().startsWith("javax.xml.bind.UnmarshalException\n - with linked exception:\n[com.ctc.wstx.exc.WstxUnexpectedCharException: Unexpected character 'a' (code 97) in prolog; expected '<'\n at [row,col {unknown-source}]: [1,1]]"));
+			} 
+    	} catch (XMLStreamException e) {
+    	    fail(e.getLocalizedMessage());
+    	}
     }
 }

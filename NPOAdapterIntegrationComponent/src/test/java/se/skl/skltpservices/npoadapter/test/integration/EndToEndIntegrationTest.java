@@ -36,7 +36,6 @@ import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
@@ -286,7 +285,19 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
         GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
         assertTrue (resp.getImagingOutcome().size() == 4);
-        assertEquals("", "Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", resp.getImagingOutcome().get(0).getImagingOutcomeBody().getResultReport());
+        assertEquals("Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", resp.getImagingOutcome().get(0).getImagingOutcomeBody().getResultReport());
+    }
+    
+    @Test
+    public void GetImagingOutcomeEN13606Exception() {
+        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        type.setPatientId(null);
+        try{
+	        getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
+	        fail("Exception expected");
+        } catch (SOAPFaultException me) {
+            assertTrue(me.getMessage().startsWith("Marshalling Error: cvc-complex-type.2.4.a: Invalid content was found"));
+        }
     }
     
     @Test
