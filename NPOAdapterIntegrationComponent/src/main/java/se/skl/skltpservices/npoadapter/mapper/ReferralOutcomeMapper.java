@@ -91,6 +91,9 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
     private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
+    
+    private static final String EHR13606_DEF = "DEF";
+    private static final String EHR13606_TILL = "TILL";
 
     // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
@@ -232,9 +235,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         
         final ReferralOutcomeBodyType bodyType = new ReferralOutcomeBodyType();
         
-        if ("DEF".equals(ehr13606values.get("und-und-ure-typ"))) {
-            bodyType.setReferralOutcomeTypeCode(ReferralOutcomeTypeCodeEnum.SS);
-        }
+        bodyType.setReferralOutcomeTypeCode(interpretOutcomeType(ehr13606values.get("und-und-ure-typ")));
         bodyType.setReferralOutcomeTitle(ehr13606values.get("und-kon-ure-kty"));
         bodyType.setReferralOutcomeText(ehr13606values.get("und-und-ure-utl"));
         if (StringUtils.isBlank(bodyType.getReferralOutcomeText())) {
@@ -373,4 +374,14 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
     }
+    
+    protected ReferralOutcomeTypeCodeEnum interpretOutcomeType(final String value) {
+    	if(value == null) return null;
+    	switch(value) {
+    		case EHR13606_DEF: return ReferralOutcomeTypeCodeEnum.SS;
+    		case EHR13606_TILL: return ReferralOutcomeTypeCodeEnum.SR;
+    		default: return null;
+    	}
+    }
+    
 }

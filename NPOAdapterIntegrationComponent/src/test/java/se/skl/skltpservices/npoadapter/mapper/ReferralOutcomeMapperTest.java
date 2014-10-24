@@ -21,18 +21,22 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
@@ -80,4 +84,16 @@ public class ReferralOutcomeMapperTest {
             assertNotNull(ro.getReferralOutcomeBody());
         }
     }
+
+	@Test
+	public void testInterpretOutcomeType() {
+		final ReferralOutcomeMapper mapper = new ReferralOutcomeMapper();
+		
+		assertEquals(ReferralOutcomeTypeCodeEnum.SR, mapper.interpretOutcomeType("TILL"));
+		assertEquals(ReferralOutcomeTypeCodeEnum.SS, mapper.interpretOutcomeType("DEF"));
+		
+		assertNull(mapper.interpretOutcomeType("FEL"));
+		assertNull(mapper.interpretOutcomeType(null));
+		assertNull(mapper.interpretOutcomeType(UUID.randomUUID().toString()));
+	}
 }
