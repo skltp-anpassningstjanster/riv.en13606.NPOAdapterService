@@ -306,22 +306,11 @@ public final class EHRUtil {
     	return XMLBeanMapper.getInstance().map(cv, type);
     }
     
-    public static <T> T cvTypeWithSTValue(final ELEMENT elm, Class<T> type) {
+    public static <T> T cvTypeToSTValue(final ELEMENT elm, Class<T> type) {
     	if(elm == null || elm.getMeaning() == null) {
     		return null;
     	}
     	final CV cv = new CV();
-    	final CD cd = elm.getMeaning();
-    	cv.setCode(cd.getCode());;
-    	cv.setCodeSystem(cd.getCodeSystem());
-    	cv.setCodeSystemName(cd.getCodeSystemName());
-    	cv.setCodeSystemVersion(cd.getCodeSystemVersion());
-    	if(cd.getDisplayName() != null) {
-    		cv.setDisplayName(cd.getDisplayName().getValue());
-    	}
-    	if(cd.getOriginalText() != null) { 
-    		cv.setOriginalText(cd.getOriginalText().getValue());
-    	}
     	//Set OriginalValue
     	if(elm.getValue() != null && elm.getValue() instanceof ST) {
     		cv.setOriginalText(((ST)elm.getValue()).getValue());
