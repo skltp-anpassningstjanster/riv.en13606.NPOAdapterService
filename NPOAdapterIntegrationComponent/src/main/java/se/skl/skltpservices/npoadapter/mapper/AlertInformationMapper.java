@@ -302,10 +302,10 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 					final ELEMENT elm = (ELEMENT) innerItem;
 					switch(innerItem.getMeaning().getCode()) {
 					case SMITTSAM_SJUKDOM:
-						bodyType.getCommunicableDisease().setCommunicableDiseaseCode(EHRUtil.cvTypeWithSTValue(elm, CVType.class));
+						bodyType.getCommunicableDisease().setCommunicableDiseaseCode(EHRUtil.cvTypeToSTValue(elm, CVType.class));
 						break;
 					case SMITTVAG:
-						bodyType.getCommunicableDisease().setRouteOfTransmission(EHRUtil.cvTypeWithSTValue(elm, CVType.class));
+						bodyType.getCommunicableDisease().setRouteOfTransmission(EHRUtil.cvTypeToSTValue(elm, CVType.class));
 						break;
 					}
 				}
@@ -335,7 +335,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 				}
 				break;
 			case BEHANDLINGSKOD:
-					bodyType.getTreatment().setTreatmentCode(EHRUtil.cvTypeWithSTValue((ELEMENT) item, CVType.class)); 
+					bodyType.getTreatment().setTreatmentCode(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class)); 
 				break;
 			}
 		}
@@ -355,7 +355,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 		switch(meaning) {
 			case SJUKDOM:
 				if(item instanceof ELEMENT) {
-					bodyType.getSeriousDisease().setDisease(EHRUtil.cvTypeWithSTValue((ELEMENT) item, CVType.class));
+					bodyType.getSeriousDisease().setDisease(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
 				}
 			break;
 		}
@@ -374,17 +374,17 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 		switch(meaning) {
 			case TYP_AV_OVERKANSLIGHET:
 				if(item instanceof ELEMENT) {
-					bodyType.getHypersensitivity().setTypeOfHypersensitivity(EHRUtil.cvTypeWithSTValue((ELEMENT) item, CVType.class));
+					bodyType.getHypersensitivity().setTypeOfHypersensitivity(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
 				}
 				break;
 			case ALLVARLIGHETSGRAD:
 				if(item instanceof ELEMENT) {
-					bodyType.getHypersensitivity().setDegreeOfSeverity(EHRUtil.cvTypeWithSTValue((ELEMENT) item, CVType.class));
+					bodyType.getHypersensitivity().setDegreeOfSeverity(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
 				}
 				break;
 			case VISSHETSGRAD:
 				if(item instanceof ELEMENT) {
-					bodyType.getHypersensitivity().setDegreeOfCertainty(EHRUtil.cvTypeWithSTValue((ELEMENT) item, CVType.class));
+					bodyType.getHypersensitivity().setDegreeOfCertainty(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
 				}
 				break;
 			case LAKEMEDEL_OVERKANSLIGHET:
@@ -449,7 +449,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 						type.setHypersensitivityAgent(EHRUtil.getElementTextValue(elm));
 						break;
 					case AGENS_OVERKANSLIGHET_KOD:
-						type.setHypersensitivityAgentCode(EHRUtil.cvTypeWithSTValue(elm, CVType.class));
+						type.setHypersensitivityAgentCode(EHRUtil.cvTypeToSTValue(elm, CVType.class));
 						break;
 					}
 				}
