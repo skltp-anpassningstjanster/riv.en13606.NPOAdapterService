@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -43,6 +44,7 @@ import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
 import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
@@ -95,6 +97,7 @@ public class DiagnosisMapperTest {
 		marshaller.marshal(new JAXBElement<GetDiagnosisResponseType>(new QName("uri","local"), GetDiagnosisResponseType.class, resp), System.out);
 	}
 
+	
 	@Test
 	public void testMapDiagnosisBodyType() throws Exception {
 		boolean typeTouch = false;

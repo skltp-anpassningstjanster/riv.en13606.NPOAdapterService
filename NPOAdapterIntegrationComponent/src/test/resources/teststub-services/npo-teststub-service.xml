@@ -10,11 +10,9 @@
 
 
     <flow name="npo-teststub-flow">
-
         <inbound-endpoint address="${ENDPOINT_NPO_STUB}"
                           connector-ref="soitoolkit-https-connector"
                           exchange-pattern="request-response"/>
-
         <cxf:jaxws-service
                 namespace="http://nationellpatientoversikt.se"
                 serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"

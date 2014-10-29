@@ -3,9 +3,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
         xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:spring="http://www.springframework.org/schema/beans"
         xsi:schemaLocation="
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-current.xsd
         ">
 
     <flow name="GetDiagnosisResponderService-2.0">
@@ -13,8 +15,8 @@
         <inbound-endpoint address="${IN_ENDPOINT_GETDIAGNOSIS}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
-                          />
+                          responseTransformer-refs="createSoapFaultTransformer logRespOut">
+        </inbound-endpoint>                  
                           
         
         <processor ref="pre-processor" />
