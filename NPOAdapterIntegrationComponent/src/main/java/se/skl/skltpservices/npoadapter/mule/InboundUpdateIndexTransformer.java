@@ -32,8 +32,12 @@ import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.EIValue;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Maps incoming index update requests to standard RIB engagement index requests. <p/>
@@ -45,7 +49,33 @@ import java.util.List;
  */
 @Slf4j
 public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
+	
+	private static final String HEALTHCOND_ACTOUTCOME = "riv:clinicalprocess:healthcond:actoutcome";
+	private static final String HEALTHCOND_DESCRIPTION = "riv:clinicalprocess:healthcond:description";
+	private static final String ACTIVITYPRESCRIPTION_ACTOUTCOME = "riv:clinicalprocess:activityprescription:actoutcome";
+	private static final String LOGISTICS_LOGISTICS = "riv:clinicalprocess:logistics:logistics";
 
+	/**
+	 * Key: NPO-OOID
+	 * Value: EIValue: EI-Categorization, RIV-TA-domain.
+	 */
+	private static final Map<String, EIValue> eiValues;
+	
+	static {
+		final Map<String, EIValue> vals = new HashMap<String, EIValue>();
+		vals.put(AbstractMapper.INFO_DIA, new EIValue("dia", HEALTHCOND_DESCRIPTION));
+		vals.put(AbstractMapper.INFO_LKF, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_LKM, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_LKO, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UND_BDI, new EIValue("und-bdi-ure", HEALTHCOND_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UND_KKM_KLI, new EIValue("und-kkm-ure", HEALTHCOND_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UND_KON, new EIValue("und-kon-ure", HEALTHCOND_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UPP, new EIValue("upp", HEALTHCOND_DESCRIPTION));
+		vals.put(AbstractMapper.INFO_VKO, new EIValue("vko", LOGISTICS_LOGISTICS));
+		vals.put(AbstractMapper.INFO_VOO, new EIValue("voo", HEALTHCOND_DESCRIPTION));
+		eiValues = Collections.unmodifiableMap(vals);
+	}
+	
     static final String NPO_PARAM_PREFIX = "npo_param_";
 
     private static final ObjectFactory of = new ObjectFactory();
@@ -62,9 +92,10 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
         this.eiLogicalAddress = eiLogicalAddress;
     }
 
+    /**
+     */
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
-
         final Object[] payload = (Object[]) message.getPayload();
 
         UpdateType updateRequest = null;
@@ -98,7 +129,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     private UpdateType fix(final MuleMessage message, final UpdateType updateRequest) {
         String logicalAddress = null;
         for (final EngagementTransactionType tx : updateRequest.getEngagementTransaction()) {
-            domain(tx.getEngagement(), tx.getEngagement().getCategorization());
+            updateEngagmentType(tx.getEngagement(), tx.getEngagement().getCategorization());
             if (logicalAddress == null) {
                 logicalAddress = tx.getEngagement().getLogicalAddress();
             }
@@ -115,11 +146,11 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     protected UpdateType map(final SendSimpleIndex simpleIndex, final MuleMessage message) {
         final UpdateType update = of.createUpdateType();
         for (final InfoTypeType info : simpleIndex.getInfoTypes().getInfoType()) {
-            final EngagementType engagement = domain(
+            final EngagementType engagement = updateEngagmentType(
                     create(simpleIndex.getSubjectOfCareId(), simpleIndex.getParameters().getParameter(), message),
                     info.getInfoTypeId());
             final EngagementTransactionType engagementTransaction = create(!info.isExists(), engagement);
-            engagementTransaction.setEngagement(domain(engagement, info.getInfoTypeId()));
+            engagementTransaction.setEngagement(updateEngagmentType(engagement, info.getInfoTypeId()));
             update.getEngagementTransaction().add(engagementTransaction);
         }
         return update;
@@ -129,7 +160,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     protected UpdateType map(final SendIndex2 sendIndex2, final MuleMessage message) {
         final UpdateType update = of.createUpdateType();
         for (final IndexUpdateType info : sendIndex2.getIndexUpdates().getIndexUpdate()) {
-            final EngagementType engagement = domain(
+            final EngagementType engagement = updateEngagmentType(
                     create(sendIndex2.getSubjectOfCareId(), sendIndex2.getParameters().getParameter(), message),
                     info.getInfoTypeId());
 
@@ -151,27 +182,23 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
         return engagementTransaction;
     }
 
-    //
-    protected EngagementType domain(final EngagementType engagement, final String infoType) {
+    /**
+     * Needs to be kept up-to-date with added TK's
+     * @param engagement
+     * @param infoType
+     * @return
+     */
+    protected EngagementType updateEngagmentType(final EngagementType engagement, final String infoType) {
+    	if(infoType == null || !eiValues.containsKey(infoType)) {
+    		throw new IllegalArgumentException("Unable to map NPO info type to RIV service domain. info type: " + infoType);
+    	}
+    	
+    	final EIValue value = eiValues.get(infoType);
 
-        switch (infoType) {
-            case AbstractMapper.INFO_VKO:
-                engagement.setServiceDomain("riv:clinicalprocess:logistics:logistics");
-                break;
-            case AbstractMapper.INFO_VOO:
-            case AbstractMapper.INFO_DIA:
-                engagement.setServiceDomain("riv:clinicalprocess:healthcond:description");
-                break;
-            case AbstractMapper.INFO_UND_KKM_KLI:
-                engagement.setServiceDomain("riv:clinicalprocess:healthcond:actoutcome");
-                break;
-            default:
-                throw new IllegalArgumentException("Unable to map NPO info type to a RIV service domain: \"" + infoType + "\"");
-        }
-
+    	engagement.setCategorization(value.categorization());
+    	engagement.setServiceDomain(value.domain());
         engagement.setBusinessObjectInstanceIdentifier(NOT_AVAILABLE);
         engagement.setClinicalProcessInterestId(NOT_AVAILABLE);
-        engagement.setCategorization(infoType);
 
         return engagement;
     }

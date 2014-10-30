@@ -7,10 +7,11 @@
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
-    <flow name="ei-update-teststub-flow" >
+    <flow name="eiupdate-teststub-flow" >
 
         <inbound-endpoint address="${ENDPOINT_EI_STUB}"
-                          connector-ref="soitoolkit-http-connector"/>
+                          connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response" />
 
         <cxf:jaxws-service
                 serviceClass="se.skl.skltpservices.npoadapter.test.stub.EiUpdateWS"
