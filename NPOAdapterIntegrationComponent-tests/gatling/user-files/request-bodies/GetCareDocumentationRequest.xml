@@ -5,7 +5,7 @@
    <soapenv:Body>
       <urn1:GetCareDocumentation>
          <!--Zero or more repetitions:-->
-         <urn1:careUnitHSAid>?</urn1:careUnitHSAid>
+         <urn1:careUnitHSAId>${careUnitHSAId}</urn1:careUnitHSAId>
          <urn1:patientId>
             <urn2:id>192712039550</urn2:id>
             <urn2:type>?</urn2:type>

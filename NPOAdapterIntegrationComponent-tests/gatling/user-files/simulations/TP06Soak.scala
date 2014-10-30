@@ -12,13 +12,21 @@ import scenarios.GetLaboratoryOrderOutcomeScenario
 import scenarios.GetMedicationHistoryScenario
 import scenarios.GetReferralOutcomeScenario
 
-class TP10Requests40PerSecond extends Simulation {
+/**
+ * Exercise the Adapter at 50% CPU for a week.
+ * Test for memory leaks in the Adapter JVM.
+ * Test for degraded performance over time.
+ */
+class TP06Soak extends Simulation {
 
+  // TODO - deduce parameters for 50% CPU
+  // TODO - can we add assertions that check for degraded performance over time?
+  
   val httpProtocol = http.baseURL("http://localhost:33001")
-  val totalUsers:Int            = 100
-  val maxRequestsPerSecond:Int  = 40
-  val rampSeconds:Int           = 10
-  val maxDuration:Int           = 360
+  val totalUsers:Int            = 50
+  val maxRequestsPerSecond:Int  = 20
+  val rampSeconds:Int           = 20
+  val maxDuration:Int           = 30     // 60 * 60 * 24 * 7
     
   val getParallel = scenario("Get parallel")
                     .forever {

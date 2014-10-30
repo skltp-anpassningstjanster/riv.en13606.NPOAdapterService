@@ -17,8 +17,8 @@ class TP08Sequential extends Simulation {
   // TODO - externalise constants
 
   val baseURL:String = "http://localhost:33001"
-  val times:Int      = 1000
-  val pause:Int      = 5
+  val times:Int      = 50   // 1000
+  val pause:Int      = 2
   
   val httpProtocol = http.baseURL(baseURL)
     

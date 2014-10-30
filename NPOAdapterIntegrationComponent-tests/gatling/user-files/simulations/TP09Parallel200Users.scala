@@ -12,13 +12,13 @@ import scenarios.GetLaboratoryOrderOutcomeScenario
 import scenarios.GetMedicationHistoryScenario
 import scenarios.GetReferralOutcomeScenario
 
-class TP10Requests40PerSecond extends Simulation {
+class TP09Parallel200Users extends Simulation {
 
   val httpProtocol = http.baseURL("http://localhost:33001")
-  val totalUsers:Int            = 100
-  val maxRequestsPerSecond:Int  = 40
-  val rampSeconds:Int           = 10
-  val maxDuration:Int           = 360
+  val totalUsers:Int            = 100   // 200
+  val maxRequestsPerSecond:Int  = 20    // 40
+  val rampSeconds:Int           = 50    // 50
+  val maxDuration:Int           = 300   // 300
     
   val getParallel = scenario("Get parallel")
                     .forever {

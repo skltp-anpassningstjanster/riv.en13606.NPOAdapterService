@@ -3,7 +3,7 @@
 	<ehr_id extension="tieto-id" root="1.2.752.129.2.1.2.1"/>
 	<ehr_system extension="caresystem-uat-prod-1" root="1.2.752.129.2.1.2.1"/>
 	<rm_id xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">EN 13606</rm_id>
-	<subject_of_care extension="190202020202" root="1.2.752.129.2.1.3.1"/>
+	<subject_of_care extension="192712079550" root="1.2.752.129.2.1.3.1"/>
 	<time_created value="20120125202316"/>
 	<all_compositions>
 		<meaning code="lko" codeSystem="1.2.752.129.2.2.2.1">

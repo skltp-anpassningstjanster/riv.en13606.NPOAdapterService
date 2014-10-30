@@ -5,7 +5,7 @@
    <soapenv:Body>
       <urn1:GetImagingOutcome>
          <!--Zero or more repetitions:-->
-         <urn1:careUnitHSAId>199001010123</urn1:careUnitHSAId>
+         <urn1:careUnitHSAId>${careUnitHSAId}</urn1:careUnitHSAId>
          <urn1:patientId>
             <urn2:id>192712059550</urn2:id>
             <urn2:type>?</urn2:type>
