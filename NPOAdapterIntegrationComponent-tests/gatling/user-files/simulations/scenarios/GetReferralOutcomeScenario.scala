@@ -9,5 +9,6 @@ object GetReferralOutcomeScenario extends {
   val requestFileName = "GetReferralOutcomeRequest.xml"
   val regex1          = "id>192712089550"
   val regex2          = "Body><GetReferralOutcomeResponse"
+  val length          = 3281
   
 } with Request

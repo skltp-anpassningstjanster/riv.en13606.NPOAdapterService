@@ -19,17 +19,27 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import se.rivta.en13606.ehrextract.v11.*;
-import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.test.Util;
-
-import javax.jws.WebService;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.jws.WebService;
+
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ParameterType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * Test stub always returning a fix response.
@@ -75,7 +85,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             log.info("Slow response, sleep for {} millis", t);
             Thread.sleep(t);
         }
-
+        
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
     	case PATIENT_ID_TRIGGER_ERROR:
@@ -133,7 +143,12 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             break;
         case UND_BDI:
             log.info("Received UND-BDI Request");
-            responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+            if ("ExtraLarge".equals(hsaId)) {
+                // 1MB response - performance test case TP2
+                responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+            } else {
+                responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+            }
             break;
         default:
             log.error("Received unexpected request " + request.getMeanings().get(0).getCode());

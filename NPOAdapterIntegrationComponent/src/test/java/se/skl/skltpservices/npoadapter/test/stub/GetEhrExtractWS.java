@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import javax.jws.WebService;
+
 import lombok.extern.slf4j.Slf4j;
 import riv.ehr.patientsummary.getehrextract._1.rivtabp21.GetEhrExtractResponderInterface;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -26,8 +28,6 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
 import se.skl.skltpservices.npoadapter.test.Util;
-
-import javax.jws.WebService;
 
 /**
  * Created by Peter on 2014-08-15.
@@ -42,7 +42,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
     public GetEhrExtractResponseType getEhrExtract(String logicalAddress, GetEhrExtractType request) {
 
         final String infoType = request.getMeanings().get(0).getCode();
-        final se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = getBaslineData(infoType);
+        final se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = getBaselineData(infoType);
         final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = new RIV13606REQUESTEHREXTRACTResponseType();
         riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().add(baseline);
 
@@ -50,7 +50,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
         return responseType;
     }
 
-    protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaslineData(final String infoType) {
+    protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaselineData(final String infoType) {
         switch (infoType) {
             case "vko":
                 log.info("Received VKO Request");

@@ -8,5 +8,6 @@ object GetDiagnosisScenario extends {
   val requestFileName = "GetDiagnosisRequest.xml"
   val regex1          = "id>192712049550"
   val regex2          = "Body><GetDiagnosisResponse"
+  val length          = 4883
 
 } with Request

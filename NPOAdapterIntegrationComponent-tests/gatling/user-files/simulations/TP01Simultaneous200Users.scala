@@ -15,7 +15,7 @@ import scenarios.GetReferralOutcomeScenario
 class TP01Simultaneous200Users extends Simulation {
 
   val httpProtocol = http.baseURL("http://localhost:33001")
-  val totalUsers:Int            = 10    // 200
+  val totalUsers:Int            = 5    // 200
   val maxRequestsPerSecond:Int  = 200   // 200
   val rampSeconds:Int           = 1     // 1
   val maxDuration:Int           = 300   // 300

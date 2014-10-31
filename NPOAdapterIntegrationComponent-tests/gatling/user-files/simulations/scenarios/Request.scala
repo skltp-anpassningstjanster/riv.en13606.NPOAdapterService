@@ -11,6 +11,7 @@ trait Request {
   def requestFileName : String
   def regex1          : String
   def regex2          : String
+  def length          : Int
   
   val request = exec((session) => {
                       session("careUnitHSAId").asOption[String] match {
@@ -28,6 +29,8 @@ trait Request {
                      .check(status.is(200))
                      .check(bodyString.exists)
                      .check(bodyString.not("Fault"))
+                     .check(bodyString.transform(s => s.length).is(length))
+                     .check(bodyString.saveAs("abc"))
                      .check(regex(regex1).exists) // TODO - can we pass in a variable length list instead of two elements?
                      .check(regex(regex2).exists)
                     )
