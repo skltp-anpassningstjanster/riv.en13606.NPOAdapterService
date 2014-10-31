@@ -11,7 +11,7 @@ class TP02ExtraLargeResponse extends Simulation {
   // TODO - externalise constants
 
   val baseURL:String = "http://localhost:33001"
-  val httpProtocol = http.baseURL(baseURL)
+  val httpProtocol = http.baseURL(baseURL).extraInfoExtractor(extraInfo => List(extraInfo.response.body))
     
   val getImagingOutcome1MB = scenario("Get imaging outcome 1 MB")
                      .exec(GetImagingOutcomeScenario.request) // warm up mule with a light query
