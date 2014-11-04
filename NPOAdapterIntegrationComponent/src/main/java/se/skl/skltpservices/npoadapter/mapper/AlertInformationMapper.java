@@ -39,6 +39,7 @@ import riv.clinicalprocess.healthcond.description._2.HyperSensitivityType;
 import riv.clinicalprocess.healthcond.description._2.OtherHypersensitivityType;
 import riv.clinicalprocess.healthcond.description._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.description._2.PharmaceuticalHypersensitivityType;
+import riv.clinicalprocess.healthcond.description._2.RelatedAlertInformationType;
 import riv.clinicalprocess.healthcond.description._2.RestrictionOfCareType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description._2.SeriousDiseaseType;
@@ -188,6 +189,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	 */
 	protected AlertInformationBodyType mapBodyType(final COMPOSITION comp) {
 		final AlertInformationBodyType type = new AlertInformationBodyType();
+		addReleatedAlertInformation(comp, type);
 		for(CONTENT content : comp.getContent()) {
 			if(content instanceof ENTRY) {
 				final ENTRY entry = (ENTRY) content;
@@ -216,6 +218,13 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 						case KOM_UPPMARKSAMHET:
 							if(item instanceof ELEMENT) {
 								type.setAlertInformationComment(EHRUtil.getElementTextValue((ELEMENT)item));
+							}
+							break;
+						case KOM_SAMBAND:
+							if(item instanceof ELEMENT) {
+								for(RelatedAlertInformationType rai : type.getRelatedAlertInformation()) {
+									rai.setRelationComment(EHRUtil.getElementTextValue((ELEMENT) item)); 
+								}
 							}
 							break;
 						default:
@@ -247,6 +256,17 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 			}
 		}
 		return type;
+	}
+	
+	protected void addReleatedAlertInformation(final COMPOSITION comp, final AlertInformationBodyType body) {
+		for(LINK link : comp.getLinks()) {
+			final RelatedAlertInformationType type = new RelatedAlertInformationType();
+			type.setTypeOfAlertInformationRelationship(EHRUtil.cvType(link.getRole(), CVType.class));
+			for(II id : link.getTargetId()) {
+				type.getDocumentId().add(id.getExtension());
+			}
+			body.getRelatedAlertInformation().add(type);
+		}
 	}
 	
 	protected void mapUnstructuredAlertInformation(final AlertInformationBodyType bodyType, final ITEM item) {
