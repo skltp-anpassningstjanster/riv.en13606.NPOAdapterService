@@ -50,10 +50,10 @@ import riv.clinicalprocess.healthcond.description.getalertinformationresponder._
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 /**
  * Mapper for AlertInformationInteraction from 13606 UPP

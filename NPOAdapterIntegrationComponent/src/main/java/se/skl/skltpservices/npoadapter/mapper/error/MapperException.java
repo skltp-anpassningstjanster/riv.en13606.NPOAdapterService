@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.error;
 
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 /**
  * Exception thrown by mappers.

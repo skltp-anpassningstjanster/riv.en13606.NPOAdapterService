@@ -76,10 +76,10 @@ import se.rivta.en13606.ehrextract.v11.PQ;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 
 /**

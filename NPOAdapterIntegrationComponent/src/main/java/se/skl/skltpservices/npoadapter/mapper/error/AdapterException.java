@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.error;
 
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 public abstract class AdapterException extends Exception {
 	private static final long serialVersionUID = 1L;

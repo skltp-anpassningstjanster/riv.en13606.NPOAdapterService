@@ -31,10 +31,10 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;

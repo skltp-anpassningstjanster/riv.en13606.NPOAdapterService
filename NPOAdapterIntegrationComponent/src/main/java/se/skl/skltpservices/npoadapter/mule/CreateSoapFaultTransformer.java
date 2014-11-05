@@ -51,6 +51,7 @@ import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
 
 import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 /**

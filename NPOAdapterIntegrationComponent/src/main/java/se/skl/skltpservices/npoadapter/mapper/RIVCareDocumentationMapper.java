@@ -35,9 +35,9 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseTyp
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 
