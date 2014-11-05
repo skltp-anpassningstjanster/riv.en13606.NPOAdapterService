@@ -29,6 +29,7 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -49,7 +50,7 @@ public class RIVAlertInformationMapper extends AlertInformationMapper {
 			message.setPayload(ehrExtractType(ehrExtractType));
 			return message;
 		} catch (Exception err) {
-			throw new MapperException("Error when transforming request", err);
+			throw new MapperException("Error when transforming request", err, Ehr13606AdapterError.MAPRIVREQUEST);
 		}
 	}
 
@@ -62,7 +63,7 @@ public class RIVAlertInformationMapper extends AlertInformationMapper {
 			message.setPayload(marshal(responseType));
 			return message;
 		} catch (Exception err) {
-			throw new MapperException("Error when transforming response", err);
+			throw new MapperException("Error when transforming response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
 	

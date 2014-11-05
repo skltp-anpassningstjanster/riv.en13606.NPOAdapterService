@@ -21,17 +21,27 @@ package se.skl.skltpservices.npoadapter.mapper.error;
 
 import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
-/**
- * Created by peter on 2014-08-26.
- */
-public class OutboundResponseException extends AdapterException {
+public abstract class AdapterException extends Exception {
 	private static final long serialVersionUID = 1L;
-
-    public OutboundResponseException(final String message) {
-        super(message, Ehr13606AdapterError.INDEXUPDATE);
-    }
-    
-    public OutboundResponseException(final String message, Exception cause) {
-    	super(message, cause, Ehr13606AdapterError.INDEXUPDATE);
-    }
+	private final Ehr13606AdapterError error;
+	
+	public AdapterException(final String message) {
+		super(message);
+		this.error = Ehr13606AdapterError.UNDEFINED;
+	}
+	public AdapterException(final String message, final Exception cause) {
+		super(message, cause);
+		this.error = Ehr13606AdapterError.UNDEFINED;;
+	}
+	public AdapterException(final String message, final Ehr13606AdapterError errorCode) {
+		super(message);
+		this.error = errorCode;
+	}
+	public AdapterException(final String message, final Exception cause, final Ehr13606AdapterError errorCode) {
+		super(message, cause);
+		this.error = errorCode;
+	}
+	public Ehr13606AdapterError getEhr13606AdapterError() {
+		return error;
+	}
 }

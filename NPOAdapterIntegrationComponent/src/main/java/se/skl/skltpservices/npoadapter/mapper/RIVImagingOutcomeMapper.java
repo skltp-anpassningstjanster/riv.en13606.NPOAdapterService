@@ -31,6 +31,7 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 @Slf4j
 public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
@@ -44,8 +45,7 @@ public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;
 		} catch (Exception err) {
-			log.error("Error when transforming ImagingOutcome request", err);
-			throw new MapperException("Error when transforming ImagingOutcome request");
+			throw new MapperException("Error when transforming ImagingOutcome request", err, Ehr13606AdapterError.MAPRIVREQUEST);
 		}
 	}
 	
@@ -59,8 +59,7 @@ public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
 			message.setPayload(marshal(responseType));
             return message;
 		} catch (Exception err) {
-			log.error("Error when transforming ImagingOutcome response", err);
-			throw new MapperException("Error when transforming ImagingOutcome response");
+			throw new MapperException("Error when transforming ImagingOutcome response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
 

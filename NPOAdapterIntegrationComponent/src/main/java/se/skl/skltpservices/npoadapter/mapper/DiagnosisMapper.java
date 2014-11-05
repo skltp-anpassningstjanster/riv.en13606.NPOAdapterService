@@ -34,6 +34,7 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -70,7 +71,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_DIA)));
 			return message;
 		} catch (Exception err) {
-            throw new MapperException("Exception when mapping request", err);
+            throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
 		}
 	}
 
@@ -82,7 +83,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 			message.setPayload(marshal(resp));
             return message;
 		} catch (Exception err) {
-            throw new MapperException("Exception when mapping response", err);
+            throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
 		}
 	}
 	

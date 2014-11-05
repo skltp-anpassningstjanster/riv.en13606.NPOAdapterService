@@ -33,6 +33,7 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.Objec
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -66,7 +67,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             message.setPayload(marshal(map(response.getEhrExtract())));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping response", err);
+    		throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
     	}
     }
 
@@ -77,7 +78,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO)));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping request", err);
+    		throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
     	}
     }
 

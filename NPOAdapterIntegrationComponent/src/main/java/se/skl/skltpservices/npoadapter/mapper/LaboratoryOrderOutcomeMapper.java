@@ -20,9 +20,11 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+
 import riv.clinicalprocess.healthcond.actoutcome._3.*;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
@@ -32,9 +34,11 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
+
 import java.util.List;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory;
@@ -66,7 +70,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING)));
 			return message;
 		} catch (Exception err) {
-            throw new MapperException("Exception when mapping response", err);
+            throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPREQUEST);
 		}
 	}
 
@@ -78,7 +82,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
-            throw new MapperException("Exception when mapping response", err);
+            throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
 		}
 	}
 	

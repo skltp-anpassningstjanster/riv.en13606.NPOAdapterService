@@ -27,9 +27,8 @@ import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
  * 
  * @author torbjorncla
  */
-public class MapperException extends Exception {
+public class MapperException extends AdapterException {
 	private static final long serialVersionUID = 1L;
-	private Ehr13606AdapterError error = Ehr13606AdapterError.UNDEFINED;
 	
 	public MapperException(final String message) {
 		super(message);
@@ -37,15 +36,11 @@ public class MapperException extends Exception {
 	public MapperException(final String message, final Exception cause) {
 		super(message, cause);
 	}
-	public MapperException(final String message, final Ehr13606AdapterError error) {
-		super(message);
-		this.error = error;
+	public MapperException(final String message, final Ehr13606AdapterError errorCode) {
+		super(message, errorCode);
 	}
 	public MapperException(final String message, final Exception cause, final Ehr13606AdapterError errorCode) {
-		super(message, cause);
-		this.error = errorCode;
+		super(message, cause, errorCode);
 	}
-	public Ehr13606AdapterError getEhr13606AdapterError() {
-		return error;
-	}
+
 }

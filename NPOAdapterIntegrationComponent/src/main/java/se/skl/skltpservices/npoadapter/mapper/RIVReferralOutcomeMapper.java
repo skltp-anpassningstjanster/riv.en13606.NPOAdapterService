@@ -31,6 +31,7 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 /**
  * Maps from 
  *  GetEHRExctract (und-kon) 
@@ -51,8 +52,7 @@ public class RIVReferralOutcomeMapper extends ReferralOutcomeMapper {
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;
 		} catch (Exception err) {
-			log.error("Error when transforming ReferralOutcome request", err);
-			throw new MapperException("Error when transforming ReferralOutcome request");
+			throw new MapperException("Error when transforming ReferralOutcome request", err, Ehr13606AdapterError.MAPRIVREQUEST);
 		}
 	}
 	
@@ -66,8 +66,7 @@ public class RIVReferralOutcomeMapper extends ReferralOutcomeMapper {
 			message.setPayload(marshal(responseType));
             return message;
 		} catch (Exception err) {
-			log.error("Error when transforming ReferralOutcome response", err);
-			throw new MapperException("Error when transforming ReferralOutcome response");
+			throw new MapperException("Error when transforming ReferralOutcome response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
 }

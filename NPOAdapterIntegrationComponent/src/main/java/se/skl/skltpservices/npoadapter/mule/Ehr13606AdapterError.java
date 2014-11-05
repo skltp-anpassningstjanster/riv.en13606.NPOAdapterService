@@ -29,7 +29,11 @@ public enum Ehr13606AdapterError {
 	NOERROR     ("0000"),
 	UNDEFINED   ("1000"),
 	MAPREQUEST  ("2001"),
-	MAPRESPONSE ("2011");
+	MAPRESPONSE ("2011"),
+	MAPRIVREQUEST ("2002"),
+	MAPRIVRESPONSE ("2012"),
+	INDEXUPDATE ("3001"),
+	ROUTE		("4001");
 
 	private String errorCode;
 	

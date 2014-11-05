@@ -26,7 +26,8 @@ package se.skl.skltpservices.npoadapter.mapper.error;
  * @author torbjorncla
  *
  */
-public class NotImplementedException extends MapperException {
+public class NotImplementedException extends AdapterException {
+	private static final long serialVersionUID = 1L;
 	public NotImplementedException(final String message) {
 		super(message);
 	}

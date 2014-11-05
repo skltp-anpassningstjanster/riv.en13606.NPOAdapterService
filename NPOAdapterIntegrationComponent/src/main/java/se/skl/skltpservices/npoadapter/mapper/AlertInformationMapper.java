@@ -53,6 +53,7 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.mule.Ehr13606AdapterError;
 
 /**
  * Mapper for AlertInformationInteraction from 13606 UPP
@@ -122,7 +123,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UPP)));
 			return message;
 		} catch (Exception err) {
-			throw new MapperException("Error when mapping request", err);
+			throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
 		}
 	}
 
@@ -134,7 +135,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
-			throw new MapperException("Error when mapping response", err);
+			throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
 		}
 	}
 	
