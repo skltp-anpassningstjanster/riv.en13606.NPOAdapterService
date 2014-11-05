@@ -6,17 +6,21 @@ import io.gatling.http.check.HttpCheck
 
 trait Request {
   
-  def requestName     : String
-  def postUrl         : String
-  def postHeaders     : Map[String, String]
-  def requestFileName : String
-  def regex1          : String
-  def regex2          : String
-  def length          : Int
+  def requestName             : String
+  def postUrl                 : String
+  def postHeaders             : Map[String, String]
+  def requestFileName         : String
+  def regex1                  : String
+  def regex2                  : String
+  def length                  : Int
+  val httpOK                  = 200
+  val httpInternalServerError = 500  
+  
 //def checks          : HttpCheck
   
   val responseTimeThreshold:Long = 250 // only report response time problems for responses that take longer than this
   
+  // requestOK
   val request = exec((session) => {
                       session("careUnitHSAId").asOption[String] match {
                         case None => {
@@ -30,17 +34,14 @@ trait Request {
                      .post(postUrl)
                      .headers(postHeaders)
                      .body(ELFileBody(requestFileName))
-                     .check(status.is(200))
+                     .check(status.is(httpOK))
                      .check(bodyString.exists)
-                     .check(bodyString.not("Fault"))
                   // .check(bodyString.saveAs("responseBodyString"))
                      .check(bodyString.transform(w => w.length).saveAs("responseBodyStringLength"))
                      .check(bodyString.transform(s => s.length).is(length))
                      .check(regex(regex1).exists) // TODO - can we pass in a variable length list instead of two elements?
                      .check(regex(regex2).exists)
-//                   .check(checks)
                      .check(responseTimeInMillis.saveAs("responseTimeInMillis"))
-                     
                      
                      .check(responseTimeInMillis.lessThanOrEqual((session) => {
                        
@@ -73,8 +74,7 @@ trait Request {
                         }
                        }
                       )
-                     )
-                    
+                      )                        
                     // Alternative way of doing the same thing
                      /*
                      .check(bodyString.transform(s => (s.length/(1024*1024))*100).saveAs("maximumResponseTimeMilliseconds"))
@@ -82,23 +82,44 @@ trait Request {
                        (t < session("maximumResponseTimeMilliseconds").as[Int])
                       })
                       */
-                    )
-  
-  // response will be delayed by 10 - 20 seconds
-  val slowRequest = exec((session) => {
-                        session.set("careUnitHSAId", "slow")
+                  )
+
+                  
+  // verify time response proportion
+  val assertTimeResponseSize = exec((session) => {
+                        session.set("assertTimeResponseSize", "true")
                     })
                     .exec(request)
-
+                    
   // source system responds before adapter timeout
   val delayedRequestWithoutTimeout = exec((session) => {
                         session.set("careUnitHSAId", "delayWithoutTimeout")
                     })
                     .exec(request)
                     
-  // verify time response proportion
-  val assertTimeResponseSize = exec((session) => {
-                        session.set("assertTimeResponseSize", "true")
+  // response will be delayed by 10 - 20 seconds
+  val slowRequest = exec((session) => {
+                        session.set("careUnitHSAId", "slow")
                     })
                     .exec(request)
+  
+  // adapter timesout before source system responds
+  val requestTimesout = exec((session) => {
+                        session.set("careUnitHSAId", "respondAfterAdapterTimeout")
+                       })
+                      .exec( http(requestName) 
+                        .post(postUrl)
+                        .headers(postHeaders)
+                        .body(ELFileBody(requestFileName))
+                        .check(status.is(httpInternalServerError))
+                        .check(bodyString.exists)
+                        .check(regex("Read timed out"))
+                        .check(regex("faultstring"))
+                        .check(responseTimeInMillis.saveAs("responseTimeInMillis"))
+                        .check(responseTimeInMillis.greaterThanOrEqual((session) => {
+                              println ("adapter timeout:" + (session("adapterTimeoutInMilliseconds")).as[Int])
+                              ((session("adapterTimeoutInMilliseconds")).as[Int])
+                       }))
+                       )
+                  
 }

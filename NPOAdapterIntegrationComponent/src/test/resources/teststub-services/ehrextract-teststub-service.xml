@@ -18,7 +18,9 @@
                 wsdlLocation="classpath:/interactions/ehr_extract/RIV13606.wsdl" />
 
         <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS"  />
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS">
+               <property key="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
+            </singleton-object>
         </component>
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>

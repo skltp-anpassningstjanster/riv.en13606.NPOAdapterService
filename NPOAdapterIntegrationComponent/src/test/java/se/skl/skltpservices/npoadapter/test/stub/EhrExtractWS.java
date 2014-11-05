@@ -28,9 +28,6 @@ import javax.jws.WebService;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Value;
-
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -77,8 +74,11 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         return null;
     }
 
-    @Value("${SERVICE_TIMEOUT_MS}")
+    // Adapter response timeout - defined in NPOAdapter-config.properties
     private long responseTimeout = 20000;
+    public void setResponseTimeout(int responseTimeout) {
+        this.responseTimeout = responseTimeout;
+    }
     
     @Override
     @SneakyThrows
@@ -108,6 +108,18 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             log.info("delayWithoutTimeout, sleep for {} millis", delayMilliseconds);
             Thread.sleep(delayMilliseconds);
         }
+        
+        // Sleep for longer than Adapter timeout.
+        // Response will be sent to Adapter after Adapter has timedout
+        if ("respondAfterAdapterTimeout".equals(hsaId)) {
+
+            // given a timeout of 20000, add a delay between 21000 and 23000 milliseconds
+            long delayMilliseconds = (long) (responseTimeout + 1000 + (Math.random() * 2000));
+            
+            log.info("respondAfterAdapterTimeout, sleep for {} millis", delayMilliseconds);
+            Thread.sleep(delayMilliseconds);
+        }
+        
         
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
