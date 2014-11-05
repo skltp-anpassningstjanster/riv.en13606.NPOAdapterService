@@ -22,15 +22,19 @@ package se.skl.skltpservices.npoadapter.mule;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractMessageTransformer;
+
 import riv.itintegration.engagementindex._1.ResultCodeEnum;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
 import se.nationellpatientoversikt.SendStatusResponse;
+import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
 import java.io.StringReader;
 
 /**
