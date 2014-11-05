@@ -90,6 +90,7 @@ public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
 		Throwable e = (ep.getRootException() != null) ? ep.getRootException() : ep.getException();
 		
 		String errorMessage = ERRORMESSAGEPREFIX + " " + e.getMessage();
+
 		
 		// prepend the error code from the exception, if there is one
 		if (e instanceof AdapterException) {

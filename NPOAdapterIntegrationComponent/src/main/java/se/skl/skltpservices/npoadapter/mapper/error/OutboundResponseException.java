@@ -27,10 +27,19 @@ public class OutboundResponseException extends AdapterException {
 	private static final long serialVersionUID = 1L;
 
     public OutboundResponseException(final String message) {
-        super(message, Ehr13606AdapterError.INDEXUPDATE);
+        super(message);
     }
     
     public OutboundResponseException(final String message, Exception cause) {
-    	super(message, cause, Ehr13606AdapterError.INDEXUPDATE);
+    	super(message, cause);
     }
+    
+    public OutboundResponseException(final String message, Ehr13606AdapterError errorCode) {
+    	super(message, errorCode);
+    }
+    
+    public OutboundResponseException(final String message, Exception cause, Ehr13606AdapterError errorCode) {
+    	super(message, cause, errorCode);
+    }
+    
 }
