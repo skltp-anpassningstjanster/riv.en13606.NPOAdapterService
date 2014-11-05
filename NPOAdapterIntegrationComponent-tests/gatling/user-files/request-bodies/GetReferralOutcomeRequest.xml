@@ -5,7 +5,7 @@
    <soapenv:Body>
       <urn1:GetReferralOutcome>
          <!--Zero or more repetitions:-->
-         <urn1:careUnitHSAId>${careUnitHSAId}</urn1:careUnitHSAId>
+         <urn1:careUnitHSAid>${careUnitHSAId}</urn1:careUnitHSAid>
          <urn1:patientId>
             <urn2:id>192712089550</urn2:id>
             <urn2:type>?</urn2:type>

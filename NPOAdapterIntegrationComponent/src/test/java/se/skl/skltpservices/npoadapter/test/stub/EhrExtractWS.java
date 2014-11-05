@@ -28,6 +28,9 @@ import javax.jws.WebService;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -74,6 +77,9 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         return null;
     }
 
+    @Value("${SERVICE_TIMEOUT_MS}")
+    private long responseTimeout = 20000;
+    
     @Override
     @SneakyThrows
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
@@ -84,6 +90,23 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             final long t = 5000 + (long)(Math.random() * 5000);
             log.info("Slow response, sleep for {} millis", t);
             Thread.sleep(t);
+        }
+        
+        // sleep between 5 and 10 seconds
+        if ("delayWithoutTimeout".equals(hsaId)) {
+
+            // given a timeout of 20000, add a delay between 15000 and 18000 milliseconds
+            
+            long delayMilliseconds = (long) (responseTimeout * 0.75);
+            delayMilliseconds = (long) (delayMilliseconds 
+                                + (
+                                    Math.random() 
+                                     * 
+                                    ((responseTimeout * 0.9) - (responseTimeout * 0.75)) 
+                                  ));
+            
+            log.info("delayWithoutTimeout, sleep for {} millis", delayMilliseconds);
+            Thread.sleep(delayMilliseconds);
         }
         
     	//See if error flow is triggered.
@@ -190,6 +213,8 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             throw new IllegalArgumentException("Max records shall not be defined");
         }
 
+        log.debug("hsaId:" + hsaId);
+        
         return hsaId;
     }
 
