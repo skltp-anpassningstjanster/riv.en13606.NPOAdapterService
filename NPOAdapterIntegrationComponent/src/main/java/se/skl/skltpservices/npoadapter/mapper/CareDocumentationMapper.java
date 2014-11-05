@@ -31,6 +31,7 @@ import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder.
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
@@ -72,7 +73,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO)));
             return message;
 		} catch (Exception err) {
-			throw new MapperException("Exception when mapping request", err);
+			throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
 		}
 	}
 
@@ -85,7 +86,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			message.setPayload(marshal(responseType));
             return message;
 		} catch (Exception err) {
-			throw new MapperException("Exception when mapping response", err);
+			throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
 		}
 	}
 		

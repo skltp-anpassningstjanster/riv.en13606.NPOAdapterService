@@ -50,6 +50,8 @@ import org.mule.api.MuleMessage;
 import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
 
+import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 /**
@@ -88,10 +90,11 @@ public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
 		Throwable e = (ep.getRootException() != null) ? ep.getRootException() : ep.getException();
 		
 		String errorMessage = ERRORMESSAGEPREFIX + " " + e.getMessage();
+
 		
 		// prepend the error code from the exception, if there is one
-		if (e instanceof MapperException) {
-			Ehr13606AdapterError error = ((MapperException)e).getEhr13606AdapterError();
+		if (e instanceof AdapterException) {
+			Ehr13606AdapterError error = ((AdapterException)e).getEhr13606AdapterError();
 			if (error.isDefinedError()) {
 			    errorMessage = "[errorCode:" + error.getErrorCode() + "] " + errorMessage;
 			}

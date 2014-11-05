@@ -20,9 +20,13 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
+
 import se.skl.skltpservices.npoadapter.mapper.Mapper;
+import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
+import se.skl.skltpservices.npoadapter.mapper.error.RouteException;
 
 import javax.xml.namespace.QName;
 
@@ -51,23 +55,23 @@ public abstract class AbstractOutboundTransformer extends AbstractMessageTransfo
      *
      * @param message the mule message.
      * @return the mapper.
-     * @throws java.lang.IllegalStateException when no mapper can be found.
+     * @throws AdapterException when no mapper can be found.
      */
-    protected Mapper getMapper(final MuleMessage message) {
+    protected Mapper getMapper(final MuleMessage message) throws RouteException {
         // check thar routing has been done.
         log.debug("check for route information in message properties");
         if (message.getInvocationProperty(ROUTE_ENDPOINT_URL) == null) {
-            throw new IllegalArgumentException("Unable to find a route to logical address: " + message.getInvocationProperty((ROUTE_LOGICAL_ADDRESS)));
+            throw new RouteException("Unable to find a route to logical address: " + message.getInvocationProperty((ROUTE_LOGICAL_ADDRESS)));
         }
         log.debug("Retrieve the actual (SOAP) operation through the CXF message invocation property: " + CXF_OPERATION);
         final QName targetNS = message.getInvocationProperty(CXF_OPERATION);
         if (targetNS == null) {
-            throw new IllegalStateException("Unable locate a mapper. Missing CXF invocation property in message: " + CXF_OPERATION);
+            throw new RouteException("Unable locate a mapper. Missing CXF invocation property in message: " + CXF_OPERATION);
         }
         final String sourceNS = message.getInvocationProperty(ROUTE_SERVICE_SOAP_ACTION);
         final Mapper mapper =  getInstance(sourceNS, targetNS.getNamespaceURI());
         if (mapper == null) {
-            throw new IllegalStateException("Unable to locate a mapper for endpoint to the source system. (Invocation property " + ROUTE_SERVICE_SOAP_ACTION + "=" + sourceNS + ")");
+            throw new RouteException("Unable to locate a mapper for endpoint to the source system. (Invocation property " + ROUTE_SERVICE_SOAP_ACTION + "=" + sourceNS + ")");
         }
         return mapper;
     }

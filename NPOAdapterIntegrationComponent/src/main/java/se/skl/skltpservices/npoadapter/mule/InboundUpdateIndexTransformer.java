@@ -31,6 +31,8 @@ import riv.itintegration.engagementindex.updateresponder._1.ObjectFactory;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 import se.nationellpatientoversikt.*;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
+import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.EIValue;
 
@@ -99,25 +101,28 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
         final Object[] payload = (Object[]) message.getPayload();
 
         UpdateType updateRequest = null;
-
-        if (payload[1] instanceof ArrayOfinfoTypeInfoTypeType) {
-            log.debug("SimpleIndex to Update");
-            final SendSimpleIndex simpleIndex = new SendSimpleIndex();
-            simpleIndex.setSubjectOfCareId((String) payload[0]);
-            simpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) payload[1]);
-            simpleIndex.setParameters((ArrayOfparameternpoParameterType) payload[2]);
-            updateRequest = map(simpleIndex, message);
-        } else if (payload[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
-            log.debug("SendIndex2 to Update");
-            final SendIndex2 sendIndex2 = new SendIndex2();
-            sendIndex2.setSubjectOfCareId((String) payload[0]);
-            sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) payload[1]);
-            sendIndex2.setParameters((ArrayOfparameternpoParameterType) payload[2]);
-            updateRequest = map(sendIndex2, message);
-        } else if (payload[1] instanceof UpdateType) {
-            updateRequest = fix(message, (UpdateType) payload[1]);
-        } else {
-            throw new IllegalStateException("Unexpected type of message: " + payload[1]);
+        try {
+        	if (payload[1] instanceof ArrayOfinfoTypeInfoTypeType) {
+        		log.debug("SimpleIndex to Update");
+        		final SendSimpleIndex simpleIndex = new SendSimpleIndex();
+        		simpleIndex.setSubjectOfCareId((String) payload[0]);
+        		simpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) payload[1]);
+        		simpleIndex.setParameters((ArrayOfparameternpoParameterType) payload[2]);
+        		updateRequest = map(simpleIndex, message);
+        	} else if (payload[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
+        		log.debug("SendIndex2 to Update");
+        		final SendIndex2 sendIndex2 = new SendIndex2();
+        		sendIndex2.setSubjectOfCareId((String) payload[0]);
+        		sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) payload[1]);
+        		sendIndex2.setParameters((ArrayOfparameternpoParameterType) payload[2]);
+        		updateRequest = map(sendIndex2, message);
+        	} else if (payload[1] instanceof UpdateType) {
+        		updateRequest = fix(message, (UpdateType) payload[1]);
+        	} else {
+        		throw new OutboundResponseException("Unexpected type of message: " + payload[1], Ehr13606AdapterError.INDEXUPDATE_MESSAGE_TYPE);
+        	}
+        } catch (OutboundResponseException outboundError) {
+        	throw new IllegalStateException(outboundError.getMessage(), outboundError);
         }
 
         message.setPayload(new Object[] { getEiLogicalAddress(), updateRequest });
@@ -126,7 +131,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     }
 
     //
-    private UpdateType fix(final MuleMessage message, final UpdateType updateRequest) {
+    private UpdateType fix(final MuleMessage message, final UpdateType updateRequest) throws OutboundResponseException {
         String logicalAddress = null;
         for (final EngagementTransactionType tx : updateRequest.getEngagementTransaction()) {
             updateEngagmentType(tx.getEngagement(), tx.getEngagement().getCategorization());
@@ -143,7 +148,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     }
 
     //
-    protected UpdateType map(final SendSimpleIndex simpleIndex, final MuleMessage message) {
+    protected UpdateType map(final SendSimpleIndex simpleIndex, final MuleMessage message) throws OutboundResponseException {
         final UpdateType update = of.createUpdateType();
         for (final InfoTypeType info : simpleIndex.getInfoTypes().getInfoType()) {
             final EngagementType engagement = updateEngagmentType(
@@ -157,7 +162,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
     }
 
     //
-    protected UpdateType map(final SendIndex2 sendIndex2, final MuleMessage message) {
+    protected UpdateType map(final SendIndex2 sendIndex2, final MuleMessage message) throws OutboundResponseException {
         final UpdateType update = of.createUpdateType();
         for (final IndexUpdateType info : sendIndex2.getIndexUpdates().getIndexUpdate()) {
             final EngagementType engagement = updateEngagmentType(
@@ -187,10 +192,11 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
      * @param engagement
      * @param infoType
      * @return
+     * @throws OutboundResponseException 
      */
-    protected EngagementType updateEngagmentType(final EngagementType engagement, final String infoType) {
+    protected EngagementType updateEngagmentType(final EngagementType engagement, final String infoType) throws OutboundResponseException {
     	if(infoType == null || !eiValues.containsKey(infoType)) {
-    		throw new IllegalArgumentException("Unable to map NPO info type to RIV service domain. info type: " + infoType);
+    		throw new OutboundResponseException("Unable to map NPO info type to RIV service domain. info type: " + infoType, Ehr13606AdapterError.INDEXUPDATE_MISSING_TYPE);
     	}
     	
     	final EIValue value = eiValues.get(infoType);

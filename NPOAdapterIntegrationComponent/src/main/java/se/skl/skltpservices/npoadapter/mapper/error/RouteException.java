@@ -17,14 +17,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.mule;
+package se.skl.skltpservices.npoadapter.mapper.error;
 
-/**
- * Created by peter on 2014-08-26.
- */
-public class OutboundResponseException extends RuntimeException {
-    //
-    public OutboundResponseException(final String message) {
-        super(message);
-    }
+
+public class RouteException extends AdapterException {
+	private static final long serialVersionUID = 1L;
+
+	public RouteException(final String message) {
+		super(message, Ehr13606AdapterError.ROUTE);
+	}
+	
+	public RouteException(final String message, final Exception cause) {
+		super(message, cause, Ehr13606AdapterError.ROUTE);
+	}
 }

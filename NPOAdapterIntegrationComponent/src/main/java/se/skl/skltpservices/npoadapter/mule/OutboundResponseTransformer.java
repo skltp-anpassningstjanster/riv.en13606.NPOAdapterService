@@ -20,10 +20,14 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+
 import se.skl.skltpservices.npoadapter.mapper.Mapper;
+import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.mapper.error.RouteException;
 import se.skl.skltpservices.npoadapter.util.Sample;
 
 /**
@@ -38,17 +42,19 @@ public class OutboundResponseTransformer extends AbstractOutboundTransformer {
 
     @Override
     public Object transformMessage(final MuleMessage message, final String outputEncoding) throws TransformerException {
-        final Mapper mapper = getMapper(message);
-        final Sample sample = new Sample(mapper.getClass().getSimpleName() + ".mapResponse");
-        try {
+        Sample sample = null;
+    	try {
+        	final Mapper mapper = getMapper(message);
+        	sample = new Sample(mapper.getClass().getSimpleName() + ".mapResponse");
             if (message.getExceptionPayload() != null || "500".equals(message.getInboundProperty("http.status"))) {
                 return message;
             }
             return sample.ok(mapper.mapResponse(message));
-        } catch (MapperException err) {
+        } catch (AdapterException err) {
             throw new TransformerException(this, err);
         } finally {
-            sample.end();
+        	if(sample != null)
+        		sample.end();
         }
     }
 }

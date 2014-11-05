@@ -76,6 +76,7 @@ import se.rivta.en13606.ehrextract.v11.PQ;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
@@ -145,7 +146,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM)));
             return message;
         } catch (Exception err) {
-            throw new MapperException("Error when mapping request", err);
+            throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
         }
     }
 
@@ -161,7 +162,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             message.setPayload(marshal(rivtaResponse));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping response", err);
+    		throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
     	}
     }
 

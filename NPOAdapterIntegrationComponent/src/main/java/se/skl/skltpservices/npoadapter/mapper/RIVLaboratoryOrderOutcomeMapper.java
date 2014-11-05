@@ -27,6 +27,7 @@ import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseTyp
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
@@ -54,8 +55,7 @@ public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMappe
 			message.setPayload(ehrExtractType(ehrExtractType));
 			return message;
 		} catch (Exception err) {
-			log.error("Error when transforming LaboratoryOrderOutcome request", err);
-			throw new MapperException("Error when transforming LaboratoryOrderOutcome request");
+			throw new MapperException("Error when transforming LaboratoryOrderOutcome request", err, Ehr13606AdapterError.MAPRIVREQUEST);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMappe
 			return message;
 		} catch (Exception err) {
 			log.error("Error when transforming LaboratoryOrderOutcome response", err);
-			throw new MapperException("Error when transforming LaboratoryOrderoutcome response");
+			throw new MapperException("Error when transforming LaboratoryOrderoutcome response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
 	

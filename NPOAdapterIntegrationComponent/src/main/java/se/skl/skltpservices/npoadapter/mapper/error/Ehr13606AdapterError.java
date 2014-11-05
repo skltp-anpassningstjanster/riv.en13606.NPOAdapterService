@@ -17,7 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.mule;
+package se.skl.skltpservices.npoadapter.mapper.error;
 
 /**
  * Error codes that can be returned in a soap fault.
@@ -29,7 +29,16 @@ public enum Ehr13606AdapterError {
 	NOERROR     ("0000"),
 	UNDEFINED   ("1000"),
 	MAPREQUEST  ("2001"),
-	MAPRESPONSE ("2011");
+	MAPRESPONSE ("2011"),
+	MAPRIVREQUEST ("2002"),
+	MAPRIVRESPONSE ("2012"),
+	INDEXUPDATE ("3001"),
+	INDEXUPDATE_MESSAGE_TYPE ("3002"),
+	INDEXUPDATE_MISSING_TYPE ("3003"),
+	ROUTE		("4001"),
+	UNSUPPORTED ("5000"),
+	MISSINGDATA ("6000"),
+	INVALIDATA ("6001");
 
 	private String errorCode;
 	

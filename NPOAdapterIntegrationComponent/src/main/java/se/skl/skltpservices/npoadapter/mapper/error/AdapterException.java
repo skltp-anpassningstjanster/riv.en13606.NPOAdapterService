@@ -20,26 +20,27 @@
 package se.skl.skltpservices.npoadapter.mapper.error;
 
 
-/**
- * Exception thrown by mappers.
- * Ease the use of shared exception handler.
- * 
- * @author torbjorncla
- */
-public class MapperException extends AdapterException {
+public abstract class AdapterException extends Exception {
 	private static final long serialVersionUID = 1L;
+	private final Ehr13606AdapterError error;
 	
-	public MapperException(final String message) {
+	public AdapterException(final String message) {
 		super(message);
+		this.error = Ehr13606AdapterError.UNDEFINED;
 	}
-	public MapperException(final String message, final Exception cause) {
+	public AdapterException(final String message, final Exception cause) {
 		super(message, cause);
+		this.error = Ehr13606AdapterError.UNDEFINED;;
 	}
-	public MapperException(final String message, final Ehr13606AdapterError errorCode) {
-		super(message, errorCode);
+	public AdapterException(final String message, final Ehr13606AdapterError errorCode) {
+		super(message);
+		this.error = errorCode;
 	}
-	public MapperException(final String message, final Exception cause, final Ehr13606AdapterError errorCode) {
-		super(message, cause, errorCode);
+	public AdapterException(final String message, final Exception cause, final Ehr13606AdapterError errorCode) {
+		super(message, cause);
+		this.error = errorCode;
 	}
-
+	public Ehr13606AdapterError getEhr13606AdapterError() {
+		return error;
+	}
 }
