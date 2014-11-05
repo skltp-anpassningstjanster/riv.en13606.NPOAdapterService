@@ -35,7 +35,10 @@ public enum Ehr13606AdapterError {
 	INDEXUPDATE ("3001"),
 	INDEXUPDATE_MESSAGE_TYPE ("3002"),
 	INDEXUPDATE_MISSING_TYPE ("3003"),
-	ROUTE		("4001");
+	ROUTE		("4001"),
+	UNSUPPORTED ("5000"),
+	MISSINGDATA ("6000"),
+	INVALIDATA ("6001");
 
 	private String errorCode;
 	

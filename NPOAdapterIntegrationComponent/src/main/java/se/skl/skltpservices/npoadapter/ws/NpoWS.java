@@ -20,12 +20,16 @@
 package se.skl.skltpservices.npoadapter.ws;
 
 import org.apache.commons.lang.StringUtils;
+
 import se.nationellpatientoversikt.*;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
+import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Holder;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,23 +68,23 @@ public class NpoWS implements NPOSoap {
         final List<String> expected = new ArrayList<String>(NPO_PARAMETERS);
         for (final NpoParameterType p : parameters.getParameter()) {
             if (StringUtils.isBlank(p.getValue())) {
-                throw new IllegalArgumentException("Invalid (empty) value for mandatory request parameter: " + p.getName());
+                throw appendToNativeException(new OutboundResponseException("Invalid (empty) value for mandatory request parameter: " + p.getName(), Ehr13606AdapterError.INVALIDATA));
             }
             expected.remove(p.getName());
         }
         if (!expected.isEmpty()) {
-            throw new IllegalArgumentException("Missing mandatory request parameter(s): " + expected);
+            throw appendToNativeException(new OutboundResponseException("Missing mandatory request parameter(s): " + expected, Ehr13606AdapterError.MISSINGDATA));
         }
     }
 
     @Override
     public Boolean sendDeletions(@WebParam(name = "subject_of_care_id", targetNamespace = "http://nationellpatientoversikt.se") String subjectOfCareId, @WebParam(name = "deletions", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfdeletionDeletionType deletions, @WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
-        throw new IllegalArgumentException("Unsupported operation, adapter doesn't support sendDeletions");
+        throw appendToNativeException(new OutboundResponseException("Unsupported operation, adapter doesn't support sendDeletions", Ehr13606AdapterError.UNSUPPORTED));
     }
 
     @Override
     public void checkConsistency(@WebParam(name = "subject_of_care_id", targetNamespace = "http://nationellpatientoversikt.se") String subjectOfCareId, @WebParam(name = "from_time", targetNamespace = "http://nationellpatientoversikt.se") XMLGregorianCalendar fromTime, @WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters, @WebParam(mode = WebParam.Mode.OUT, name = "updates", targetNamespace = "http://nationellpatientoversikt.se") Holder<ArrayOfcheckConsistencyCheckConsistencyType> updates, @WebParam(mode = WebParam.Mode.OUT, name = "response_details", targetNamespace = "http://nationellpatientoversikt.se") Holder<ArrayOfresponseDetailnpoResponseDetailType> responseDetails) {
-        throw new IllegalArgumentException("Unsupported operation, adapter doesn't support checkConsistency");
+        throw appendToNativeException(new OutboundResponseException("Unsupported operation, adapter doesn't support checkConsistency", Ehr13606AdapterError.UNSUPPORTED));
     }
 
     @Override
@@ -90,14 +94,15 @@ public class NpoWS implements NPOSoap {
 
     @Override
     public Boolean sendIndex2(@WebParam(name = "subject_of_care_id", targetNamespace = "http://nationellpatientoversikt.se") String subjectOfCareId, @WebParam(name = "index_updates", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfindexUpdateIndexUpdateType indexUpdates, @WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
-        throw new IllegalArgumentException("Unsupported operation, adapter doesn't support sendIndex2");
-//
-//        validate(parameters);
-//        return Boolean.TRUE;
+        throw appendToNativeException(new OutboundResponseException("Unsupported operation, adapter doesn't support sendIndex2", Ehr13606AdapterError.UNSUPPORTED));
     }
 
     @Override
     public void getConsistencyList(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters, @WebParam(name = "from_time", targetNamespace = "http://nationellpatientoversikt.se") XMLGregorianCalendar fromTime, @WebParam(mode = WebParam.Mode.OUT, name = "subject_of_care_ids", targetNamespace = "http://nationellpatientoversikt.se") Holder<ArrayOfsubjectOfCareIdString> subjectOfCareIds, @WebParam(mode = WebParam.Mode.OUT, name = "response_details", targetNamespace = "http://nationellpatientoversikt.se") Holder<ArrayOfresponseDetailnpoResponseDetailType> responseDetails) {
-        throw new IllegalArgumentException("Unsupported operation, adapter doesn't support getConsistencyList");
+        throw appendToNativeException(new OutboundResponseException("Unsupported operation, adapter doesn't support getConsistencyList", Ehr13606AdapterError.UNSUPPORTED));
+    }
+    
+    protected IllegalArgumentException appendToNativeException(final OutboundResponseException error) {
+    	return new IllegalArgumentException(error.getMessage(), error);
     }
 }
