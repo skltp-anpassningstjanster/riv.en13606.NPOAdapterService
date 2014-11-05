@@ -8,6 +8,6 @@ object GetAlertInformationScenario extends {
     val requestFileName = "GetAlertInformationRequest.xml"
     val regex1          = "id>192712019550"
     val regex2          = "Body><GetAlertInformationResponse"
-    val length          = 25282
+    val length          = 25840
     
 } with Request
