@@ -2,6 +2,7 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import io.gatling.http.check.HttpCheck
 
 trait Request {
   
@@ -12,6 +13,7 @@ trait Request {
   def regex1          : String
   def regex2          : String
   def length          : Int
+//def checks          : HttpCheck
   
   val responseTimeThreshold:Long = 250 // only report response time problems for responses that take longer than this
   
@@ -24,7 +26,7 @@ trait Request {
                       }
                     }
                     )
-               .exec( http(requestName)
+               .exec( http(requestName) 
                      .post(postUrl)
                      .headers(postHeaders)
                      .body(ELFileBody(requestFileName))
@@ -36,6 +38,7 @@ trait Request {
                      .check(bodyString.transform(s => s.length).is(length))
                      .check(regex(regex1).exists) // TODO - can we pass in a variable length list instead of two elements?
                      .check(regex(regex2).exists)
+//                   .check(checks)
                      .check(responseTimeInMillis.saveAs("responseTimeInMillis"))
                      
                      
@@ -71,19 +74,25 @@ trait Request {
                        }
                       )
                      )
-                     // Alternative way of doing the same thing
+                    
+                    // Alternative way of doing the same thing
                      /*
                      .check(bodyString.transform(s => (s.length/(1024*1024))*100).saveAs("maximumResponseTimeMilliseconds"))
                      .check(responseTimeInMillis.transform { (t:Long, session:Session) => 
                        (t < session("maximumResponseTimeMilliseconds").as[Int])
                       })
                       */
-                     
                     )
   
   // response will be delayed by 10 - 20 seconds
   val slowRequest = exec((session) => {
                         session.set("careUnitHSAId", "slow")
+                    })
+                    .exec(request)
+
+  // source system responds before adapter timeout
+  val delayedRequestWithoutTimeout = exec((session) => {
+                        session.set("careUnitHSAId", "delayWithoutTimeout")
                     })
                     .exec(request)
                     

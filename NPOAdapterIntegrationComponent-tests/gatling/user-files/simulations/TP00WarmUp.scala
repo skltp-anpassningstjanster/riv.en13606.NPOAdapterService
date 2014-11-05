@@ -1,0 +1,46 @@
+
+import scala.concurrent.duration._
+import io.gatling.core.Predef._
+import io.gatling.http.Predef._
+import io.gatling.jdbc.Predef._
+import scenarios.GetAlertInformationScenario
+import scenarios.GetCareContactsScenario
+import scenarios.GetCareDocumentationScenario
+import scenarios.GetDiagnosisScenario
+import scenarios.GetImagingOutcomeScenario 
+import scenarios.GetLaboratoryOrderOutcomeScenario
+import scenarios.GetMedicationHistoryScenario
+import scenarios.GetReferralOutcomeScenario
+
+/**
+ * Simple requests to warm up a newly started Adapter.
+ */
+class TP00WarmUp extends Simulation {
+
+  // TODO - externalise constants
+
+  val baseURL:String = "http://localhost:33001"
+  val times:Int      = 2   // 1000
+  val pause:Int      = 2
+  
+  val httpProtocol = http.baseURL(baseURL)
+    
+  val getSequentialTimes = scenario("Get " + times + " times sequentially")
+                     .repeat(times){exec(GetAlertInformationScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetCareContactsScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetCareDocumentationScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetDiagnosisScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetImagingOutcomeScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetLaboratoryOrderOutcomeScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetMedicationHistoryScenario.request)}
+                     .pause(pause)
+                     .repeat(times){exec(GetReferralOutcomeScenario.request)}
+    
+  setUp (getSequentialTimes.inject(atOnceUsers(1)).protocols(httpProtocol))
+}

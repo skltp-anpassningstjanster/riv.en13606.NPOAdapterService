@@ -19,19 +19,54 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.util;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import lombok.Data;
 import lombok.SneakyThrows;
 
 import org.apache.commons.lang.StringUtils;
 
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.AD;
+import se.rivta.en13606.ehrextract.v11.ADXP;
+import se.rivta.en13606.ehrextract.v11.ATTESTATIONINFO;
+import se.rivta.en13606.ehrextract.v11.AUDITINFO;
+import se.rivta.en13606.ehrextract.v11.BL;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.EN;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.ENXP;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
+import se.rivta.en13606.ehrextract.v11.HEALTHCAREPROFESSIONALROLE;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.LINK;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.ParameterType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TEL;
+import se.rivta.en13606.ehrextract.v11.TELEMAIL;
+import se.rivta.en13606.ehrextract.v11.TELPHONE;
+import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * Utility class to create and map common EHR types.
@@ -526,13 +561,18 @@ public final class EHRUtil {
     	request.setSubjectOfCareId(iiType(mapperRequest.getPatientId()));
     	request.setTimePeriod(IVLTSType(mapperRequest.getTimePeriod()));
 
-    	
-    	if (mapperRequest.getCareUnitHSAId().size() > 1) {
-    		throw new IllegalArgumentException("Only one careUnitHSAId element can be handled");
+    	// sometimes careUnitHSAId, sometimes careUnitHSAid
+    	if (mapperRequest.getCareUnitHSAId().size() + mapperRequest.getCareUnitHSAid().size() > 1) {
+    		throw new IllegalArgumentException("Only one careUnitHSAId/careUnitHSAid element can be handled");
     	} else if (mapperRequest.getCareUnitHSAId().size() == 1) {
             final ParameterType hsaId = new ParameterType();
             hsaId.setName(stType("hsa_id"));
             hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
+            request.getParameters().add(hsaId);
+        } else if (mapperRequest.getCareUnitHSAid().size() == 1) {
+            final ParameterType hsaId = new ParameterType();
+            hsaId.setName(stType("hsa_id"));
+            hsaId.setValue(stType(mapperRequest.getCareUnitHSAid().get(0)));
             request.getParameters().add(hsaId);
         }
         request.getParameters().add(versionParameter);
@@ -597,17 +637,47 @@ public final class EHRUtil {
     	private String end;
     }
     
-    @Data
     public static class Request {
+        //
     	private PersonId patientId;
-    	private DatePeriod timePeriod;
-    	private List<String> careUnitHSAId;
+        public PersonId getPatientId() {
+            return patientId;
+        }
+        public void setPatientId(PersonId patientId) {
+            this.patientId = patientId;
+        }
+        
+        //
+        private DatePeriod timePeriod;
+        public DatePeriod getTimePeriod() {
+            return timePeriod;
+        }
+        public void setTimePeriod(DatePeriod timePeriod) {
+            this.timePeriod = timePeriod;
+        }
 
+        // RIV-TA : GetAlertInformation, GetCareContacts, GetDiagnosis, GetImagingOutcome, GetLaboratoryOrderOutcome, GetMedicationHistory
+    	private List<String> careUnitHSAId;
         public List<String> getCareUnitHSAId() {
             if (careUnitHSAId == null) {
                 careUnitHSAId = new ArrayList<String>();
             }
             return careUnitHSAId;
+        }
+        public void setCareUnitHSAId(List<String> ids) {
+            careUnitHSAId = ids;
+        }
+    	
+    	// RIV-TA : GetReferralOutcome, GetCareDocumentation
+        private List<String> careUnitHSAid;
+        public List<String> getCareUnitHSAid() {
+            if (careUnitHSAid == null) {
+                careUnitHSAid = new ArrayList<String>();
+            }
+            return careUnitHSAid;
+        }
+        public void setCareUnitHSAid(List<String> ids) {
+            careUnitHSAid = ids;
         }
     }
 
