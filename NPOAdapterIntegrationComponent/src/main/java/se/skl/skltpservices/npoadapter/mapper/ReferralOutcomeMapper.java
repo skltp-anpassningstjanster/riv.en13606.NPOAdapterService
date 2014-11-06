@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,12 +37,14 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.clinicalprocess.healthcond.actoutcome._3.ActCodeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ActType;
 import riv.clinicalprocess.healthcond.actoutcome._3.HealthcareProfessionalType;
+import riv.clinicalprocess.healthcond.actoutcome._3.MultimediaType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeBodyType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.TextMediaTypeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory;
@@ -93,12 +96,12 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
     
-    private static final String EHR13606_DEF = "DEF";
+    private static final String EHR13606_DEF  = "DEF";
     private static final String EHR13606_TILL = "TILL";
+    private static final String SAKNAS        = "saknas";
 
     // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
-        
         log.debug("unmarshal");
         try {
             return  (GetReferralOutcomeType) jaxb.unmarshal(reader);
@@ -111,6 +114,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         }
     }
 
+    
     protected String marshal(final GetReferralOutcomeResponseType response) {
         final JAXBElement<GetReferralOutcomeResponseType> el = objectFactory.createGetReferralOutcomeResponse(response);
         return jaxb.marshal(el);
@@ -152,7 +156,6 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * @return GetReferralOutcomeResponseType response type
      */
     protected GetReferralOutcomeResponseType map(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, String uniqueId) {
-
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         log.debug("list of EHREXTRACT - " + ehrExtractList.size());
         GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList);
@@ -172,6 +175,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         }
         return responseType;
     }
+
 
     /**
      * Maps contact header information.
@@ -241,45 +245,66 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         	log.warn("Missing mandatory field ReferralOutcomeTypeCode");
         }
         bodyType.setReferralOutcomeTitle(ehr13606values.get("und-kon-ure-kty"));
+        if (StringUtils.isBlank(bodyType.getReferralOutcomeTitle())) {
+            bodyType.setReferralOutcomeTitle(SAKNAS);
+        }
         bodyType.setReferralOutcomeText(ehr13606values.get("und-und-ure-utl"));
         if (StringUtils.isBlank(bodyType.getReferralOutcomeText())) {
-            bodyType.setReferralOutcomeText("TODO"); // is this an error?
+            bodyType.setReferralOutcomeText(SAKNAS);
         }
+        
+        //
         
         bodyType.getClinicalInformation(); // nothing to do here
 
+        //
+        
         bodyType.getAct().add(new ActType());
-        bodyType.getAct().get(0).setActCode(new ActCodeType());
-        bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
-        if (StringUtils.isBlank(bodyType.getAct().get(0).getActCode().getCode())) {
-            bodyType.getAct().get(0).getActCode().setCode("TODO");
-        }
-        bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod"));
-        if (StringUtils.isBlank(bodyType.getAct().get(0).getActCode().getCodeSystem())) {
-            bodyType.getAct().get(0).getActCode().setCodeSystem("TODO");
+        if (ehr13606values.containsKey("und-und-uat-kod")) {
+            bodyType.getAct().get(0).setActCode(new ActCodeType());
+            bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
+            bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod"));
         }
         
         bodyType.getAct().get(0).setActId(ehr13606values.get("vbe-rc-id"));
         bodyType.getAct().get(0).setActText(ehr13606values.get("und-kon-ure-kty"));
+        if (StringUtils.isBlank(bodyType.getAct().get(0).getActText())) {
+            bodyType.getAct().get(0).setActText(SAKNAS);
+        }
+        if (ehr13606values.containsKey("und-und-res-und")) {
+            // We need to confirm that und-und-res-und contains text - we have no sample data so far
+            bodyType.getAct().get(0).getActResult().add(new MultimediaType());
+            bodyType.getAct().get(0).getActResult().get(0).setMediaType(TextMediaTypeEnum.TEXT_PLAIN.value());
+            bodyType.getAct().get(0).getActResult().get(0).setValue(ehr13606values.get("und-und-res-und").getBytes(Charset.forName("UTF-8")));
+        }
+        
         bodyType.getAct().get(0).setActTime(ehr13606values.get("und-kon-ure-kty-high"));
+
+        //
         
         ReferralType rt = new ReferralType();
 
         rt.setReferralId(ehr13606values.get("und-kon-ure"));
         if (StringUtils.isBlank(rt.getReferralId())) {
-            rt.setReferralId("TODO");
+            rt.setReferralId(SAKNAS);
         }
         rt.setReferralReason(ehr13606values.get("vbe-vbe-fst"));
+        if (StringUtils.isBlank(rt.getReferralReason())) {
+            rt.setReferralReason(SAKNAS);
+        }
+        
         rt.setReferralTime(ehr13606values.get("vbe-committal-timecommitted"));
         
         rt.setReferralAuthor(new HealthcareProfessionalType());
         
         rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root"))); // root="1.2.752.129.2.1.2.1" extension="SONSVE"
         rt.getReferralAuthor().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
-        
-        rt.setCareContactId(null);
-
+        if (StringUtils.isBlank(rt.getReferralAuthor().getAuthorTime())) {
+            rt.getReferralAuthor().setAuthorTime(SAKNAS);
+        }
         bodyType.setReferral(rt);
+        
+        //
         return bodyType;
     }
 
@@ -337,7 +362,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                         } else if (value instanceof TS) {
                             text = ((TS)value).getValue();
                         } else {
-                            log.error("Code " + code + " has unknown value type " + value.getClass().getCanonicalName());
+                            log.error("Code " + code + " has unexpected value type " + value.getClass().getCanonicalName());
                         }
                                
                         if (StringUtils.isNotBlank(text)) {
