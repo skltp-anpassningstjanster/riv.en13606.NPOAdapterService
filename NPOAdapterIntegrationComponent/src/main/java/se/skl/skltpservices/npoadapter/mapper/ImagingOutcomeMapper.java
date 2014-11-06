@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,6 +45,7 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome._3.TimePeriodType;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.TextMediaTypeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.TypeOfResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeType;
@@ -86,6 +88,9 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String VARDBEGARAN = "vbe";
 	private static final String UNDERSOKNINGS_RESULTAT = "und";
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
+	
+	// Mandatory field default value
+    private static final String SAKNAS = "saknas";
 	
 	
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
@@ -156,7 +161,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 
 				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class));
 				if (StringUtils.isEmpty(type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().getAuthorTime())) {
-				    type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().setAuthorTime("TODO");
+				    type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
 				}
 		        
 				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
@@ -178,43 +183,66 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
             } catch (IllegalArgumentException iae) {
                 log.error("Received unexpected Svarstyp und-und-ure-typ:" + ehr13606values.get("und-und-ure-typ"));
             }
-        }
+        } 
         
         body.setResultTime(ehr13606values.get("und-und-ure-stp"));
+        if (StringUtils.isBlank(body.getResultTime())) {
+            body.setResultTime(SAKNAS);
+        }
         
         body.setResultReport(ehr13606values.get("und-und-ure-utl"));
+        if (StringUtils.isBlank(body.getResultReport())) {
+            body.setResultReport(SAKNAS);
+        }
 
         // ---
         
         body.getImageRecording().add(new ImageRecordingType());
         body.getImageRecording().get(0).setRecordingId(new IIType());
         body.getImageRecording().get(0).getRecordingId().setRoot(ehr13606values.get("vbe-rc-id"));
+        if (StringUtils.isBlank(body.getImageRecording().get(0).getRecordingId().getRoot())) {
+            body.getImageRecording().get(0).getRecordingId().setRoot(SAKNAS);
+        }
         
         body.getImageRecording().get(0).setExaminationActivity(new CVType());
         body.getImageRecording().get(0).getExaminationActivity().setCode(ehr13606values.get("und-und-uat-txt"));
+        if (StringUtils.isBlank(body.getImageRecording().get(0).getExaminationActivity().getCode())) {
+            body.getImageRecording().get(0).getExaminationActivity().setCode(SAKNAS);
+        }
 
         body.getImageRecording().get(0).setExaminationTimePeriod(new TimePeriodType());
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-low"));
-        body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-high"));
+        if (StringUtils.isBlank(body.getImageRecording().get(0).getExaminationTimePeriod().getStart())) {
+            body.getImageRecording().get(0).getExaminationTimePeriod().setStart(SAKNAS);    
+        }
+        if (StringUtils.isNoneBlank(ehr13606values.get("und-und-uat-tx-high"))) {
+            body.getImageRecording().get(0).getExaminationTimePeriod().setEnd(ehr13606values.get("und-und-uat-txt-high"));
+        }
         
         body.getImageRecording().get(0).setExaminationUnit(ehr13606values.get("und-bdi-ure-lab"));
 
-        body.getImageRecording().get(0).getImageStructuredData().add(new ImageStructuredDataType());
-        body.getImageRecording().get(0).getImageStructuredData().get(0).setImageData(new ImageDataType());
-        body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setReference(ehr13606values.get("und-und-res-und")); // TODO
-        body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setMediaType("TODO");
+        if (StringUtils.isNotBlank(ehr13606values.get("und-und-res-und"))) {
+            body.getImageRecording().get(0).getImageStructuredData().add(new ImageStructuredDataType());
+            body.getImageRecording().get(0).getImageStructuredData().get(0).setImageData(new ImageDataType());
+            // Assumption is that we receive text data - this will need to be confirmed by sample data
+            body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setMediaType(TextMediaTypeEnum.TEXT_PLAIN.value());
+            body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setValue(ehr13606values.get("und-und-res-und").getBytes(Charset.forName("UTF-8")));
+        }
         
         // ---
         
         body.setReferral(new ECGReferralType());
         body.getReferral().setReferralId(ehr13606values.get("vbe-rc-id"));
+        if (StringUtils.isBlank(body.getReferral().getReferralId())) {
+            body.getReferral().setReferralId(SAKNAS);    
+        }
+        
         body.getReferral().setReferralReason(ehr13606values.get("vbe-vbe-fst"));
-        body.getReferral().setCareContactId("TODO");
 
         body.getReferral().setAccountableHealthcareProfessional(new HealthcareProfessionalType());
         body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
         if (StringUtils.isBlank(body.getReferral().getAccountableHealthcareProfessional().getAuthorTime())) {
-            body.getReferral().getAccountableHealthcareProfessional().setAuthorTime("TODO");
+            body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
         }
 
         // --- 
@@ -222,6 +250,8 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         return body;
     }
 
+    
+    // Retrieve values from the two compositions and store in a Map
     private Map<String, String> getEhr13606values(COMPOSITION und, COMPOSITION vbe) {
 
         Map<String,String> ehr13606values = new LinkedHashMap<String,String>();
@@ -240,7 +270,8 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         return ehr13606values;
     }
 
-    // Retrieve ehr values from message and store in a map
+    
+    // Retrieve ehr values from this composition and store in a map
     private void retrieveValues(COMPOSITION composition, Map<String,String> values) {
 
         if (composition != null) {
@@ -251,6 +282,8 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
             }
             
             if ("vbe".equals(composition.getMeaning().getCode())) {
+                // Following are three 'synthetic' keys for retrieving String values 
+                // in incoming objects
                 if (composition.getRcId() != null) {
                     if (StringUtils.isNotBlank(composition.getRcId().getRoot())) {
                         values.put("vbe-rc-id", composition.getRcId().getRoot());
@@ -297,6 +330,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
                         } else if (value instanceof TS) {
                             text = ((TS)value).getValue();
                         } else {
+                            // There are many other subtypes of Any, but we restrict ourselves to the ones we expect
                             log.error("Code " + code + " has unknown value type " + value.getClass().getCanonicalName());
                         }
                                
