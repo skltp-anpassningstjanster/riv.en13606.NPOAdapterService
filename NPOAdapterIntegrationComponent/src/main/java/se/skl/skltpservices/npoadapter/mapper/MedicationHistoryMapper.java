@@ -54,7 +54,6 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
-import riv.clinicalprocess.activityprescription.actoutcome.enums._2.ResultCodeEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
@@ -108,6 +107,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     public static final CD MEANING_LKM = new CD();
     public static final CD MEANING_LKO = new CD();
     
+    // Default value for mandatory outgoing fields
+    private static final String SAKNAS = "saknas";
+    
     protected static final String TIME_ELEMENT = "lkm-ord-tid";
     
     static {
@@ -125,6 +127,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
       = new JaxbUtil(GetMedicationHistoryType.class, GetMedicationHistoryResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    
     protected GetMedicationHistoryType unmarshal(final XMLStreamReader reader) {
         try {
             return  (GetMedicationHistoryType) jaxb.unmarshal(reader);
@@ -133,6 +136,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         }
     }
 
+    
     protected String marshal(final GetMedicationHistoryResponseType response) {
         final JAXBElement<GetMedicationHistoryResponseType> el = objectFactory.createGetMedicationHistoryResponse(response);
         return jaxb.marshal(el);
@@ -181,17 +185,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
         
-        // TODO - investigate why this code is necessary - if EHRUtil.resultType cannot handle this message,
-        // then maybe we shouldn't be trying to do any extra processing here.
-        if (responseType.getResult() == null) {
-            responseType.setResult(new ResultType());
-        }
-        if (responseType.getResult().getResultCode() == null) {
-            responseType.getResult().setResultCode(ResultCodeEnum.OK); // TODO ok?
-        }
-        if (StringUtils.isEmpty(responseType.getResult().getLogId())) {
-            responseType.getResult().setLogId("TODO log id");
-        }
         return responseType;
     }
     
@@ -220,17 +213,17 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract, final int compositionIndex) {
         final COMPOSITION composition = ehrExtract.getAllCompositions().get(compositionIndex);
         if (composition.getComposer() == null) {
-            log.warn("composition " + compositionIndex + " has a null composer"); // TODO lkf has no composer
+            // Note that lkf has no composer - does this mean lkf compositions should be ignored?
+            log.warn("composition " + compositionIndex + " has a null composer");
         }
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            patient.getAccountableHealthcareProfessional().setAuthorTime("TODO - author time");   
+            patient.getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);   
         }
-        
         if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            patient.getLegalAuthenticator().setSignatureTime("TODO - signature time");
+            patient.getLegalAuthenticator().setSignatureTime(SAKNAS);
         }
         return patient;
     }
@@ -288,9 +281,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         mpt.setPrescriptionNote(ehr13606values.get("lkm-ord-not"));
         if (ehr13606values.containsKey("lkm-lva-kom")) {
-            mpt.setPrescriptionNote(mpt.getPrescriptionNote() + 
-                    (StringUtils.isNotBlank(mpt.getPrescriptionNote()) ? " " : "") +
-                    ehr13606values.get("lkm-lva-kom"));
+            mpt.setPrescriptionNote(
+              mpt.getPrescriptionNote() + (StringUtils.isNotBlank(mpt.getPrescriptionNote()) ? " " : "") +  ehr13606values.get("lkm-lva-kom")
+            );
         }
         
         mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
@@ -463,6 +456,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         return values;
      }
+    
 
     /*
      * Retrieve item values from incoming message and store 
@@ -498,7 +492,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                         } else if (value instanceof IVLTS) {
                             // lkm-dst-bet is more complex
                             // split into two String values
-                            // lkm-dst-bet-low, lkm-dst-bet-hiugh
+                            // lkm-dst-bet-low, lkm-dst-bet-high
                             String low = ((IVLTS)value).getLow().getValue();
                             if (StringUtils.isNotBlank(low)) {
                                 values.put(code + "-low", low);
