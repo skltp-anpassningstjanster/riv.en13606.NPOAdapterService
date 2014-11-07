@@ -21,7 +21,7 @@
         <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor">
             <spring:property name="router" ref="router" />
         </spring:bean>
-
+        
     </spring:beans>
 
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexTransformer" name="update-index-transformer">
