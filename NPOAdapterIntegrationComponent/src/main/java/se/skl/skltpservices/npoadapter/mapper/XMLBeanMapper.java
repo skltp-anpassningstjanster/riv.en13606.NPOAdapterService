@@ -19,14 +19,13 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldDefinition;
 import org.dozer.loader.api.TypeMappingBuilder;
 import org.dozer.loader.api.TypeMappingOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -45,6 +44,7 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.bind.annotation.XmlType;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -62,9 +62,10 @@ import static org.dozer.loader.api.TypeMappingOptions.mapNull;
  *
  * See also "http://dozer.sourceforge.net"
  */
-@Slf4j
 public class XMLBeanMapper {
 
+	private static final Logger log = LoggerFactory.getLogger(XMLBeanMapper.class);
+	
     //
     static final String SRC_PKG = "se.rivta.en13606.ehrextract.v11";
     static final String[] DST_PKGS = { "riv.ehr.patientsummary._1", "riv.ehr.patientsummary.getehrextractresponder._1" };
@@ -93,10 +94,13 @@ public class XMLBeanMapper {
 
             @Override
             protected void configure() {
-
-                for (final Class<?> c : findCandidates(SRC_PKG)) {
-                    typeMappingBuilder(c, dstClass(c.getSimpleName()), getAllFields(c));
-                }
+            	try {
+            		for (final Class<?> c : findCandidates(SRC_PKG)) {
+            			typeMappingBuilder(c, dstClass(c.getSimpleName()), getAllFields(c));
+            		}
+            	} catch (IOException err) {
+            		log.error("Error when configuring XMLBeanMapper", err);
+            	}
             }
 
             /**
@@ -239,13 +243,14 @@ public class XMLBeanMapper {
     }
 
     /**
+     * @throws IOException 
      * Finds mapping candidates for mapping between baseline schema to/from the corresponding RIV schema.
      *
      * @param basePackage the base package (baseline).
      * @return the list of candidates.
+     * @throws  
      */
-    @SneakyThrows
-    private static List<Class<?>> findCandidates(final String basePackage)
+    private static List<Class<?>> findCandidates(final String basePackage) throws IOException
     {
         final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         final MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
