@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
 
@@ -40,7 +39,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
  *
  * @author martin flower
  */
-@Slf4j
 public class RIVMedicationHistoryMapper extends MedicationHistoryMapper {
 
 	@Override

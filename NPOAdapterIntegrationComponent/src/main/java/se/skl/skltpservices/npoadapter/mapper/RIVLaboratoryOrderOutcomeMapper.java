@@ -33,7 +33,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 import javax.xml.stream.XMLStreamReader;
 
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Maps from GetEhrExtract (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType v3.0. <p>
@@ -43,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author torbjorncla
  *
  */
-@Slf4j
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 
 	@Override
@@ -68,7 +66,6 @@ public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMappe
 			message.setPayload(marshal(responseType));
 			return message;
 		} catch (Exception err) {
-			log.error("Error when transforming LaboratoryOrderOutcome response", err);
 			throw new MapperException("Error when transforming LaboratoryOrderoutcome response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}

@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
 
@@ -33,7 +32,6 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
-@Slf4j
 public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
 	
 	@Override

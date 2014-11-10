@@ -30,7 +30,6 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-import lombok.extern.slf4j.Slf4j;
 /**
  * Maps from GetEHRExctract (dia v1.1) to RIV GetDiagnosisResponseType v2.0. <p>
  *
@@ -39,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author torbjorncla
  *
  */
-@Slf4j
 public class RIVDiagnosisMapper extends DiagnosisMapper {
 
 	@Override
