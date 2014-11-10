@@ -90,9 +90,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String UNDERSOKNINGS_RESULTAT = "und";
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
 	
-	// Mandatory field default value
-    private static final String SAKNAS = "saknas";
-	
 	
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
 		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
@@ -161,9 +158,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 				final ImagingOutcomeType type = new ImagingOutcomeType();
 
 				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class));
-				if (StringUtils.isEmpty(type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().getAuthorTime())) {
-				    type.getImagingOutcomeHeader().getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
-				}
 		        
 				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
 		        type.setImagingOutcomeBody(mapBody(ehr13606values));
@@ -187,35 +181,20 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         } 
         
         body.setResultTime(ehr13606values.get("und-und-ure-stp"));
-        if (StringUtils.isBlank(body.getResultTime())) {
-            body.setResultTime(SAKNAS);
-        }
         
         body.setResultReport(ehr13606values.get("und-und-ure-utl"));
-        if (StringUtils.isBlank(body.getResultReport())) {
-            body.setResultReport(SAKNAS);
-        }
 
         // ---
         
         body.getImageRecording().add(new ImageRecordingType());
         body.getImageRecording().get(0).setRecordingId(new IIType());
         body.getImageRecording().get(0).getRecordingId().setRoot(ehr13606values.get("vbe-rc-id"));
-        if (StringUtils.isBlank(body.getImageRecording().get(0).getRecordingId().getRoot())) {
-            body.getImageRecording().get(0).getRecordingId().setRoot(SAKNAS);
-        }
         
         body.getImageRecording().get(0).setExaminationActivity(new CVType());
         body.getImageRecording().get(0).getExaminationActivity().setCode(ehr13606values.get("und-und-uat-txt"));
-        if (StringUtils.isBlank(body.getImageRecording().get(0).getExaminationActivity().getCode())) {
-            body.getImageRecording().get(0).getExaminationActivity().setCode(SAKNAS);
-        }
 
         body.getImageRecording().get(0).setExaminationTimePeriod(new TimePeriodType());
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-low"));
-        if (StringUtils.isBlank(body.getImageRecording().get(0).getExaminationTimePeriod().getStart())) {
-            body.getImageRecording().get(0).getExaminationTimePeriod().setStart(SAKNAS);    
-        }
         if (StringUtils.isNoneBlank(ehr13606values.get("und-und-uat-tx-high"))) {
             body.getImageRecording().get(0).getExaminationTimePeriod().setEnd(ehr13606values.get("und-und-uat-txt-high"));
         }
@@ -234,17 +213,11 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         
         body.setReferral(new ECGReferralType());
         body.getReferral().setReferralId(ehr13606values.get("vbe-rc-id"));
-        if (StringUtils.isBlank(body.getReferral().getReferralId())) {
-            body.getReferral().setReferralId(SAKNAS);    
-        }
         
         body.getReferral().setReferralReason(ehr13606values.get("vbe-vbe-fst"));
 
         body.getReferral().setAccountableHealthcareProfessional(new HealthcareProfessionalType());
         body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
-        if (StringUtils.isBlank(body.getReferral().getAccountableHealthcareProfessional().getAuthorTime())) {
-            body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
-        }
 
         // --- 
         
