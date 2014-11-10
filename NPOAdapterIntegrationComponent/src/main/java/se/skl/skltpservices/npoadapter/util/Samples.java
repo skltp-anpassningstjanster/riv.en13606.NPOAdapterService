@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.util;
 
-import lombok.Synchronized;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,6 +35,8 @@ public class Samples extends Timer {
     private long[] history;
     private AtomicLong total = new AtomicLong (0);
     private AtomicLong success = new AtomicLong (0);
+    
+    private final Object $lock = new Object[0];
 
     //
     public Samples(final String name, final int historyLength) {
@@ -51,12 +52,13 @@ public class Samples extends Timer {
     }
 
     //
-    @Synchronized
     private void add0(final long t) {
+    	synchronized (this.$lock) {
         if (ofs >= len) {
             ofs = 0;
         }
         history[ofs++] = t;
+    	}
     }
 
     /**
@@ -72,20 +74,23 @@ public class Samples extends Timer {
     /**
      * Calculate stats over sampled history.
      */
-    @Synchronized
     public void recalc() {
+    	synchronized (this.$lock) {
         reset();
         for (int i = 0; i < len && history[i] >= 0; i++) {
             super.add(history[i]);
         }
+    	}
     }
 
     @Override
-    @Synchronized
     public String toString() {
+    	synchronized (this.$lock) {
+			
         final long num = total.get();
         final long err = num - success.get();
         return String.format("num_req=%d, num_err=%d, timed_stats=(history=%d, time_avg=%d, time_max=%d, time_min=%d)",
                 num, err, n(), avg(), max(), min());
+    	}
     }
 }

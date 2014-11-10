@@ -19,12 +19,12 @@
  */
 package se.skl.skltpservices.npoadapter.ws;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.MuleContext;
 import org.mule.api.annotations.expressions.Lookup;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.management.stats.FlowConstructStatistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import riv.ehr.patientsummary._1.EHREXTRACT;
 import se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface;
@@ -48,13 +48,14 @@ import java.util.Map;
  *
  * @author Peter
  */
-@Slf4j
 @WebService(serviceName = "PingForConfigurationResponderService",
         endpointInterface = "se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface",
         portName = "PingForConfigurationResponderPort",
         targetNamespace = "urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21")
 public class PingForConfigurationWS implements PingForConfigurationResponderInterface {
 
+	private static final Logger log = LoggerFactory.getLogger(PingForConfigurationWS.class);
+	
     @Lookup
     private MuleContext muleContext;
 

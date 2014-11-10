@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.ws;
 
-import lombok.extern.slf4j.Slf4j;
 import riv.itintegration.engagementindex._1.EngagementTransactionType;
 import riv.itintegration.engagementindex._1.EngagementType;
 import riv.itintegration.engagementindex._1.ResultCodeEnum;
@@ -37,7 +36,6 @@ import javax.jws.WebService;
  *
  * @author peter
  */
-@Slf4j
 @WebService(serviceName = "UpdateResponderService",
         endpointInterface = "riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderInterface",
         portName = "UpdateResponderPort",
