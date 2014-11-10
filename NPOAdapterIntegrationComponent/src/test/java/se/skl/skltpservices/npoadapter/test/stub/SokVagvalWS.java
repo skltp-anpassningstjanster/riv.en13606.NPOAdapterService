@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import lombok.SneakyThrows;
 import skl.tp.vagvalsinfo.v2.HamtaAllaAnropsBehorigheterResponseType;
 import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
 import skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface;
@@ -82,11 +81,14 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
     }
 
     //
-    @SneakyThrows
     protected XMLGregorianCalendar fromNow(int days) {
+    	try {
         final GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
         cal.add(Calendar.DATE, days);
         final XMLGregorianCalendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         return date;
+    	} catch (Exception err) {
+    		return null;
+    	}
     }
 }

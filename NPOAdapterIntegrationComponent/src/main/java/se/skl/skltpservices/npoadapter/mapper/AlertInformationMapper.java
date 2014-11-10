@@ -24,8 +24,6 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 

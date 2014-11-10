@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
-import lombok.extern.slf4j.Slf4j;
 import riv.itintegration.engagementindex._1.ResultCodeEnum;
 import riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderInterface;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
@@ -27,17 +26,21 @@ import riv.itintegration.engagementindex.updateresponder._1.UpdateType;
 
 import javax.jws.WebService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Created by Peter on 2014-08-20.
  */
-@Slf4j
 @WebService(serviceName = "UpdateResponderService",
         endpointInterface = "riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderInterface",
         portName = "UpdateResponderPort",
         targetNamespace = "urn:riv:itintegration:engagementindex:Update:1:rivtabp21")
 public class EiUpdateWS implements UpdateResponderInterface {
 
+	private static final Logger log = LoggerFactory.getLogger(EiUpdateWS.class);
+	
     @Override
     public UpdateResponseType update(String logicalAddress, UpdateType parameters) {
 

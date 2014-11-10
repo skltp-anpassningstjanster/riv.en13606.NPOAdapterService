@@ -27,8 +27,11 @@ import java.util.Map;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sun.xml.messaging.saaj.packaging.mime.internet.ParseException;
+
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -45,12 +48,13 @@ import se.skl.skltpservices.npoadapter.test.Util;
 /**
  * Test stub always returning a fix response.
  */
-@Slf4j
 @WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service",
         endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType",
         portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
         targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
+	
+	private static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
 
     private static final String VKO = "vko";
     private static final String VOO = "voo";
@@ -82,10 +86,9 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     }
     
     @Override
-    @SneakyThrows
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
         final String hsaId = validate(request);
-
+        try {
         // sleep between 5 and 10 seconds
         if ("slow".equals(hsaId)) {
             final long t = 5000 + (long)(Math.random() * 5000);
@@ -120,7 +123,6 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             log.info("respondAfterAdapterTimeout, sleep for {} millis", delayMilliseconds);
             Thread.sleep(delayMilliseconds);
         }
-        
         
     	//See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
@@ -190,7 +192,16 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             log.error("Received unexpected request " + request.getMeanings().get(0).getCode());
         	return createAlternativeResponse(ResponseDetailTypeCodes.E, NOT_IMPLEMENTED_YET_TEXT);
         }
+        
         return responseType;
+        } catch (JAXBException err) {
+        	log.error("Error parsing", err);
+        } catch (InterruptedException in) {
+        	log.error("Thread sleep error", in);
+        } catch (java.text.ParseException e) {
+        	log.error("Parse date error", e);
+		}
+        return createAlternativeResponse(ResponseDetailTypeCodes.E, "Error creating response");
     }
 
     /**
