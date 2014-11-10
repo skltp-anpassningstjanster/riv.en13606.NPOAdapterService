@@ -57,7 +57,7 @@ public class AlertInformationMapperTest {
 	private static final String TEST_DATA_3 = UUID.randomUUID().toString();
 	
 	@BeforeClass
-	public static void init() {
+	public static void init() throws JAXBException {
 		mapper = new AlertInformationMapper();
 		ehrExctract = Util.loadEhrTestData(Util.ALERT_TEST_FILE);
 		ehrResp.getEhrExtract().add(ehrExctract);

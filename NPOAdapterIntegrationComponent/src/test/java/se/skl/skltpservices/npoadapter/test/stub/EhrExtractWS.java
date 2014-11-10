@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -231,7 +232,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     }
 
     //
-    protected EHREXTRACT getTestData(final String path) {
+    protected EHREXTRACT getTestData(final String path) throws JAXBException {
         EHREXTRACT ehrextract = responseCache.get(path);
         if (ehrextract == null) {
             ehrextract = Util.loadEhrTestData(path);

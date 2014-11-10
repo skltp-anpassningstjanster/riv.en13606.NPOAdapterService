@@ -28,6 +28,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.stream.XMLInputFactory;
@@ -53,7 +54,7 @@ public class ImagingOutcomeMapperTest {
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
 	
 	@BeforeClass
-	public static void init() {
+	public static void init() throws JAXBException {
 		ehrExtract = Util.loadEhrTestData(Util.IMAGE_TEST_FILE);
 		mapper = new ImagingOutcomeMapper();
 		ehrResp.getEhrExtract().add(ehrExtract);
@@ -68,7 +69,7 @@ public class ImagingOutcomeMapperTest {
     }
 
     //
-    private void dump(final GetImagingOutcomeResponseType responseType) {
+    private void dump(final GetImagingOutcomeResponseType responseType) throws JAXBException {
         Root root = new Root();
         root.type = responseType;
         Util.dump(root);
@@ -76,7 +77,7 @@ public class ImagingOutcomeMapperTest {
 	
 	
     @Test
-    public void testMapFromEhrToImagingOutcome() {
+    public void testMapFromEhrToImagingOutcome() throws JAXBException {
         GetImagingOutcomeResponseType responseType = mapper.mapResponseType(ehrResp,"uniqueId");
         assertNotNull(responseType);
 

@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.Data;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import riv.clinicalprocess.logistics.logistics._2.*;

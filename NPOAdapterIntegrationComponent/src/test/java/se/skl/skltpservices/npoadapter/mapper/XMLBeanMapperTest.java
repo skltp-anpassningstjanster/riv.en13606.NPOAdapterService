@@ -20,11 +20,14 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.Test;
+
 import riv.ehr.patientsummary._1.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.io.StringWriter;
 
 import static org.junit.Assert.assertEquals;
@@ -51,29 +54,34 @@ public class XMLBeanMapperTest {
         @Override
         public String toString() {
             final StringWriter writer = new StringWriter();
-            Util.dump(this, writer);
+            try {
+				Util.dump(this, writer);
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             return writer.toString();
         }
     }
 
 
     @Test
-    public void testEhrExtractMapping_CareCareContacts() {
+    public void testEhrExtractMapping_CareCareContacts() throws JAXBException {
         testEhrExtractMapping(Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE));
     }
 
     @Test
-    public void testEhrExtractMapping_CareCareDocumentation() {
+    public void testEhrExtractMapping_CareCareDocumentation() throws JAXBException {
         testEhrExtractMapping(Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE));
     }
 
     @Test
-    public void testEhrExtractMapping_Diagnosis() {
+    public void testEhrExtractMapping_Diagnosis() throws JAXBException {
         testEhrExtractMapping(Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE));
     }
 
     @Test
-    public void testEhrExtractMapping_Laboratory() {
+    public void testEhrExtractMapping_Laboratory() throws JAXBException {
         testEhrExtractMapping(Util.loadEhrTestData(Util.LAB_TEST_FILE));
     }
 

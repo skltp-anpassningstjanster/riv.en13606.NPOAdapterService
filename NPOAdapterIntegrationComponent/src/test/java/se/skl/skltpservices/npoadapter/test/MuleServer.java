@@ -19,8 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.test;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
 
 /**
@@ -30,15 +30,16 @@ import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
  * and to stop server by pressing any key.
  *
  */
-@Slf4j
 public class MuleServer {
+	
+	private static final Logger log = LoggerFactory.getLogger(MuleServer.class);
+	
     //
     public static void main(String[] args) throws Exception {
         final boolean batchMode =  Boolean.valueOf(System.getProperty("batchMode"));
         new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true) {
             @Override
-            @SneakyThrows
-            public void run() {
+            public void run() throws InterruptedException, Exception {
                 if (batchMode) {
                     // Start me up...
                     log.info("Starting up in batch mode...");

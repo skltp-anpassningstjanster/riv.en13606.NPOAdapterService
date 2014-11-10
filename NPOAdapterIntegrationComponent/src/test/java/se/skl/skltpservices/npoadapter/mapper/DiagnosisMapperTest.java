@@ -79,7 +79,7 @@ public class DiagnosisMapperTest {
 	private static final String TEST_DATA_2 = UUID.randomUUID().toString();
 		
 	@BeforeClass
-	public static void init() {
+	public static void init() throws JAXBException {
 		ehrExctract = Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
 		ehrResp.getEhrExtract().add(ehrExctract);
 		

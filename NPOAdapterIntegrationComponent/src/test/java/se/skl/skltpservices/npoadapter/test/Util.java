@@ -24,10 +24,10 @@ import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import lombok.SneakyThrows;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 
 /**
@@ -47,14 +47,12 @@ public class Util {
     public static final String REFERRALOUTCOME_TEST_FILE   = "/data/Underskning_SSEN13606-2.1.1.xml";
     
     //
-    @SneakyThrows
-    public static EHREXTRACT loadEhrTestData(final String fileName) {
+    public static EHREXTRACT loadEhrTestData(final String fileName) throws JAXBException {
         return loadEhrTestData(fileName, "se.rivta.en13606.ehrextract.v11");
     }
 
 
-    @SneakyThrows
-    public static EHREXTRACT loadEhrTestData(final String fileName, final String contextPath) {
+    public static EHREXTRACT loadEhrTestData(final String fileName, final String contextPath) throws JAXBException {
         final JAXBContext context = JAXBContext.newInstance(contextPath);
         final Unmarshaller unmarshaller;
         unmarshaller = context.createUnmarshaller();
@@ -66,12 +64,11 @@ public class Util {
     }
 
 
-    public static <T> void dump(final T jaxbObject) {
+    public static <T> void dump(final T jaxbObject) throws JAXBException {
         dump(jaxbObject, new OutputStreamWriter(System.out));
     }
 
-    @SneakyThrows
-    public static <T> void dump(final T jaxbObject, Writer writer) {
+    public static <T> void dump(final T jaxbObject, Writer writer) throws JAXBException {
         final JAXBContext context;
         context = JAXBContext.newInstance(jaxbObject.getClass());
         Marshaller marshaller = context.createMarshaller();

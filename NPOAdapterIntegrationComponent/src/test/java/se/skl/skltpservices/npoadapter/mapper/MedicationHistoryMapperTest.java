@@ -59,7 +59,7 @@ public class MedicationHistoryMapperTest {
 
     //
     @SuppressWarnings("unused")
-    private void dump(final GetMedicationHistoryResponseType responseType) {
+    private void dump(final GetMedicationHistoryResponseType responseType) throws JAXBException {
         Root root = new Root();
         root.type = responseType;
         Util.dump(root);

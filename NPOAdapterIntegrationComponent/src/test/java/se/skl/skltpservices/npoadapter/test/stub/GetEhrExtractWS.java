@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
 
 import lombok.extern.slf4j.Slf4j;
 import riv.ehr.patientsummary.getehrextract._1.rivtabp21.GetEhrExtractResponderInterface;
@@ -40,17 +41,20 @@ import se.skl.skltpservices.npoadapter.test.Util;
 public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
     @Override
     public GetEhrExtractResponseType getEhrExtract(String logicalAddress, GetEhrExtractType request) {
+    	try {
+    		final String infoType = request.getMeanings().get(0).getCode();
+    		final se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = getBaselineData(infoType);
+    		final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = new RIV13606REQUESTEHREXTRACTResponseType();
+    		riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().add(baseline);
 
-        final String infoType = request.getMeanings().get(0).getCode();
-        final se.rivta.en13606.ehrextract.v11.EHREXTRACT baseline = getBaselineData(infoType);
-        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = new RIV13606REQUESTEHREXTRACTResponseType();
-        riv13606REQUESTEHREXTRACTResponseType.getEhrExtract().add(baseline);
-
-        final GetEhrExtractResponseType responseType = XMLBeanMapper.getInstance().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
-        return responseType;
+    		final GetEhrExtractResponseType responseType = XMLBeanMapper.getInstance().map(riv13606REQUESTEHREXTRACTResponseType, GetEhrExtractResponseType.class);
+    		return responseType;
+    	} catch (Exception err) {
+    		return new GetEhrExtractResponseType();
+    	}
     }
 
-    protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaselineData(final String infoType) {
+    protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaselineData(final String infoType) throws JAXBException {
         switch (infoType) {
             case "vko":
                 log.info("Received VKO Request");

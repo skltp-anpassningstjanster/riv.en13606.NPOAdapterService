@@ -46,7 +46,7 @@ public class LaboratoryOrderOutcomeMapperTest {
 	private static LaboratoryOrderOutcomeMapper mapper;
 
 	@BeforeClass
-	public static void init() {
+	public static void init() throws JAXBException {
 		ehrExctract = Util.loadEhrTestData(Util.LAB_TEST_FILE);
 		ehrResp.getEhrExtract().add(ehrExctract);
 		mapper = Mockito.spy(new LaboratoryOrderOutcomeMapper());

@@ -61,14 +61,14 @@ public class ReferralOutcomeMapperTest {
     }
 
     //
-    private void dump(final GetReferralOutcomeResponseType responseType) {
+    private void dump(final GetReferralOutcomeResponseType responseType) throws JAXBException {
         Root root = new Root();
         root.type = responseType;
         Util.dump(root);
     }
 
     @Test
-    public void testMapFromEhrToMedicationHistory() {
+    public void testMapFromEhrToMedicationHistory() throws JAXBException {
         ReferralOutcomeMapper mapper = new ReferralOutcomeMapper();
         GetReferralOutcomeResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
         assertNotNull(responseType);

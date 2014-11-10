@@ -22,6 +22,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mule.api.MuleMessage;
+
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
@@ -31,6 +32,8 @@ import se.skl.skltpservices.npoadapter.test.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.xml.bind.JAXBException;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -64,7 +67,7 @@ public class CareDocumentationMapperTest {
 
 	
 	@BeforeClass
-	public static void init() {
+	public static void init() throws JAXBException {
 		ehrExctract = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
 		mapper = new CareDocumentationMapper();
 		careDocType = new GetCareDocumentationType();
