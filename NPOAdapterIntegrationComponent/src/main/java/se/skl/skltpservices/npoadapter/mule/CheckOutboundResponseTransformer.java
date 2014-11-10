@@ -19,17 +19,17 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import lombok.Cleanup;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractMessageTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import riv.itintegration.engagementindex._1.ResultCodeEnum;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
 import se.nationellpatientoversikt.SendStatusResponse;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 
 import javax.xml.stream.XMLStreamException;
@@ -45,12 +45,12 @@ import java.io.StringReader;
  *
  * @author Peter
  */
-@Slf4j
 public class CheckOutboundResponseTransformer extends AbstractMessageTransformer {
 
+	
+	private static final Logger log = LoggerFactory.getLogger(CheckOutboundResponseTransformer.class);
 
     @Override
-    @SneakyThrows
     public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
         final Object payload = message.getPayload();
 
@@ -58,12 +58,12 @@ public class CheckOutboundResponseTransformer extends AbstractMessageTransformer
         if (payload instanceof UpdateResponseType) {
             if (((UpdateResponseType) payload).getResultCode() == ResultCodeEnum.ERROR) {
                 final String msg = String.format("Engagement index update operation was rejected. Returned error message is: %s", ((UpdateResponseType) payload).getComment());
-                throw new OutboundResponseException(msg);
+                throw new TransformerException(this, new OutboundResponseException(msg, Ehr13606AdapterError.INDEXUPDATE));
             }
             log.debug("EI Update response is OK");
         } else if (payload instanceof Boolean) {
             if (!(Boolean) payload) {
-                throw new OutboundResponseException("Update index operation was rejected by NPO");
+                throw new TransformerException(this, new OutboundResponseException("Update index operation was rejected by NPO", Ehr13606AdapterError.INDEXUPDATE));
             }
             log.debug("NPO SendSimpleIndex/SendIndex2 response is OK");
         }
