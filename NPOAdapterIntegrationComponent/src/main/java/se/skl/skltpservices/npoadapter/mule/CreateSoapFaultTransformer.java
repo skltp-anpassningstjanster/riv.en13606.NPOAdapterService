@@ -43,16 +43,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleMessage;
 import org.mule.api.transport.PropertyScope;
 import org.mule.transformer.AbstractMessageTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
 /**
  * Convert a MuleMessage with exception payload to a MuleMessage with a soap fault payload.
@@ -65,8 +64,9 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
  * 
  * @author torbjorncla
  */
-@Slf4j
 public class CreateSoapFaultTransformer extends AbstractMessageTransformer {
+	
+	private static final Logger log = LoggerFactory.getLogger(CreateSoapFaultTransformer.class);
 	
 	protected static final String ERRORMESSAGEPREFIX = "[ehr13606 adapter]"; 
 

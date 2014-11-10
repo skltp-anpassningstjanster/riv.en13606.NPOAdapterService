@@ -19,10 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.itintegration.engagementindex._1.EngagementTransactionType;
@@ -49,8 +50,9 @@ import java.util.Map;
  * @author Peter
  *
  */
-@Slf4j
 public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
+	
+	private static final Logger log = LoggerFactory.getLogger(InboundUpdateIndexTransformer.class);
 	
 	private static final String HEALTHCOND_ACTOUTCOME = "riv:clinicalprocess:healthcond:actoutcome";
 	private static final String HEALTHCOND_DESCRIPTION = "riv:clinicalprocess:healthcond:description";

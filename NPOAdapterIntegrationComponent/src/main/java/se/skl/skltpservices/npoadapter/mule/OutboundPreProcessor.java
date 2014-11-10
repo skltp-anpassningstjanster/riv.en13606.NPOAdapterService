@@ -19,12 +19,13 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.processor.MessageProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.skl.skltpservices.npoadapter.router.RouteData;
 import se.skl.skltpservices.npoadapter.router.Router;
 
@@ -32,6 +33,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
 import java.io.ByteArrayInputStream;
 
 /**
@@ -40,8 +42,9 @@ import java.io.ByteArrayInputStream;
  *
  * @author Peter
  */
-@Slf4j
 public class OutboundPreProcessor implements MessageProcessor {
+	
+	private static final Logger log = LoggerFactory.getLogger(OutboundPreProcessor.class);
 
     public static final String ROUTE_LOGICAL_ADDRESS = "route-logical-address";
     public static final String ROUTE_SERVICE_SOAP_ACTION = "route-service-soap-action";
@@ -57,26 +60,29 @@ public class OutboundPreProcessor implements MessageProcessor {
     private Router router;
 
     @Override
-    @SneakyThrows
     public MuleEvent process(final MuleEvent event) throws MuleException {
-        final byte[] payload = event.getMessage().getPayloadAsBytes();
+        try {
+        	final byte[] payload = event.getMessage().getPayloadAsBytes();
 
-        // Ignore HTTP GET operations.
-        if (payload[0] == '/') {
-            return event;
-        }
-        final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(new ByteArrayInputStream(payload));
-        final String logicalAddress = extractLogicalAddress(reader);
-        log.debug("Logical address: " + logicalAddress);
+        	// Ignore HTTP GET operations.
+        	if (payload[0] == '/') {
+        		return event;
+        	}
+        	final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(new ByteArrayInputStream(payload));
+        	final String logicalAddress = extractLogicalAddress(reader);
+        	log.debug("Logical address: " + logicalAddress);
 
-        final MuleMessage message = event.getMessage();
-        message.setInvocationProperty(ROUTE_LOGICAL_ADDRESS, (logicalAddress == null) ? "" : logicalAddress);
-        final RouteData.Route route = this.router.getRoute(logicalAddress, false);
-        if (route != null) {
-            message.setInvocationProperty(ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
-            message.setInvocationProperty(ROUTE_ENDPOINT_URL, route.getUrl());
-        } else {
-            log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress);
+        	final MuleMessage message = event.getMessage();
+        	message.setInvocationProperty(ROUTE_LOGICAL_ADDRESS, (logicalAddress == null) ? "" : logicalAddress);
+        	final RouteData.Route route = this.router.getRoute(logicalAddress, false);
+        	if (route != null) {
+        		message.setInvocationProperty(ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
+        		message.setInvocationProperty(ROUTE_ENDPOINT_URL, route.getUrl());
+        	} else {
+        		log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress);
+        	}
+        } catch (Exception err) {
+        	log.error("Unablie to route to outbound system", err);
         }
         return event;
     }
