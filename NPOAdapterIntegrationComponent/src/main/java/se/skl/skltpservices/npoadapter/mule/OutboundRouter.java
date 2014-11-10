@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-import lombok.extern.slf4j.Slf4j;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
@@ -34,6 +33,9 @@ import org.mule.endpoint.URIBuilder;
 import org.mule.routing.outbound.AbstractRecipientList;
 import org.mule.transformer.simple.MessagePropertiesTransformer;
 import org.mule.transport.http.HttpConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.skl.skltpservices.npoadapter.util.Sample;
 
 import java.util.Collections;
@@ -45,8 +47,10 @@ import java.util.List;
  *
  * @author Peter
  */
-@Slf4j
 public class OutboundRouter extends AbstractRecipientList {
+	
+	private static final Logger log = LoggerFactory.getLogger(OutboundRouter.class);
+	
     // constants
     public static final String X_RIVTA_ORIGINAL_SERVICECONSUMER_HSAID = "x-rivta-original-serviceconsumer-hsaid";
     public static final String SOAP_ACTION = "SOAPAction";

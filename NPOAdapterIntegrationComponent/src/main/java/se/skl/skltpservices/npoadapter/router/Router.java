@@ -19,15 +19,17 @@
  */
 package se.skl.skltpservices.npoadapter.router;
 
-import lombok.Synchronized;
-import lombok.extern.slf4j.Slf4j;
 import org.mule.api.MuleContext;
 import org.mule.api.context.MuleContextAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
 import skl.tp.vagvalsinfo.v2.SokVagvalsServiceSoap11LitDocService;
 import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -41,8 +43,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Peter on 2014-08-08.
  */
-@Slf4j
 public class Router implements MuleContextAware {
+	
+	private static final Logger log = LoggerFactory.getLogger(Router.class);
+	
+	private final Object $lock = new Object[0];
 
     static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
     static final List<String> CONTRACTS = Arrays.asList(
@@ -204,18 +209,20 @@ public class Router implements MuleContextAware {
     }
 
     //
-    @Synchronized
     public void setRouteData(final RouteData routeData) {
-        this.routeData = routeData;
+    	synchronized (this.$lock) {
+    		this.routeData = routeData;			
+		}
     }
 
     //
-    @Synchronized
     public RouteData getRouteData() {
-        if (this.routeData == null) {
-            reloadRoutingData0();
-        }
-        return this.routeData;
+    	synchronized (this.$lock) {
+    		if (this.routeData == null) {
+    			reloadRoutingData0();
+    		}
+    		return this.routeData;
+		}
     }
 
     @Override

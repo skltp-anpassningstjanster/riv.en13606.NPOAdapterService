@@ -19,12 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.router;
 
-import lombok.Cleanup;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.*;
 import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Keeps routing information, main routing is from northbound NPO consumer to southbound care system.
@@ -35,8 +34,9 @@ import java.util.HashMap;
  *
  * @author Peter
  */
-@Slf4j
 public class RouteData implements Serializable {
+	
+	private static final Logger log = LoggerFactory.getLogger(RouteData.class);
 
     static final long serialVersionUID = 1L;
     public static final String CALLBACK_PREFIX = "callback:";
@@ -45,14 +45,48 @@ public class RouteData implements Serializable {
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
 
-    @Data
     public static class Route implements Serializable {
         static final long serialVersionUID = 1L;
         private String soapAction;
         private String url;
         private boolean callback;
+        
+        public Route() {
+        	super();
+        }
+        
+        public Route(String soapAction, String url, boolean callback) {
+			super();
+			this.soapAction = soapAction;
+			this.url = url;
+			this.callback = callback;
+		}
 
-        public String key(final String key) {
+		public String getSoapAction() {
+			return soapAction;
+		}
+
+		public void setSoapAction(String soapAction) {
+			this.soapAction = soapAction;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public boolean isCallback() {
+			return callback;
+		}
+
+		public void setCallback(boolean callback) {
+			this.callback = callback;
+		}
+
+		public String key(final String key) {
             return key(key, isCallback());
         }
 
@@ -103,14 +137,23 @@ public class RouteData implements Serializable {
 
     public static boolean save(final RouteData routingData, final String fileName) {
         boolean rc = false;
+        ObjectOutputStream os = null;
         try {
-            @Cleanup ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fileName));
+            os = new ObjectOutputStream(new FileOutputStream(fileName));
             os.writeObject(routingData);
             os.flush();
             rc = true;
             log.debug("NPOAdapter: Successfully saved route data to file: " + fileName);
         } catch (Exception e) {
             log.error("NPOAdapter: Unable to save route data to local file: " + fileName, e);
+        } finally {
+        	if(os != null) {
+        		try {
+        			os.close();
+        		} catch (Exception err) {
+        			log.error("Could not close stream", err);
+        		}
+        	}
         }
         return rc;
     }
@@ -118,12 +161,21 @@ public class RouteData implements Serializable {
     //
     public static RouteData load(final String fileName) {
         RouteData routingData = null;
+        ObjectInputStream is = null;
         try {
-            @Cleanup ObjectInputStream is = new ObjectInputStream(new FileInputStream(fileName));
+            is = new ObjectInputStream(new FileInputStream(fileName));
             routingData = (RouteData) is.readObject();
             log.debug("NPOAdapter: Successfully loaded route data from file: " + fileName);
         } catch (Exception e) {
             log.error("NPOAdapter: Unable to load route data from local file: " + fileName, e);
+        } finally {
+        	if(is != null) {
+        		try {
+        			is.close();
+        		} catch (Exception err) {
+        			log.error("Could not close input stream", err);
+        		}
+        	}
         }
         return routingData;
     }
