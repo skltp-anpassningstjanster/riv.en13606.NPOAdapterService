@@ -19,10 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.*;
@@ -51,8 +52,9 @@ import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomerespon
  * @author torbjorncla
  *
  */
-@Slf4j
 public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapper {
+	
+	private static final Logger log = LoggerFactory.getLogger(LaboratoryOrderOutcomeMapper.class);
 	
 	private static final JaxbUtil jaxb = new JaxbUtil(GetLaboratoryOrderOutcomeType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();

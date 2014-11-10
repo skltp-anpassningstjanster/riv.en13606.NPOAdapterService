@@ -27,10 +27,10 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
@@ -100,9 +100,10 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
  *
  * @author Martin
  */
-@Slf4j
 public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
 
+	private static final Logger log = LoggerFactory.getLogger(MedicationHistoryMapper.class);
+	
     public static final CD MEANING_LKF = new CD();
     public static final CD MEANING_LKM = new CD();
     public static final CD MEANING_LKO = new CD();

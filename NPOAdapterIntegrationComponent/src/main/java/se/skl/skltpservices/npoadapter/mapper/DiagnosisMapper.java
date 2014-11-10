@@ -19,10 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.*;
@@ -47,8 +48,9 @@ import javax.xml.stream.XMLStreamReader;
  * @author torbjorncla
  *
  */
-@Slf4j
 public class DiagnosisMapper extends AbstractMapper implements Mapper {
+	
+	private static final Logger log = LoggerFactory.getLogger(DiagnosisMapper.class);
 	
 	private static final JaxbUtil jaxb = new JaxbUtil(GetDiagnosisType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
