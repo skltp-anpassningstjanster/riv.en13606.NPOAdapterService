@@ -19,13 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
@@ -47,7 +45,6 @@ import java.util.List;
  *
  * @author Peter
  */
-@Slf4j
 public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     public static final CD MEANING_VKO = new CD();

@@ -26,9 +26,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
-import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.AlertInformationBodyType;
@@ -60,7 +58,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
  * @author torbjorncla
  *
  */
-@Slf4j
 public class AlertInformationMapper extends AbstractMapper implements Mapper {
 
 	private static final JaxbUtil jaxb = new JaxbUtil(GetAlertInformationType.class);

@@ -19,9 +19,10 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
 
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.description._2.*;
@@ -39,7 +40,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
-import java.util.List;
 
 /**
  * Maps from EHR_EXTRACT (voo v1.1) to RIV GetCareDocumentationResponseType v2.0. <p>
@@ -49,8 +49,9 @@ import java.util.List;
  * @author torbjorncla
  *
  */
-@Slf4j
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
+	
+	private static final Logger log = LoggerFactory.getLogger(CareDocumentationMapper.class);
 	
 	private static JaxbUtil jaxb = new JaxbUtil(GetCareDocumentationType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();

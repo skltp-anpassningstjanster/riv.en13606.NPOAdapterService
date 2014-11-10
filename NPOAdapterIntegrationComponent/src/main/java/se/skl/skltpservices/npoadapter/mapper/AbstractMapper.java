@@ -19,9 +19,9 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
@@ -45,9 +45,10 @@ import java.util.Map;
  *
  * @author Peter
  */
-@Slf4j
 public abstract class AbstractMapper {
 
+	private static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
+	
     // context for baseline (en 13606)
     private static final JaxbUtil enEhrExtractTypeJaxbUtil = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
     private static final ObjectFactory enObjectFactory = new ObjectFactory();
