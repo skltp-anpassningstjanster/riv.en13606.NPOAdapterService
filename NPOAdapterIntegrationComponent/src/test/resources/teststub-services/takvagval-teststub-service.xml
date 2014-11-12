@@ -9,10 +9,16 @@
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
                 http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
         ">
+
+    <!-- Flow that contains TakVägVal stub within an inbound endpoint -->
+    <!-- Flow only exists for integration tests - not part of distribution -->
+
     <flow name="tak-teststub-flow" >
 
         <inbound-endpoint address="${ENDPOINT_TAKVAGVAL_STUB}"
                           connector-ref="soitoolkit-http-connector"/>
+                          
+        <logger level="INFO" message="=== Incoming request to TakVägVal ===" />
 
         <cxf:jaxws-service
                 serviceClass="se.skl.skltpservices.npoadapter.test.stub.SokVagvalWS"
