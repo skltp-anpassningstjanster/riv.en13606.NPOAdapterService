@@ -10,9 +10,21 @@
                 http://www.mulesoft.org/schema/mule/http    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
 
+
     <flow name="UpdateResponderService-1.0-Client">
+
+        <!-- transform the message -->
+    
+        <!-- message is a SendSimpleIndex request to NPOSoap -->
+        <!-- use InboundUpdateIndexTransformer.transform() to transform the message into an UpdateType request which can be sent to EngagementIndex -->
+        <!-- UpdateType contains a sequence of EngagementTransaction -->
+        
         <transformer ref="update-index-transformer" />
 
+        <logger level="INFO" message="=============== Payload: #[payload] ==========" />
+        
+        <!-- Pass the transformed message to the EngagementIndex endpoint -->
+        
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
                                 address="${OUT_ENDPOINT_EI}"
                                 exchange-pattern="request-response"
@@ -27,6 +39,7 @@
                               operation="Update"
                               clientClass="riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderService"
                               wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
+                              
         </http:outbound-endpoint>
 
     </flow>
