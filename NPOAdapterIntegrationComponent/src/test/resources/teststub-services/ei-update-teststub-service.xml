@@ -7,6 +7,11 @@
                 http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
+        
+        
+    <!-- Flow that contains EngagementIndex stub within an inbound endpoint -->
+    <!-- Flow only exists for integration tests - not part of distribution -->
+        
     <flow name="eiupdate-teststub-flow" >
 
         <inbound-endpoint address="${ENDPOINT_EI_STUB}"
