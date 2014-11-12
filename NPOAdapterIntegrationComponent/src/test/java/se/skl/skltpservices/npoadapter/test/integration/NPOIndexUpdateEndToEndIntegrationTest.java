@@ -19,14 +19,13 @@
  */
 package se.skl.skltpservices.npoadapter.test.integration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.soap.SOAPException;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.apache.cxf.endpoint.Client;
@@ -36,16 +35,13 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import se.nationellpatientoversikt.ArrayOfinfoTypeInfoTypeType;
 import se.nationellpatientoversikt.ArrayOfparameternpoParameterType;
 import se.nationellpatientoversikt.InfoTypeType;
-import se.nationellpatientoversikt.NPO;
 import se.nationellpatientoversikt.NPOSoap;
 import se.nationellpatientoversikt.NpoParameterType;
-import se.nationellpatientoversikt.SendSimpleIndex;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 
 public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTestCase {
