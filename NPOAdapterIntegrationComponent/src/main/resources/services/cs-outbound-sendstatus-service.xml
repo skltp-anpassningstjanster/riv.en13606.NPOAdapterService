@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:https="http://www.mulesoft.org/schema/mule/https"
+        xsi:schemaLocation="
+                http://www.mulesoft.org/schema/mule/core   http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf    http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/http   http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                http://www.mulesoft.org/schema/mule/https  http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+                ">
+
+
+    <flow name="CareSystemService-1.0-Client">
+
+        <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
+                                 address="https://#[careSystemAddress]"
+                                 exchange-pattern="request-response"
+                                 responseTimeout="${SERVICE_TIMEOUT_MS}"
+                                 transformer-refs="logReqOut"
+                                 responseTransformer-refs="logRespIn check-response-transformer">
+            
+            <cxf:jaxws-client port="CSSoap"
+                              operation="SendStatus"
+                              clientClass="se.nationellpatientoversikt.CS"
+                              wsdlLocation="classpath:/interactions/care_system/CARE_SYSTEM_1.1.2.wsdl" />
+                              
+        </https:outbound-endpoint>
+
+    </flow>
+
+</mule>

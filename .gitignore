@@ -3,3 +3,5 @@
 .settings
 .studio
 target
+/mule-project.xml
+/NPOAdapter/

@@ -19,27 +19,48 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import skl.tp.vagvalsinfo.v2.HamtaAllaAnropsBehorigheterResponseType;
 import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
 import skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface;
 import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
 
-import javax.jws.WebService;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 /**
- * Test stub service    .
+ * Stub service for retrieving all VirtualiseringsInfoType.
+ * 
+ * Only used by Integration tests. Not part of the distribution.
  */
 @WebService(serviceName = "SokVagvalsServiceSoap11LitDocService",
         targetNamespace = "urn:skl:tp:vagvalsinfo:v2",
-        endpointInterface = "skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface",
-                portName = "SokVagvalsSoap11LitDocPort")
+      endpointInterface = "skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface",
+               portName = "SokVagvalsSoap11LitDocPort")
 public class SokVagvalWS implements SokVagvalsInfoInterface {
+    
+    private static final Logger log = LoggerFactory.getLogger(SokVagvalWS.class);
+    
     @Override
-    public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(Object parameters) {
+    @WebMethod
+    @WebResult(name = "hamtaAllaVirtualiseringarResponse", targetNamespace = "urn:skl:tp:vagvalsinfo:v2", partName = "response")
+    public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(
+                                                 @WebParam(partName = "parameters", name = "hamtaAllaVirtualiseringar", targetNamespace = "urn:skl:tp:vagvalsinfo:v2")
+                                                 Object parameters) {
+        
+        // incoming parameter is ignored
+        
+        log.debug("SokVagvalsInfoInterface hamtaAllaVirtualiseringar");
+        
         final HamtaAllaVirtualiseringarResponseType responseType = new HamtaAllaVirtualiseringarResponseType();
         VirtualiseringsInfoType infoType = new VirtualiseringsInfoType();
         infoType.setReceiverId("VS-1");
@@ -71,11 +92,23 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType.setTomTidpunkt(null);
         responseType.getVirtualiseringsInfo().add(infoType);
 
-
+        infoType = new VirtualiseringsInfoType();
+        infoType.setReceiverId("VS-2");
+        infoType.setRivProfil("RIVEN13606");
+        infoType.setTjansteKontrakt("http://nationellpatientoversikt.se:SendStatus");
+        infoType.setVirtualiseringsInfoId("ID-987");
+        infoType.setAdress("https://localhost:33002/npoadapter/caresystem/stub");
+        infoType.setFromTidpunkt(fromNow(-2));
+        infoType.setTomTidpunkt(null);
+        responseType.getVirtualiseringsInfo().add(infoType);
+        
         return responseType;
     }
 
     @Override
+    /**
+     * Throws IllegalArgumentException. Not implemented.
+     */
     public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(Object parameters) {
         throw new IllegalArgumentException("Method is not implemented (not valid in this context)!");
     }

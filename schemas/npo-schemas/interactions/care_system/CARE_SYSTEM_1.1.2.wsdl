@@ -228,7 +228,7 @@
                 <s:attribute name="info_type_id" type="s:string"/>
                 <s:attribute name="exists" type="s:boolean"/>
             </s:complexType>
-            <s:element name="SendStatus">
+            <s:element name="SendStatus"> 
                 <s:complexType>
                     <s:sequence>
                         <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
