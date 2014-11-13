@@ -45,5 +45,4 @@
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundCSTakLookupTransformer"           name="cs-taklookup-transformer"/>
     
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundCSSendStatusTransformer"         name="cs-sendstatus-transformer"/>
-
 </mule>

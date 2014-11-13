@@ -15,6 +15,44 @@
 
     <flow name="CareSystemService-1.0-Client">
 
+        <!--  PAN-89 SendStatus when index request is not forwarded to NPO -->
+    
+        <logger level="INFO" message="=== Prepare to call CareSystem SendStatus (SendSimpleIndexRequest is not forwarded to NPÖ) ===" />
+    
+        <!-- transform the message -->
+        <logger level="INFO" message="=== Transforming EngagementIndex UpdateResponseType to CareSystem SendStatus ===" />
+        <transformer ref="cs-sendstatus-transformer" />
+        <set-variable variableName="sendStatusRequest" value="#[payload]" />
+        <logger level="INFO" message="=== sendStatusRequest: #[sendStatusRequest] ==========" />
+        
+
+        <!-- retrieve careSystemUrl -->
+        <logger level="INFO" message="=== Calling out to TakVägVal ===" />
+        <set-payload value="Not used"/>
+        <!-- internal connections are http -->
+        <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
+                                address="${ENDPOINT_TAKVAGVAL_STUB}"
+                                exchange-pattern="request-response"
+                                responseTimeout="${SERVICE_TIMEOUT_MS}"
+                                transformer-refs="logReqOut"
+                                responseTransformer-refs="logRespIn check-response-transformer">
+
+            <cxf:jaxws-client port="SokVagvalsSoap11LitDocPort"
+                              operation="hamtaAllaVirtualiseringar"
+                              clientClass="skl.tp.vagvalsinfo.v2.SokVagvalsServiceSoap11LitDocService"
+                              wsdlLocation="classpath:/sokvagval-info-v2.wsdl" />
+        </http:outbound-endpoint>
+        
+        <logger level="INFO" message="=== Transform response from TakVägVal to retrieve careSystemUrl for hsaId #[hsaId] ===" />
+        <transformer ref="cs-taklookup-transformer" />
+        <set-variable variableName="careSystemAddress" value="#[payload]"/>
+        <logger level="INFO" message="=== careSystemAddress:#[careSystemAddress], hsaId:#[hsaId] ===" />
+
+        <!--    -->
+        
+        <logger level="INFO" message="=== Calling out to CareSystem SendStatus (as index request was not forwarded to NPO) ===" />
+        <set-payload value="#[sendStatusRequest]"/>
+
         <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
                                  address="https://#[careSystemAddress]"
                                  exchange-pattern="request-response"

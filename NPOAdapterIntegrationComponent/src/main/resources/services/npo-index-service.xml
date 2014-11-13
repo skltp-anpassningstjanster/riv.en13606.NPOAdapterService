@@ -3,72 +3,107 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
         xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xmlns:https="http://www.mulesoft.org/schema/mule/https"
         xsi:schemaLocation="
-                http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-                http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-                http://www.mulesoft.org/schema/mule/https   http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+                http://www.mulesoft.org/schema/mule/core   http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                http://www.mulesoft.org/schema/mule/cxf    http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+                http://www.mulesoft.org/schema/mule/http   http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                http://www.mulesoft.org/schema/mule/https  http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
         ">
 
     <!--
-    Receives NPO specific send index requests. Then NPO and ei update are invoked synchronously.
-    See also the re-used outbound flow "ei-outbound-update-flow".
+    Receives NPÖ SendSimpleIndex request. 
+    NPÖ SendSimpleIndex and EngagementIndex Update are invoked synchronously.
     -->
     <flow name="NPOService-1.1.2">
 
+        <!-- http -->
         <inbound-endpoint address="${IN_ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="createSoapFaultTransformer logRespOut"
                           exchange-pattern="request-response">
-
             <cxf:jaxws-service
                     namespace="http://nationellpatientoversikt.se"
                     serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
-                    wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
+                    wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" 
+            />
         </inbound-endpoint>
+        
+        <set-variable variableName="sendSimpleIndexRequest" value="#[payload]"/>
 
-        <set-variable variableName="request" value="#[payload]"/>
 
-        <logger level="INFO" message="=============== Payload: #[variable:request] ==========" />
-
+        <!-- invoke sendSimpleIndex on NpoWS - validation component that implements the NPO interface -->
+        <!-- Returns true if the three parameters are present in the request -->
+        <!-- hsa_id, transaction_id, version -->
+        <!-- otherwise throw an exception -->
         <component>
+            <!-- NpoWS implements the webservice interface in order to validate the request payload -->
+            <!-- It does not do any implementation that would be part of NPO -->
             <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
         </component>
+        <set-variable variableName="result" value="#[payload]" />
+        <logger level="INFO" message="=== NpoWS validation result: #[variable:result] ==========" />
 
-        <set-variable variableName="response" value="#[payload]" />
-
+        <!--  -->
+        
+        <logger level="INFO" message="=== Whether to call external NPÖ SendSimpleIndex: ${FORWARD_INDEX_TO_NPO} ===" />
         <choice>
             <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
-
-                <logger level="INFO" message="========= Forward Index To NPO ===========" />
-
-                <set-payload value="#[variable:request]" />
-
-                <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
-                                         address="${OUT_ENDPOINT_NPO}"
-                                         exchange-pattern="request-response"
-                                         responseTimeout="${SERVICE_TIMEOUT_MS}"
-                                         transformer-refs="logReqOut"
-                                         responseTransformer-refs="logRespIn check-response-transformer">
-                    <cxf:jaxws-client port="NPOSoap"
-                                      operation="SendSimpleIndex"
-                                      clientClass="se.nationellpatientoversikt.NPO"
-                                      wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
-                </https:outbound-endpoint>
+                <set-payload value="#[variable:sendSimpleIndexRequest]" />
+                <!-- flow in npo-outbound-index-service.xml -->
+		        <flow-ref name="NPOService-1.1.2-Client" />
             </when>
             <otherwise>
                <echo-component />
             </otherwise>
         </choice>
 
-        <set-payload value="#[variable:request]" />
+        <!--  -->
+        
+        <set-payload value="#[sendSimpleIndexRequest]"/>
 
-        <logger level="INFO" message="========= Update E-Index ===========" />
+        <!-- TODO - is this the appropriate way to solve this problem? -->
+        <!-- Retrieve incoming parameters from the payload : hsa_id, transaction_id, version -->
+        <set-variable variableName="version"       value="#[payload[2].parameter[0].value]"/>
+        <set-variable variableName="transactionId" value="#[payload[2].parameter[1].value]"/>
+        <set-variable variableName="hsaId"         value="#[payload[2].parameter[2].value]"/>
 
+        <logger level="INFO" message="=== hsaId         : #[variable:hsaId] ===" />
+        <logger level="INFO" message="=== transactionId : #[variable:transactionId] ===" />
+        <logger level="INFO" message="=== version       : #[variable:version] ===" />
+        
+        <!--  -->
+        
+        <logger level="INFO" message="=== EngagementIndex Update - start ===" />
+        <set-payload value="#[variable:sendSimpleIndexRequest]" />
+
+        <!-- flow in ei-outbound-update-service.xml -->
         <flow-ref name="UpdateResponderService-1.0-Client" />
 
-        <set-payload value="#[variable:response]" />
+        <logger level="INFO" message="=== EngagementIndex Update - end ===" />
+
+        <!--  -->
+
+        <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
+        
+        <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
+        <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
+        
+        <choice>
+            <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
+                <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
+                <!-- flow in cs-outbound-sendstatus-service.xml -->
+                <flow-ref name="CareSystemService-1.0-Client" />
+            </when>
+            <otherwise>
+                <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
+            </otherwise>
+        </choice>
+        
+        <!-- If no exception has been thrown, then always return true -->
+        <set-payload value="#[true]"/>
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
     </flow>
