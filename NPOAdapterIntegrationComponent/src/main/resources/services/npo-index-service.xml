@@ -83,28 +83,33 @@
         <flow-ref name="UpdateResponderService-1.0-Client" />
 
         <logger level="INFO" message="=== EngagementIndex Update - end ===" />
-
-        <!--  -->
-
-        <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
         
-        <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
-        <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
-        
-        <choice>
-            <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
-                <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
-                <!-- flow in cs-outbound-sendstatus-service.xml -->
-                <flow-ref name="CareSystemService-1.0-Client" />
-            </when>
-            <otherwise>
-                <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
-            </otherwise>
-        </choice>
-        
+        <!-- This is needed for CareSystem SendStatus below -->
+        <set-variable variableName="updateResponseType" value="#[payload]" />
         <!-- If no exception has been thrown, then always return true -->
         <set-payload value="#[true]"/>
 
+        <!--  -->
+
+        <async>
+	        <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
+	        
+	        <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
+	        <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
+	        
+	        <choice>
+	            <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
+	                <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
+                    <set-payload value="#[updateResponseType]"/>
+	                <!-- flow in cs-outbound-sendstatus-service.xml -->
+	                <flow-ref name="CareSystemService-1.0-Client" />
+	            </when>
+	            <otherwise>
+	                <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
+	            </otherwise>
+	        </choice>
+	    </async>   
+        
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
     </flow>
 

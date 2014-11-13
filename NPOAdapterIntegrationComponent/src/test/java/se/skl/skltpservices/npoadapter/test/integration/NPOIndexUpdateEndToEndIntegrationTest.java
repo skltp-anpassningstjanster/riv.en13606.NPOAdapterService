@@ -91,8 +91,16 @@ public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTe
 	
 	@Test
 	public void testSendSimpleIndexSuccess() {
+	    logger.debug("Number of categorizations:" + categorizations.size());
 		for(String cat : categorizations) {
 			assertTrue(npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType(cat, true), createParameters()));
+			logger.debug("categorization:" + cat + " completed successfully");
+	        try {
+	            logger.debug("1 second pause to let the Adapter call SendStatus asynchronously before the next test is started");
+	            Thread.sleep(1000);
+	        } catch(InterruptedException ex) {
+	            // ignore
+	        }
 		}
 	}
 	
