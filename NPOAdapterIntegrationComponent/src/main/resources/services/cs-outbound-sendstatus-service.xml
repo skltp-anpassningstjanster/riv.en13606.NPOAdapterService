@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mule
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
         xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+        xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
         xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xmlns:https="http://www.mulesoft.org/schema/mule/https"
         xsi:schemaLocation="
@@ -28,10 +29,11 @@
 
         <!-- retrieve careSystemUrl -->
         <logger level="INFO" message="=== Calling out to TakVägVal ===" />
-        <set-payload value="Not used"/>
+        <transformer ref="tak-vagval-hamtaallavirtualiseringar-transformer" />
+        <logger level="INFO" message="=== payload before calling TakVägVal:#[payload] ===" />
         <!-- internal connections are http -->
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
-                                address="${ENDPOINT_TAKVAGVAL_STUB}"
+                                address="${ENDPOINT_TAKVAGVAL}"
                                 exchange-pattern="request-response"
                                 responseTimeout="${SERVICE_TIMEOUT_MS}"
                                 transformer-refs="logReqOut"
@@ -53,6 +55,7 @@
         <logger level="INFO" message="=== Calling out to CareSystem SendStatus (as index request was not forwarded to NPO) ===" />
         <set-payload value="#[sendStatusRequest]"/>
 
+        <!-- https for external endpoints -->
         <https:outbound-endpoint connector-ref="soitoolkit-https-connector"
                                  address="https://#[careSystemAddress]"
                                  exchange-pattern="request-response"

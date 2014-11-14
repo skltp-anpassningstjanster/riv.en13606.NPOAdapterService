@@ -86,8 +86,11 @@
         
         <!-- This is needed for CareSystem SendStatus below -->
         <set-variable variableName="updateResponseType" value="#[payload]" />
-        <!-- If no exception has been thrown, then always return true -->
-        <set-payload value="#[true]"/>
+        
+        <logger level="INFO" message="=== Transform UpdateResponseType to Boolean ===" />
+        <transformer ref="ei-updateresponse-transformer" />
+        
+        <logger level="INFO" message="=== Returning from NPO SendSimpleIndex - result:#[payload] ===" />
 
         <!--  -->
 

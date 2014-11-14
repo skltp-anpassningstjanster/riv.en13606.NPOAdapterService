@@ -57,7 +57,12 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
                                                  @WebParam(partName = "parameters", name = "hamtaAllaVirtualiseringar", targetNamespace = "urn:skl:tp:vagvalsinfo:v2")
                                                  Object parameters) {
         
-        // incoming parameter is ignored
+        // incoming parameters Object is ignored - it needs to be:
+        //
+        // <soapenv:Body>
+        //   <urn:hamtaAllaVirtualiseringar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+        // </soapenv:Body>
+        //
         
         log.debug("SokVagvalsInfoInterface hamtaAllaVirtualiseringar");
         

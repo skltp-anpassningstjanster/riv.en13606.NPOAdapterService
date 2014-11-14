@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mule
-        xmlns="http://www.mulesoft.org/schema/mule/core"
         xmlns:xsi   ="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns       ="http://www.mulesoft.org/schema/mule/core"
         xmlns:cxf   ="http://www.mulesoft.org/schema/mule/cxf"
         xmlns:http  ="http://www.mulesoft.org/schema/mule/http"
         xmlns:https ="http://www.mulesoft.org/schema/mule/http"
@@ -16,9 +16,13 @@
     <!-- Flow only exists for integration tests - not part of distribution -->
 
     <flow name="npo-teststub-flow">
+    
         <inbound-endpoint address="${ENDPOINT_NPO_STUB}"
                           connector-ref="soitoolkit-https-connector"
                           exchange-pattern="request-response"/>
+                          
+        <logger level="INFO" message="=== Incoming request to NPO stub ===" />
+        
         <cxf:jaxws-service
                 namespace="http://nationellpatientoversikt.se"
                 serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
