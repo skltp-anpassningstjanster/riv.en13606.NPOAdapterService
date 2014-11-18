@@ -50,5 +50,7 @@
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.EIUpdateResponseTransformer"                    name="ei-updateresponse-transformer"/>
     
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.TakHamtaAllaVirtualiseringarRequestTransformer" name="tak-vagval-hamtaallavirtualiseringar-transformer" />    
+
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexParameterCaptureTransformer"  name="update-index-captureparameters-transformer" />    
 </mule>
 

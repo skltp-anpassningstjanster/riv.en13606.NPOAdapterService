@@ -33,7 +33,6 @@
         
         <set-variable variableName="sendSimpleIndexRequest" value="#[payload]"/>
 
-
         <!-- invoke sendSimpleIndex on NpoWS - validation component that implements the NPO interface -->
         <!-- Returns true if the three parameters are present in the request -->
         <!-- hsa_id, transaction_id, version -->
@@ -59,20 +58,6 @@
                <echo-component />
             </otherwise>
         </choice>
-
-        <!--  -->
-        
-        <set-payload value="#[sendSimpleIndexRequest]"/>
-
-        <!-- TODO - is this the appropriate way to solve this problem? -->
-        <!-- Retrieve incoming parameters from the payload : hsa_id, transaction_id, version -->
-        <set-variable variableName="version"       value="#[payload[2].parameter[0].value]"/>
-        <set-variable variableName="transactionId" value="#[payload[2].parameter[1].value]"/>
-        <set-variable variableName="hsaId"         value="#[payload[2].parameter[2].value]"/>
-
-        <logger level="INFO" message="=== hsaId         : #[variable:hsaId] ===" />
-        <logger level="INFO" message="=== transactionId : #[variable:transactionId] ===" />
-        <logger level="INFO" message="=== version       : #[variable:version] ===" />
         
         <!--  -->
         
@@ -102,6 +87,16 @@
 	        
 	        <choice>
 	            <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
+	            
+			        <!-- capture incoming parameters (hsaId, transactionId, version)-->
+			        <set-payload value="#[sendSimpleIndexRequest]"/>
+			        <transformer ref="update-index-captureparameters-transformer" />
+			        <logger level="INFO" message="=== hsaId         : #[variable:hsaId] ===" />
+			        <logger level="INFO" message="=== transactionId : #[variable:transactionId] ===" />
+			        <logger level="INFO" message="=== version       : #[variable:version] ===" />
+        
+                    <!--  -->
+	            
 	                <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
                     <set-payload value="#[updateResponseType]"/>
 	                <!-- flow in cs-outbound-sendstatus-service.xml -->

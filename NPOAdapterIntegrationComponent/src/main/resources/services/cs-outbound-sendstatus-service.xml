@@ -29,16 +29,16 @@
 
         <!-- retrieve careSystemUrl -->
         <logger level="INFO" message="=== Calling out to TakVägVal ===" />
+        <!-- 
         <transformer ref="tak-vagval-hamtaallavirtualiseringar-transformer" />
+         -->
+        <set-payload value="#[null]"/> 
         <logger level="INFO" message="=== payload before calling TakVägVal:#[payload] ===" />
         <!-- internal connections are http -->
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
                                 address="${ENDPOINT_TAKVAGVAL}"
                                 exchange-pattern="request-response"
-                                responseTimeout="${SERVICE_TIMEOUT_MS}"
-                                transformer-refs="logReqOut"
-                                responseTransformer-refs="logRespIn check-response-transformer">
-
+                                responseTimeout="${SERVICE_TIMEOUT_MS}">
             <cxf:jaxws-client port="SokVagvalsSoap11LitDocPort"
                               operation="hamtaAllaVirtualiseringar"
                               clientClass="skl.tp.vagvalsinfo.v2.SokVagvalsServiceSoap11LitDocService"
