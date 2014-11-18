@@ -53,8 +53,30 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
             try {
                 HamtaAllaVirtualiseringarResponseType h = (HamtaAllaVirtualiseringarResponseType)message.getPayload();
                 List<VirtualiseringsInfoType> a = h.getVirtualiseringsInfo();
+                log.debug("Retrieved " + a.size() + " VirtualiseringsInfoType");
                 for (VirtualiseringsInfoType v : a) {
-                    if (hsaId.equalsIgnoreCase(v.getReceiverId())) {
+                    
+                   /*
+                         <virtualiseringsInfo>
+                            <virtualiseringsInfoId>16</virtualiseringsInfoId>
+                            <receiverId>VS-1</receiverId>
+                            <rivProfil>RIVEN13606</rivProfil>
+                            <tjansteKontrakt>http://nationellpatientoversikt.se:SendStatus</tjansteKontrakt>
+                            <fromTidpunkt>2014-11-14T00:00:00.000</fromTidpunkt>
+                            <tomTidpunkt>2014-11-14T00:00:00.000</tomTidpunkt>
+                            <adress>https://33.33.33.1:33002/npoadapter/caresystem/stub</adress>
+                         </virtualiseringsInfo>                     
+                    */
+                    
+                    if (log.isDebugEnabled()) {
+                        log.debug(v.getVirtualiseringsInfoId() + " " + v.getReceiverId() + " " + v.getRivProfil() + v.getAdress());
+                    }
+                    
+                    if (hsaId.equalsIgnoreCase(v.getReceiverId())
+                        &&
+                       "RIVEN13606".equalsIgnoreCase(v.getRivProfil())
+                        &&
+                       "http://nationellpatientoversikt.se:SendStatus".equalsIgnoreCase(v.getTjansteKontrakt())) {
                         careSystemUrl = v.getAdress();
                         if (careSystemUrl.startsWith("https://")) {
                             careSystemUrl = careSystemUrl.substring("https://".length());
@@ -64,15 +86,15 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
                         }
                     }
                 }
-            } catch (Exception outboundError) {
-            	throw new IllegalStateException(outboundError.getMessage(), outboundError);
+            } catch (Exception e) {
+            	throw new IllegalStateException(e.getMessage(), e);
             }
         }
         if (StringUtils.isBlank(careSystemUrl)) {
             throw new IllegalStateException("No care system url found for hsaId " + hsaId);
         }
         message.setPayload(careSystemUrl);
-        log.debug("Mapped hsaId:" + hsaId + " to url:" + careSystemUrl);
+        log.debug("Mapped hsaId:" + hsaId + " to CareSystem url:" + careSystemUrl);
         return message;
     }
 }
