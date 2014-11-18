@@ -25,8 +25,8 @@ import org.mule.transformer.AbstractMessageTransformer;
 /**
  * Populate payload with
  * 
- * <soapenv:Body> <urn:hamtaAllaVirtualiseringar
- * xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+ * <soapenv:Body> 
+ *    <urn:hamtaAllaVirtualiseringar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
  * </soapenv:Body>
  *
  * @author Martin Flower
