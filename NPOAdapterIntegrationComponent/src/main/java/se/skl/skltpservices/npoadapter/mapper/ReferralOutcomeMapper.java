@@ -126,7 +126,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         try {
             final GetReferralOutcomeType request = unmarshal(payloadAsXMLStreamReader(message));
-            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_UND)));
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_UND, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
         } catch (Exception err) {
             throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -153,12 +153,10 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     /**
      * Maps from EHR_EXTRACT (und-kon) to GetReferralOutcomeResponseType.
      *
-     * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return GetReferralOutcomeResponseType response type
      */
     protected GetReferralOutcomeResponseType map(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, String uniqueId) {
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
-        log.debug("list of EHREXTRACT - " + ehrExtractList.size());
         GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList);
         responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
         return responseType;
@@ -182,7 +180,6 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * Maps contact header information.
      *
      * @param ehrExtract the extract.
-     * @param compositionIndex the actual composition in the list.
      * @return the target header information.
      */
     private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract) {

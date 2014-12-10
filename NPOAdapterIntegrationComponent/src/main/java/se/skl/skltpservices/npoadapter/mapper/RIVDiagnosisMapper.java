@@ -44,7 +44,7 @@ public class RIVDiagnosisMapper extends DiagnosisMapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_DIA);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_DIA, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;

@@ -105,12 +105,12 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		}
 	}
 
-	
+
 	@Override
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
 			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UND_BDI)));
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UND_BDI, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
 			if (err instanceof MapperException) {

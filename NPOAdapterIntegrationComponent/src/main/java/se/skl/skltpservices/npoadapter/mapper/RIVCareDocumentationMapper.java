@@ -45,7 +45,7 @@ public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_VOO);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_VOO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;

@@ -38,7 +38,7 @@ public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_UND_BDI);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_UND_BDI, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
             return message;

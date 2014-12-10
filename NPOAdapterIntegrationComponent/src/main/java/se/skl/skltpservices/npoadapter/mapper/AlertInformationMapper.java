@@ -115,7 +115,8 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
 			final GetAlertInformationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UPP)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UPP, message.getUniqueId(),
+					message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
 			throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);

@@ -206,7 +206,7 @@ public class EHRUtilTest {
         final GetDiagnosisType req = createDiagnosisTestRequest();
 
         req.getCareUnitHSAId().add("anotherCareUnitHSAIdUnitTest");
-        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
     }
 
     @Test
@@ -217,8 +217,8 @@ public class EHRUtilTest {
 
         final GetDiagnosisType req = createDiagnosisTestRequest();
         req.getCareUnitHSAId().clear();
-        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
-        assertEquals(1, reqOut.getParameters().size());
+        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
+        assertEquals(3, reqOut.getParameters().size());
     }
 
     @Test
@@ -228,7 +228,7 @@ public class EHRUtilTest {
 
         final GetDiagnosisType req = createDiagnosisTestRequest();
 
-		final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose);
+		final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
 
 		assertEquals(reqOut.getMeanings().get(0).getCode(), purpose.getCode());
 		assertEquals(reqOut.getMeanings().get(0).getCodeSystem(), purpose.getCodeSystem());
@@ -236,14 +236,14 @@ public class EHRUtilTest {
 		assertEquals(reqOut.getSubjectOfCareId().getExtension(), req.getPatientId().getId());
 		assertEquals(reqOut.getTimePeriod().getHigh().getValue(), req.getTimePeriod().getEnd());
 		assertEquals(reqOut.getTimePeriod().getLow().getValue(), req.getTimePeriod().getStart());
-		assertEquals(2, reqOut.getParameters().size());
+		assertEquals(3, reqOut.getParameters().size());
 		for(ParameterType param : reqOut.getParameters()) {
 			if(param.getName().getValue().equals("version")) {
 				assertEquals("1.1", param.getValue().getValue());
 			} else if(param.getName().getValue().equals("hsa_id")) {
 				assertEquals(req.getCareUnitHSAId().get(0), param.getValue().getValue());
-			} else {
-				fail(String.format("Expected paramaters are version or hsa_id got: <%s>", param.getName().getValue()));
+			} else if(param.getName().getValue().equals("transaction_id")) {
+				assertEquals("id", param.getValue().getValue());
 			}
 		}
 	}

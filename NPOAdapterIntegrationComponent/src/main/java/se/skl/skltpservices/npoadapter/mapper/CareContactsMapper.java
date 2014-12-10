@@ -72,7 +72,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
     	try {
     		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
-        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO)));
+        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
     	} catch (Exception err) {
     		throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);

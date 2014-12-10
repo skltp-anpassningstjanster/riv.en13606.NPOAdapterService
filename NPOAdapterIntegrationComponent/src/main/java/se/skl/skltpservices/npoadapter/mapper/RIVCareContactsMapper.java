@@ -61,7 +61,7 @@ public class RIVCareContactsMapper extends CareContactsMapper {
 
 		// map to baseline model
 		final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil
-				.requestType(request, MEANING_VKO);
+				.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
 
 		final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 

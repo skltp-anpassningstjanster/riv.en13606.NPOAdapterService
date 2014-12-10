@@ -21,11 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -549,8 +545,16 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(header, type);
     }
 
-    //
-    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(final T rivRequestType, final CD meaning) {
+    /**
+     * Mandatory in Svarstjansten.
+     *
+     * hsa_id
+     * transaction_id
+     * version
+     *
+     *
+     */
+    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(final T rivRequestType, final CD meaning, final String messageId, final Object logicalAddress) {
     	final RIV13606REQUESTEHREXTRACTRequestType request = new RIV13606REQUESTEHREXTRACTRequestType();
     	final Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
 
@@ -558,20 +562,34 @@ public final class EHRUtil {
     	request.setSubjectOfCareId(iiType(mapperRequest.getPatientId()));
     	request.setTimePeriod(IVLTSType(mapperRequest.getTimePeriod()));
 
+        /**
+         * HSAId is mandatory in Svarstjansten.
+         * Put LogicalAddress if no specific careUnitHSAId was specified.
+         */
+
+        final ParameterType hsaId = new ParameterType();
+        hsaId.setName(stType("hsa_id"));
+
+        hsaId.setValue(stType(logicalAddress.toString()));
+
     	// sometimes careUnitHSAId, sometimes careUnitHSAid
     	if (mapperRequest.getCareUnitHSAId().size() + mapperRequest.getCareUnitHSAid().size() > 1) {
     		throw new IllegalArgumentException("Only one careUnitHSAId/careUnitHSAid element can be handled");
-    	} else if (mapperRequest.getCareUnitHSAId().size() == 1) {
-            final ParameterType hsaId = new ParameterType();
-            hsaId.setName(stType("hsa_id"));
+    	} else if (mapperRequest.getCareUnitHSAId().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAId().get(0))) {
             hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
-            request.getParameters().add(hsaId);
-        } else if (mapperRequest.getCareUnitHSAid().size() == 1) {
-            final ParameterType hsaId = new ParameterType();
-            hsaId.setName(stType("hsa_id"));
+
+        } else if (mapperRequest.getCareUnitHSAid().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAId().get(0))) {
             hsaId.setValue(stType(mapperRequest.getCareUnitHSAid().get(0)));
-            request.getParameters().add(hsaId);
         }
+
+        request.getParameters().add(hsaId);
+
+        //Create tansaction_id param
+        final ParameterType transactionId = new ParameterType();
+        transactionId.setName(stType("transaction_id"));
+        transactionId.setValue(stType(messageId));
+
+        request.getParameters().add(transactionId);
         request.getParameters().add(versionParameter);
 
         return request;

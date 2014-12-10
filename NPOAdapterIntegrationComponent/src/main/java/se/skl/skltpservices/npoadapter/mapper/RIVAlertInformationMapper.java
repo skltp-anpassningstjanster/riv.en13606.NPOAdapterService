@@ -43,7 +43,7 @@ public class RIVAlertInformationMapper extends AlertInformationMapper {
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
 			final GetAlertInformationType req = unmarshal(payloadAsXMLStreamReader(message));
-			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_UPP);
+			final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil.requestType(req, MEANING_UPP, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
 			final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
 			message.setPayload(ehrExtractType(ehrExtractType));
 			return message;

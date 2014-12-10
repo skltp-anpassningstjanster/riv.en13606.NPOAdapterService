@@ -71,7 +71,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		log.debug("Transforming Request");
 		try {
 			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);

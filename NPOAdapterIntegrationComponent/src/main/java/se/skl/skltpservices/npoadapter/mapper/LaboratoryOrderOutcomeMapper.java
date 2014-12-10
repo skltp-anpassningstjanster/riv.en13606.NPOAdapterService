@@ -69,7 +69,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
 			final GetLaboratoryOrderOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING)));
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
             throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPREQUEST);
