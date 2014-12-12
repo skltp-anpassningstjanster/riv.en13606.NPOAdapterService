@@ -104,24 +104,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
 
 	private static final Logger log = LoggerFactory.getLogger(MedicationHistoryMapper.class);
 	
-    public static final CD MEANING_LKF = new CD();
-    public static final CD MEANING_LKM = new CD();
-    public static final CD MEANING_LKO = new CD();
-    
-    // Default value for mandatory outgoing fields
-    private static final String SAKNAS = "saknas";
+    public static final CD MEANING_LKM_ORD = new CD();
     
     protected static final String TIME_ELEMENT = "lkm-ord-tid";
     
     static {
-        MEANING_LKF.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_LKF.setCode(INFO_LKF);
-
-        MEANING_LKM.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_LKM.setCode(INFO_LKM);
-
-        MEANING_LKO.setCodeSystem("1.2.752.129.2.2.2.1");
-        MEANING_LKO.setCode(INFO_LKO);
+        MEANING_LKM_ORD.setCodeSystem("1.2.752.129.2.2.2.1");
+        MEANING_LKM_ORD.setCode(INFO_LKM_ORD);
     }
 
     private static final JaxbUtil jaxb 
@@ -148,7 +137,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         try {
             final GetMedicationHistoryType request = unmarshal(payloadAsXMLStreamReader(message));
-            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM_ORD, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
         } catch (Exception err) {
             throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -221,10 +210,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            patient.getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);   
+            //patient.getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
         }
         if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            patient.getLegalAuthenticator().setSignatureTime(SAKNAS);
+            //patient.getLegalAuthenticator().setSignatureTime(SAKNAS);
         }
         return patient;
     }
@@ -262,13 +251,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         MedicationPrescriptionType mpt = new MedicationPrescriptionType();
         
         mpt.setPrescriptionId(new IIType());
-        mpt.getPrescriptionId().setRoot(INFO_LKM);
-        mpt.getPrescriptionId().setExtension("TODO");
+        mpt.getPrescriptionId().setRoot(INFO_LKM_ORD);
+        //mpt.getPrescriptionId().setExtension("TODO");
         
         mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.INSÄTTNING);
         
         mpt.setPrescriptionStatus(new CVType());
-        mpt.getPrescriptionStatus().setCode("TODO");
+        //mpt.getPrescriptionStatus().setCode("TODO");
         
         if (ehr13606values.containsKey("lkm-dst-bet-low")) {
             mpt.setStartOfTreatment(ehr13606values.get("lkm-dst-bet-low"));
@@ -289,7 +278,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
         mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
-        mpt.getPrincipalPrescriptionReason().get(0).getReason().setCode("TODO");
+        //mpt.getPrincipalPrescriptionReason().get(0).getReason().setCode("TODO");
         
         mpt.setEvaluationTime  (ehr13606values.get("lkm-ord-utv"));
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
@@ -303,7 +292,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         mpt.getDrug().getDrug().setNplId(new CVType());
         
-        mpt.getDrug().getDrug().getNplId().setCode("TODO");
+        //mpt.getDrug().getDrug().getNplId().setCode("TODO");
         
         mpt.getDrug().getDosage().add(new DosageType());
         mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
@@ -323,12 +312,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
         }
         if (StringUtils.isEmpty(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText())) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText("TODO - unstructured dosage information text");
+            //mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText("TODO - unstructured dosage information text");
         }
         
         mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
         mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
-        mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
+        //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
         if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
@@ -416,11 +405,11 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             }
             
             mpt.getDispensationAuthorization().setDispensationAuthorizationId(new IIType());
-            mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("TODO authorization id");
+            //mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("TODO authorization id");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
-            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
-            mpt.getDispensationAuthorization().setPrescriptionSignatura("TODO signatura");
+            //mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
+            //mpt.getDispensationAuthorization().setPrescriptionSignatura("TODO signatura");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
                     (ehr13606values.containsKey("lkm-for-uiv") ? "lkm-for-uiv:utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +

@@ -75,7 +75,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
             case "upp":
             	log.info("Received UPP Request");
             	return Util.loadEhrTestData(Util.ALERT_TEST_FILE);
-            case "lkm":
+            case "lkm-ord":
                 log.info("Received LKM Request");
                 return Util.loadEhrTestData(Util.MEDICALHISTORY_TEST_FILE);
             case "und-kon":

@@ -61,7 +61,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String DIA = "dia";
     private static final String UND_KKM_KLI = "und-kkm-kli";
     private static final String UPP = "upp";
-    private static final String LKM = "lkm";
+    private static final String LKM = "lkm-ord";
     private static final String UND_KON = "und-kon";
     private static final String UND_BDI = "und-bdi";
     

@@ -68,9 +68,7 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 	static {
 		final Map<String, EIValue> vals = new HashMap<String, EIValue>();
 		vals.put(AbstractMapper.INFO_DIA, new EIValue("dia", HEALTHCOND_DESCRIPTION));
-		vals.put(AbstractMapper.INFO_LKF, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
-		vals.put(AbstractMapper.INFO_LKM, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
-		vals.put(AbstractMapper.INFO_LKO, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_LKM_ORD, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
 		vals.put(AbstractMapper.INFO_UND_BDI, new EIValue("und-bdi-ure", HEALTHCOND_ACTOUTCOME));
 		vals.put(AbstractMapper.INFO_UND_KKM_KLI, new EIValue("und-kkm-ure", HEALTHCOND_ACTOUTCOME));
 		vals.put(AbstractMapper.INFO_UND_KON, new EIValue("und-kon-ure", HEALTHCOND_ACTOUTCOME));
