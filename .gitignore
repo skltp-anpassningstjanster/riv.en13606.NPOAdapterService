@@ -5,3 +5,5 @@
 target
 /mule-project.xml
 /NPOAdapter/
+maven-eclipse.xml
+Maven_Ant_Builder.launch
