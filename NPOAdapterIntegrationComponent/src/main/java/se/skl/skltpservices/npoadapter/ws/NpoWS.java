@@ -29,6 +29,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Holder;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.nationellpatientoversikt.ArrayOfcheckConsistencyCheckConsistencyType;
 import se.nationellpatientoversikt.ArrayOfdeletionDeletionType;
@@ -64,11 +66,16 @@ public class NpoWS implements NPOSoap {
     // mandatory npo parameters.
     static final List<String> NPO_PARAMETERS = Arrays.asList("hsa_id", "transaction_id", "version");
 
+    private static final Logger log = LoggerFactory.getLogger(NpoWS.class);
+    
+    /**
+     * Return true if service is alive.
+     */
     @Override
     public Boolean notifyAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
+        log.info("notify alive true");
         return Boolean.TRUE;
     }
-
     
     /**
      * Returns true if mandatory parameters are present, otherwise throws IllegalArgumentException.

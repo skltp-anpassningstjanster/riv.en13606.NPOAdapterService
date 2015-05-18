@@ -46,67 +46,80 @@
         <logger level="INFO" message="=== NpoWS validation result: #[variable:result] ==========" />
 
         <!--  -->
-        
-        <logger level="INFO" message="=== Whether to call external NPÖ SendSimpleIndex: ${FORWARD_INDEX_TO_NPO} ===" />
+
         <choice>
-            <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
+        
+            <when expression="header:INVOCATION:cxf_operation={http://nationellpatientoversikt.se}NotifyAlive">
+                <logger message="Operation: NotifyAlive" level="INFO"/>
+            </when>
+            
+            <when expression="header:INVOCATION:cxf_operation={http://nationellpatientoversikt.se}SendSimpleIndex">
+                <logger message="Operation:SendSimpleIndex" level="INFO"/>
+                <logger level="INFO" message="=== Whether to call external NPÖ SendSimpleIndex: ${FORWARD_INDEX_TO_NPO} ===" />
+                <choice>
+                    <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
+                        <set-payload value="#[variable:sendSimpleIndexRequest]" />
+                        <!-- flow in npo-outbound-index-service.xml -->
+                        <flow-ref name="NPOService-1.1.2-Client" />
+                    </when>
+                    <otherwise>
+                       <echo-component />
+                    </otherwise>
+                </choice>
+                
+                <!--  -->
+                
+                <logger level="INFO" message="=== EngagementIndex Update - start ===" />
                 <set-payload value="#[variable:sendSimpleIndexRequest]" />
-                <!-- flow in npo-outbound-index-service.xml -->
-		        <flow-ref name="NPOService-1.1.2-Client" />
+        
+                <!-- flow in ei-outbound-update-service.xml -->
+                <flow-ref name="UpdateResponderService-1.0-Client" />
+        
+                <logger level="INFO" message="=== EngagementIndex Update - end ===" />
+                
+                <!-- This is needed for CareSystem SendStatus below -->
+                <set-variable variableName="updateResponseType" value="#[payload]" />
+                
+                <logger level="INFO" message="=== Transform UpdateResponseType to Boolean ===" />
+                <transformer ref="ei-updateresponse-transformer" />
+                
+                <logger level="INFO" message="=== Returning from NPO SendSimpleIndex - result:#[payload] ===" />
+        
+                <!--  -->
+        
+                <async>
+                    <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
+                    
+                    <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
+                    <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
+                    
+                    <choice>
+                        <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
+                        
+                            <!-- capture incoming parameters (hsaId, transactionId, version)-->
+                            <set-payload value="#[sendSimpleIndexRequest]"/>
+                            <transformer ref="update-index-captureparameters-transformer" />
+                            <logger level="INFO" message="=== hsaId         : #[variable:hsaId] ===" />
+                            <logger level="INFO" message="=== transactionId : #[variable:transactionId] ===" />
+                            <logger level="INFO" message="=== version       : #[variable:version] ===" />
+                
+                            <!--  -->
+                        
+                            <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
+                            <set-payload value="#[updateResponseType]"/>
+                            <!-- flow in cs-outbound-sendstatus-service.xml -->
+                            <flow-ref name="CareSystemService-1.0-Client" />
+                        </when>
+                        <otherwise>
+                            <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
+                        </otherwise>
+                    </choice>
+                </async>   
             </when>
             <otherwise>
-               <echo-component />
+                <logger message="Operation not supported" level="INFO"/>
             </otherwise>
         </choice>
-        
-        <!--  -->
-        
-        <logger level="INFO" message="=== EngagementIndex Update - start ===" />
-        <set-payload value="#[variable:sendSimpleIndexRequest]" />
-
-        <!-- flow in ei-outbound-update-service.xml -->
-        <flow-ref name="UpdateResponderService-1.0-Client" />
-
-        <logger level="INFO" message="=== EngagementIndex Update - end ===" />
-        
-        <!-- This is needed for CareSystem SendStatus below -->
-        <set-variable variableName="updateResponseType" value="#[payload]" />
-        
-        <logger level="INFO" message="=== Transform UpdateResponseType to Boolean ===" />
-        <transformer ref="ei-updateresponse-transformer" />
-        
-        <logger level="INFO" message="=== Returning from NPO SendSimpleIndex - result:#[payload] ===" />
-
-        <!--  -->
-
-        <async>
-	        <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
-	        
-	        <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
-	        <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
-	        
-	        <choice>
-	            <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
-	            
-			        <!-- capture incoming parameters (hsaId, transactionId, version)-->
-			        <set-payload value="#[sendSimpleIndexRequest]"/>
-			        <transformer ref="update-index-captureparameters-transformer" />
-			        <logger level="INFO" message="=== hsaId         : #[variable:hsaId] ===" />
-			        <logger level="INFO" message="=== transactionId : #[variable:transactionId] ===" />
-			        <logger level="INFO" message="=== version       : #[variable:version] ===" />
-        
-                    <!--  -->
-	            
-	                <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
-                    <set-payload value="#[updateResponseType]"/>
-	                <!-- flow in cs-outbound-sendstatus-service.xml -->
-	                <flow-ref name="CareSystemService-1.0-Client" />
-	            </when>
-	            <otherwise>
-	                <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
-	            </otherwise>
-	        </choice>
-	    </async>   
         
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
     </flow>
