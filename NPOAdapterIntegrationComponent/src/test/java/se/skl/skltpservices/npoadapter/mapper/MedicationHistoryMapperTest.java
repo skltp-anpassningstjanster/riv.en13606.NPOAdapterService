@@ -22,7 +22,6 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 

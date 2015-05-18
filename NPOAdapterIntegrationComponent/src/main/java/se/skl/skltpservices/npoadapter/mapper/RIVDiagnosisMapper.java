@@ -31,12 +31,9 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 /**
- * Maps from GetEHRExctract (dia v1.1) to RIV GetDiagnosisResponseType v2.0. <p>
- *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
+ * Maps from GetEHRExctract (dia v1.1) to RIV GetDiagnosisResponseType<p>
  * 
  * @author torbjorncla
- *
  */
 public class RIVDiagnosisMapper extends DiagnosisMapper {
 

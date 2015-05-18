@@ -20,12 +20,9 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 /**
- * Maps from GetEHRExctract (voo v1.1) to RIV GetCareDocumentationResponseType v2.0. <p>
- *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
+ * Maps from GetEHRExctract (voo v1.1) to RIV GetCareDocumentationResponseType.
  * 
  * @author torbjorncla
- *
  */
 import org.mule.api.MuleMessage;
 

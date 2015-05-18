@@ -31,16 +31,10 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
-import javax.xml.stream.XMLStreamReader;
-
-
 /**
- * Maps from GetEhrExtract (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType v3.0. <p>
- *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_actoutcome_3.0_RC1.zip"
+ * Maps from GetEhrExtract (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType.
  *
  * @author torbjorncla
- *
  */
 public class RIVLaboratoryOrderOutcomeMapper extends LaboratoryOrderOutcomeMapper {
 

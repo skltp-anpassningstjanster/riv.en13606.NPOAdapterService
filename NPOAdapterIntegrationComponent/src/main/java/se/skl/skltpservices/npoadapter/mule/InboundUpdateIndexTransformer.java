@@ -24,7 +24,6 @@ import org.mule.api.MuleMessage;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.itintegration.engagementindex._1.EngagementTransactionType;
 import riv.itintegration.engagementindex._1.EngagementType;
@@ -48,16 +47,15 @@ import java.util.Map;
  * Supports NPO SendSimpleIndex, SendIndex2 and Update.
  *
  * @author Peter
- *
  */
 public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 	
 	private static final Logger log = LoggerFactory.getLogger(InboundUpdateIndexTransformer.class);
 	
-	private static final String HEALTHCOND_ACTOUTCOME = "riv:clinicalprocess:healthcond:actoutcome";
-	private static final String HEALTHCOND_DESCRIPTION = "riv:clinicalprocess:healthcond:description";
+	private static final String HEALTHCOND_ACTOUTCOME           = "riv:clinicalprocess:healthcond:actoutcome";
+	private static final String HEALTHCOND_DESCRIPTION          = "riv:clinicalprocess:healthcond:description";
 	private static final String ACTIVITYPRESCRIPTION_ACTOUTCOME = "riv:clinicalprocess:activityprescription:actoutcome";
-	private static final String LOGISTICS_LOGISTICS = "riv:clinicalprocess:logistics:logistics";
+	private static final String LOGISTICS_LOGISTICS             = "riv:clinicalprocess:logistics:logistics";
 
 	/**
 	 * Key: NPO-OOID
@@ -67,21 +65,20 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
 	
 	static {
 		final Map<String, EIValue> vals = new HashMap<String, EIValue>();
-		vals.put(AbstractMapper.INFO_DIA, new EIValue("dia", HEALTHCOND_DESCRIPTION));
-		vals.put(AbstractMapper.INFO_LKM_ORD, new EIValue("caa-gmh", ACTIVITYPRESCRIPTION_ACTOUTCOME));
-		vals.put(AbstractMapper.INFO_UND_BDI, new EIValue("und-bdi-ure", HEALTHCOND_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_DIA,         new EIValue("dia"        , HEALTHCOND_DESCRIPTION));
+		vals.put(AbstractMapper.INFO_LKM_ORD,     new EIValue("caa-gmh"    , ACTIVITYPRESCRIPTION_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UND_BDI,     new EIValue("und-bdi-ure", HEALTHCOND_ACTOUTCOME));
 		vals.put(AbstractMapper.INFO_UND_KKM_KLI, new EIValue("und-kkm-ure", HEALTHCOND_ACTOUTCOME));
-		vals.put(AbstractMapper.INFO_UND_KON, new EIValue("und-kon-ure", HEALTHCOND_ACTOUTCOME));
-		vals.put(AbstractMapper.INFO_UPP, new EIValue("upp", HEALTHCOND_DESCRIPTION));
-		vals.put(AbstractMapper.INFO_VKO, new EIValue("vko", LOGISTICS_LOGISTICS));
-		vals.put(AbstractMapper.INFO_VOO, new EIValue("voo", HEALTHCOND_DESCRIPTION));
+		vals.put(AbstractMapper.INFO_UND_KON,     new EIValue("und-kon-ure", HEALTHCOND_ACTOUTCOME));
+		vals.put(AbstractMapper.INFO_UPP,         new EIValue("upp"        , HEALTHCOND_DESCRIPTION));
+		vals.put(AbstractMapper.INFO_VKO,         new EIValue("vko"        , LOGISTICS_LOGISTICS));
+		vals.put(AbstractMapper.INFO_VOO,         new EIValue("voo"        , HEALTHCOND_DESCRIPTION));
 		eiValues = Collections.unmodifiableMap(vals);
 	}
 	
     static final String NPO_PARAM_PREFIX = "npo_param_";
 
     private static final ObjectFactory of = new ObjectFactory();
-    private static final JaxbUtil jaxbUtil = new JaxbUtil(UpdateType.class);
     public static final String NOT_AVAILABLE = "NA";
 
     private String eiLogicalAddress;
@@ -103,20 +100,21 @@ public class InboundUpdateIndexTransformer extends AbstractMessageTransformer {
         UpdateType updateRequest = null;
         try {
         	if (payload[1] instanceof ArrayOfinfoTypeInfoTypeType) {
-        		log.debug("SimpleIndex to Update");
+        		log.debug("transforming SendSimpleIndex to ei update");
         		final SendSimpleIndex simpleIndex = new SendSimpleIndex();
         		simpleIndex.setSubjectOfCareId((String) payload[0]);
         		simpleIndex.setInfoTypes((ArrayOfinfoTypeInfoTypeType) payload[1]);
         		simpleIndex.setParameters((ArrayOfparameternpoParameterType) payload[2]);
         		updateRequest = map(simpleIndex, message);
         	} else if (payload[1] instanceof ArrayOfindexUpdateIndexUpdateType) {
-        		log.debug("SendIndex2 to Update");
+        		log.debug("transforming SendIndex2 to ei update");
         		final SendIndex2 sendIndex2 = new SendIndex2();
         		sendIndex2.setSubjectOfCareId((String) payload[0]);
         		sendIndex2.setIndexUpdates((ArrayOfindexUpdateIndexUpdateType) payload[1]);
         		sendIndex2.setParameters((ArrayOfparameternpoParameterType) payload[2]);
         		updateRequest = map(sendIndex2, message);
         	} else if (payload[1] instanceof UpdateType) {
+                log.debug("fixing ei update");
         		updateRequest = fix(message, (UpdateType) payload[1]);
         	} else {
         		throw new OutboundResponseException("Unexpected type of message: " + payload[1], Ehr13606AdapterError.INDEXUPDATE_MESSAGE_TYPE);

@@ -25,7 +25,6 @@ import org.mule.api.transformer.TransformerException;
 
 import se.skl.skltpservices.npoadapter.mapper.Mapper;
 import se.skl.skltpservices.npoadapter.mapper.error.AdapterException;
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.util.Sample;
 
 /**
@@ -34,7 +33,6 @@ import se.skl.skltpservices.npoadapter.util.Sample;
  * @see se.skl.skltpservices.npoadapter.mapper.AbstractMapper
  *
  * @author Peter
- *
  */
 public class OutboundRequestTransformer extends AbstractOutboundTransformer {
 

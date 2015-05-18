@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-
 import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
@@ -60,6 +59,4 @@ public class RIVImagingOutcomeMapper extends ImagingOutcomeMapper {
 			throw new MapperException("Error when transforming ImagingOutcome response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
-
-	
 }

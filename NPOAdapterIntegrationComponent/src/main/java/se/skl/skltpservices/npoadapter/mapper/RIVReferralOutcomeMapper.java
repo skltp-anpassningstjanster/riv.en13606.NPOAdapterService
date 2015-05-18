@@ -33,9 +33,9 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 /**
  * Maps from 
- *  GetEHRExctract (und-kon) 
+ *  GetEhrExtract (und-kon) 
  * to 
- *  RIV GetReferralOutcomeResponseType v2.0. <p>
+ *  RIV GetReferralOutcomeResponseType
  *
  * @author martin flower
  */
@@ -53,7 +53,6 @@ public class RIVReferralOutcomeMapper extends ReferralOutcomeMapper {
 			throw new MapperException("Error when transforming ReferralOutcome request", err, Ehr13606AdapterError.MAPRIVREQUEST);
 		}
 	}
-	
 	
 	@Override
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {

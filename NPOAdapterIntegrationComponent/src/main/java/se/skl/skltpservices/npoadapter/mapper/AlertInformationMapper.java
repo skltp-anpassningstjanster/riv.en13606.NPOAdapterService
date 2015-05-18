@@ -19,8 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.List;
-
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
@@ -54,7 +52,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 /**
  * Mapper for AlertInformationInteraction from 13606 UPP
  * @author torbjorncla
- *
  */
 public class AlertInformationMapper extends AbstractMapper implements Mapper {
 

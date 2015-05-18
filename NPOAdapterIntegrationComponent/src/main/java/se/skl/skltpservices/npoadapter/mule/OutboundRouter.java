@@ -134,7 +134,6 @@ public class OutboundRouter extends AbstractRecipientList {
         eb.setConnector(muleContext.getRegistry().lookupConnector(connectorName));
 
         return eb;
-
     }
 
     //

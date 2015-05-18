@@ -20,10 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
-import org.mule.api.annotations.expressions.Mule;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
-
-import javax.xml.stream.XMLStreamReader;
 
 /**
  * The generic mapper interface. <p/>

@@ -19,11 +19,24 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import static org.dozer.loader.api.FieldsMappingOptions.copyByReference;
+import static org.dozer.loader.api.FieldsMappingOptions.hintA;
+import static org.dozer.loader.api.FieldsMappingOptions.hintB;
+import static org.dozer.loader.api.TypeMappingOptions.mapNull;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlType;
+
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.dozer.loader.api.FieldDefinition;
 import org.dozer.loader.api.TypeMappingBuilder;
-import org.dozer.loader.api.TypeMappingOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -35,28 +48,26 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
-import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.BL;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.PQ;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TELEMAIL;
+import se.rivta.en13606.ehrextract.v11.TELPHONE;
+import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
-import javax.xml.bind.annotation.XmlType;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.dozer.loader.api.FieldsMappingOptions.*;
-import static org.dozer.loader.api.TypeMappingOptions.mapNull;
-
 /**
- * Based on Dozer mapper, and especially configures Dozer to map XMLBeans between the different schema
- * locations. <p/>
+ * Based on Dozer mapper, and especially configures Dozer to map XMLBeans between the different schema locations. 
+ * <p/>
  *
  * Baseline source schema package is "se.rivta.en13606.ehrextract.v11" (A) and target is "riv.ehr.patientsummary...." (B). <p/>
  *

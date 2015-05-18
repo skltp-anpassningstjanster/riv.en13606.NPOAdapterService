@@ -48,10 +48,10 @@ import java.util.Map;
  *
  * @author Peter
  */
-@WebService(serviceName = "PingForConfigurationResponderService",
+@WebService(serviceName   = "PingForConfigurationResponderService",
         endpointInterface = "se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface",
-        portName = "PingForConfigurationResponderPort",
-        targetNamespace = "urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21")
+        portName          = "PingForConfigurationResponderPort",
+        targetNamespace   = "urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21")
 public class PingForConfigurationWS implements PingForConfigurationResponderInterface {
 
 	private static final Logger log = LoggerFactory.getLogger(PingForConfigurationWS.class);

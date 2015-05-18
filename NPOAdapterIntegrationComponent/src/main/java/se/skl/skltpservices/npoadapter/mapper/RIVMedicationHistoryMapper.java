@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-
 import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -31,11 +30,12 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+
 /**
  * Maps from 
- *  GetEHRExctract (lkm/lko/lkf) 
+ *  GetEhrExtract (lkm/lko/lkf) 
  * to 
- *  RIV GetMedicationHistoryResponseType v2.0. <p>
+ *  RIV GetMedicationHistoryResponseType
  *
  * @author martin flower
  */
@@ -66,5 +66,4 @@ public class RIVMedicationHistoryMapper extends MedicationHistoryMapper {
 			throw new MapperException("Error when transforming MedicationHistory response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
-
 }

@@ -19,13 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,16 +50,11 @@ public class LaboratoryOrderOutcomeMapperTest {
 		mapper = Mockito.spy(new LaboratoryOrderOutcomeMapper());
 	}
 	
-	private void print(GetLaboratoryOrderOutcomeResponseType resp) throws JAXBException {
-		JAXBContext context =
-		        JAXBContext.newInstance(GetLaboratoryOrderOutcomeResponseType.class);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(new JAXBElement<GetLaboratoryOrderOutcomeResponseType>(new QName("uri","local"), GetLaboratoryOrderOutcomeResponseType.class, resp), System.out);
-	}
-
 	@Test
 	public void testMapResponseType() throws Exception {
 		final GetLaboratoryOrderOutcomeResponseType type = mapper.mapResponseType(ehrResp, TEST_UNIQUE_ID);
+		assertNotNull(type.getResult());
 	}
+	
+	// TODO - add some useful tests
 }

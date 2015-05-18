@@ -36,10 +36,10 @@ import javax.jws.WebService;
  *
  * @author peter
  */
-@WebService(serviceName = "UpdateResponderService",
+@WebService(serviceName   = "UpdateResponderService",
         endpointInterface = "riv.itintegration.engagementindex.update._1.rivtabp21.UpdateResponderInterface",
-        portName = "UpdateResponderPort",
-        targetNamespace = "urn:riv:itintegration:engagementindex:Update:1:rivtabp21")
+        portName          = "UpdateResponderPort",
+        targetNamespace   = "urn:riv:itintegration:engagementindex:Update:1:rivtabp21")
 public class UpdateWS implements UpdateResponderInterface {
     @Override
     public UpdateResponseType update(String logicalAddress, UpdateType request) {

@@ -35,7 +35,6 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
  * Maps GetAlertInformationMapper TK from GetEhrExtract
  * 
  * @author torbjorncla
- *
  */
 public class RIVAlertInformationMapper extends AlertInformationMapper {
 	
@@ -64,5 +63,4 @@ public class RIVAlertInformationMapper extends AlertInformationMapper {
 			throw new MapperException("Error when transforming response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
 		}
 	}
-	
 }

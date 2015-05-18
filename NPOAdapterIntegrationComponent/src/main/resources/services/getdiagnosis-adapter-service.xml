@@ -13,7 +13,8 @@
     <flow name="GetDiagnosisResponderService-2.0">
     		
         <inbound-endpoint address="${IN_ENDPOINT_GETDIAGNOSIS}"
-                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
+                          connector-ref="soitoolkit-http-connector" 
+                          exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="createSoapFaultTransformer logRespOut">
         </inbound-endpoint>                  

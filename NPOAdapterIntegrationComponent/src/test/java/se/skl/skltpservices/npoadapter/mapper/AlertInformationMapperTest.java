@@ -19,18 +19,16 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import riv.clinicalprocess.healthcond.description._2.AlertInformationBodyType;
@@ -38,11 +36,16 @@ import riv.clinicalprocess.healthcond.description._2.CVType;
 import riv.clinicalprocess.healthcond.description._2.OtherHypersensitivityType;
 import riv.clinicalprocess.healthcond.description._2.PharmaceuticalHypersensitivityType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationResponseType;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.CLUSTER;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
-import se.rivta.en13606.ehrextract.v11.*;
 
 public class AlertInformationMapperTest {
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
@@ -102,14 +105,6 @@ public class AlertInformationMapperTest {
 		assertFalse(resp.getAlertInformation().isEmpty());
 		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationBody());
 		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationHeader());
-	}
-	
-	private void print(GetAlertInformationResponseType resp) throws JAXBException {
-		JAXBContext context =
-		        JAXBContext.newInstance(GetAlertInformationResponseType.class);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(new JAXBElement<GetAlertInformationResponseType>(new QName("uri","local"), GetAlertInformationResponseType.class, resp), System.out);
 	}
 	
 	private static CD cdType(final String code) {

@@ -19,57 +19,29 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.mule.api.MuleMessage;
-
-import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
-import riv.clinicalprocess.healthcond.description._2.PersonIdType;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
-import se.rivta.en13606.ehrextract.v11.*;
-import se.skl.skltpservices.npoadapter.test.Util;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
+import riv.clinicalprocess.healthcond.description._2.PersonIdType;
+import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 
 public class CareDocumentationMapperTest {
 	
-	private static EHREXTRACT ehrExctract;
-	private static CareDocumentationMapper mapper;
 	private static GetCareDocumentationType careDocType;
-	private static FUNCTIONALROLE functionalRole;
-	private static Map<String, ORGANISATION> orgs;
-	private static Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> pros;
-	private static AUDITINFO audit;
-	
-	
-	private static final String TEST_CODE_SYSTEM = "1.2.752.129.2.2.2.1";
-	private static final String TEST_CODE = "voo";
-	
 	private static final String TEST_VALUE_1 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_2 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_3 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_4 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_5 = UUID.randomUUID().toString();
 	
-	private static final int TEST_INT_VALUE_1 = 225;
-	
-	
-
 	
 	@BeforeClass
 	public static void init() throws JAXBException {
-		ehrExctract = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
-		mapper = new CareDocumentationMapper();
 		careDocType = new GetCareDocumentationType();
 		final PersonIdType personId = new PersonIdType();
 		personId.setId(TEST_VALUE_1);
@@ -81,19 +53,12 @@ public class CareDocumentationMapperTest {
 		datePeriod.setStart(TEST_VALUE_5);
 		careDocType.setTimePeriod(datePeriod);
 
-		//TODO: add some test data....
-		functionalRole = new FUNCTIONALROLE();
-		orgs = new HashMap<String, ORGANISATION>();
-		pros = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
-		audit = new AUDITINFO();
-	}
-	
-	
-	@Test
-	public void mapResponseTypeTest() {
+		// TODO: add some test data....
 	}
 	
 
-	
-	
+	// TODO - implement some tests
+	@Test
+	public void mapResponseTypeTest() {
+	}
 }

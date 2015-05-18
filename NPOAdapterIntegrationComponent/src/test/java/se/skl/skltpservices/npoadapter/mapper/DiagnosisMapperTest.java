@@ -22,30 +22,15 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.namespace.QName;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
-import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
-import riv.clinicalprocess.healthcond.description._2.ResultType;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
-import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
 import se.rivta.en13606.ehrextract.v11.CONTENT;
@@ -54,19 +39,14 @@ import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
-import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * @author torbjorncla
- *
  */
 public class DiagnosisMapperTest {
-	
-	private static final String	UNIQUE_TEST_ID = UUID.randomUUID().toString();
 	
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
 	private static EHREXTRACT ehrExctract;
@@ -89,20 +69,10 @@ public class DiagnosisMapperTest {
 		st.setValue(TEST_DATA_1);
 	}
 	
-	private void print(GetDiagnosisResponseType resp) throws JAXBException {
-		JAXBContext context =
-		        JAXBContext.newInstance(GetDiagnosisResponseType.class);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.marshal(new JAXBElement<GetDiagnosisResponseType>(new QName("uri","local"), GetDiagnosisResponseType.class, resp), System.out);
-	}
-
-	
 	@Test
 	public void testMapDiagnosisBodyType() throws Exception {
 		boolean typeTouch = false;
 		CD cd = null;
-		int amountOfCompositions = ehrExctract.getAllCompositions().size();
 		
 		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
 			DiagnosisBodyType body = Mockito.spy(mapper.mapDiagnosisBodyType(comp));
@@ -134,6 +104,4 @@ public class DiagnosisMapperTest {
 			assertTrue(typeTouch);
 		}
 	}
-	
-
 }
