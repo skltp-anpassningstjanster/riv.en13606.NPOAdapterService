@@ -21,7 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
 
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
@@ -31,11 +31,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 
 /**
- * Maps from GetEhrExtract(vko v1.1) to RIV GetCareContactsResponseType v2.0.
- * <p>
- *
- * Riv contract spec (TKB):
- * "http://rivta.se/downloads/ServiceContracts_clinicalpocess_logistics_logistics_2.0.0.zip"
+ * Maps from GetEhrExtract(vko v1.1) to RIV GetCareContactsResponseType.
  *
  * @author Peter
  */

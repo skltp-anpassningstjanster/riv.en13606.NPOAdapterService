@@ -8,10 +8,11 @@
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
 
-    <flow name="GetCareDocumentationResponderService-2.0">
+    <flow name="GetCareDocumentationResponderService-2.1">
     		
         <inbound-endpoint address="${IN_ENDPOINT_GETCAREDOCUMENTATION}"
-                          connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
+                          connector-ref="soitoolkit-http-connector" 
+                          exchange-pattern="request-response"
                           transformer-refs="create-correlation-id logReqIn"
                           responseTransformer-refs="createSoapFaultTransformer logRespOut"
                           />
@@ -22,12 +23,11 @@
         <cxf:proxy-service namespace="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21"
                            payload="body"
                            service="GetCareDocumentationResponderService"
-                           wsdlLocation="classpath:/interactions/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.0_RIVTABP21.wsdl" />
+                           wsdlLocation="classpath:/interactions/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.1_RIVTABP21.wsdl" />
 
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 
         <flow-ref name="outbound-dynamic-route-flow" />
-        
 
         <response>
             <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundResponseTransformer" />

@@ -24,10 +24,10 @@
 	targetNamespace="urn:riv:clinicalprocess:healthcond:description:GetAlertInformationResponder:2"
 	elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
 
-	<xs:import schemaLocation="../../core_components/clinicalprocess_healthcond_description_2.0.xsd"
+	<xs:import schemaLocation="../../core_components/clinicalprocess_healthcond_description_2.1.xsd"
 		namespace="urn:riv:clinicalprocess:healthcond:description:2"/>
 	<xs:import
-		schemaLocation="../../core_components/clinicalprocess_healthcond_description_enum_2.0.xsd"
+		schemaLocation="../../core_components/clinicalprocess_healthcond_description_enum_2.1.xsd"
 		namespace="urn:riv:clinicalprocess:healthcond:description:enums:2"/>
 
 	<xs:element name="GetAlertInformation" type="tns:GetAlertInformationType"/>

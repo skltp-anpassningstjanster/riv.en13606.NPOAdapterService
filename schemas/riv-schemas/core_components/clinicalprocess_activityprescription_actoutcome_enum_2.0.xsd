@@ -31,9 +31,6 @@
     <xs:simpleType name="ErrorCodeEnum">
         <xs:restriction base="xs:string">
             <xs:enumeration value="INVALID_REQUEST"/>
-            <xs:enumeration value="TRANSFORMATION_ERROR"/>
-            <xs:enumeration value="APPLICATION_ERROR"/>
-            <xs:enumeration value="TECHNICAL_ERROR"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="NonReplaceableEnum">
@@ -44,8 +41,8 @@
     </xs:simpleType>
     <xs:simpleType name="TypeOfPrescriptionEnum">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="Insättning"/>
-            <xs:enumeration value="Utsättning"/>
+            <xs:enumeration value="I"/>
+            <xs:enumeration value="U"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="PrescriptionStatusEnum">

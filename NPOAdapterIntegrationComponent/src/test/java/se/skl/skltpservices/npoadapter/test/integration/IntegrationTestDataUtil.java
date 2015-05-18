@@ -26,7 +26,7 @@ import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
 import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
 import java.util.UUID;
@@ -57,7 +57,7 @@ public final class IntegrationTestDataUtil {
 		final GetCareContactsType type = new GetCareContactsType();
 		type.setPatientId(conPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
-		type.setTimePeriod(conDatePeriodType());
+		type.setDatePeriod(conDatePeriodType());
 		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
@@ -134,15 +134,15 @@ public final class IntegrationTestDataUtil {
 		return datePeriodType;
 	}
 	
-	private static riv.clinicalprocess.logistics.logistics._2.PersonIdType conPersonIdType(int triggerType) {
-		final riv.clinicalprocess.logistics.logistics._2.PersonIdType personIdType = new riv.clinicalprocess.logistics.logistics._2.PersonIdType();
+	private static riv.clinicalprocess.logistics.logistics._3.PersonIdType conPersonIdType(int triggerType) {
+		final riv.clinicalprocess.logistics.logistics._3.PersonIdType personIdType = new riv.clinicalprocess.logistics.logistics._3.PersonIdType();
 		personIdType.setId(personId(triggerType));
 		personIdType.setType(PERSON_ID_TYPE);
 		return personIdType;
 	}
 	
-	private static riv.clinicalprocess.logistics.logistics._2.DatePeriodType conDatePeriodType() {
-		final riv.clinicalprocess.logistics.logistics._2.DatePeriodType datePeriodType = new riv.clinicalprocess.logistics.logistics._2.DatePeriodType();
+	private static riv.clinicalprocess.logistics.logistics._3.DatePeriodType conDatePeriodType() {
+		final riv.clinicalprocess.logistics.logistics._3.DatePeriodType datePeriodType = new riv.clinicalprocess.logistics.logistics._3.DatePeriodType();
         datePeriodType.setEnd(TIME_END);
         datePeriodType.setStart(TIME_START);
 		return datePeriodType;

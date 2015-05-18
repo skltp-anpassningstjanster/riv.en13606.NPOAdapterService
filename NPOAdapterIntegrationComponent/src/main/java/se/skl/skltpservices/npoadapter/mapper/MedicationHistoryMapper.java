@@ -93,10 +93,7 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
  *  riv:clinicalprocess:activityprescription:actoutcome
  *   GetMedicationHistory
  * 
- * Maps from EHR_EXTRACT to RIV GetMedicationHistoryResponseType v2.0. 
- * <p>
- * Riv contract spec : 
- * http://rivta.se/downloads/ServiceContracts_clinicalpocess_activityprescription_actoutcome_2.0_RC1.zip
+ * Maps from EHR_EXTRACT to RIV GetMedicationHistoryResponseType 
  *
  * @author Martin
  */
@@ -254,9 +251,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getPrescriptionId().setRoot(INFO_LKM_ORD);
         //mpt.getPrescriptionId().setExtension("TODO");
         
-        mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.INSÄTTNING);
-        
-        mpt.setPrescriptionStatus(new CVType());
+        mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.I);
+
         //mpt.getPrescriptionStatus().setCode("TODO");
         
         if (ehr13606values.containsKey("lkm-dst-bet-low")) {

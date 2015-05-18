@@ -20,9 +20,9 @@
 package se.skl.skltpservices.npoadapter.test.stub;
 
 
-import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontacts._3.rivtabp21.GetCareContactsResponderInterface;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
 
 import javax.jws.WebService;
 
@@ -30,9 +30,9 @@ import javax.jws.WebService;
  * Created by Peter on 2014-07-30.
  */
 @WebService(serviceName = "GetCareContactsResponderService",
-        endpointInterface = "riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface",
+        endpointInterface = "riv.clinicalprocess.logistics.logistics.getcarecontacts._3.rivtabp21.GetCareContactsResponderInterface",
         portName = "GetCareContactsResponderPort",
-        targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21")
+        targetNamespace = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21")
 public class GetCareContactsWS implements GetCareContactsResponderInterface {
     @Override
     public GetCareContactsResponseType getCareContacts(String logicalAddress, GetCareContactsType parameters) {

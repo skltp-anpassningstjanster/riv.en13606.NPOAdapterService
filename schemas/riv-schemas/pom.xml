@@ -23,6 +23,10 @@
                 <directory>${coredir}</directory>
             </resource>
             <resource>
+                <targetPath>interactions/GetAlertInformationInteraction</targetPath>
+                <directory>${interactionsdir}/GetAlertInformationInteraction</directory>
+            </resource>
+            <resource>
                 <targetPath>interactions/GetCareContactsInteraction</targetPath>
                 <directory>${interactionsdir}/GetCareContactsInteraction</directory>
             </resource>
@@ -31,36 +35,32 @@
                 <directory>${interactionsdir}/GetCareDocumentationInteraction</directory>
             </resource>
             <resource>
+                <targetPath>interactions/GetDiagnosisInteraction</targetPath>
+                <directory>${interactionsdir}/GetDiagnosisInteraction</directory>
+            </resource>
+            <resource>
                 <targetPath>interactions/GetEhrExtractInteraction</targetPath>
                 <directory>${interactionsdir}/GetEhrExtractInteraction</directory>
             </resource>
             <resource>
-                <targetPath>interactions/GetMedicationHistoryInteraction</targetPath>
-                <directory>${interactionsdir}/GetMedicationHistoryInteraction</directory>
-            </resource>
-            <resource>
-                <targetPath>interactions/UpdateInteraction</targetPath>
-                <directory>${interactionsdir}/UpdateInteraction</directory>
-            </resource>
-            <resource>
-                <targetPath>interactions/GetDiagnosisInteraction</targetPath>
-                <directory>${interactionsdir}/GetDiagnosisInteraction</directory>
+                <targetPath>interactions/GetImagingOutcomeInteraction</targetPath>
+                <directory>${interactionsdir}/GetImagingOutcomeInteraction</directory>
             </resource>
             <resource>
                 <targetPath>interactions/GetLaboratoryOrderOutcomeInteraction</targetPath>
                 <directory>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction</directory>
             </resource>
             <resource>
-            	<targetPath>interactions/GetImagingOutcomeInteraction</targetPath>
-            	<directory>${interactionsdir}/GetImagingOutcomeInteraction</directory>
+                <targetPath>interactions/GetMedicationHistoryInteraction</targetPath>
+                <directory>${interactionsdir}/GetMedicationHistoryInteraction</directory>
             </resource>
             <resource>
             	<targetPath>interactions/GetReferralOutcomeInteraction</targetPath>
             	<directory>${interactionsdir}/GetReferralOutcomeInteraction</directory>
             </resource>
             <resource>
-            	<targetPath>interactions/GetAlertInformationInteraction</targetPath>
-            	<directory>${interactionsdir}/GetAlertInformationInteraction</directory>
+                <targetPath>interactions/UpdateInteraction</targetPath>
+                <directory>${interactionsdir}/UpdateInteraction</directory>
             </resource>
         </resources>
         <plugins>
@@ -71,36 +71,36 @@
                     <execution>
                         <configuration>
                             <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${interactionsdir}/GetAlertInformationInteraction/GetAlertInformationInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
                             	<wsdlOption>
-                                    <wsdl>${interactionsdir}/GetCareContactsInteraction/GetCareContactsInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetCareContactsInteraction/GetCareContactsInteraction_3.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${interactionsdir}/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.0_RIVTABP21.wsdl</wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${interactionsdir}/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl</wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${interactionsdir}/GetMedicationHistoryInteraction/GetMedicationHistoryInteraction_2.0_RIVTABP21.wsdl</wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${interactionsdir}/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetCareDocumentationInteraction/GetCareDocumentationInteraction_2.1_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${interactionsdir}/GetDiagnosisInteraction/GetDiagnosisInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
+                                    <wsdl>${interactionsdir}/GetEhrExtractInteraction/GetEhrExtractInteraction_0.99_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${interactionsdir}/GetImagingOutcomeInteraction/GetImagingOutcomeInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
                                     <wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                	<wsdl>${interactionsdir}/GetImagingOutcomeInteraction/GetImagingOutcomeInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetMedicationHistoryInteraction/GetMedicationHistoryInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                	<wsdl>${interactionsdir}/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                	<wsdl>${interactionsdir}/GetAlertInformationInteraction/GetAlertInformationInteraction_2.0_RIVTABP21.wsdl</wsdl>
-                            	</wsdlOption>
+                                    <wsdl>${interactionsdir}/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>

@@ -18,27 +18,43 @@
  under the License.
  -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:2"
-    xmlns:codes="urn:riv:clinicalprocess:logistics:logistics:enums:2"
-    targetNamespace="urn:riv:clinicalprocess:logistics:logistics:2" elementFormDefault="qualified"
-    attributeFormDefault="unqualified" version="2.0">
+    xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:3"
+    xmlns:codes="urn:riv:clinicalprocess:logistics:logistics:enums:3"
+    targetNamespace="urn:riv:clinicalprocess:logistics:logistics:3" elementFormDefault="qualified"
+    attributeFormDefault="unqualified" version="3.0">
 
-    <xs:import schemaLocation="./clinicalprocess_logistics_logistics_enum_2.0.xsd"
-        namespace="urn:riv:clinicalprocess:logistics:logistics:enums:2"/>
+    <xs:import schemaLocation="./clinicalprocess_logistics_logistics_enum_3.0.xsd"
+        namespace="urn:riv:clinicalprocess:logistics:logistics:enums:3"/>
 
     <xs:complexType name="CareContactType">
         <xs:sequence>
             <xs:element name="careContactHeader" type="tns:PatientSummaryHeaderType"/>
             <xs:element name="careContactBody" type="tns:CareContactBodyType"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="CareServiceType">
+        <xs:sequence>
+            <xs:element name="careServiceHeader" type="tns:PatientSummaryHeaderType"/>
+            <xs:element name="careServiceBody" type="tns:CareServiceBodyType"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CarePlanType">
+        <xs:sequence>
+            <xs:element name="carePlanHeader" type="tns:PatientSummaryHeaderType"/>
+            <xs:element name="carePlanBody" type="tns:CarePlanBodyType"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:complexType name="CareContactBodyType">
         <xs:annotation>
             <xs:documentation>
                 careContactCode:
-                    Typ av vård- och omsorgsdokumentation. Nullvärde tillåtetet.
+                    Typ av vård- och omsorgskontakt.
                 careContactReason:
                     Text som beskriver orsaken till vård- och omsorgskontakt som 
                     vård- och omsorgstagaren själv eller dess företrädare anger.
@@ -54,40 +70,45 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="careContactCode" type="codes:CareContactCodeEnum" minOccurs="0"/>
+            <xs:element name="careContactCode" type="tns:CVType" minOccurs="0"/>
             <xs:element name="careContactReason" type="xs:string" minOccurs="0"/>
-            <xs:element name="careContactOrgUnit" type="tns:OrgUnitType"/>
-            <xs:element name="careContactTimePeriod" type="tns:TimePeriodType"/>
-            <xs:element name="careContactStatus" type="codes:CareContactStatusEnum" minOccurs="0"
-                maxOccurs="1"/>
+            <xs:element name="careContactOrgUnit" type="tns:OrgUnitType" minOccurs="0"/>
+            <xs:element name="careContactTimePeriod" type="tns:TimePeriodType" minOccurs="0"/>
+            <xs:element name="careContactStatus" type="tns:CVType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="additionalPatientInformation"
+                type="tns:AdditionalPatientInformationType" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="CareContactOrgUnitType">
+    <xs:complexType name="CareServiceBodyType">
         <xs:annotation>
             <xs:documentation>
-                careContactOrgUnitId:
-                    HSA-id på den person inom enheten som hade
-                    kontakt med patienten
-                careContactOrgUnitName:
-                    Namne på enhet 
-                careContactOrgUnitTelecom:
-                    Telefon till organisationsenheten
-                careContactOrgUnitEmail:
-                    Epost till organisationsenheten
-                careContactOrgUnitAddress:
-                    Adress till enhet
-	            careContactOrgUnitLocation:
-	                Text som anger namnet på plats eller ort för organisationsenhetens eller funktionens fysiska placering
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="careContactOrgUnitId" type="tns:HSAIdType"/>
-            <xs:element name="careContactOrgUnitName" type="xs:string"/>
-            <xs:element name="careContactOrgUnitTelecom" type="xs:string" minOccurs="0"/>
-            <xs:element name="careContactOrgUnitEmail" type="xs:string" minOccurs="0"/>
-            <xs:element name="careContactOrgUnitAddress" type="xs:string" minOccurs="0"/>
-            <xs:element name="careContactOrgUnitLocation" type="xs:string" minOccurs="0"/>
+            <xs:element name="performerHealthCareUnit" type="tns:IIType" minOccurs="1"/>
+            <xs:element name="performerHealthCareProfessional" type="tns:IIType" minOccurs="0"/>
+            <xs:element name="typeOfCareService" type="codes:TypeOfCareServiceEnum" minOccurs="1"/>
+            <xs:element name="timePeriod" type="tns:TimePeriodType" minOccurs="1"/>
+            <xs:element name="input" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="scope" type="xs:string" minOccurs="1"/>
+            <xs:element minOccurs="0" name="housing" type="xs:string"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CarePlanBodyType">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="content" type="tns:MultimediaType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="participatingCareUnitHSAId" type="tns:IIType" minOccurs="0"
+                maxOccurs="unbounded"/>
+            <xs:element minOccurs="0" name="typeOfCarePlanEnum" type="codes:TypeOfCarePlanEnum"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -119,12 +140,16 @@
         <xs:sequence>
             <xs:element name="documentId" type="xs:string"/>
             <xs:element name="sourceSystemHSAId" type="tns:HSAIdType"/>
+            <xs:element name="documentTitle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="documentTime" type="tns:TimeStampType" maxOccurs="1" minOccurs="0"/>
             <xs:element name="patientId" type="tns:PersonIdType"/>
             <xs:element name="accountableHealthcareProfessional"
-                type="tns:HealthcareProfessionalType" minOccurs="0"/>
+                type="tns:HealthcareProfessionalType" minOccurs="1"/>
+            <xs:element name="legalAuthenticator" type="tns:LegalAuthenticatorType" minOccurs="0"/>
             <xs:element name="approvedForPatient" type="xs:boolean"/>
-            <xs:element minOccurs="0" name="nullified" type="xs:boolean"/>
-            <xs:element minOccurs="0" name="nullifiedReason" type="xs:string"/>
+            <xs:element name="nullified" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="nullifiedReason" type="xs:string" minOccurs="0"/>
+            <xs:element name="careContactId" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -138,7 +163,8 @@
 				healthcareProfessionalName
 					Namn på vård- och omsorgspersonal
 				healthcareProfessionalRoleCode: 
-					Information om personens befattning om annat kodverk än KV Befattning används. 
+					Information om personens befattning. Om möjligt skall KV Befattning (OID 1.2.752.129.2.2.1.4), se 
+					http://www.inera.se/Documents/TJANSTER_PROJEKT/Katalogtjanst_HSA/Innehall/hsa_innehall_befattning.pdf  
 				healthcareProfessionalOrgUnit: 
 					HSA-id för PDL-enhet som vård- och omsorgspersonen är uppdragstagare för
 				healthcareProfessionalCareUnitHSAId: 
@@ -147,14 +173,15 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="authorTime" type="tns:TimeStampType"/>
-            <xs:element name="healthcareProfessionalHSAId" type="tns:HSAIdType" minOccurs="1"/>
-            <xs:element name="healthcareProfessionalName" type="xs:string" minOccurs="1"/>
+            <xs:element minOccurs="0" name="healthcareProfessionalHSAId" type="tns:HSAIdType"/>
+            <xs:element name="healthcareProfessionalName" type="xs:string" minOccurs="0"/>
             <xs:element name="healthcareProfessionalRoleCode" type="tns:CVType" minOccurs="0"/>
-            <xs:element name="healthcareProfessionalOrgUnit" type="tns:OrgUnitType" minOccurs="1"/>
-           <xs:element name="healthcareProfessionalCareUnitHSAId" type="tns:HSAIdType"
+            <xs:element name="healthcareProfessionalOrgUnit" type="tns:OrgUnitType" minOccurs="0"/>
+            <xs:element name="healthcareProfessionalCareUnitHSAId" type="tns:HSAIdType"
                 minOccurs="0"/>
-            <xs:element name="healthcareProfessionalCareGiverHSAId"
-                type="tns:HSAIdType" minOccurs="0" />
+            <xs:element name="healthcareProfessionalCareGiverHSAId" type="tns:HSAIdType"
+                minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -163,27 +190,28 @@
             <xs:documentation>
 				Information om en organisationsenhet
 
-				careContactOrgUnitHsaId: 
+				orgUnitHsaId: 
 					HSA-id för organisationsenhet
-				careContactOrgUnitName
+				orgUnitName
 					Namn på organisationsenhet
-				careContactOrgUnitTelecom: 
+				orgUnitTelecom: 
 					Telefon till organisationsenhet
-				careContactOrgUnitEmail: 
+				orgUnitEmail: 
 					Epost till enhet
-				careContactOrgUnitAddress: 
+				orgUnitAddress: 
 					Postadress till enhet
-				careContactOrgUnitLocation: 
+				orgUnitLocation: 
 					Text som anger namnet på plats eller ort för enhetens eller funktionens fysiska placering
 			</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="orgUnitHSAId" type="tns:HSAIdType" minOccurs="1"/>
-            <xs:element name="orgUnitName" type="xs:string" minOccurs="1"/>
+            <xs:element name="orgUnitHSAId" type="tns:HSAIdType" minOccurs="0"/>
+            <xs:element name="orgUnitName" type="xs:string" minOccurs="0"/>
             <xs:element name="orgUnitTelecom" type="xs:string" minOccurs="0"/>
             <xs:element name="orgUnitEmail" type="xs:string" minOccurs="0"/>
             <xs:element name="orgUnitAddress" type="xs:string" minOccurs="0"/>
             <xs:element name="orgUnitLocation" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -209,13 +237,33 @@
         <xs:sequence>
             <xs:element name="start" type="tns:DateType"/>
             <xs:element name="end" type="tns:DateType"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
-    <!-- YYYYMMDD -->
+    <xs:complexType name="PartialDateType">
+        <xs:annotation>
+            <xs:documentation>YYYY, YYYYMM or YYYYMMDD</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="format" type="codes:DateTypeFormatEnum"/>
+            <xs:element name="value" type="tns:PartialDateValueType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="PartialDateValueType">
+        <xs:annotation>
+            <xs:documentation>YYYY, YYYYMM or YYYYMMDD</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern
+                value="-?([1-9][0-9]{3}|0[0-9]{3})((0[1-9]|1[0-2])((0[1-9]|[12][0-9]|3[01]))?)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="DateType">
         <xs:annotation>
-            <xs:documentation/>
+            <xs:documentation>YYYYMMDD</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern value="(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])"/>
@@ -231,6 +279,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:string"/>
             <xs:element name="type" type="xs:string"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -249,6 +298,7 @@
         <xs:sequence>
             <xs:element name="start" type="tns:TimeStampType"/>
             <xs:element name="end" type="tns:TimeStampType" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -280,6 +330,28 @@
             <xs:element name="codeSystemVersion" type="xs:string" minOccurs="0"/>
             <xs:element name="displayName" type="xs:string" minOccurs="0"/>
             <xs:element name="originalText" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AdditionalPatientInformationType">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="dateOfBirth" type="tns:PartialDateType" minOccurs="0"/>
+            <xs:element name="gender" type="tns:CVType" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MultimediaType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string" minOccurs="0"/>
+            <xs:element name="mediaType" type="codes:MediaTypeEnum"/>
+            <xs:element name="value" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="reference" type="xs:anyURI" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -291,6 +363,29 @@
             <xs:element name="signatureTime" type="tns:TimeStampType"/>
             <xs:element name="legalAuthenticatorHSAId" type="tns:HSAIdType" minOccurs="0"/>
             <xs:element name="legalAuthenticatorName" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="IIType">
+        <xs:sequence>
+            <xs:element name="root" type="xs:string"/>
+            <xs:element name="extension" type="xs:string" minOccurs="0"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ResultType">
+        <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="resultCode" type="codes:ResultCodeEnum"/>
+            <xs:element name="errorCode" type="codes:ErrorCodeEnum" minOccurs="0"/>
+            <xs:element name="logId" type="xs:string"/>
+            <xs:element minOccurs="0" name="subCode" type="xs:string"/>
+            <xs:element name="message" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

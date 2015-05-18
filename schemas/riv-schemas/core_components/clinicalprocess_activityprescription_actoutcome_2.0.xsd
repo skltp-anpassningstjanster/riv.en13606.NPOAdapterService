@@ -21,7 +21,7 @@
   xmlns:tns="urn:riv:clinicalprocess:activityprescription:actoutcome:2"
   xmlns:codes="urn:riv:clinicalprocess:activityprescription:actoutcome:enums:2"
   targetNamespace="urn:riv:clinicalprocess:activityprescription:actoutcome:2"
-  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+  elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
   <xs:import schemaLocation="./clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd"
     namespace="urn:riv:clinicalprocess:activityprescription:actoutcome:enums:2"/>
   <xs:complexType name="VaccinationMedicalRecordType">
@@ -30,7 +30,6 @@
         minOccurs="1" maxOccurs="1"/>
       <xs:element name="vaccinationMedicalRecordBody" type="tns:VaccinationMedicalRecordBodyType"
         minOccurs="1" maxOccurs="1"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="relation" type="tns:RelationType"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -235,16 +234,6 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="RelationType">
-    <xs:annotation>
-      <xs:documentation> </xs:documentation>
-    </xs:annotation>
-    <xs:sequence>
-      <xs:element name="code" type="tns:CVType"/>
-      <xs:element name="referredInformation" type="tns:ReferredInformationType" minOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="ReferredInformationType">
     <xs:annotation>
       <xs:documentation> </xs:documentation>
@@ -252,7 +241,7 @@
     <xs:sequence>
       <xs:element name="id" type="tns:IIType"/>
       <xs:element name="time" type="tns:TimeStampType" minOccurs="1"/>
-      <xs:element name="uri" type="xs:anyURI" minOccurs="1"/>
+      <xs:element name="type" type="xs:string" minOccurs="1"/>
       <xs:element name="informationOwner" type="tns:InformationOwnerType" minOccurs="1"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -274,7 +263,6 @@
       <xs:element name="medicationMedicalRecordHeader" type="tns:PatientSummaryHeaderType"/>
       <xs:element name="medicationMedicalRecordBody" type="tns:MedicationMedicalRecordBodyType"
         minOccurs="1"/>
-      <xs:element name="relation" type="tns:RelationType" maxOccurs="unbounded" minOccurs="0"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -297,9 +285,9 @@
     <xs:sequence>
       <xs:element name="prescriptionId" type="tns:IIType"/>
       <xs:element name="typeOfPrescription" type="codes:TypeOfPrescriptionEnum"/>
-      <xs:element name="prescriptionStatus" type="tns:CVType" minOccurs="1"/>
+      <xs:element name="prescriptionStatus" type="codes:PrescriptionStatusEnum" minOccurs="1"/>
       <xs:element name="prescriptionNote" type="xs:string" minOccurs="0"/>
-      <xs:element maxOccurs="unbounded" minOccurs="1" name="principalPrescriptionReason"
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="principalPrescriptionReason"
         type="tns:PrescriptionReasonType"/>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalPrescriptionReason"
         type="tns:PrescriptionReasonType"/>
@@ -361,6 +349,7 @@
       <xs:element name="firstDispensationBefore" type="tns:DateType" minOccurs="0"/>
       <xs:element name="prescriptionSignatura" type="xs:string"/>
       <xs:element name="nonReplaceable" type="codes:NonReplaceableEnum" minOccurs="0"/>
+      <xs:element minOccurs="0" name="drug" type="tns:DrugChoiceType"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -386,6 +375,9 @@
       <xs:element name="nplId" type="tns:CVType" minOccurs="1"/>
       <xs:element name="atcCode" type="tns:CVType" minOccurs="0"/>
       <xs:element name="routeOfAdministration" type="tns:CVType" minOccurs="0"/>
+      <xs:element minOccurs="0" name="pharmaceuticalForm" type="xs:string"/>
+      <xs:element minOccurs="0" name="strength" type="xs:double"/>
+      <xs:element minOccurs="0" name="strengthUnit" type="xs:string"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -497,7 +489,7 @@
       <xs:element name="doseStep" type="tns:PQType" minOccurs="1"/>
       <xs:element name="timeStep" type="tns:PQType" minOccurs="1"/>
       <xs:element name="rampStart" type="tns:RampEndpointType"/>
-      <xs:element name="rampStart" type="tns:RampEndpointType"/>
+      <xs:element name="rampEnd" type="tns:RampEndpointType"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>

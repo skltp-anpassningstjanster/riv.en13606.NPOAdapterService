@@ -42,12 +42,9 @@ import javax.xml.stream.XMLStreamReader;
 
 
 /**
- * Maps from EHR_EXTRACT (voo v1.1) to RIV GetCareDocumentationResponseType v2.0. <p>
+ * Maps from EHR_EXTRACT (voo v1.1) to RIV GetCareDocumentationResponseType<p>
  *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_description_2.1_RC3.zip"
- * 
  * @author torbjorncla
- *
  */
 public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
@@ -108,18 +105,18 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	 */
 	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {
 		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
-		resp.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), ResultType.class));
+		resp.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), Result.class));
 
-        if(ehrResp.getEhrExtract().isEmpty()) {
+        if (ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
 		
-		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
-		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
+		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
+		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
 		
-		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
+		for (COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			final CareDocumentationType doc = new CareDocumentationType();
-			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
+			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class));
 			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(comp.getLinks()));
 			doc.setCareDocumentationBody(mapBodyType(comp));
 			resp.getCareDocumentation().add(doc);			

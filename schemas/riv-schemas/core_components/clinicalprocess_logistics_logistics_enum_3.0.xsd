@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:enums:3" 
+    targetNamespace="urn:riv:clinicalprocess:logistics:logistics:enums:3" 
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified" 
+    version="3.0">
+
+    <xs:simpleType name="CareContactCodeEnum">
+        <xs:restriction base="xs:int">
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>Besök</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>Telefon</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="3">
+                <xs:annotation>
+                    <xs:documentation>Vårdtillfälle</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="4">
+                <xs:annotation>
+                    <xs:documentation>Dagsjukvård</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="5">
+                <xs:annotation>
+                    <xs:documentation>Annan</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="MediaTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="application/dicom"/>
+            <xs:enumeration value="application/msword"/>
+            <xs:enumeration value="application/pdf"/>
+            <xs:enumeration value="audio/basic"/>
+            <xs:enumeration value="audio/k32adpcm"/>
+            <xs:enumeration value="audio/mpeg"/>
+            <xs:enumeration value="image/g3fax"/>
+            <xs:enumeration value="image/gif"/>
+            <xs:enumeration value="image/jpeg"/>
+            <xs:enumeration value="image/png"/>
+            <xs:enumeration value="image/tiff"/>
+            <xs:enumeration value="model/vrml"/>
+            <xs:enumeration value="multipart/x-hl7-cda-level1"/>
+            <xs:enumeration value="text/html"/>
+            <xs:enumeration value="text/plain"/>
+            <xs:enumeration value="text/rtf"/>
+            <xs:enumeration value="text/sgml"/>
+            <xs:enumeration value="text/x-hl7-ft"/>
+            <xs:enumeration value="text/xml"/>
+            <xs:enumeration value="video/mpeg"/>
+            <xs:enumeration value="video/x-avi"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="DateTypeFormatEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="YYYY"/>
+            <xs:enumeration value="YYYYMM"/>
+            <xs:enumeration value="YYYYMMDD"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="ResultCodeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OK"/>
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="INFO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="ErrorCodeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INVALID_REQUEST"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="TypeOfCareServiceEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HSJV"/>
+            <xs:enumeration value="HTJ"/>
+            <xs:enumeration value="LSS"/>
+            <xs:enumeration value="SVTJ"/>
+            <xs:enumeration value="SÄBO"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TypeOfCarePlanEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SIP"><xs:annotation><xs:documentation>Samordnad individuell plan</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="SPLPTLRV"><xs:annotation><xs:documentation>Samordnad plan enligt LPT och LRV</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="SPU"><xs:annotation><xs:documentation>Samordnad plan vid utskrivning</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="VP"><xs:annotation><xs:documentation>Vårdplan</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="HP"><xs:annotation><xs:documentation>Habiliteringsplan</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="RP"><xs:annotation><xs:documentation>Rehabiliteringsplan</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="GP"><xs:annotation><xs:documentation>Genomförande plan</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="SVP"><xs:annotation><xs:documentation>Standardiserad vårdplan</xs:documentation></xs:annotation></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

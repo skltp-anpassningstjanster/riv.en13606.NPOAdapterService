@@ -24,10 +24,10 @@ import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
-import riv.clinicalprocess.logistics.logistics._2.*;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
+import riv.clinicalprocess.logistics.logistics._3.*;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
@@ -39,10 +39,8 @@ import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 
 /**
- * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>
- *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalpocess_logistics_logistics_2.0.0.zip"
- *
+ * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType<p>
+ * 
  * @author Peter
  */
 public class CareContactsMapper extends AbstractMapper implements Mapper {
@@ -160,15 +158,18 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
         for (final CONTENT content : composition.getContent()) {
             for (final ITEM item : ((ENTRY) content).getItems()) {
+                
                 switch (item.getMeaning().getCode()) {
                     case "vko-vko-typ":
-                        bodyType.setCareContactCode(ContactCodes.map.code(EHRUtil.getElementTextValue((ELEMENT) item)));
+                        bodyType.setCareContactCode(new CVType());
+                        bodyType.getCareContactCode().setCode(ContactCodes.map.code(EHRUtil.getElementTextValue((ELEMENT) item)) + "");
                         break;
                     case "vko-vko-ors":
                         bodyType.setCareContactReason(EHRUtil.getElementTextValue((ELEMENT) item));
                         break;
                     case "vko-vko-sta":
-                        bodyType.setCareContactStatus(ContactStatus.map.code(EHRUtil.getElementTextValue((ELEMENT) item)));
+                        bodyType.setCareContactStatus(new CVType());
+                        bodyType.getCareContactStatus().setCode(ContactStatus.map.code(EHRUtil.getElementTextValue((ELEMENT) item)) + "");
                         break;
                 }
 

@@ -20,11 +20,14 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:tns="urn:riv:clinicalprocess:healthcond:actoutcome:3"
     xmlns:codes="urn:riv:clinicalprocess:healthcond:actoutcome:enums:3"
+    xmlns:m1="urn:riv:clinicalprocess:healthcond:actoutcome:3.1"
     targetNamespace="urn:riv:clinicalprocess:healthcond:actoutcome:3" elementFormDefault="qualified"
-    attributeFormDefault="unqualified" version="3.0">
+    attributeFormDefault="unqualified" version="3.1">
 
-    <xs:import schemaLocation="./clinicalprocess_healthcond_actoutcome_enum_3.0.xsd"
+    <xs:import schemaLocation="clinicalprocess_healthcond_actoutcome_enum_3.1.xsd"
         namespace="urn:riv:clinicalprocess:healthcond:actoutcome:enums:3"/>
+    <xs:import schemaLocation="./clinicalprocess_healthcond_actoutcome_3.1_ext.xsd"
+        namespace="urn:riv:clinicalprocess:healthcond:actoutcome:3.1"/>
 
     <!-- Common datatypes -->
     <xs:complexType name="PatientSummaryHeaderType">
@@ -52,27 +55,6 @@
             <xs:element name="actTime" type="tns:TimeStampType" minOccurs="0"/>
             <xs:element name="actResult" type="tns:MultimediaType" minOccurs="0"
                 maxOccurs="unbounded"/>
-            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="ObservationType">
-        <xs:sequence>
-            <xs:element name="id" type="tns:IIType" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="type" type="tns:CVType" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="targetSite" type="tns:CVType" minOccurs="0"/>
-            <xs:element name="time" type="tns:TimePeriodType" minOccurs="0"/>
-            <xs:element name="method" type="tns:CVType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="value" type="tns:CVType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="valueNegation" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="approvedForPatient" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="location" type="tns:LocationType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="patient" type="tns:PatientType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="legalauthenticator" type="tns:LegalAuthenticatorType" minOccurs="0"
-                maxOccurs="1"/>
-            <xs:element name="sourceSystem" type="tns:SourceSystemType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="relation" type="tns:RelationType" minOccurs="0" maxOccurs="1"/>
             <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
@@ -119,18 +101,6 @@
             <xs:element name="code" type="tns:CVType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="referredInformation" type="tns:ReferredInformationType" minOccurs="1"
                 maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="PatientType">
-        <xs:sequence>
-            <xs:element name="id" type="tns:IIType" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="dateOfBirth" type="tns:DateType" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="gender" type="tns:CVType" minOccurs="0"/>
-            <xs:element name="actTime" type="tns:TimeStampType" minOccurs="0"/>
-            <xs:element name="actResult" type="tns:MultimediaType" minOccurs="0"
-                maxOccurs="unbounded"/>
-            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -291,7 +261,6 @@
             <xs:element minOccurs="0" name="legalAuthenticatorName" type="xs:string"/>
             <xs:element minOccurs="0" name="legalAuthenticatorRoleCode" type="tns:CVType"/>
             <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-
         </xs:sequence>
     </xs:complexType>
 
@@ -527,9 +496,10 @@
             <xs:element maxOccurs="unbounded" minOccurs="0" name="relationToAnalysis"
                 type="tns:RelationToAnalysisType"/>
             <xs:element name="analysisOutcome" type="tns:AnalysisOutcomeType" minOccurs="0"/>
-            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element minOccurs="0" ref="m1:attested"/>
         </xs:sequence>
     </xs:complexType>
+
     <xs:complexType name="RelationToAnalysisType">
         <xs:sequence>
             <xs:element name="analysisId" type="tns:IIType"/>
@@ -595,7 +565,6 @@
             <xs:element name="imageData" type="tns:ImageDataType"/>
         </xs:sequence>
     </xs:complexType>
-
 
     <xs:complexType name="ECGOutcomeBodyType">
         <xs:sequence>
@@ -798,7 +767,7 @@
             <xs:element name="discipline" type="xs:string"/>
             <xs:element name="resultReport" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="resultComment" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="accountableHeathcareProfessional"
+            <xs:element name="accountableHealthcareProfessional"
                 type="tns:HealthcareProfessionalType" minOccurs="0"/>
             <xs:element name="analysis" type="tns:AnalysisType" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element name="order" type="tns:OrderType"/>
@@ -915,7 +884,7 @@
                 maxOccurs="unbounded"/>
             <xs:element name="act" type="tns:ActType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="referral" type="tns:ReferralType"/>
-            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element minOccurs="0" ref="m1:attested"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="ClinicalInformationType">

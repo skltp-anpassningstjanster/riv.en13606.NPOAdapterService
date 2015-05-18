@@ -22,11 +22,12 @@
   xmlns:codes="urn:riv:clinicalprocess:activityprescription:actoutcome:enums:2"
   xmlns:core="urn:riv:clinicalprocess:activityprescription:actoutcome:2"
   targetNamespace="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2"
-  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+  elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
   <xs:import
     schemaLocation="../../core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd"
     namespace="urn:riv:clinicalprocess:activityprescription:actoutcome:2"/>
-  <xs:import schemaLocation="../../core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd"
+  <xs:import
+    schemaLocation="../../core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd"
     namespace="urn:riv:clinicalprocess:activityprescription:actoutcome:enums:2"/>
   <xs:element name="GetMedicationHistory" type="tns:GetMedicationHistoryType"/>
   <xs:element name="GetMedicationHistoryResponse" type="tns:GetMedicationHistoryResponseType"/>
@@ -38,7 +39,7 @@
       <xs:element name="datePeriod" type="core:DatePeriodType" minOccurs="0"/>
       <xs:element name="sourceSystemHSAId" type="core:HSAIdType" minOccurs="0"/>
       <xs:element name="careContactId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="prescriptionChainId" type="core:IIType"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="prescriptionChainId" type="core:IIType"/>
       <xs:element maxOccurs="1" minOccurs="0" name="prescriptionStatus"
         type="codes:PrescriptionStatusEnum"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>

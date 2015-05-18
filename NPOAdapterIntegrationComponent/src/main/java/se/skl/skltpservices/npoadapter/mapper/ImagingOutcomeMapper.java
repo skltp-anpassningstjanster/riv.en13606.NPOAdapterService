@@ -45,7 +45,7 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome._3.TimePeriodType;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.TextMediaTypeEnum;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.MediaTypeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.TypeOfResultCodeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeType;
@@ -70,8 +70,8 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 /**
  * Transformer for RIV-TA GetImagingOutcome -> EN13606 Informationsmangd UND-BDI
+ * 
  * @author torbjorncla
- *
  */
 public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	
@@ -205,7 +205,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
             body.getImageRecording().get(0).getImageStructuredData().add(new ImageStructuredDataType());
             body.getImageRecording().get(0).getImageStructuredData().get(0).setImageData(new ImageDataType());
             // Assumption is that we receive text data - this will need to be confirmed by sample data
-            body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setMediaType(TextMediaTypeEnum.TEXT_PLAIN.value());
+            body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setMediaType(MediaTypeEnum.TEXT_PLAIN);
             body.getImageRecording().get(0).getImageStructuredData().get(0).getImageData().setValue(ehr13606values.get("und-und-res-und").getBytes(Charset.forName("UTF-8")));
         }
         

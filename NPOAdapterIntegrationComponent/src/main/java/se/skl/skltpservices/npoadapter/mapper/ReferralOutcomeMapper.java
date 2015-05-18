@@ -43,8 +43,8 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeBodyType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
+import riv.clinicalprocess.healthcond.actoutcome.enums._3.MediaTypeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
-import riv.clinicalprocess.healthcond.actoutcome.enums._3.TextMediaTypeEnum;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.GetReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory;
@@ -76,11 +76,8 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
  *  riv:clinicalprocess:activityprescription:actoutcome
  *   GetReferralOutcome
  * 
- * Maps from EHR_EXTRACT to RIV GetReferralOutcomeResponseType v3.0. 
- * <p>
- * Riv contract spec : 
- * http://rivta.se/downloads/ServiceContracts_clinicalpocess_activityprescription_actoutcome_3.0_RC1.zip
- *
+ * Maps from EHR_EXTRACT to RIV GetReferralOutcomeResponseType. 
+ * 
  * @author Martin Flower
  */
 public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
@@ -272,7 +269,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if (ehr13606values.containsKey("und-und-res-und")) {
             // We need to confirm that und-und-res-und contains text - we have no sample data so far
             bodyType.getAct().get(0).getActResult().add(new MultimediaType());
-            bodyType.getAct().get(0).getActResult().get(0).setMediaType(TextMediaTypeEnum.TEXT_PLAIN.value());
+            bodyType.getAct().get(0).getActResult().get(0).setMediaType(MediaTypeEnum.TEXT_PLAIN);
             bodyType.getAct().get(0).getActResult().get(0).setValue(ehr13606values.get("und-und-res-und").getBytes(Charset.forName("UTF-8")));
         }
         

@@ -22,8 +22,6 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.*;
@@ -40,21 +38,12 @@ import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
-import java.util.List;
-
-import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory;
-
 /**
- * Maps from EHR_EXTRACT (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType v3.0. <p>
+ * Maps from EHR_EXTRACT (und-kkm-kli v1.1) to RIV GetLaboratoryOrderOutcomeResponseType<p>
  *
- * Riv contract spec (TKB): "http://rivta.se/downloads/ServiceContracts_clinicalprocess_healthcond_actoutcome_3.0_RC1.zip"
- * 
  * @author torbjorncla
- *
  */
 public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapper {
-	
-	private static final Logger log = LoggerFactory.getLogger(LaboratoryOrderOutcomeMapper.class);
 	
 	private static final JaxbUtil jaxb = new JaxbUtil(GetLaboratoryOrderOutcomeType.class);
 	private static final ObjectFactory objFactory = new ObjectFactory();
@@ -156,7 +145,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 											type.setResultComment(EHRUtil.getElementTextValue(elm));
 											break;
 										case "und-und-ure-stp":
-											type.setAccountableHeathcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healtcareProfessional));
+											type.setAccountableHealthcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healtcareProfessional));
 											break;
 											
 									}

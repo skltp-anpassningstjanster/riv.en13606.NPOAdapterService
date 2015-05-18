@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;

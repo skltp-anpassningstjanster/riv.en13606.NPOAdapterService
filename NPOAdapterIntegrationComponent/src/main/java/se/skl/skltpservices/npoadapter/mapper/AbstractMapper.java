@@ -54,37 +54,40 @@ public abstract class AbstractMapper {
     private static final ObjectFactory enObjectFactory = new ObjectFactory();
 
     // context for the riv alternative
-    private static final JaxbUtil rivEhrExtractTypeJaxbUtil = new JaxbUtil("riv.itintegration.registry._1:riv.ehr.patientsummary._1:riv.ehr.patientsummary.getehrextractresponder._1");
-    private static final riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory rivEhrExtractTypeObjectFactory = new riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory();
+    private static final JaxbUtil rivEhrExtractTypeJaxbUtil 
+      = new JaxbUtil("riv.itintegration.registry._1:riv.ehr.patientsummary._1:riv.ehr.patientsummary.getehrextractresponder._1");
+    private static final riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory rivEhrExtractTypeObjectFactory 
+      = new riv.ehr.patientsummary.getehrextractresponder._1.ObjectFactory();
 
     // main supported information types,
-    public static final String INFO_VKO = "vko";
-    public static final String INFO_VOO = "voo";
-    public static final String INFO_DIA = "dia";
-    public static final String INFO_LKM_ORD = "lkm-ord";
+    public static final String INFO_VKO         = "vko";
+    public static final String INFO_VOO         = "voo";
+    public static final String INFO_DIA         = "dia";
+    public static final String INFO_LKM_ORD     = "lkm-ord";
     public static final String INFO_UND_KKM_KLI = "und-kkm-kli";
-    public static final String INFO_UND_BDI = "und-bdi";
-    public static final String INFO_UND_KON = "und-kon";
-    public static final String INFO_UPP = "upp";
+    public static final String INFO_UND_BDI     = "und-bdi";
+    public static final String INFO_UND_KON     = "und-kon";
+    public static final String INFO_UPP         = "upp";
 
-    static final String NS_CARECONTACTS_2 = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";
+    static final String NS_EN_EXTRACT          = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
+    static final String NS_RIV_EXTRACT         = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
+    
+    static final String NS_ALERT_2             = "urn:riv:clinicalprocess:healthcond:description:GetAlertInformation:2:rivtabp21";
+    static final String NS_CARECONTACTS_3      = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21";
     static final String NS_CAREDOCUMENTATION_2 = "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentation:2:rivtabp21";
-    static final String NS_DIAGNOSIS_2 = "urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21";
-    static final String NS_EN_EXTRACT = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
-    static final String NS_RIV_EXTRACT = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
-    static final String NS_LABORATORY_3 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21";
-    static final String NS_IMAGING_1 = "urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcome:1:rivtabp21";
-    static final String NS_ALERT_2 = "urn:riv:clinicalprocess:healthcond:description:GetAlertInformation:2:rivtabp21";
-    static final String NS_MEDICATIONHISTORY = "urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21";
-    static final String NS_REFERRALOUTCOME = "urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcome:3:rivtabp21";
+    static final String NS_DIAGNOSIS_2         = "urn:riv:clinicalprocess:healthcond:description:GetDiagnosis:2:rivtabp21";
+    static final String NS_IMAGING_1           = "urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcome:1:rivtabp21";
+    static final String NS_LABORATORY_3        = "urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21";
+    static final String NS_MEDICATIONHISTORY   = "urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21";
+    static final String NS_REFERRALOUTCOME     = "urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcome:3:rivtabp21";
 
     
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
         // contacts
-        map.put(mapperKey(NS_EN_EXTRACT, NS_CARECONTACTS_2), new CareContactsMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_CARECONTACTS_2), new RIVCareContactsMapper());
+        map.put(mapperKey(NS_EN_EXTRACT, NS_CARECONTACTS_3), new CareContactsMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_CARECONTACTS_3), new RIVCareContactsMapper());
 
         // docs
         map.put(mapperKey(NS_EN_EXTRACT, NS_CAREDOCUMENTATION_2), new CareDocumentationMapper());
