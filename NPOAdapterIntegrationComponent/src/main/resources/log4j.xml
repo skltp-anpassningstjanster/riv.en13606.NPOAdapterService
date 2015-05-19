@@ -23,7 +23,7 @@
         <!-- The threshold level for this appender. -->
         <!-- <param name="Threshold" value="ERROR"/> -->
         <layout class="org.apache.log4j.PatternLayout">
-        	 <param name="ConversionPattern" value="%d %-5p %-30C - %m%n" />
+             <param name="ConversionPattern" value="%d %-5p %-30C - %m%n ehr13606 - adapter: " />
         </layout>
     </appender>
     
@@ -36,12 +36,10 @@
         <level value="WARN" />
     </logger>
 
-
     <logger name="org.dozer">
         <level value="WARN" />
     </logger>
 
-    
 	<logger name="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<level value="WARN" />
 	</logger>
@@ -91,14 +89,9 @@
         <level value="INFO"/>
     </logger>
     
-    
-    <logger name="se.skl.skltpservices.npoadapter">
-        <level value="DEBUG"/>
-        <layout class="org.apache.log4j.PatternLayout">
-        	 <param name="ConversionPattern" value="%d %-5p %-30C - %m%n ehr13606 - adapter: " />
-        </layout>
+     <logger name="se.skl.skltpservices.npoadapter">
+        <level value="INFO"/>
     </logger>
-    
     
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <logger name="httpclient.wire.header">
