@@ -8,7 +8,7 @@
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
 
-    <flow name="GetCareContactsResponderService-3.0">
+    <flow name="GetCareContactsResponderService-2.0">
 
         <inbound-endpoint address="${IN_ENDPOINT_GETCARECONTACTS}"
                           connector-ref="soitoolkit-http-connector" 
@@ -18,10 +18,10 @@
 
         <processor ref="pre-processor" />
 
-        <cxf:proxy-service namespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21"
+        <cxf:proxy-service namespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21"
                            payload="body"
                            service="GetCareContactsResponderService"
-                           wsdlLocation="classpath:/interactions/GetCareContactsInteraction/GetCareContactsInteraction_3.0_RIVTABP21.wsdl" />
+                           wsdlLocation="classpath:/interactions/GetCareContactsInteraction/GetCareContactsInteraction_2.0_RIVTABP21.wsdl" />
 
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 

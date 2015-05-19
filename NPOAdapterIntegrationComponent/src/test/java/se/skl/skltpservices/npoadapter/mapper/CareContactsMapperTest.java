@@ -19,31 +19,26 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import riv.clinicalprocess.logistics.logistics._2.*;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import riv.clinicalprocess.logistics.logistics._3.CareContactBodyType;
-import riv.clinicalprocess.logistics.logistics._3.CareContactType;
-import riv.clinicalprocess.logistics.logistics._3.HealthcareProfessionalType;
-import riv.clinicalprocess.logistics.logistics._3.OrgUnitType;
-import riv.clinicalprocess.logistics.logistics._3.PatientSummaryHeaderType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsResponseType;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.skl.skltpservices.npoadapter.test.Util;
+import static junit.framework.Assert.*;
 
 /**
  * Created by Peter on 2014-07-28.
@@ -132,10 +127,10 @@ public class CareContactsMapperTest {
 
     private void verifyCareContactBody(CareContactBodyType careContactBody) {
         assertNotNull(careContactBody.getCareContactCode());
-        assertTrue(1 <= Integer.parseInt(careContactBody.getCareContactCode().getCode()) && 5 >= Integer.parseInt(careContactBody.getCareContactCode().getCode()));
+        assertTrue(1 <= careContactBody.getCareContactCode() && 5 >= careContactBody.getCareContactCode());
         assertNull(careContactBody.getCareContactReason());
         assertNotNull(careContactBody.getCareContactStatus());
-        assertTrue(1 <= Integer.parseInt(careContactBody.getCareContactStatus().getCode()) && 5 >= Integer.parseInt(careContactBody.getCareContactStatus().getCode()));
+        assertTrue(1 <= careContactBody.getCareContactStatus() && 5 >= careContactBody.getCareContactStatus());
 
         verifyOrgUnit(careContactBody.getCareContactOrgUnit());
 

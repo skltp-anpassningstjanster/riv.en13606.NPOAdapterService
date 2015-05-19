@@ -31,7 +31,7 @@ public class AbstractMapperTest {
 
     @Test
     public void testLookupMapper() {
-        final Mapper mapper = AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CARECONTACTS_3);
+        final Mapper mapper = AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CARECONTACTS_2);
         assertTrue(mapper instanceof CareContactsMapper);
     }
 

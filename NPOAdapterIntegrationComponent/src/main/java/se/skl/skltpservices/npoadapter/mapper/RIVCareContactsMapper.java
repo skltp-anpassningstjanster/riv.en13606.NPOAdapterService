@@ -21,7 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
 
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;

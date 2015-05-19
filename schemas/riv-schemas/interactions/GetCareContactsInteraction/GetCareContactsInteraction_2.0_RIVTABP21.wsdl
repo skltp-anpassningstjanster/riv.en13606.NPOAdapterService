@@ -19,10 +19,10 @@
  -->		
 <wsdl:definitions name='GetCareContactsInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
   xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema'
-  xmlns:tjsr='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:3'
-  xmlns:tjsi='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsInitiator:3'
-  xmlns:tns='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21'
-  targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
+  xmlns:tjsr='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2'
+  xmlns:tjsi='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsInitiator:2'
+  xmlns:tns='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21'
+  targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
   <xs:annotation>
     <xs:documentation>
 			 Tjänsteinteraktionens namn: GetCareContactsInteraction
@@ -36,8 +36,8 @@
 			 </xs:documentation>
   </xs:annotation>
   <wsdl:types>
-    <xs:schema targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:3:rivtabp21'>
-      <xs:import schemaLocation='GetCareContactsResponder_3.0.xsd' namespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:3' />
+    <xs:schema targetNamespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21'>
+      <xs:import schemaLocation='GetCareContactsResponder_2.0.xsd' namespace='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2' />
       <xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd' namespace='urn:riv:itintegration:registry:1' />
     </xs:schema>
   </wsdl:types>
@@ -63,7 +63,7 @@
   <wsdl:binding name='GetCareContactsResponderBinding' type='tns:GetCareContactsResponderInterface'>
     <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http' />
     <wsdl:operation name='GetCareContacts'>
-      <soap:operation soapAction='urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:3:GetCareContacts' style='document' />
+      <soap:operation soapAction='urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts' style='document' />
       <wsdl:input>
         <soap:header use='literal' message='tns:GetCareContactsRequest' part='LogicalAddress' />
         <soap:body use='literal' parts='parameters' />

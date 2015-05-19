@@ -55,9 +55,9 @@ import riv.clinicalprocess.healthcond.description.getcaredocumentation._2.rivtab
 import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationResponseType;
 import riv.clinicalprocess.healthcond.description.getdiagnosis._2.rivtabp21.GetDiagnosisResponderInterface;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
-import riv.clinicalprocess.logistics.logistics.getcarecontacts._3.rivtabp21.GetCareContactsResponderInterface;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsResponseType;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._3.GetCareContactsType;
+import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -66,7 +66,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
 	// TODO: Collect Endpoints from configuration
 	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:33001/npoadapter/getcaredocumentation/v2";
-	private static final String CARE_CONTACTS_ENDPOINT      = "http://localhost:33001/npoadapter/getcarecontacts/v3";
+	private static final String CARE_CONTACTS_ENDPOINT      = "http://localhost:33001/npoadapter/getcarecontacts/v2";
 	private static final String DIAGNOSIS_ENDPOINT          = "http://localhost:33001/npoadapter/getdiagnosis/v2";
 	private static final String LABORATORY_ENDPOINT         = "http://localhost:33001/npoadapter/getlaboratoryorderoutcome/v3";
 	private static final String ALERT_INFORMATION_ENDPOINT  = "http://localhost:33001/npoadapter/getalertinformation/v2";
