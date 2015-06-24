@@ -232,10 +232,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         Map<String,String> ehr13606values = retrieveValues(composition, compositionIndex);
         
         // use the ehr values to build a medication medical history record body
-        return buildBody(ehr13606values);
+        MedicationMedicalRecordBodyType bodyType = buildBody(ehr13606values);
+        
+        return bodyType;
     }
 
-   /* 
+
+    /* 
     * Create a MedicationMedicalRecord for outgoing message.
     * Use values from ehr 13606 incoming message.
     * Populate values in outgoing message if there is data in the incoming message.
@@ -325,7 +328,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().getAtcCode().setOriginalText(ehr13606values.get("lkm-lva-typ"));
         mpt.getDrug().getDrug().getAtcCode().setDisplayName(ehr13606values.get("lkm-lkm-lva-pre"));
         
-        
         mpt.getDrug().getDrug().setRouteOfAdministration(new CVType());
         mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
         mpt.getDrug().getDrug().getRouteOfAdministration().setDisplayName(ehr13606values.get("lkm-lkm-lpr-ber"));
@@ -385,6 +387,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                      (ehr13606values.containsKey("lkm-lkm-lpr-prs") ? "lkm-lkm-lpr-prs:produktstyrka:"    + ehr13606values.get("lkm-lkm-lpr-prs") : "") );
         }
         
+
         // --- DispensationAuthorization
         
         if (ehr13606values.containsKey("lkm-for-fpe") ||
@@ -405,12 +408,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             
             mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
             //mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
-            //mpt.getDispensationAuthorization().setPrescriptionSignatura("TODO signatura");
-            
+
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
-                    (ehr13606values.containsKey("lkm-for-uiv") ? "lkm-for-uiv:utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +
-                    (ehr13606values.containsKey("lkm-for-mpt") ? "lkm-for-mpt:mäng per tillfälle:" + ehr13606values.get("lkm-for-mpt") + " " : "") +
-                    (ehr13606values.containsKey("lkm-for-dbs") ? "lkm-for-dbs:distributionssätt:"  + ehr13606values.get("lkm-for-dbs") : ""));
+                    (ehr13606values.containsKey("lkm-for-uiv") ? "utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +
+                    (ehr13606values.containsKey("lkm-for-mpt") ? "mängd per tillfälle:" + ehr13606values.get("lkm-for-mpt") + " " : "") +
+                    (ehr13606values.containsKey("lkm-for-dbs") ? "distributionssätt:"  + ehr13606values.get("lkm-for-dbs") : ""));
+            
+            mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
         }
         
         // ---
