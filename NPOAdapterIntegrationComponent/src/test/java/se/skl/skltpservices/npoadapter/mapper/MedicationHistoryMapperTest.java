@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,7 @@ import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
- * @author Martin
+ * @author Martin Flower
  */
 public class MedicationHistoryMapperTest {
 
@@ -56,12 +57,14 @@ public class MedicationHistoryMapperTest {
         private GetMedicationHistoryResponseType type;
     }
 
-    //
-    @SuppressWarnings("unused")
-    private void dump(final GetMedicationHistoryResponseType responseType) throws JAXBException {
+    private void dump(final GetMedicationHistoryResponseType responseType) {
         Root root = new Root();
         root.type = responseType;
-        Util.dump(root);
+        try {
+            Util.dump(root);
+        } catch (JAXBException j) {
+            fail(j.getLocalizedMessage());
+        }
     }
 
     @Test
@@ -70,7 +73,7 @@ public class MedicationHistoryMapperTest {
         GetMedicationHistoryResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
         assertNotNull(responseType);
 
-        // dump(responseType);
+        dump(responseType);
         
         List<MedicationMedicalRecordType> mmrs = responseType.getMedicationMedicalRecord();
 
