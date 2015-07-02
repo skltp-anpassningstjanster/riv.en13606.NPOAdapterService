@@ -37,8 +37,14 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
 
 /**
- * Processes binary XML stream to fetch logical address and also performs routing, i,e,
- * updates message properties with actual routing data.
+ * The consumer has sent a GetSomethingRequest to VP.
+ * In EngagemangsIndex, this request has been associated with a producer.
+ * The producer is identified by a logical address.
+ * The GetSomethingRequest has been converted by the NPOAdapter into a 13606 request.
+ * At this point, the message is ready to be sent to the producer.
+ * We have a logical address, we need to find the route.
+ * Routing data is held in TAK.
+ * But rather than look up data in TAK, we look it up in a cache contained inside the Router.
  *
  * @author Peter
  */
@@ -74,7 +80,7 @@ public class OutboundPreProcessor implements MessageProcessor {
 
         	final MuleMessage message = event.getMessage();
         	message.setInvocationProperty(ROUTE_LOGICAL_ADDRESS, (logicalAddress == null) ? "" : logicalAddress);
-        	final RouteData.Route route = this.router.getRoute(logicalAddress, false);
+        	final RouteData.Route route = router.getRoute(logicalAddress);
         	if (route != null) {
         		message.setInvocationProperty(ROUTE_SERVICE_SOAP_ACTION, route.getSoapAction());
         		message.setInvocationProperty(ROUTE_ENDPOINT_URL, route.getUrl());
