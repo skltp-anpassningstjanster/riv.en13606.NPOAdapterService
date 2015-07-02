@@ -65,7 +65,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	
 	@Override
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
-		log.debug("Transforming Request");
+		log.debug("Transforming request");
 		try {
 			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
@@ -77,11 +77,12 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 
 	@Override
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
-		log.debug("Transforming Response");
+		log.debug("Transforming response - start");
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
 			final GetCareDocumentationResponseType responseType = mapResponseType(message.getUniqueId(), resp);
 			message.setPayload(marshal(responseType));
+	        log.debug("Transformed response - end");
             return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
@@ -97,18 +98,19 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
     }
 	
 	/**
-	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentation <p/>
+	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentationResponse <p/>
      *
      * @param unqiueId the unique message correlation id.
 	 * @param ehrResp subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
 	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {
-		final GetCareDocumentationResponseType resp = new GetCareDocumentationResponseType();
-		resp.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), Result.class));
+	    log.debug("Populating GetCareDocumentationResponse using ehrResp (" + ehrResp.getClass().getName() + ")");
+		final GetCareDocumentationResponseType getCareDocumentationResponse = new GetCareDocumentationResponseType();
+		getCareDocumentationResponse.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), Result.class));
 
         if (ehrResp.getEhrExtract().isEmpty()) {
-			return resp;
+			return getCareDocumentationResponse;
 		}
 		
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
@@ -118,10 +120,12 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 			final CareDocumentationType doc = new CareDocumentationType();
 			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class));
 			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(comp.getLinks()));
+            doc.getCareDocumentationHeader().setSourceSystemHSAid(EHRUtil.getSystemHSAId(ehrExtract));
 			doc.setCareDocumentationBody(mapBodyType(comp));
-			resp.getCareDocumentation().add(doc);			
+			getCareDocumentationResponse.getCareDocumentation().add(doc);
 		}		
-		return resp;
+        log.debug("Finished populating GetCareDocumentationResponse");
+		return getCareDocumentationResponse;
 	}
 	
 	protected CareDocumentationBodyType mapBodyType(final COMPOSITION comp) {

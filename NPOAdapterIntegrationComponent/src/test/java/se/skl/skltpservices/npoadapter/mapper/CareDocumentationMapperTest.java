@@ -19,46 +19,77 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import java.util.UUID;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import javax.xml.bind.JAXBException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Scanner;
 
-import org.junit.BeforeClass;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mule.api.MuleMessage;
 
-import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
-import riv.clinicalprocess.healthcond.description._2.PersonIdType;
-import riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.GetCareDocumentationType;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
+import se.skl.skltpservices.npoadapter.test.Util;
 
+/**
+ * @author Martin Flower
+ */
 public class CareDocumentationMapperTest {
-	
-	private static GetCareDocumentationType careDocType;
-	private static final String TEST_VALUE_1 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_2 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_3 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_4 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_5 = UUID.randomUUID().toString();
-	
-	
-	@BeforeClass
-	public static void init() throws JAXBException {
-		careDocType = new GetCareDocumentationType();
-		final PersonIdType personId = new PersonIdType();
-		personId.setId(TEST_VALUE_1);
-		personId.setType(TEST_VALUE_2);
-		careDocType.setPatientId(personId);
-		careDocType.setSourceSystemHSAid(TEST_VALUE_3);
-		final DatePeriodType datePeriod = new DatePeriodType();
-		datePeriod.setEnd(TEST_VALUE_4);
-		datePeriod.setStart(TEST_VALUE_5);
-		careDocType.setTimePeriod(datePeriod);
 
-		// TODO: add some test data....
-	}
-	
+    @Test
+    public void mapResponse() {
 
-	// TODO - implement some tests
-	@Test
-	public void mapResponseTypeTest() {
-	}
+        CareDocumentationMapper objectUnderTest = new CareDocumentationMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.CAREDOCUMENTATION_TEST_FILE), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+        
+        // pass the <RIV13606REQUEST_EHR_EXTRACT_response/> message into the CareDocumentationMapper - expect back a <GetCareDocumentationResponse/>
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
+
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String)argumentCaptor.getValue();
+            assertTrue(responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
+            assertTrue(responseXml.contains("<GetCareDocumentationResponse"));
+            assertTrue(responseXml.contains("documentId>SE2321000164-1006Dok19381221704420090512082720692684000-1</"));
+
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
 }
