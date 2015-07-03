@@ -40,7 +40,7 @@ public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
     public static final String CALLBACK_PREFIX = "callback:";
-    public static final String NPO_NS = "http://nationellpatientoversikt.se";
+    private static final String NPO_NAMESPACE = "http://nationellpatientoversikt.se";
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -94,7 +94,7 @@ public class RouteData implements Serializable {
         final Route route = new Route();
         route.setSoapAction(serviceContract);
         route.setUrl(url);
-        if (serviceContract.startsWith(NPO_NS)) {
+        if (serviceContract.startsWith(NPO_NAMESPACE)) {
             route.setCallback(true);
         }
         return route;
