@@ -1,0 +1,29 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcomeResponder:1" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+   <soapenv:Header>
+      <urn:LogicalAddress>VS-1</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetImagingOutcome>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>${careUnitHSAId}</urn1:careUnitHSAId>
+         <urn1:patientId>
+            <urn2:id>192712059550</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+         <!--Optional:-->
+         <urn1:datePeriod>
+            <!--Optional:-->
+            <urn2:start>?</urn2:start>
+            <!--Optional:-->
+            <urn2:end>?</urn2:end>
+            <!--You may enter ANY elements at this point-->
+         </urn1:datePeriod>
+         <!--Optional:-->
+         <urn1:sourceSystemHSAId>?</urn1:sourceSystemHSAId>
+         <!--Zero or more repetitions:-->
+         <urn1:careContactId>?</urn1:careContactId>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetImagingOutcome>
+   </soapenv:Body>
+</soapenv:Envelope>

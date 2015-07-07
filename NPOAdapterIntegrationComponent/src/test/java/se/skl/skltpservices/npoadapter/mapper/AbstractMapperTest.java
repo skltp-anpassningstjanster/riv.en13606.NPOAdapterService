@@ -37,7 +37,7 @@ public class AbstractMapperTest {
 
 
     @Test(expected = IllegalStateException.class)
-    public void testInvalidURNWHenLookupMapper() {
+    public void testInvalidURNWhenLookupMapper() {
         AbstractMapper.getInstance("no-ns", "no-ns");
     }
 

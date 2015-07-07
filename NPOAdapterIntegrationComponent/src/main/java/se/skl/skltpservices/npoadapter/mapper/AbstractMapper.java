@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public abstract class AbstractMapper {
 
-	private static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
+	protected static final Logger log = LoggerFactory.getLogger(AbstractMapper.class);
 	
     // context for baseline (en 13606)
     private static final JaxbUtil enEhrExtractTypeJaxbUtil = new JaxbUtil("se.rivta.en13606.ehrextract.v11");
@@ -206,20 +206,22 @@ public abstract class AbstractMapper {
     	final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
 		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
 		
-		for(IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
-			if(entity instanceof ORGANISATION) {
+		for (IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
+		    
+			if (entity instanceof ORGANISATION) {
 				final ORGANISATION org = (ORGANISATION) entity;
 				if(org.getExtractId() != null) {
 					orgs.put(org.getExtractId().getExtension(), org);
 				}
 			}
-			if(entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
+			if (entity instanceof IDENTIFIEDHEALTHCAREPROFESSIONAL) {
 				final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = (IDENTIFIEDHEALTHCAREPROFESSIONAL) entity;
 				if(hp.getExtractId() != null) {
 					hps.put(hp.getExtractId().getExtension(), hp);
 				}
 			}
 		}
+		
 		return new SharedHeaderExtract(orgs, hps, EHRUtil.getSystemHSAId(ehrExtract), ehrExtract.getSubjectOfCare());
     }
 

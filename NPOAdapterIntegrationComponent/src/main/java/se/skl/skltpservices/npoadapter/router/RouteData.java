@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Keeps routing information, main routing is from northbound NPO consumer to southbound care system.
- * Though, a callback flag indicates that itäs about an internal NPO specific route, i.e. the same logical
+ * Though, a callback flag indicates that it's about an internal NPO specific route, i.e. the same logical
  * address can be used for 2 different kinds of routes (a main consumer-producer route, and a callback route). <p/>
  *
  * Route data is serialized to a file store.
@@ -40,7 +40,7 @@ public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
     public static final String CALLBACK_PREFIX = "callback:";
-    public static final String NPO_NS = "http://nationellpatientoversikt.se";
+    private static final String NPO_NAMESPACE = "http://nationellpatientoversikt.se";
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -55,18 +55,11 @@ public class RouteData implements Serializable {
         	super();
         }
         
-        public Route(String soapAction, String url, boolean callback) {
-			super();
-			this.soapAction = soapAction;
-			this.url = url;
-			this.callback = callback;
-		}
-
 		public String getSoapAction() {
 			return soapAction;
 		}
 
-		public void setSoapAction(String soapAction) {
+		private void setSoapAction(String soapAction) {
 			this.soapAction = soapAction;
 		}
 
@@ -74,7 +67,7 @@ public class RouteData implements Serializable {
 			return url;
 		}
 
-		public void setUrl(String url) {
+		private void setUrl(String url) {
 			this.url = url;
 		}
 
@@ -82,7 +75,7 @@ public class RouteData implements Serializable {
 			return callback;
 		}
 
-		public void setCallback(boolean callback) {
+		private void setCallback(boolean callback) {
 			this.callback = callback;
 		}
 
@@ -97,11 +90,11 @@ public class RouteData implements Serializable {
 
 
     //
-    public static Route route(final String serviceContract, final String url) {
+    static Route route(final String serviceContract, final String url) {
         final Route route = new Route();
         route.setSoapAction(serviceContract);
         route.setUrl(url);
-        if (serviceContract.startsWith(NPO_NS)) {
+        if (serviceContract.startsWith(NPO_NAMESPACE)) {
             route.setCallback(true);
         }
         return route;
@@ -109,13 +102,13 @@ public class RouteData implements Serializable {
 
 
     //
-    public Route getRoute(final String logicalAddress) {
+    Route getRoute(final String logicalAddress) {
         return getRoute(logicalAddress, false);
     }
 
 
     //
-    public Route getRoute(final String logicalAddress, final boolean callbackRoute)  {
+    Route getRoute(final String logicalAddress, final boolean callbackRoute)  {
         final Route route = map.get(Route.key(logicalAddress, callbackRoute));
         if (route == null) {
             log.error("Routing information not found for logical address: {}, callback: {}", logicalAddress, callbackRoute);
@@ -125,7 +118,7 @@ public class RouteData implements Serializable {
     }
 
     //
-    public void setRoute(final String logicalAddress, final Route route) {
+    void setRoute(final String logicalAddress, final Route route) {
         if (map.containsKey(route.key(logicalAddress))) {
             log.error("NPOAdapter: Duplicate routes exists for: " + logicalAddress + ",and " + route + " has been ignored/skipped");
             log.info("NPOAdapter: Current route for " + logicalAddress + " is " + getRoute(logicalAddress, route.isCallback()));
@@ -135,7 +128,7 @@ public class RouteData implements Serializable {
     }
 
 
-    public static boolean save(final RouteData routingData, final String fileName) {
+    static boolean save(final RouteData routingData, final String fileName) {
         boolean rc = false;
         ObjectOutputStream os = null;
         try {
@@ -159,7 +152,7 @@ public class RouteData implements Serializable {
     }
 
     //
-    public static RouteData load(final String fileName) {
+    static RouteData load(final String fileName) {
         RouteData routingData = null;
         ObjectInputStream is = null;
         try {

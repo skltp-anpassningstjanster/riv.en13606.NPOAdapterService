@@ -20,10 +20,13 @@
 package se.skl.skltpservices.npoadapter.test.integration;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.ws.soap.SOAPFaultException;
@@ -43,14 +46,15 @@ import se.nationellpatientoversikt.InfoTypeType;
 import se.nationellpatientoversikt.NPOSoap;
 import se.nationellpatientoversikt.NpoParameterType;
 import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
+import se.skl.skltpservices.npoadapter.test.stub.EiUpdateWS;
 
 public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTestCase {
 	
-	private static final Set<String> categorizations = new HashSet<String>();
+	private static final List<String> categorizations = new ArrayList<String>();
 	
 	private static final String NPO_ADAPTER_STUB = "http://localhost:33001/npoadapter/npo/v1";
 	private static final String TEST_SUBJECT_OF_CARE = "191101011234";
-	
+    
 	private final NPOSoap npoServices;
 	
 	public NPOIndexUpdateEndToEndIntegrationTest() {
@@ -93,7 +97,10 @@ public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTe
 	public void testSendSimpleIndexSuccess() {
 	    logger.debug("Number of categorizations:" + categorizations.size());
 		for(String cat : categorizations) {
-			assertTrue(npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType(cat, true), createParameters()));
+		    
+		    ArrayOfinfoTypeInfoTypeType a = createTypeTypeType(cat, true);
+		    ArrayOfparameternpoParameterType p = createParameters();
+			assertTrue(npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, a, p));
 			logger.debug("categorization:" + cat + " completed successfully");
 	        try {
 	            logger.debug("1 second pause to let the Adapter call SendStatus asynchronously before the next test is started");
@@ -104,6 +111,16 @@ public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTe
 		}
 	}
 	
+    @Test(expected = SOAPFaultException.class)
+    public void testSendSimpleIndexEiTimeout() {
+        npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_TIMEOUT, createTypeTypeType(categorizations.get(0), true), createParameters());
+    }
+	
+    @Test(expected = SOAPFaultException.class)
+    public void testSendSimpleIndexEiException() {
+        npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_EXCEPTION, createTypeTypeType(categorizations.get(0), true), createParameters());
+    }
+    
 	@Test(expected = SOAPFaultException.class)
 	public void testSendSimpleIndexFailInvalidCategorization() {
 		npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType("FAIL", true), createParameters());

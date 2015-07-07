@@ -60,7 +60,7 @@ public class Router implements MuleContextAware {
     private RouteData routeData;
 
     //
-    public String getTakCacheFilename() {
+    String getTakCacheFilename() {
         return takCacheFilename;
     }
 
@@ -75,7 +75,7 @@ public class Router implements MuleContextAware {
     }
 
     //
-    public RouteData.Route getRoute(final String logicalAddress, final boolean callbackRoute) {
+    private RouteData.Route getRoute(final String logicalAddress, final boolean callbackRoute) {
         return getRouteData().getRoute(logicalAddress, callbackRoute);
     }
 
@@ -90,7 +90,7 @@ public class Router implements MuleContextAware {
     }
 
     //
-    protected void reloadRoutingData0() {
+    void reloadRoutingData0() {
         try {
             log.info("NPOAdapter: Load routing data from TAK");
             final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
@@ -110,7 +110,7 @@ public class Router implements MuleContextAware {
     }
 
     //
-    protected RouteData toRouteData(final HamtaAllaVirtualiseringarResponseType data) {
+    private RouteData toRouteData(final HamtaAllaVirtualiseringarResponseType data) {
         final RouteData routeData = new RouteData();
         final Calendar now = Calendar.getInstance();
         for (final VirtualiseringsInfoType infoType : data.getVirtualiseringsInfo()) {
@@ -122,12 +122,12 @@ public class Router implements MuleContextAware {
     }
 
     //
-    protected boolean isTargetContract(final String namespace) {
+    private boolean isTargetContract(final String namespace) {
         return (namespace == null) ? false : CONTRACTS.contains(namespace);
     }
 
     //
-    protected boolean isActive(final Calendar time, final VirtualiseringsInfoType infoType) {
+    private boolean isActive(final Calendar time, final VirtualiseringsInfoType infoType) {
         final Calendar from = floorDate(toDate(infoType.getFromTidpunkt()));
         final Calendar to = ceilDate(toDate(infoType.getTomTidpunkt()));
         return (time.after(from) && time.before(to));
@@ -139,7 +139,7 @@ public class Router implements MuleContextAware {
      * @param cal the actual date and time.
      * @return the {@link Date} representation.
      */
-    protected Calendar toDate(XMLGregorianCalendar cal) {
+    private Calendar toDate(XMLGregorianCalendar cal) {
         if (cal != null) {
             Calendar c = Calendar.getInstance();
             c.set(Calendar.DATE, cal.getDay());
@@ -151,7 +151,7 @@ public class Router implements MuleContextAware {
     }
 
     // truncates a date to 00:00:00
-    protected static Calendar floorDate(Calendar cal) {
+    private static Calendar floorDate(Calendar cal) {
         if (cal == null) {
             cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, 1970);
@@ -167,7 +167,7 @@ public class Router implements MuleContextAware {
     }
 
     // increases a date to 23:59:59
-    protected static Calendar ceilDate(Calendar cal) {
+    private static Calendar ceilDate(Calendar cal) {
         if (cal == null) {
             cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, 2999);
@@ -183,7 +183,7 @@ public class Router implements MuleContextAware {
 
 
     //
-    protected HamtaAllaVirtualiseringarResponseType getRoutingDataFromSource() {
+    private HamtaAllaVirtualiseringarResponseType getRoutingDataFromSource() {
         final SokVagvalsServiceSoap11LitDocService client = new SokVagvalsServiceSoap11LitDocService(getTakWSDL());
         final HamtaAllaVirtualiseringarResponseType data = client.getSokVagvalsSoap11LitDocPort().hamtaAllaVirtualiseringar(null);
         return data;
@@ -204,7 +204,7 @@ public class Router implements MuleContextAware {
     }
 
     //
-    public URL getTakWSDL() {
+    URL getTakWSDL() {
         return this.takWSDL;
     }
 
@@ -216,7 +216,7 @@ public class Router implements MuleContextAware {
     }
 
     //
-    public RouteData getRouteData() {
+    RouteData getRouteData() {
     	synchronized (this.$lock) {
     		if (this.routeData == null) {
     			reloadRoutingData0();

@@ -146,9 +146,9 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	}
 	
 	/**
-	* Create response.
+     * Create response.
 	 * Collects organisation and healthcare-professional into maps with HSAId as key.
-	 * So other functions dont need to itterat over document each time.
+	 * So other functions don't need to iterate over document each time.
 	 * @param ehrResp response to be loaded into soap-payload.
 	 * @param uniqueId mule-message uniqueId.
 	 * @return a alertinformation response.
