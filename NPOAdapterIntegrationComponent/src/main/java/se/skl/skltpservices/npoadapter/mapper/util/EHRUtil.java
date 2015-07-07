@@ -416,54 +416,70 @@ public final class EHRUtil {
                                                                      final Map<String, ORGANISATION> orgs,
                                                                      final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps,
                                                                      final AUDITINFO committal) {
-        final HealthcareProfessional professional = new HealthcareProfessional();
-        String organisationKey = null;
-        String performerKey = null;
+        final HealthcareProfessional resultProfessional = new HealthcareProfessional();
+        
+        String healthcareFacilityKey = null;
         if (composer != null && composer.getHealthcareFacility() != null) {
-            organisationKey = composer.getHealthcareFacility().getExtension();
+            healthcareFacilityKey = composer.getHealthcareFacility().getExtension();
         }
+
+        // --- CareUnitHSAId, OrgUnit
+        if (healthcareFacilityKey != null && orgs.containsKey(healthcareFacilityKey)) {
+            final ORGANISATION healthcareFacilityOrganisation = orgs.get(healthcareFacilityKey);
+            // ---
+            resultProfessional.setHealthcareProfessionalCareUnitHSAId(healthcareFacilityOrganisation.getExtractId().getExtension());
+
+            final OrgUnit healthcareProfessionalOrgUnit = new OrgUnit();
+            if (healthcareFacilityOrganisation.getName() != null) {
+                healthcareProfessionalOrgUnit.setOrgUnitName(healthcareFacilityOrganisation.getName().getValue());
+            }
+            for(final TEL t : healthcareFacilityOrganisation.getTelecom()) {
+                if(t instanceof TELEMAIL) {
+                    healthcareProfessionalOrgUnit.setOrgUnitEmail(removePrefix(t.getValue(), "mailto:"));
+                }
+                if(t instanceof TELPHONE) {
+                    healthcareProfessionalOrgUnit.setOrgUnitTelecom(removePrefix(t.getValue(), "tel:"));
+                }
+            }
+            healthcareProfessionalOrgUnit.setOrgUnitHSAId(healthcareFacilityKey);
+
+            mapAddress(healthcareProfessionalOrgUnit, healthcareFacilityOrganisation);
+
+            // ---
+            resultProfessional.setHealthcareProfessionalOrgUnit(healthcareProfessionalOrgUnit);
+        }
+        
+        //
+        
+        String performerKey = null;
         if (composer!= null && composer.getPerformer() != null) {
             performerKey = composer.getPerformer().getExtension();
         }
-        professional.setHealthcareProfessionalHSAId(performerKey);
-        if(organisationKey != null && orgs.containsKey(organisationKey)) {
-            final ORGANISATION org = orgs.get(organisationKey);
-            professional.setHealthcareProfessionalCareUnitHSAId(org.getExtractId().getExtension());
-            final OrgUnit orgUnit = new OrgUnit();
+        resultProfessional.setHealthcareProfessionalHSAId(performerKey);
+        
+        // --- care giver, author time, name, role
+        if (performerKey != null && hps.containsKey(performerKey)) {
+            final IDENTIFIEDHEALTHCAREPROFESSIONAL performerHealthCareProfessional = hps.get(performerKey);
 
-            if(org.getName() != null) {
-                orgUnit.setOrgUnitName(org.getName().getValue());
-            }
-            for(final TEL t : org.getTelecom()) {
-                if(t instanceof TELEMAIL) {
-                    orgUnit.setOrgUnitEmail(removePrefix(t.getValue(), "mailto:"));
-                }
-                if(t instanceof TELPHONE) {
-                    orgUnit.setOrgUnitTelecom(removePrefix(t.getValue(), "tel:"));
-                }
-            }
-            orgUnit.setOrgUnitHSAId(organisationKey);
+            resultProfessional.setHealthcareProfessionalCareGiverHSAId(performerHealthCareProfessional.getExtractId().getExtension());
 
-            mapAddress(orgUnit, org);
-
-            professional.setHealthcareProfessionalOrgUnit(orgUnit);
-        }
-        if(performerKey != null && hps.containsKey(performerKey)) {
-            final IDENTIFIEDHEALTHCAREPROFESSIONAL hp = hps.get(performerKey);
-            if(committal != null && committal.getTimeCommitted() != null) {
-                professional.setAuthorTime(committal.getTimeCommitted().getValue());
-            }
-            professional.setHealthcareProfessionalCareGiverHSAId(hp.getExtractId().getExtension());
-            if(!hp.getName().isEmpty() && !hp.getName().get(0).getPart().isEmpty()) {
-                professional.setHealthcareProfessionalName(hp.getName().get(0).getPart().get(0).getValue());
+            if (committal != null && committal.getTimeCommitted() != null) {
+                resultProfessional.setAuthorTime(committal.getTimeCommitted().getValue());
             }
 
-            final HEALTHCAREPROFESSIONALROLE role = firstItem(hp.getRole());
+            if (!performerHealthCareProfessional.getName().isEmpty() && !performerHealthCareProfessional.getName().get(0).getPart().isEmpty()) {
+                resultProfessional.setHealthcareProfessionalName(performerHealthCareProfessional.getName().get(0).getPart().get(0).getValue());
+            }
+
+            final HEALTHCAREPROFESSIONALROLE role = firstItem(performerHealthCareProfessional.getRole());
             if (role != null) {
-                professional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
+                resultProfessional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
             }
         }
-        return professional;
+        
+        // ---
+        
+        return resultProfessional;
     }
 
     //
