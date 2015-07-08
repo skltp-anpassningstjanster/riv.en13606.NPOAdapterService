@@ -69,7 +69,6 @@
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CreateSoapFaultTransformer"
     					name="createSoapFaultTransformer" />                    
 
-
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqIn">
         <spring:property name="logType" value="req-in"/>
         <spring:property name="jaxbContext" ref="jaxbContext"/>

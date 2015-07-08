@@ -72,7 +72,8 @@ public class NpoWS implements NPOSoap {
      * Return true if service is alive.
      */
     @Override
-    public Boolean notifyAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
+    public Boolean notifyAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") 
+                               ArrayOfparameternpoParameterType parameters) {
         log.info("notify alive true");
         return Boolean.TRUE;
     }
