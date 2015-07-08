@@ -105,6 +105,8 @@ public class AlertInformationMapperTest {
 		assertFalse(resp.getAlertInformation().isEmpty());
 		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationBody());
 		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationHeader());
+        assertEquals("Givare", resp.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("Enhet", resp.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
 	}
 	
 	private static CD cdType(final String code) {
