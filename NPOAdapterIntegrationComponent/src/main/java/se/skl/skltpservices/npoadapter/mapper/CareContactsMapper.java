@@ -205,10 +205,10 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         for (final FUNCTIONALROLE careGiver : composition.getOtherParticipations()) {
 			if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
 				if (careGiver.getPerformer() != null) {
-					professionalType.setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
+					professionalType.setHealthcareProfessionalCareUnitHSAId(careGiver.getPerformer().getExtension());
 				}
 				if (careGiver.getHealthcareFacility() != null) {
-					professionalType.setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
+					professionalType.setHealthcareProfessionalCareGiverHSAId(careGiver.getHealthcareFacility().getExtension());
 				}
 			}
 		}

@@ -547,10 +547,10 @@ public final class EHRUtil {
         for (FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
             if(careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
                 if(careGiver.getPerformer() != null) {
-                    header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(careGiver.getPerformer().getExtension());
+                    header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(careGiver.getPerformer().getExtension());
                 }
                 if(careGiver.getHealthcareFacility() != null) {
-                    header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(careGiver.getHealthcareFacility().getExtension());
+                    header.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(careGiver.getHealthcareFacility().getExtension());
                 }
             }
         }
