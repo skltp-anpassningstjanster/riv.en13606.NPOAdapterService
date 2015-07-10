@@ -182,7 +182,17 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract) {
         final COMPOSITION composition = ehrExtract.getAllCompositions().get(0);
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class);
+        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class, true, true);
+        
+        // 'Tidpunkt då dokument skapades' - TKB clinicalprocess healthcond actoutcome
+        if ("" == patient.getDocumentTime() || null == patient.getDocumentTime()) {
+            TS timestamp = ehrExtract.getTimeCreated();
+            if (timestamp != null && StringUtils.isNotBlank(timestamp.getValue())) {
+                patient.setDocumentTime(ehrExtract.getTimeCreated().getValue());
+            } else {
+                patient.setDocumentTime("19000101000000"); // default timestamp
+            }
+        }
         return patient;
     }
     

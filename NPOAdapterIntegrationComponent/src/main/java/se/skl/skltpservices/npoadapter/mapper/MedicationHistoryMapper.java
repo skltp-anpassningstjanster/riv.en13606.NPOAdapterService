@@ -205,7 +205,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         }
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class);
+        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class, true, true);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
             //patient.getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
         }
