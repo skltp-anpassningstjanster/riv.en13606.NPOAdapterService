@@ -93,7 +93,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 					final COMPOSITION und = comp;
 					final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), "vbe");
 					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
-					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class));
+					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
 					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
 					type.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
 					resp.getLaboratoryOrderOutcome().add(type);

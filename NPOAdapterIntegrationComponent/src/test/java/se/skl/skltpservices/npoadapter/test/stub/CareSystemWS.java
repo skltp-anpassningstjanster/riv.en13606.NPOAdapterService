@@ -42,25 +42,32 @@ import se.nationellpatientoversikt.NpoResponseDetailType;
 
 /**
  * Created by Peter on 2014-08-20.
+ * 
+ * Stub implementation of an NPOv1 client.
+ * The client calls sendSimpleIndex on NPOAdapter, which calls sendSimpleIndex on NPOv1.
+ * NPOv1 calls sendStatus on the client.
+ * NPOv1 can also call checkAlive on the client.
+ * The other methods are not implemented.
  */
-@WebService(serviceName = "CS",
-        endpointInterface = "se.nationellpatientoversikt.CSSoap",
-        portName = "CSSoap",
-        targetNamespace = "http://nationellpatientoversikt.se")
+@WebService(      serviceName = "CS",
+            endpointInterface = "se.nationellpatientoversikt.CSSoap",
+                     portName = "CSSoap",
+              targetNamespace = "http://nationellpatientoversikt.se")
 public class CareSystemWS implements CSSoap {
 
     private static final Logger log = LoggerFactory.getLogger(CareSystemWS.class);
 
     @Override
-    public Boolean checkAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") ArrayOfparameternpoParameterType parameters) {
+    public Boolean checkAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") 
+                              ArrayOfparameternpoParameterType parameters) {
         return Boolean.TRUE;
     }
     
     @Override
     public Boolean sendStatus(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") 
-                                ArrayOfparameternpoParameterType parameters, 
+                              ArrayOfparameternpoParameterType parameters, 
                               @WebParam(name = "response_details", targetNamespace = "http://nationellpatientoversikt.se") 
-                                ArrayOfresponseDetailnpoResponseDetailType responseDetails) {
+                              ArrayOfresponseDetailnpoResponseDetailType responseDetails) {
         
         log.debug("CareSystemWS stub : CS CSSoap SendStatus");
         

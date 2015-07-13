@@ -17,9 +17,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skl.skltpservices.npoadapter.ws;
+package se.skl.skltpservices.npoadapter.test.stub;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Holder;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,23 +37,15 @@ import se.nationellpatientoversikt.ArrayOfinfoTypeInfoTypeType;
 import se.nationellpatientoversikt.ArrayOfparameternpoParameterType;
 import se.nationellpatientoversikt.ArrayOfresponseDetailnpoResponseDetailType;
 import se.nationellpatientoversikt.ArrayOfsubjectOfCareIdString;
+import se.nationellpatientoversikt.InfoTypeType;
 import se.nationellpatientoversikt.NPOSoap;
 import se.nationellpatientoversikt.NpoParameterType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 
 /**
- * Web Service implementing the NPO API. <p/>
- *
- * At this stage the following are supported
- * {#sendSimpleIndex, #notifyAlive}
- * 
- * This service is part of a flow and is responsible for validating the incoming request. <p/>
- *
- * Please also see the mule flow "npo-index-service.xml" (NPOService-1.1.2) 
- * for the full service implementation and to understand how this Web Service is utilised.
- *
- * @author Peter
+ * Stub implementation of NPOv1 interface
+ * Used when NPOAdapter needs to call NPOv1 - for sendSimpleIndex.
  */
 @WebService(serviceName       = "NPO",
             endpointInterface = "se.nationellpatientoversikt.NPOSoap",
@@ -74,35 +64,36 @@ public class NpoWS implements NPOSoap {
     @Override
     public Boolean notifyAlive(@WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se") 
                                ArrayOfparameternpoParameterType parameters) {
-        log.info("notify alive true");
+        log.info("NpoWS (stub) notifyAlive - true");
         return Boolean.TRUE;
     }
     
     /**
-     * Returns true if mandatory parameters are present, otherwise throws IllegalArgumentException.
+     * Called by NPOAdapter when FORWARD_INDEX_TO_NPO=true
      */
     @Override
-    public Boolean sendSimpleIndex(String subjectOfCareId, ArrayOfinfoTypeInfoTypeType infoTypes, ArrayOfparameternpoParameterType parameters) {
-        validateSendSimpleIndexParameters(parameters);
+    public Boolean sendSimpleIndex(
+            @WebParam(name = "subject_of_care_id", targetNamespace = "http://nationellpatientoversikt.se")
+            String subjectOfCareId,
+            @WebParam(name = "info_types", targetNamespace = "http://nationellpatientoversikt.se")
+            ArrayOfinfoTypeInfoTypeType infoTypes,
+            @WebParam(name = "parameters", targetNamespace = "http://nationellpatientoversikt.se")
+            ArrayOfparameternpoParameterType parameters
+        ) {
+        log.info("NpoWS (stub) sendSimpleIndex");
+        
+        log.info("subjectOfCareId:{}", subjectOfCareId);
+        
+        for (InfoTypeType infoTypeType : infoTypes.getInfoType()) {
+            log.info("infoTypeId:{}", infoTypeType.getInfoTypeId());
+            log.info("infoTypeIsExists:{}",infoTypeType.isExists());
+        }
+        
+        for (NpoParameterType parameter : parameters.getParameter()) {
+            log.info("parameter:{}, value:{}", parameter.getName(), parameter.getValue());
+        }
         return Boolean.TRUE;
     }
-
-    // Ensure that the request supplies all the mandatory parameters.
-    // Additional (unexpected) parameters are ignored.
-    private void validateSendSimpleIndexParameters(final ArrayOfparameternpoParameterType parameters) {
-
-        final List<String> expected = new ArrayList<String>(NPO_PARAMETERS);
-        for (final NpoParameterType p : parameters.getParameter()) {
-            if (StringUtils.isBlank(p.getValue())) {
-                throw appendToNativeException(new OutboundResponseException("Invalid (empty) value for mandatory request parameter: " + p.getName(), Ehr13606AdapterError.INVALIDATA));
-            }
-            expected.remove(p.getName());
-        }
-        if (!expected.isEmpty()) {
-            throw appendToNativeException(new OutboundResponseException("Missing mandatory request parameter(s): " + expected, Ehr13606AdapterError.MISSINGDATA));
-        }
-    }
-
     
     // --- ------------
 

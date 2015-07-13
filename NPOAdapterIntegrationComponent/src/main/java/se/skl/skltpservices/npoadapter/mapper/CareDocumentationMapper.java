@@ -118,7 +118,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		
 		for (COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			final CareDocumentationType doc = new CareDocumentationType();
-			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class));
+			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class, true, true));
 			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(comp.getLinks()));
             doc.getCareDocumentationHeader().setSourceSystemHSAid(EHRUtil.getSystemHSAId(ehrExtract));
 			doc.setCareDocumentationBody(mapBodyType(comp));

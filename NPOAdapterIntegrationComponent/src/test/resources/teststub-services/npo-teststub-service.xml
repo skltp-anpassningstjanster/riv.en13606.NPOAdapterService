@@ -29,7 +29,7 @@
                 wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" />
 
         <component>
-            <singleton-object class="se.skl.skltpservices.npoadapter.ws.NpoWS"  />
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.NpoWS"  />
         </component>
 
         <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
