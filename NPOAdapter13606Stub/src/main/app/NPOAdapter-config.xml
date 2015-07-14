@@ -14,7 +14,7 @@
 
 
         <!-- configure router -->
-        
+<!--         
         <spring:bean id="router" class="se.skl.skltpservices.npoadapter.router.Router">
             <spring:property name="takCacheFilename" value="${FILE_LOCAL_TAK_CACHE}" />
             <spring:property name="takWSDL" value="${ENDPOINT_TAK_WSDL}" />
@@ -27,15 +27,19 @@
         <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor">
             <spring:property name="router" ref="router" />
         </spring:bean>
+-->
         
     </spring:beans>
 
 
-    <!-- transformers -->
-
     <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer"        name="create-correlation-id">
         <spring:property name="integrationScenario" value="npo-adapter-type-1" />
     </custom-transformer>
+
+
+    <!-- transformers -->
+    <!-- 
+
     
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer"               name="check-response-transformer" />
     
@@ -52,5 +56,8 @@
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.TakHamtaAllaVirtualiseringarRequestTransformer" name="tak-vagval-hamtaallavirtualiseringar-transformer" />    
 
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexParameterCaptureTransformer"  name="update-index-captureparameters-transformer" />    
+    
+    -->
+    
 </mule>
 

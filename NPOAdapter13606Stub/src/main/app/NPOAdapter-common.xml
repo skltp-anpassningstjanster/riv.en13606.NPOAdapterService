@@ -15,8 +15,8 @@
         <spring:property name="locations">
             <spring:list>
                 <!-- Only available in development env, e.g. Eclipse -->
-                <spring:value>classpath:NPOAdapter-config.properties</spring:value>
-                <spring:value>classpath:NPOAdapter-config-override.properties</spring:value>
+                <spring:value>classpath:NPOAdapter13606Stub-config.properties</spring:value>
+                <spring:value>classpath:NPOAdapter13606Stub-config-override.properties</spring:value>
             </spring:list>
         </spring:property>
     </spring:bean>
@@ -30,25 +30,6 @@
 
         <!-- Import the JMS-provider used in production here, embedded JMS providers used for integration tests are loaded by the *IntegratIonTest.java classes directly -->
         <spring:import resource="classpath:soitoolkit-mule-jms-connector-activemq-external.xml"/>
-
-    </spring:beans>
-
-    <!-- Used by integration tests only -->
-    <spring:beans profile="soitoolkit-integrationtests">
-        <mule>
-            <!--  Allow integration tests to register dynamic listeners by specifying dynamic="true" -->
-            <notifications dynamic="true">
-                <notification event="ENDPOINT-MESSAGE"/>
-                <notification event="COMPONENT-MESSAGE"/>
-            </notifications>
-        </mule>
-    </spring:beans>
-
-
-    <!-- Used by st-muleServer-helper-class only -->
-    <spring:beans profile="soitoolkit-teststubs">
-        <!-- Load all teststub services -->
-        <spring:import resource="classpath:teststub-services/*-teststub-service.xml"/>
     </spring:beans>
 
     <!-- Common connectors and endpoints, i.e. that not needs to be changed for different config-files (local unit-test, integration-test or production environments) -->
@@ -104,7 +85,8 @@
 
     <configuration>
         <default-receiver-threading-profile
-                maxThreadsActive="${RECEIVE_MAX_THREADS_ACTIVE}" maxThreadsIdle="${RECEIVE_MAX_THREADS_IDLE}"
+                maxThreadsActive="${RECEIVE_MAX_THREADS_ACTIVE}" 
+                maxThreadsIdle="${RECEIVE_MAX_THREADS_IDLE}"
                 threadTTL="${RECEIVE_MAX_THREADS_TTL}"/>
     </configuration>
     

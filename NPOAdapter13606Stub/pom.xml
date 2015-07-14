@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>NPOAdapterIntegrationComponent</artifactId>
+  <artifactId>NPOAdapter13606Stub</artifactId>
   <name>${project.artifactId}</name>
 
   <packaging>mule</packaging>
@@ -102,7 +102,7 @@
         <groupId>org.mule.tools</groupId>
         <artifactId>maven-mule-plugin</artifactId>
         <extensions>true</extensions>
-        <!-- Include mule-dependencies that don't come with Mule 3.x otherwise 
+        <!-- Include mule-dependencies that don't come with Mule 3.x otherwise
              we can't install to a vanilla Mule 3.x installation -->
         <configuration>
           <inclusions>
@@ -146,7 +146,7 @@
               <groupId>org.safehaus.jug</groupId>
               <artifactId>jug.osgi</artifactId>
             </exclusion>
-            
+
             <!-- activemq needs to be added manually to MULE_HOME/lib/user if required, see issue 283 -->
             <exclusion>
               <groupId>org.apache.activemq</groupId>
@@ -166,7 +166,7 @@
               <groupId>org.hornetq</groupId>
               <artifactId>hornetq-jms</artifactId>
             </exclusion>
-            
+
             <exclusion>
               <groupId>org.jboss.netty</groupId>
               <artifactId>netty</artifactId>
@@ -185,8 +185,8 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <!-- if no classifier is declared, then a mvn install results in a file 
-               in the local repo: ic2-1.0.0-SNAPSHOT.mule 
+          <!-- if no classifier is declared, then a mvn install results in a file
+               in the local repo: ic2-1.0.0-SNAPSHOT.mule
                which is a jar-file - only strangely named and with a bad extension -->
           <classifier>core</classifier>
           <excludes>
@@ -206,7 +206,7 @@
 
     <pluginManagement>
       <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. 
+        <!--This plugin's configuration is used to store Eclipse m2e settings only.
             It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -247,9 +247,9 @@
   <profiles>
     <profile>
       <id>muleServer</id>
-      <!-- Start mule server with the command 
-           mvn -PmuleServer or 
-           mvn -PmuleServer -Dexec.args="${artifaceId}-NPOAdapter-config.xml" 
+      <!-- Start mule server with the command
+           mvn -PmuleServer or
+           mvn -PmuleServer -Dexec.args="${artifaceId}-NPOAdapter-config.xml"
            if you want to override the default config-file -->
       <build>
         <defaultGoal>test</defaultGoal>

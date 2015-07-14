@@ -28,7 +28,6 @@ import org.soitoolkit.commons.mule.test.StandaloneMuleServer;
  *
  * Set system property batchMode to true in order to run in batch mode, default is console mode
  * and to stop server by pressing any key.
- *
  */
 public class MuleServer {
 	
@@ -37,7 +36,7 @@ public class MuleServer {
     //
     public static void main(String[] args) throws Exception {
         final boolean batchMode =  Boolean.valueOf(System.getProperty("batchMode"));
-        new StandaloneMuleServer("NPOAdapterIntegrationComponent", true, true) {
+        new StandaloneMuleServer("NPOAdapter13606Stub", true, true) {
             @Override
             public void run() throws InterruptedException, Exception {
                 if (batchMode) {
