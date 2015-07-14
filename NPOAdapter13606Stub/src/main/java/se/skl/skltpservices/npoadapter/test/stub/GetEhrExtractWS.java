@@ -61,28 +61,28 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
     protected se.rivta.en13606.ehrextract.v11.EHREXTRACT getBaselineData(final String infoType) throws JAXBException {
         switch (infoType) {
             case "vko":
-                log.info("Received VKO Request");
+                log.info("Received vko request");
                 return Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
             case "voo":
-                log.info("Received VOO Request");
+                log.info("Received voo request");
                 return Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE);
             case "dia":
-            	log.info("Received DIA Request");
+            	log.info("Received dia request");
             	return Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
             case "und-kkm-kli":
-            	log.info("und-kkm-kli");
+            	log.info("Received und-kkm-kli request");
             	return Util.loadEhrTestData(Util.LAB_TEST_FILE);
             case "upp":
-            	log.info("Received UPP Request");
+            	log.info("Received upp request");
             	return Util.loadEhrTestData(Util.ALERT_TEST_FILE);
             case "lkm-ord":
-                log.info("Received LKM Request");
+                log.info("Received lkm request");
                 return Util.loadEhrTestData(Util.MEDICALHISTORY_TEST_FILE);
             case "und-kon":
-                log.info("Received UND-KON Request");
+                log.info("Received und-kon request");
                 return Util.loadEhrTestData(Util.REFERRALOUTCOME_TEST_FILE);
             case "und-bdi":
-                log.info("Received UND-BDI Request");
+                log.info("Received und-bdi request");
                 return Util.loadEhrTestData(Util.IMAGINGOUTCOME_TEST_FILE);
             default:
                 throw new IllegalArgumentException("Unknown information type (meanings code): " + infoType);

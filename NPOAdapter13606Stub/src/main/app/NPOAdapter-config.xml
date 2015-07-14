@@ -7,57 +7,15 @@
 						http://www.mulesoft.org/schema/mule/core     http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
     <spring:beans>
-    
      	<!-- register all services -->
-     	
-        <spring:import resource="classpath:services/*-service.xml"/>
-
-
-        <!-- configure router -->
-<!--         
-        <spring:bean id="router" class="se.skl.skltpservices.npoadapter.router.Router">
-            <spring:property name="takCacheFilename" value="${FILE_LOCAL_TAK_CACHE}" />
-            <spring:property name="takWSDL" value="${ENDPOINT_TAK_WSDL}" />
-        </spring:bean>
-
-        <spring:bean id="route-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundRouter">
-            <spring:property name="responseTimeout" value="${SERVICE_TIMEOUT_MS}" />
-        </spring:bean>
-
-        <spring:bean id="pre-processor" class="se.skl.skltpservices.npoadapter.mule.OutboundPreProcessor">
-            <spring:property name="router" ref="router" />
-        </spring:bean>
--->
-        
+        <spring:import resource="classpath:services/ehrextract-teststub-service.xml"/>
+        <spring:import resource="classpath:services/exit-teststub-service.xml"/>
+        <spring:import resource="classpath:services/getehrextract-teststub-service.xml"/>
+        <spring:import resource="classpath:services/ping-for-configuration-service.xml"/>
     </spring:beans>
 
-
-    <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer"        name="create-correlation-id">
+    <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer" name="create-correlation-id">
         <spring:property name="integrationScenario" value="npo-adapter-type-1" />
     </custom-transformer>
-
-
-    <!-- transformers -->
-    <!-- 
-
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CheckOutboundResponseTransformer"               name="check-response-transformer" />
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexTransformer"                  name="update-index-transformer">
-        <spring:property name="eiLogicalAddress" value="${LOGICAL_ADDRESS_EI}" />
-    </custom-transformer>
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundCSTakLookupTransformer"                  name="cs-taklookup-transformer"/>
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundCSSendStatusTransformer"                name="cs-sendstatus-transformer"/>
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.EIUpdateResponseTransformer"                    name="ei-updateresponse-transformer"/>
-    
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.TakHamtaAllaVirtualiseringarRequestTransformer" name="tak-vagval-hamtaallavirtualiseringar-transformer" />    
-
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundUpdateIndexParameterCaptureTransformer"  name="update-index-captureparameters-transformer" />    
-    
-    -->
-    
 </mule>
 

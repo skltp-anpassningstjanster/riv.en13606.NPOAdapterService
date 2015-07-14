@@ -10,7 +10,7 @@
     <flow name="ehrextract-teststub-flow" >
 
         <inbound-endpoint address="${ENDPOINT_EHR_EXTRACT_STUB}"
-                          connector-ref="soitoolkit-https-connector"
+                          connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response" />
 
         <cxf:jaxws-service

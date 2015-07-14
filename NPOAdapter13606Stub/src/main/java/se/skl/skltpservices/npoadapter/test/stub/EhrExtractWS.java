@@ -152,35 +152,35 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
-        	log.info("Received VKO Request");
+        	log.info("Received vko request");
         	responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
         	break;
         case VOO:
-        	log.info("Received VOO Request");
+        	log.info("Received voo request");
         	responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
         	break;
         case DIA:
-        	log.info("Received DIA Request");
+        	log.info("Received dia request");
         	responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
         	break;
         case UND_KKM_KLI:
-        	log.info("Received UND-KKM-KLI Request");
+        	log.info("Received und-kkm-kli request");
         	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
         	break;
         case UPP:
-        	log.info("Received UPP Request");
+        	log.info("Received upp request");
         	responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));
         	break;
         case LKM:
-            log.info("Received LKM Request");
+            log.info("Received lkm request");
             responseType.getEhrExtract().add(getTestData(Util.MEDICALHISTORY_TEST_FILE));
             break;
         case UND_KON:
-            log.info("Received UND-KON Request");
+            log.info("Received und-kon request");
             responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
             break;
         case UND_BDI:
-            log.info("Received UND-BDI Request");
+            log.info("Received und-bdi request");
             if ("ExtraLarge".equals(hsaId)) {
                 // 1MB response - performance test case TP2
                 responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
