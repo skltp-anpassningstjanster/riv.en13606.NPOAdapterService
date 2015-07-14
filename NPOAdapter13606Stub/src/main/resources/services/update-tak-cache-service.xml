@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+<!-- Disable scheduled update for now, since it's impossible to determine if the TAK state is correct
+    <quartz:endpoint name="quartz-scheduler" jobName="cron-tak-cache-reset"
+                     cronExpression="${CRON_TAK_CACHE_RELOAD}" responseTimeout="${SERVICE_TIMEOUT_MS}">
+        <quartz:event-generator-job/>
+    </quartz:endpoint>
+
+    <flow name="update-tak-cache-cron-flow">
+        <inbound-endpoint ref="quartz-scheduler"/>
+        <logger level="INFO" message="Reload TAK cache, Cron Request" />
+        <invoke object-ref="router" method="reloadRoutingData"/>
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy" />
+    </flow>
+-->
+
+    <flow name="update-tak-cache-http-flow">
+        <inbound-endpoint address="${IN_ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response"
+                          transformer-refs="create-correlation-id logReqIn"
+                          responseTransformer-refs="logRespOut" />
+        <logger level="INFO" message="Reload TAK cache, HTTP Request" />
+        <invoke object-ref="router" method="reloadRoutingData"/>
+        <expression-transformer>
+            <return-argument evaluator="string"
+                             expression="OK (TAK cache has been successfully reloaded)" />
+        </expression-transformer>
+    </flow>
+</mule>

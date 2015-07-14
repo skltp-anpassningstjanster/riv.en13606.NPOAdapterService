@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd">
+	<ehr_id extension="SE2321000164-1002Kem36603115" root="1.2.752.129.2.1.2.1"/>
+	<ehr_system extension="SE2321000164-1002" root="1.2.752.129.2.1.4.1"/>
+	<rm_id>EN 13606</rm_id>
+	<subject_of_care extension="192712069550" root="1.2.752.129.2.1.3.1"/>
+	<time_created value="20090430104205"/>
+	<all_compositions>
+		<meaning codeSystem="1.2.752.129.2.2.2.1" code="und">
+			<displayName value="Informationsmängd Undersökningsresultat"/>
+		</meaning>
+		<name nullFlavor="NA"/>
+		<rc_id extension="SE2321000164-1002Kem09042908060036603115" root="1.2.752.129.2.1.2.1"/>
+		<synthesised nullFlavor="NA"/>
+		<attestations>
+			<reason_for_attestation nullFlavor="NA"/>
+			<time value="20090429115000"/>
+			<target_rc_id nullFlavor="NA"/>
+			<attester>
+				<performer nullFlavor="NA"/>
+			</attester>
+		</attestations>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20090429132009"/>
+		</committal>
+		<composer>
+			<healthcare_facility extension="SE2321000164-7381037594544" root="1.2.752.129.2.1.4.1"/>
+			<performer extension="SE2321000164-73810375900035709176621" root="1.2.752.129.2.1.2.1"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-ure">
+				<displayName value="Undersökningsresultat Klinisk kemi/Mikrobiologi"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<links>
+				<follow_link value="true"/>
+				<nature code="LINK-A0"/>
+				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="vbe"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00020"/>
+			</links>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="CLUSTER">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-und-res">
+					<displayName value="Undersökningsresultat"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<structure_type nullFlavor="NA"/>
+				<parts xsi:type="ELEMENT">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-und-ure-stp">
+						<displayName value="Svarstidpunkt"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id nullFlavor="NA"/>
+					<synthesised nullFlavor="NA"/>
+					<value xsi:type="TS" value="200805121310"/>
+				</parts>
+				<parts xsi:type="ELEMENT">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-und-ure-utl">
+						<displayName value="Utlåtande"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id nullFlavor="NA"/>
+					<synthesised nullFlavor="NA"/>
+					<value xsi:type="ST" value="Någon utlåtandetext"/>
+				</parts>
+				<parts xsi:type="ELEMENT">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-und-ure-typ">
+						<displayName value="Svarstyp"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id nullFlavor="NA"/>
+					<synthesised nullFlavor="NA"/>
+					<value xsi:type="ST" value="Definitivsvar"/>
+				</parts>
+				<parts xsi:type="ELEMENT">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-ure-lab">
+						<displayName value="Labenhet"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id nullFlavor="NA"/>
+					<synthesised nullFlavor="NA"/>
+					<value xsi:type="ST" value="Klinisk kemi"/>
+				</parts>
+				<parts xsi:type="ELEMENT">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-ure-kom">
+						<displayName value="Svarskommentar"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id nullFlavor="NA"/>
+					<synthesised nullFlavor="NA"/>
+					<value xsi:type="ST" value="Någon text som kommenterar svaret."/>
+				</parts>
+				<parts xsi:type="CLUSTER">
+					<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-uat">
+						<displayName value="Utförd analystjänst"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id extension="SE2321000164-1002Kem09042908060036603115" root="1.2.752.129.2.1.2.1"/>
+					<synthesised nullFlavor="NA"/>
+					<structure_type nullFlavor="NA"/>
+					<parts xsi:type="ELEMENT">
+						<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-uat-kod">
+							<displayName value="Åtgärdskod"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<obs_time>
+							<low value="20090429083600"/>
+							<high value="20090429083600"/>
+						</obs_time>
+						<value xsi:type="CD" code="SWE05074" codeSystem="1.2.752.108.1">
+							<displayName value="-Hemoglobin"/>
+						</value>
+					</parts>
+					<parts xsi:type="ELEMENT">
+						<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-uat-sta">
+							<displayName value="Åtgärdsstatus"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<value xsi:type="ST" value="Avklarad"/>
+					</parts>
+					<parts xsi:type="ELEMENT">
+						<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-uat-kom">
+							<displayName value="Analyskommentar"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<value xsi:type="ST" value="En text som kommenterar analysresultatet."/>
+					</parts>
+					<parts xsi:type="ELEMENT">
+						<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-uat-mat">
+							<displayName value="Provmaterial"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<value xsi:type="ST" value="B"/>
+					</parts>
+					<parts xsi:type="CLUSTER">
+						<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf">
+							<displayName value="Utfall/Resultat"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<structure_type nullFlavor="NA"/>
+						<parts xsi:type="ELEMENT">
+							<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf-var">
+								<displayName value="Värde"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<obs_time>
+								<low value="20090429115000"/>
+								<high value="20090429115000"/>
+							</obs_time>
+							<value xsi:type="ST" value="126"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf-vae">
+								<displayName value="Värde enhet"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value xsi:type="ST" value="g/L"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf-pat">
+								<displayName value="Patologisk markerad"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value xsi:type="BL" value="false"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf-ref">
+								<displayName value="Referensintervall"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value xsi:type="ST" value="117-153"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning codeSystem="1.2.752.129.2.2.2.1" code="und-kkm-utf-bes">
+								<displayName value="Beskrivning"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value xsi:type="ST" value="Text som beskriver värdet ytterligare."/>
+						</parts>
+					</parts>
+				</parts>
+				<parts xsi:type="CLUSTER">
+					<meaning code="und-kkm-uat" codeSystem="1.2.752.129.2.2.2.1">
+						<displayName value="Utförd analystjänst"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id extension="SE2321000164-1002Kem09042908060036603115" root="1.2.752.129.2.1.2.1"/>
+					<synthesised nullFlavor="NA"/>
+					<structure_type nullFlavor="NA"/>
+					<!-- Test Start -->
+					<links>
+						<follow_link value="false"/>
+						<nature code="LINK-A1"/>
+						<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="test"/>
+						<target_id root="testRoot" extension="testExtentsion"/>
+					</links>
+					<links>
+						<follow_link value="false"/>
+						<nature code="LINK-A2"/>
+						<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="test"/>
+						<target_id root="testRootSecond" extension="testExtentsionSecond"/>
+					</links>
+					<!-- Start End -->
+					<parts xsi:type="ELEMENT">
+						<meaning code="und-kkm-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Åtgärdskod"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<obs_time>
+							<low value="20090429083600"/>
+							<high value="20090429083600"/>
+						</obs_time>
+						<value xsi:type="CD" code="NPU01121" codeSystem="1.2.752.108.1">
+							<displayName value="-ALAT"/>
+						</value>
+					</parts>
+					<parts xsi:type="ELEMENT">
+						<meaning code="und-kkm-uat-sta" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Åtgärdsstatus"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<value value="Avklarad" xsi:type="ST"/>
+					</parts>
+					<parts xsi:type="ELEMENT">
+						<meaning code="und-kkm-uat-mat" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Provmaterial"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<value value="P" xsi:type="ST"/>
+					</parts>
+					<parts xsi:type="CLUSTER">
+						<meaning code="und-kkm-utf" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Utfall/Resultat"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id extension="SE2321000164-1002Kem09042908060036603115" root="1.2.752.129.2.1.2.1"/>
+						<synthesised nullFlavor="NA"/>
+						<structure_type nullFlavor="NA"/>
+						<parts xsi:type="ELEMENT">
+							<meaning code="und-kkm-utf-var" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Värde"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<obs_time xsi:type="IVL_TS">
+								<low value="20090429131800"/>
+								<high value="20090429131800"/>
+							</obs_time>
+							<value value="0,35" xsi:type="ST"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning code="und-kkm-utf-vae" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Värde enhet"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value value="µkat/L" xsi:type="ST"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning code="und-kkm-utf-pat" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Patologisk markerad"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value value="false" xsi:type="BL"/>
+						</parts>
+						<parts xsi:type="ELEMENT">
+							<meaning code="und-kkm-utf-ref" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Referensintervall"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value value="0,75" xsi:type="ST"/>
+						</parts>
+					</parts>
+				</parts>
+			</items>
+		</content>
+	</all_compositions>
+	<all_compositions>
+		<meaning codeSystem="1.2.752.129.2.2.2.1" code="vbe">
+			<displayName value="Informationsmängd Vårdbegäran"/>
+		</meaning>
+		<name nullFlavor="NA"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00020"/>
+		<synthesised nullFlavor="NA"/>
+		<links>
+			<follow_link value="false"/>
+			<nature code="LINK-A0"/>
+			<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="vko"/>
+			<target_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00010"/>
+		</links>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20090429132009"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning codeSystem="1.2.752.129.2.2.2.1" code="vbe-vbe">
+				<displayName value="Vårdbegäran"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="vbe-vbe-fst">
+					<displayName value="Frågeställning"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Patologiskt?"/>
+			</items>
+		</content>
+	</all_compositions>
+	<demographic_extract xsi:type="ORGANISATION">
+		<extract_id extension="SE2321000164-7381037594544" root="1.2.752.129.2.1.4.1"/>
+		<id extension="SE2321000164-7381037594544" root="1.2.752.129.2.1.4.1"/>
+		<telecom xsi:type="TEL.PHONE"/>
+		<telecom xsi:type="TEL.EMAIL"/>
+		<code nullFlavor="NA"/>
+		<desc nullFlavor="NA"/>
+		<name value="Kumla Vårdcentral Rehabiliteringsenheten"/>
+	</demographic_extract>
+	<demographic_extract xsi:type="ORGANISATION">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		<telecom xsi:type="TEL.PHONE" value="tel:+46196021292"/>
+		<telecom xsi:type="TEL.EMAIL" value="mailto:medicinkliniken.uso@orebroll.se"/>
+		<code nullFlavor="NA"/>
+		<desc nullFlavor="NA"/>
+		<name value="Medicinska kliniken USÖ"/>
+		<addr>
+			<part type="AL">Universitetssjukhuset Örebro  701 85 ÖREBRO</part>
+		</addr>
+		<addr>
+			<part type="CEN">Universitetssjukhuset Örebro</part>
+		</addr>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id extension="SE2321000164-73810375900035709176621" root="1.2.752.129.2.1.2.1"/>
+		<id extension="SE2321000164-73810375900035709176621" root="1.2.752.129.2.1.2.1"/>
+		<name xsi:type="EN">
+			<part value="Gunvor Martinsson, distriktsläkare"/>
+		</name>
+		<role>
+			<profession codeSystem="1.2.752.129.2.2.1.4" code="201011">
+				<displayName value="Distriktsläkare/Specialist allmänmedicin"/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594544"/>
+		</role>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		<id root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		<name>
+			<part value="Anders Englund"/>
+		</name>
+		<role>
+			<profession codeSystem="1.2.752.129.2.2.1.4" code="201010">
+				<displayName value="Överläkare"/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		</role>
+	</demographic_extract>
+</ehr_extract>
