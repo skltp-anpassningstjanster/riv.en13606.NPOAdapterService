@@ -36,6 +36,7 @@
     <modules>
         <module>schemas</module>
         <module>NPOAdapterIntegrationComponent</module>
+        <module>NPOAdapter13606Stub</module>
     </modules>
 
     <dependencyManagement>
