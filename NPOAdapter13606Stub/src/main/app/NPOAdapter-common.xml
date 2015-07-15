@@ -21,10 +21,15 @@
         </spring:property>
     </spring:bean>
 
-    <!-- Common connectors and endpoints, i.e. that not needs to be changed for different config-files (local unit-test, integration-test or production environments) -->
+    <!-- The default profile used by normal usage of mule-app, either deployed in mule or started using st-muleServer-helper-class. Not used by integration tests -->
+    <spring:beans profile="default">
+        <!-- Connectors et al that are specific for different environment specific config-files (local unit-test, integration-test or production environments) -->
+        <!-- TODO: Add import of environment specific configuration files here as required -->
+        <!-- Import the JMS-provider used in production here, embedded JMS providers used for integration tests are loaded by the *IntegratIonTest.java classes directly -->  
+<!--  <spring:import resource="classpath:soitoolkit-mule-jms-connector-activemq-external.xml"/> -->
+    </spring:beans>
 
     <spring:beans>
-        <!-- import the common logger config -->
         <spring:import resource="classpath:tp-commons-mule-logging.xml" />
         <spring:import resource="classpath:soitoolkit-mule-http-connector.xml"/>
         <spring:import resource="classpath:soitoolkit-mule-https-connector.xml"/>
@@ -44,6 +49,13 @@
         <spring:property name="jaxbContext" ref="jaxbContext"/>
     </custom-transformer>
 
+    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logRespOut">
+        <spring:property name="logType" value="resp-out"/>
+        <spring:property name="jaxbContext" ref="jaxbContext"/>
+    </custom-transformer>
+
+
+<!-- 
     <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logReqOut">
         <spring:property name="logType" value="req-out"/>
         <spring:property name="jaxbContext" ref="jaxbContext"/>
@@ -65,11 +77,7 @@
         <spring:property name="jaxbContext" ref="jaxbContext"/>
     </custom-transformer>
 
-    <custom-transformer class="org.soitoolkit.commons.mule.log.LogTransformer" name="logRespOut">
-        <spring:property name="logType" value="resp-out"/>
-        <spring:property name="jaxbContext" ref="jaxbContext"/>
-    </custom-transformer>
-
+-->
     <!-- TODO: Add global definitions here -->
 
     <configuration>

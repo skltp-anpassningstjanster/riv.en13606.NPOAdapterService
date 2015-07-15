@@ -23,8 +23,6 @@ import org.mule.api.MuleContext;
 import org.mule.api.annotations.expressions.Lookup;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.management.stats.FlowConstructStatistics;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import riv.ehr.patientsummary._1.EHREXTRACT;
 import se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponderInterface;
@@ -32,6 +30,7 @@ import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+//import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.util.Samples;
 import se.skl.skltpservices.npoadapter.util.Sample;
 import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
@@ -54,14 +53,11 @@ import java.util.Map;
         targetNamespace   = "urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21")
 public class PingForConfigurationWS implements PingForConfigurationResponderInterface {
 
-	private static final Logger log = LoggerFactory.getLogger(PingForConfigurationWS.class);
-	
     @Lookup
     private MuleContext muleContext;
 
     @Override
     public PingForConfigurationResponseType pingForConfiguration(String logicalAddress, PingForConfigurationType request) {
-        log.debug("Called with logical address {}", logicalAddress);
 
         final PingForConfigurationResponseType response = new PingForConfigurationResponseType();
 
