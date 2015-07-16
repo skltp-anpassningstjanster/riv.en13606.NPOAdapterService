@@ -13,7 +13,6 @@
                 http://www.mulesoft.org/schema/mule/https  http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
                 ">
 
-
     <flow name="CareSystemService-1.0-Client">
 
         <!--  PAN-89 SendStatus when index request is not forwarded to NPO -->
@@ -29,10 +28,12 @@
 
         <!-- retrieve careSystemUrl -->
         <logger level="INFO" message="=== Calling out to TakVägVal ===" />
-        <!-- 
+
         <transformer ref="tak-vagval-hamtaallavirtualiseringar-transformer" />
-         -->
+
+        <!-- 
         <set-payload value="#[null]"/> 
+        -->
         <logger level="INFO" message="=== payload before calling TakVägVal:#[payload] ===" />
         <!-- internal connections are http -->
         <http:outbound-endpoint connector-ref="soitoolkit-http-connector"
@@ -52,7 +53,7 @@
 
         <!--    -->
         
-        <logger level="INFO" message="=== Calling out to CareSystem SendStatus (as index request was not forwarded to NPO) ===" />
+        <logger level="INFO" message="=== Calling out to external care system (13606 producer) with SendStatus (https) ===" />
         <set-payload value="#[sendStatusRequest]"/>
 
         <!-- https for external endpoints -->

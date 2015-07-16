@@ -136,7 +136,7 @@ public class RouteData implements Serializable {
             os.writeObject(routingData);
             os.flush();
             rc = true;
-            log.debug("NPOAdapter: Successfully saved route data to file: " + fileName);
+            log.debug("NPOAdapter: Successfully saved {} routes to file:{}", routingData.map.keySet().size(), fileName);
         } catch (Exception e) {
             log.error("NPOAdapter: Unable to save route data to local file: " + fileName, e);
         } finally {

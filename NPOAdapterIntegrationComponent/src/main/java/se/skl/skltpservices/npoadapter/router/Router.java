@@ -94,6 +94,7 @@ public class Router implements MuleContextAware {
         try {
             log.info("NPOAdapter: Load routing data from TAK");
             final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
+            log.info("retrieved {} VirtualiseringsInfo",data.getVirtualiseringsInfo().size());
             final RouteData routeData = toRouteData(data);
             RouteData.save(routeData, takCacheFilename);
             setRouteData(routeData);

@@ -44,8 +44,10 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
 
+        log.info("InboundCSTakLookupTransformer");
+        
         String careSystemUrl = "";
-        String hsaId =  (String)message.getInvocationProperty("hsaId");
+        String hsaId = (String)message.getInvocationProperty("hsaId");
 
         if (StringUtils.isBlank(hsaId)) {
             throw new IllegalStateException("invocation property hsaId is missing");
@@ -69,7 +71,7 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
                     */
                     
                     if (log.isDebugEnabled()) {
-                        log.debug(v.getVirtualiseringsInfoId() + " " + v.getReceiverId() + " " + v.getRivProfil() + v.getAdress());
+                        log.debug(v.getVirtualiseringsInfoId() + " " + v.getReceiverId() + " " + v.getRivProfil() + " " + v.getAdress());
                     }
                     
                     if (hsaId.equalsIgnoreCase(v.getReceiverId())
@@ -78,11 +80,13 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
                         &&
                        "http://nationellpatientoversikt.se:SendStatus".equalsIgnoreCase(v.getTjansteKontrakt())) {
                         careSystemUrl = v.getAdress();
-                        if (careSystemUrl.startsWith("https://")) {
-                            careSystemUrl = careSystemUrl.substring("https://".length());
-                        }
-                        if (careSystemUrl.startsWith("http://")) {
-                            careSystemUrl = careSystemUrl.substring("http://".length());
+                        if (careSystemUrl != null) {
+                            if (careSystemUrl.startsWith("https://")) {
+                                careSystemUrl = careSystemUrl.substring("https://".length());
+                            }
+                            if (careSystemUrl.startsWith("http://")) {
+                                careSystemUrl = careSystemUrl.substring("http://".length());
+                            }
                         }
                     }
                 }
@@ -91,7 +95,7 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
             }
         }
         if (StringUtils.isBlank(careSystemUrl)) {
-            throw new IllegalStateException("No care system url found for hsaId " + hsaId);
+            throw new IllegalStateException("No care system url found (no producer vägval) - hsaId:" + hsaId);
         }
         message.setPayload(careSystemUrl);
         log.debug("Mapped hsaId:" + hsaId + " to CareSystem url:" + careSystemUrl);

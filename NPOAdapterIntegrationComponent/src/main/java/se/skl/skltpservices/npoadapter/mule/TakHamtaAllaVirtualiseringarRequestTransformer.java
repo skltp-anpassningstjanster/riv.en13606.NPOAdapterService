@@ -35,6 +35,7 @@ public class TakHamtaAllaVirtualiseringarRequestTransformer extends AbstractMess
 
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
+        logger.debug("TakHamtaAllaVirtualiseringarRequestTransformer");
         message.setPayload("<soapenv:Header/><soapenv:Body><urn:hamtaAllaVirtualiseringar xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\" /></soapenv:Body>");
         return message;
     }

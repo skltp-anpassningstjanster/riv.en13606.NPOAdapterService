@@ -58,11 +58,11 @@ public class EiUpdateWS implements UpdateResponderInterface {
         EngagementType et = ett.getEngagement();
         
         if (SUBJECT_OF_CARE_ID_EI_EXCEPTION.equals(et.getRegisteredResidentIdentification())) {
-            throw new RuntimeException("Exception occurred in Engagementindex");
+            throw new RuntimeException("Exception occurred in engagementindex");
         }
         
         if (SUBJECT_OF_CARE_ID_EI_TIMEOUT.equals(et.getRegisteredResidentIdentification())) {
-            log.debug("60 second pause to provoke mule timeout");
+            log.debug("engagmentindex pauses 60 seconds to provoke mule timeout");
             try {
                 Thread.sleep(60 * 1000);
             } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ public class EiUpdateWS implements UpdateResponderInterface {
 
         // ignore all other inputs
         
-        response.setComment("Looks alright.");
+        response.setComment("Engagement index - update was successful");
         response.setResultCode(ResultCodeEnum.OK);
 
         return response;
