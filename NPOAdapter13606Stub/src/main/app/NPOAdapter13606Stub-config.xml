@@ -8,6 +8,7 @@
 
     <spring:beans>
      	<!-- register all services -->
+        <spring:import resource="classpath:services/caresystem-teststub-service.xml"/>
         <spring:import resource="classpath:services/ehrextract-teststub-service.xml"/>
         <spring:import resource="classpath:services/exit-teststub-service.xml"/>
         <spring:import resource="classpath:services/getehrextract-teststub-service.xml"/>

@@ -35,10 +35,10 @@ import se.skl.skltpservices.npoadapter.test.Util;
 /**
  * Created by Peter on 2014-08-15.
  */
-@WebService(serviceName = "GetEhrExtractResponderService",
-        endpointInterface = "riv.ehr.patientsummary.getehrextract._1.rivtabp21.GetEhrExtractResponderInterface",
-        targetNamespace = "urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21",
-        portName = "GetEhrExtractResponderPort")
+@WebService(      serviceName = "GetEhrExtractResponderService",
+            endpointInterface = "riv.ehr.patientsummary.getehrextract._1.rivtabp21.GetEhrExtractResponderInterface",
+              targetNamespace = "urn:riv:ehr:patientsummary:GetEhrExtract:1:rivtabp21",
+                     portName = "GetEhrExtractResponderPort")
 public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
 	
 	private final static Logger log = LoggerFactory.getLogger(GetEhrExtractWS.class);

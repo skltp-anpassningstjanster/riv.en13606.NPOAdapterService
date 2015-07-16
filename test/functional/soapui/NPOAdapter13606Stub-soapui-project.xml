@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project activeEnvironment="Default" name="NPOAdapter13606Stub" resourceRoot="" soapui-version="5.0.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="PingForConfigurationResponderBinding" type="wsdl" bindingName="{urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21}PingForConfigurationResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/pfc?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/pfc?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/pfc?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="PingForConfigurationInteraction" targetNamespace="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:rgy="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:itintegration:monitoring:PingForConfigurationInitiator:1" xmlns:tjsr="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" xmlns:tns="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<con:soapui-project activeEnvironment="Default" name="NPOAdapter13606Stub" resourceRoot="" soapui-version="5.0.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="PingForConfigurationResponderBinding" type="wsdl" bindingName="{urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21}PingForConfigurationResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/pfc?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/pfc?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/pfc?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="PingForConfigurationInteraction" targetNamespace="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:rgy="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:itintegration:monitoring:PingForConfigurationInitiator:1" xmlns:tjsr="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" xmlns:tns="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:documentation>Tjänsteinteraktionens namn: PingForConfigurationInteraction
 			 Beskrivning: 
 			   A service interaction for monitoring and querying the configuration of service endpoints. 
@@ -14766,7 +14766,7 @@ ISO 2008  All rights reserved
          </urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/></con:call><con:call name="vko"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:33001/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" xmlns:urn2="urn:riv:ehr:patientsummary:1">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:call><con:call name="vko"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:33001/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" xmlns:urn2="urn:riv:ehr:patientsummary:1">
    <soapenv:Header>
       <urn:LogicalAddress>?</urn:LogicalAddress>
    </soapenv:Header>
@@ -29609,7 +29609,481 @@ ISO 2008  All rights reserved
          </urn:continuation_token>
       </urn:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION_request>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite name="localhost:33001"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="AllInterfaces" searchProperties="true" id="c6417946-49f1-4c5a-ae65-dd494970ba52"><con:settings/><con:testStep type="request" name="PingForConfiguration"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PingForConfigurationResponderBinding</con:interface><con:operation>PingForConfiguration</con:operation><con:request name="PingForConfiguration" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/pfc</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT_CONTINUATION"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="CSSoap" type="wsdl" bindingName="{http://nationellpatientoversikt.se}CSSoap" soapVersion="1_1" anonymous="optional" definition="http://localhost:11000/npoadapter/caresystem/stub?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11000/npoadapter/caresystem/stub?wsdl"><con:part><con:url>http://localhost:11000/npoadapter/caresystem/stub?wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://nationellpatientoversikt.se" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://nationellpatientoversikt.se" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://nationellpatientoversikt.se">
+      <s:element name="CheckAlive">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfparameternpoParameter_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="parameter" nillable="true" type="s0:npoParameter_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="npoParameter_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="name" type="s:string"/>
+          <s:element minOccurs="0" name="value" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CheckAliveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeletions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="to_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeletionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="deletions" type="s0:ArrayOfdeletionDeletion_type"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfdeletionDeletion_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="deletion" nillable="true" type="s0:Deletion_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Deletion_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="rc_id" type="s:string"/>
+          <s:element minOccurs="0" name="registration_time" type="s:dateTime"/>
+          <s:element minOccurs="0" name="info_type_id" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfresponse_detailnpoResponse_detail_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="response_detail" nillable="true" type="s0:npoResponse_detail_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="npoResponse_detail_type">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="kind">
+              <s:simpleType>
+                <s:restriction base="s:string">
+                  <s:maxLength value="1"/>
+                  <s:enumeration value="E"/>
+                  <s:enumeration value="W"/>
+                  <s:enumeration value="I"/>
+                </s:restriction>
+              </s:simpleType>
+            </s:attribute>
+            <s:attribute name="code" type="s:string"/>
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="GetIndex2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="to_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIndex2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="index_updates" type="s0:ArrayOfindex_updateIndexUpdate_type"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfindex_updateIndexUpdate_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="index_update" nillable="true" type="s0:IndexUpdate_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndexUpdate_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="info_type_id" type="s:string"/>
+          <s:element minOccurs="0" name="from_date" type="s:date"/>
+          <s:element minOccurs="0" name="to_date" type="s:date"/>
+          <s:element minOccurs="0" name="registration_time" type="s:dateTime"/>
+          <s:element minOccurs="0" name="rc_id" type="s:string"/>
+          <!--The following three elements are added in order to support VG/VE-->
+          <s:element minOccurs="0" name="care_giver" type="s:string"/>
+          <s:element minOccurs="0" name="care_unit" type="s:string"/>
+          <s:element minOccurs="0" name="org_unit" type="s:string"/>
+        </s:sequence>
+        <s:attribute name="action">
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:maxLength value="1"/>
+              <s:enumeration value="U"/>
+              <s:enumeration value="D"/>
+            </s:restriction>
+          </s:simpleType>
+        </s:attribute>
+      </s:complexType>
+      <s:element name="GetPatientList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="purpose" type="s:string"/>
+            <s:element minOccurs="0" name="info_type_ids" type="s0:ArrayOfinfo_type_idsItemString"/>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfinfo_type_idsItemString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="info_type_idsItem" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetPatientListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_ids" type="s0:ArrayOfsubject_of_care_idString"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfsubject_of_care_idString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="subject_of_care_id" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSimpleIndex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSimpleIndexResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="subject_of_care_info_types" type="s0:ArrayOfsubject_of_care_info_typeSubjectOfCareInfoTypes_type"/>
+            <s:element minOccurs="0" name="from_time" type="s:dateTime"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfsubject_of_care_info_typeSubjectOfCareInfoTypes_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="subject_of_care_info_type" nillable="true" type="s0:SubjectOfCareInfoTypes_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SubjectOfCareInfoTypes_type">
+        <s:sequence>
+          <s:element minOccurs="0" name="subject_of_care_id" type="s:string"/>
+          <s:element minOccurs="0" name="info_types" type="s0:ArrayOfinfo_typeInfoType_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfinfo_typeInfoType_type">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="info_type" nillable="true" type="s0:InfoType_type"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="InfoType_type">
+        <s:attribute name="info_type_id" type="s:string"/>
+        <s:attribute name="exists" type="s:boolean"/>
+      </s:complexType>
+      <s:element name="SendStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="parameters" type="s0:ArrayOfparameternpoParameter_type"/>
+            <s:element minOccurs="0" name="response_details" type="s0:ArrayOfresponse_detailnpoResponse_detail_type"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="success" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="GetSimpleIndexSoapIn">
+    <part element="s0:GetSimpleIndex" name="parameters"></part>
+  </message>
+  <message name="GetIndex2SoapOut">
+    <part element="s0:GetIndex2Response" name="parameters"></part>
+  </message>
+  <message name="CheckAliveSoapOut">
+    <part element="s0:CheckAliveResponse" name="parameters"></part>
+  </message>
+  <message name="GetPatientListSoapOut">
+    <part element="s0:GetPatientListResponse" name="parameters"></part>
+  </message>
+  <message name="GetDeletionsSoapIn">
+    <part element="s0:GetDeletions" name="parameters"></part>
+  </message>
+  <message name="CheckAliveSoapIn">
+    <part element="s0:CheckAlive" name="parameters"></part>
+  </message>
+  <message name="SendStatusSoapOut">
+    <part element="s0:SendStatusResponse" name="parameters"></part>
+  </message>
+  <message name="GetPatientListSoapIn">
+    <part element="s0:GetPatientList" name="parameters"></part>
+  </message>
+  <message name="GetSimpleIndexSoapOut">
+    <part element="s0:GetSimpleIndexResponse" name="parameters"></part>
+  </message>
+  <message name="GetIndex2SoapIn">
+    <part element="s0:GetIndex2" name="parameters"></part>
+  </message>
+  <message name="GetDeletionsSoapOut">
+    <part element="s0:GetDeletionsResponse" name="parameters"></part>
+  </message>
+  <message name="SendStatusSoapIn">
+    <part element="s0:SendStatus" name="parameters"></part>
+  </message>
+  <portType name="CSSoap">
+    <operation name="CheckAlive">
+      <input message="s0:CheckAliveSoapIn"></input>
+      <output message="s0:CheckAliveSoapOut"></output>
+    </operation>
+    <operation name="GetDeletions">
+      <input message="s0:GetDeletionsSoapIn"></input>
+      <output message="s0:GetDeletionsSoapOut"></output>
+    </operation>
+    <operation name="GetIndex2">
+      <input message="s0:GetIndex2SoapIn"></input>
+      <output message="s0:GetIndex2SoapOut"></output>
+    </operation>
+    <operation name="GetPatientList">
+      <input message="s0:GetPatientListSoapIn"></input>
+      <output message="s0:GetPatientListSoapOut"></output>
+    </operation>
+    <operation name="GetSimpleIndex">
+      <input message="s0:GetSimpleIndexSoapIn"></input>
+      <output message="s0:GetSimpleIndexSoapOut"></output>
+    </operation>
+    <operation name="SendStatus">
+      <input message="s0:SendStatusSoapIn"></input>
+      <output message="s0:SendStatusSoapOut"></output>
+    </operation>
+  </portType>
+  <binding name="CSSoap" type="s0:CSSoap">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CheckAlive">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:CheckAlive" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetDeletions">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:GetDeletions" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetIndex2">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:GetIndex2" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetPatientList">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:GetPatientList" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetSimpleIndex">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:GetSimpleIndex" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SendStatus">
+      <soap:operation soapAction="http://nationellpatientoversikt.se:SendStatus" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="CS">
+    <port binding="s0:CSSoap" name="CSSoap">
+      <soap:address location="http://localhost:11000/npoadapter/caresystem/stub"/>
+    </port>
+  </service>
+  <s:annotation>
+    <s:documentation>-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in CARE_SYSTEM_1.1.2.wsdl compared to CARE_SYSTEM_1.1.1.wsdl
+		
+		The service 'GetIndex' changed name to 'GetIndex2' (needed since the signature of the service
+		changed in version 1.1.0 - the name should have been changed in that version).
+    
+    Version is 1.1.2
+-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in CARE_SYSTEM_1.1.1.wsdl compared to CARE_SYSTEM_1.1.0.wsdl
+		
+		There are no changes in CARE_SYSTEM_1.1.1.wsdl compared to CARE_SYSTEM_1.1.0.wsdl
+    
+    Version is 1.1.1
+-------------------------------------------------------------
+		Hjalmar Jacobson
+		Tieto
+		
+		Changes in CARE_SYSTEM_1.1.0.wsdl compared to CARE_SYSTEM_1.0.0.wsdl
+		
+		Changes to support care giver (VG) and care unit (VE) - the change affects GetIndex
+		  - The type IndexUpdate_type have three new elements: care_giver, care_unit and org_unit
+    
+    Version is 1.1.0
+-------------------------------------------------------------</s:documentation>
+  </s:annotation>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint></con:endpoints><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:CheckAlive" name="CheckAlive" bindingOperationName="CheckAlive" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:CheckAlive>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>?</nat:name>
+               <!--Optional:-->
+               <nat:value>?</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+      </nat:CheckAlive>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:CheckAlive"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:GetDeletions" name="GetDeletions" bindingOperationName="GetDeletions" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:GetDeletions>
+         <!--Optional:-->
+         <nat:subject_of_care_id>?</nat:subject_of_care_id>
+         <!--Optional:-->
+         <nat:from_time>?</nat:from_time>
+         <!--Optional:-->
+         <nat:to_time>?</nat:to_time>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>?</nat:name>
+               <!--Optional:-->
+               <nat:value>?</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+      </nat:GetDeletions>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:GetDeletions"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:GetIndex2" name="GetIndex2" bindingOperationName="GetIndex2" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:GetIndex2>
+         <!--Optional:-->
+         <nat:subject_of_care_id>?</nat:subject_of_care_id>
+      </nat:GetIndex2>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:GetIndex2"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:GetPatientList" name="GetPatientList" bindingOperationName="GetPatientList" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:GetPatientList>
+         <!--Optional:-->
+         <nat:purpose>?</nat:purpose>
+         <!--Optional:-->
+         <nat:info_type_ids>
+            <!--Zero or more repetitions:-->
+            <nat:info_type_idsItem>?</nat:info_type_idsItem>
+         </nat:info_type_ids>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>?</nat:name>
+               <!--Optional:-->
+               <nat:value>?</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+         <!--Optional:-->
+         <nat:from_time>?</nat:from_time>
+      </nat:GetPatientList>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:GetPatientList"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:GetSimpleIndex" name="GetSimpleIndex" bindingOperationName="GetSimpleIndex" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:GetSimpleIndex>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>?</nat:name>
+               <!--Optional:-->
+               <nat:value>?</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+         <!--Optional:-->
+         <nat:from_time>?</nat:from_time>
+      </nat:GetSimpleIndex>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:GetSimpleIndex"/></con:call></con:operation><con:operation isOneWay="false" action="http://nationellpatientoversikt.se:SendStatus" name="SendStatus" bindingOperationName="SendStatus" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11000/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:nat="http://nationellpatientoversikt.se">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <nat:SendStatus>
+         <!--Optional:-->
+         <nat:parameters>
+            <!--Zero or more repetitions:-->
+            <nat:parameter>
+               <!--Optional:-->
+               <nat:name>?</nat:name>
+               <!--Optional:-->
+               <nat:value>?</nat:value>
+            </nat:parameter>
+         </nat:parameters>
+         <!--Optional:-->
+         <nat:response_details>
+            <!--Zero or more repetitions:-->
+            <nat:response_detail kind="?" code="?">?</nat:response_detail>
+         </nat:response_details>
+      </nat:SendStatus>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://nationellpatientoversikt.se:SendStatus"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite name="localhost:33001"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="AllInterfaces" searchProperties="true" id="c6417946-49f1-4c5a-ae65-dd494970ba52"><con:settings/><con:testStep type="request" name="PingForConfiguration"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PingForConfigurationResponderBinding</con:interface><con:operation>PingForConfiguration</con:operation><con:request name="PingForConfiguration" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#http}/npoadapter/pfc</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
                   xmlns:urn="urn:riv:itintegration:registry:1" 
                   xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
    <soapenv:Header>
@@ -29618,7 +30092,7 @@ ISO 2008  All rights reserved
    <soapenv:Body>
       <urn1:PingForConfiguration/>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="PingForConfigurationResponse"><con:configuration><path>count(//*:PingForConfigurationResponse)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="configuration"><con:configuration><path>count(//*:configuration) > 20</path><content>true</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - dia"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - dia" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="PingForConfigurationResponse"><con:configuration><path>count(//*:PingForConfigurationResponse)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="configuration"><con:configuration><path>count(//*:configuration) > 20</path><content>true</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - dia"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - dia" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29637,7 +30111,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>diagnos</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - lkm-ord"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - lkm-ord" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>diagnos</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - lkm-ord"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - lkm-ord" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29656,7 +30130,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Läkemedelsordination</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-bdi"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-bdi" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Läkemedelsordination</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-bdi"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-bdi" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29675,7 +30149,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Bilddiagnostik</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-kkm-kli"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-kkm-kli" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Bilddiagnostik</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-kkm-kli"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-kkm-kli" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29694,7 +30168,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Klinisk kemi/Mikrobiologi</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-kon"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-kon" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Klinisk kemi/Mikrobiologi</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - und-kon"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - und-kon" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29713,7 +30187,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - upp"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - upp" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - upp"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - upp" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29732,7 +30206,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Uppmärksamhetssignal</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - vko"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - vko" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Uppmärksamhetssignal</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - vko"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - vko" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29751,7 +30225,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Vård-och omsorgskontakt</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - voo"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - voo" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Vård-och omsorgskontakt</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="EhrExtract - voo"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>RIV13606REQUEST_EHR_EXTRACT_Binding</con:interface><con:operation>RIV13606REQUEST_EHR_EXTRACT</con:operation><con:request name="EhrExtract - voo" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/ehrextract/stub</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
  <soap:Body>
   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
@@ -29770,7 +30244,7 @@ ISO 2008  All rights reserved
    </parameters>
   </RIV13606REQUEST_EHR_EXTRACT_request>
  </soap:Body>
-</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsägare</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - dia"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - dia" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soap:Envelope>"]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsägare</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - dia"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - dia" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29793,7 +30267,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>diagnos</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - lkm-ord"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - lkm-ord" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>diagnos</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - lkm-ord"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - lkm-ord" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29816,7 +30290,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Läkemedelsordination</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-kkm-kli"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-kkm-kli" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Läkemedelsordination</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-kkm-kli"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-kkm-kli" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29839,7 +30313,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Klinisk kemi/Mikrobiologi</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-bdi"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-bdi" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Klinisk kemi/Mikrobiologi</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-bdi"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-bdi" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29862,7 +30336,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Bilddiagnostik</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-kon"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-kon" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat Bilddiagnostik</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - und-kon"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - und-kon" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29885,7 +30359,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - upp"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - upp" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Undersökningsresultat</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - upp"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - upp" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29908,7 +30382,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Uppmärksamhetssignal</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - vko"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - vko" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="Simple Contains" name="Contains"><con:configuration><token>Informationsmängd Uppmärksamhetssignal</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - vko"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - vko" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29931,7 +30405,7 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - voo"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - voo" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetEhrExtract - voo"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetEhrExtractResponderBinding</con:interface><con:operation>GetEhrExtract</con:operation><con:request name="GetEhrExtract - voo" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/getehrextract/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
   xmlns:urn="urn:riv:itintegration:registry:1" 
   xmlns:urn1="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1" 
@@ -29954,4 +30428,30 @@ ISO 2008  All rights reserved
 		</urn1:parameters>
       </urn1:GetEhrExtract>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>protocolHostAndPort</con:name><con:value>http://localhost:33001</con:value></con:property></con:properties></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="SendStatus CareSystem Stub"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CSSoap</con:interface><con:operation>SendStatus</con:operation><con:request name="SendStatus CareSystem Stub"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#https}/npoadapter/caresystem/stub</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+  xmlns:nat="http://nationellpatientoversikt.se">
+ <soapenv:Header/>
+ <soapenv:Body>
+  <nat:SendStatus>
+   <nat:parameters>
+    <nat:parameter>
+     <nat:name>hsa_id</nat:name>
+     <nat:value>VS-1</nat:value>
+    </nat:parameter>
+    <nat:parameter>
+     <nat:name>transaction_id</nat:name>
+     <nat:value>TX-1234</nat:value>
+    </nat:parameter>
+    <nat:parameter>
+     <nat:name>version</nat:name>
+     <nat:value>1.1</nat:value>
+    </nat:parameter>
+   </nat:parameters>
+   <nat:response_details>
+    <nat:response_detail code="OK" kind="I">Looks alright.</nat:response_detail>
+   </nat:response_details>
+  </nat:SendStatus>
+ </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:assertion type="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>protocolHostAndPort</con:name><con:value>http://localhost:33001</con:value></con:property><con:property><con:name>localhost</con:name><con:value>http://localhost:33001</con:value></con:property><con:property><con:name>mockserver</con:name><con:value>http://ine-tit-mock01.sth.basefarm.net:29206</con:value></con:property><con:property><con:name>http</con:name><con:value>http://localhost:33001</con:value></con:property><con:property><con:name>https</con:name><con:value>https://localhost:33002</con:value></con:property></con:properties></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
