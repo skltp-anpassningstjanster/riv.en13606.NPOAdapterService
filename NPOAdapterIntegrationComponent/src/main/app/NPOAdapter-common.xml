@@ -54,6 +54,7 @@
         <spring:import resource="classpath:teststub-services/exit-teststub-service.xml"/>
         <spring:import resource="classpath:teststub-services/getcarecontacts-teststub-service.xml"/>
         <spring:import resource="classpath:teststub-services/getehrextract-teststub-service.xml"/>
+        <spring:import resource="classpath:teststub-services/takvagval-teststub-service.xml"/>
     </spring:beans>
 
     <!-- Common connectors and endpoints, i.e. that not needs to be changed for different config-files (local unit-test, integration-test or production environments) -->
