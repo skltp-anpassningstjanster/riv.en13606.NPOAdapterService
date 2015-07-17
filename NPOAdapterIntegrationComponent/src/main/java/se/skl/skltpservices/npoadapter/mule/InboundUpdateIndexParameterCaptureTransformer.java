@@ -37,18 +37,23 @@ public class InboundUpdateIndexParameterCaptureTransformer extends AbstractMessa
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
 
+        logger.info("InboundUpdateIndexParameterCaptureTransformer");
+        
         Object[] payloadParts = (Object[])message.getPayload();
         ArrayOfparameternpoParameterType parameters = ((ArrayOfparameternpoParameterType)payloadParts[2]);
         
         for (NpoParameterType p : parameters.getParameter()) {
             if ("hsa_id".equals(p.getName())) {
                 message.setInvocationProperty("hsaId", p.getValue());
+                logger.debug("hsaId:" + p.getValue());
             }
             if ("transaction_id".equals(p.getName())) {
                 message.setInvocationProperty("transactionId", p.getValue());
+                logger.debug("transactionId:" + p.getValue());
             }
             if ("version".equals(p.getName())) {
                 message.setInvocationProperty("version", p.getValue());
+                logger.debug("version:" + p.getValue());
             }
         }
         return message;

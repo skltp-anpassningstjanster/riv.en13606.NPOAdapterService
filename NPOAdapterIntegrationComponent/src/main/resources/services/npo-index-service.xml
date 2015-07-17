@@ -55,17 +55,6 @@
             
             <when expression="header:INVOCATION:cxf_operation={http://nationellpatientoversikt.se}SendSimpleIndex">
                 <logger message="Operation:SendSimpleIndex" level="INFO"/>
-                <logger level="INFO" message="=== Whether to call external NPÖ SendSimpleIndex: ${FORWARD_INDEX_TO_NPO} ===" />
-                <choice>
-                    <when expression="${FORWARD_INDEX_TO_NPO} == 'true'">
-                        <set-payload value="#[variable:sendSimpleIndexRequest]" />
-                        <!-- flow in npo-outbound-index-service.xml -->
-                        <flow-ref name="NPOService-1.1.2-Client" />
-                    </when>
-                    <otherwise>
-                       <echo-component />
-                    </otherwise>
-                </choice>
                 
                 <!--  -->
                 
@@ -89,13 +78,10 @@
         
                 <async>
                     <logger level="INFO" message="=== Checking whether to call CareSystem SendStatus ===" />
-                    
-                    <logger level="INFO" message="=== FORWARD_INDEX_TO_NPO: ${FORWARD_INDEX_TO_NPO} ===" />
                     <logger level="INFO" message="=== CARE_SYSTEM_SEND_STATUS_IS_ACTIVE: ${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} ===" />
                     
                     <choice>
-                        <when expression="(${FORWARD_INDEX_TO_NPO} == 'false') &amp;&amp; (${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
-                        
+                        <when expression="(${CARE_SYSTEM_SEND_STATUS_IS_ACTIVE} == 'true')" >
                             <!-- capture incoming parameters (hsaId, transactionId, version)-->
                             <set-payload value="#[sendSimpleIndexRequest]"/>
                             <transformer ref="update-index-captureparameters-transformer" />
@@ -104,12 +90,12 @@
                             <logger level="INFO" message="=== version       : #[variable:version] ===" />
                 
                             <!--  -->
-                        
                             <logger level="INFO" message="=== Calling CareSystem SendStatus ===" />
                             <set-payload value="#[updateResponseType]"/>
                             <!-- flow in cs-outbound-sendstatus-service.xml -->
                             <flow-ref name="CareSystemService-1.0-Client" />
                         </when>
+                        
                         <otherwise>
                             <logger level="INFO" message="=== Not calling CareSystem SendStatus ===" />
                         </otherwise>

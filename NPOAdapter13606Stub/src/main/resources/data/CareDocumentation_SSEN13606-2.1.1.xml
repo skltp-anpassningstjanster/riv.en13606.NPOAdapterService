@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd">
+	<ehr_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1006Dok19381221704420090512082720689800000"/>
+	<ehr_system root="1.2.752.129.2.1.4.1" extension="SE2321000164-1006"/>
+	<rm_id>EN 13606</rm_id>
+	<subject_of_care root="1.2.752.129.2.1.3.1" extension="192712039550"/>
+	<time_created value="20090512102720"/>
+	<all_compositions>
+		<meaning code="epi" codeSystem="1.2.752.129.2.2.2.1">
+			<displayName value="Epikris"/>
+		</meaning>
+		<name value="Epikris"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1006Dok19381221704420090512082720692684000-1"/>
+		<synthesised nullFlavor="NA"/>
+		<links>
+			<follow_link value="false"/>
+			<nature code="LINK-A0"/>
+			<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="vko"/>
+			<target_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00010"/>
+		</links>
+		<attestations>
+			<reason_for_attestation nullFlavor="NA"/>
+			<time value="20090102000000"/>
+			<target_rc_id nullFlavor="NA"/>
+			<attester>
+				<performer nullFlavor="NA"/>
+			</attester>
+		</attestations>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20090102000000"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-7381037590003ollvgiv-1"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning code="voo-voo" codeSystem="1.2.752.129.2.2.2.1">
+				<displayName value="Vård-och omsorgsdokument ostrukturerat"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning code="voo-voo-txt" codeSystem="1.2.752.129.2.2.2.1">
+					<displayName value="Innehåll text"/>
+				</meaning>
+				<name/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Diagnos$$NL$$I489 Förmaksflimmer och förmaksfladder$$NL$$R942 Onormala resultat av lungfunktionsundersökningar$$NL$$M353 Polymyalgia rheumatica$$NL$$I110 Hypertensiv hjärtsjukdom med hjärtsvikt$$NL$$$$NL$$Intagningsorsak$$NL$$Dyspné.$$NL$$$$NL$$Anamnes$$NL$$Pat som är änka sedan 5 år tillbaka, ingen kommunal tillsyn. Tidigare problem med gallstensicterus 2001 och sedan gallstensilius 2002 opererades akut, därefter utvecklat ärrbråck på bukväggen.$$NL$$Appendektomerad. Flera falltrauma med revbensfrakturer. PMR diagnostiserad 2005 med recidiv 2006. Står på kortison. Inkommer nu med drygt 1 veckas plötsligt påkomna andningsbesvär.$$NL$$$$NL$$$$NL$$Vårdförlopp$$NL$$Initialt ordentligt andningspåverkad med 40 andningsfrekvens på akuten. Initialt uppfattar man att pat har hjärtsvikt, ger Furix samt digitalis intravenöst. Röntgen visar dock mycket stort hjärta, ingen säker svikt men misstänkt lunginflammation med pleuravätska höger sida. Går till avdelningen ALLVA, 50 CRP, ingen feber, dator thorax samt över lever pat har patologiska levervärden och misstanke på lungemboli men detta avskrivs. Man ser spridda små infiltrat höger lunga och något på vänster sida samt förtätning med pleuravätska höger basalt. Går in med tablett Emconcor plus Digoxin pga pats förmaksflimmer. Digoxinkoncentration innan hemgång 0,7. Pga Calicivirus gastroenterit avstannar en fortsatt utredning, vi tänkt att punktera pleuran för analyser. Pat har relativt långvarig diarré. Kliniskt tillfrisknar pat, mår betydligt bättre. Förnyad lungröntgen visar att förändringarna nästan är helt borta samt att levervärdena återgår till nästan det normala.$$NL$$$$NL$$Bedömning$$NL$$Inkommer med ett snabbt förmaksflimmer och uttalad dyspné. Pat ser inte ut att ha en vänstersvikt samt infiltrat med pleuravätska UNS som vi aldrig får någon genes till. Pat tillfrisknar spontant. Ej Warankandidat pga flertal tidigare fall. Sätts på Trombyl 160 mg x 2. Nyinsatt på Digoxin och Emconcor också. Kreatininvärde vid hemgång 81, Hb 140. MMT genomförs och pat får 22 av 30, missar framför allt i närminne och språk.&lt;NEWPAGE>$$NL$$$$NL$$Ordination$$NL$$Tablett Furix 20 mg 1 x 1, tablett Bisoprolol 2,5 mg 1 + 0 + 2, tablett Digoxin 0,13 mg 1 x 1 utom lördag och söndag, tablett Prednisolon 5 mg 1 x 1, tablett Trombyl 160 mg 2 x 1.$$NL$$$$NL$$Planering$$NL$$Vårdplanering i hemmet. Har vän som kommer och hämtar och hjälper pat sedan tidigare.$$NL$$$$NL$$Kopia$$NL$$Till Inskrivande doktor Richard Schnell$$NL$$Till Kumla VC$$NL$$"/>
+			</items>
+		</content>
+	</all_compositions>
+	<all_compositions>
+		<meaning code="ovr" codeSystem="1.2.752.129.2.2.2.1">
+			<displayName value="Övrigt dokument"/>
+		</meaning>
+		<name value="Operationsberättelse"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1006Dok19381221704420090512082720700859000-2"/>
+		<synthesised nullFlavor="NA"/>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20090102000000"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-7381037590003ollvgiv-2"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning code="voo-voo" codeSystem="1.2.752.129.2.2.2.1">
+				<displayName value="Vård-och omsorgsdokument ostrukturerat"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning code="voo-voo-txt" codeSystem="1.2.752.129.2.2.2.1">
+					<displayName value="Innehåll text"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Preop bedömn$$NL$$Kvinna som för cirka 50 år sedan gjort en appendectomi. För något år sedan en del besvär med gallsten. Han har nu inkommit med 3 - 4 dagars anamnes på buksmärtor och kräkningar. Ter sig rejält intorkad och har också erhållit en CRP-stegring på över 300. Kreatininet ligger på över 400. Buköversikt har visat ileusbild. Beslut om akut op med tanke på risk för påverkad tarm. Pat tages skyndsamt inom ½-1 tim till op-avd efter beslut om op.$$NL$$$$NL$$Operatör$$NL$$Peter Flodström$$NL$$$$NL$$Op-ass$$NL$$Gunilla von Schoultz$$NL$$$$NL$$Op-kod$$NL$$JFB00 Tunntarmsresektion$$NL$$$$NL$$Operation$$NL$$Medellinjesnitt. Man kommer enkelt in i fri bukhåla. Man kan initialt konstatera att den proximala delen av tunntarmen är måttligt - kraftigt dilaterad. Det finns en hel del adherenser mellan omentet och främre bukväggen, sannolikt till följd av tidigare appendicitoperation. När dessa löses kan man successivt luxera fram hela tunntarmspaketet. Man kan nu se att det finns en perforation i tunntarmsmesot till följd av den kraftiga dilatationen, uppskattningsvis 60 - 70 cm från lig Treitz. Inom samma område, cirka 15 - 20 cm proximalt resp distalt om den beskrivna perforationen mot mesosidan, finns ytterligare fler begynnande perforationer i tarmen. Proximalt och distalt om detta område är tarmen dilaterad och i någon mån påverkad men utan några perforationstendenser. När man fortsätter att inspektera tunntarmen i mer distal riktning är tarmen i viss utsträckning ihopnystad till följd av adherenser och också tendenser till brid motsv distala ileum. Man har initialt intrycket av att dessa utgör en ileusmekanism men när hela paketet lösts upp kan man snart konstatera att det cirka 5 cm från distala ileum finns en typisk gallsten som utgör den egentliga ileusmekanismen. Denna har således vandrat igenom den knickiga och krokiga tarmen ända till valvelområdet men här fastnat. Gallstenen manipuleras tillbaka upp till det perforerade och kraftigt distenderade området i mellersta jejunum. Här görs ett hål i den mittre delen av tarmen och den dekomprimeras proximalt och distalt medelst sug. Även en sond appliceras nasalt och ventrikeln tömmes den vägen med hjälp av narkosen. Successivt återhämtar sig nu tarmen och får mer normal färg och viabilitet. Området med perforationen, cirka 40 cm av tarmen, kan dock inte lämnas varför resektionsrändern identifieras och mesenteriet avligeras på peanger. Därefter delas tarmen medelst mjuka och hårda tarmklämmare och en handsydd ända-till-ända anastomos sys med fortlöpande biosyn på två nålar i inre rad och fortlöpande 3/0 vicryl i yttre rad. Anastomosen befinnes vid och fin och tät. Mesoslitsen slutes så, därefter inspekteras och rensuges i bukhålan. Vi palp upp mot lever- och gallblåseområdet. Man kan här känna en viss skrumpning, sannolikt till följd av att gallstenen vandrat över till duodenum här. Området inspekteras inte närmare. Buken slutes så med 2 st 0:ans maxonsuturer i fascia och därefter stapler i huden.$$NL$$$$NL$$Medicinering$$NL$$Pat får fortsätta med antibiotika postop och bör nog ha sond åtminstone ett par dagar för att undvika att belasta anastomos och tarm.$$NL$$$$NL$$Prep$$NL$$Tunntarmen skickas för PAD. Vid uppklippning av tarmen ser man flera 5 - 6 mm stora utstansade, djupa sårigheter framför allt på mesosidan.$$NL$$$$NL$$Diagnos$$NL$$Gallstensileus med sekundärt påverkad tarm med tunntarmsperforation"/>
+			</items>
+		</content>
+	</all_compositions>
+	<all_compositions>
+		<meaning code="epi" codeSystem="1.2.752.129.2.2.2.1">
+			<displayName value="Epikris"/>
+		</meaning>
+		<name value="Omvårdnadsepikris"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1006Dok19381221704420090512082720709473000-3"/>
+		<synthesised nullFlavor="NA"/>
+		<attestations>
+			<reason_for_attestation nullFlavor="NA"/>
+			<time value="20090130132000"/>
+			<target_rc_id nullFlavor="NA"/>
+			<attester>
+				<performer nullFlavor="NA"/>
+			</attester>
+		</attestations>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20090102000000"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-7381037590003hhr001"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning code="voo-voo" codeSystem="1.2.752.129.2.2.2.1">
+				<displayName value="Vård-och omsorgsdokument ostrukturerat"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning code="voo-voo-txt" codeSystem="1.2.752.129.2.2.2.1">
+					<displayName value="Innehåll text"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Vårdförlopp$$NL$$Inkommer pga smärtor i bröstet. Varken EKG eller blodprover visar på hjärtinfarkt.$$NL$$$$NL$$Överkänslighet$$NL$$Patienten tål ej penicillin.$$NL$$$$NL$$Cirkulation$$NL$$Bltr 120/70.$$NL$$$$NL$$Smärta$$NL$$Ej haft någon direkt smärta på avdelningen.$$NL$$$$NL$$Social situation$$NL$$Bor ensam utan hemtjänst.$$NL$$$$NL$$ADL$$NL$$Uppegående, självständig ADL."/>
+			</items>
+			<items xsi:type="ELEMENT">
+				<meaning code="voo-voo-tid" codeSystem="1.2.752.129.2.2.2.1">
+					<displayName value="Tid"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="TS" value="20140101" />
+			</items>
+		</content>
+	</all_compositions>
+	<demographic_extract xsi:type="ORGANISATION">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+		<telecom xsi:type="TEL.PHONE" value="tel:+4619602114"/>
+		<telecom xsi:type="TEL.EMAIL" value="mailto:barn.uso@orebroll.se"/>
+		<code code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.3"/>
+		<desc value="ÖLL"/>
+		<name value="Barn- och ungdomskliniken USÖ"/>
+		<addr>
+			<part type="AL">Universitetssjukhuset Örebro  701 85 ÖREBRO</part>
+		</addr>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003ollvgiv-1"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003ollvgiv-1"/>
+		<name>
+			<part value="Mikael Rizell öl"/>
+		</name>
+		<role>
+			<profession code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.4">
+				<displayName value=""/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+		</role>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003ollvgiv-2"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003ollvgiv-2"/>
+		<name>
+			<part value="Magnus Andersson öl"/>
+		</name>
+		<role>
+			<profession code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.4">
+				<displayName value="TestDisplayName"/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+		</role>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003hhr001"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003hhr001"/>
+		<name>
+			<part value="Hrönn Hreidarsdottir systemansv"/>
+		</name>
+		<role>
+			<profession code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.4">
+				<displayName value="TestTvaDisplayName"/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+		</role>
+	</demographic_extract>
+</ehr_extract>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns:xsi  ="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns      ="http://www.mulesoft.org/schema/mule/core"
+        xmlns:cxf  ="http://www.mulesoft.org/schema/mule/cxf"
+        xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core  http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+                            http://www.mulesoft.org/schema/mule/cxf   http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd">
+
+    <!-- Flow that contains CareSystem stub within an inbound endpoint -->
+    <!-- Flow only exists for integration tests - not part of distribution -->
+
+    <flow name="caresystem-teststub-flow">
+
+        <inbound-endpoint address="${ENDPOINT_CS_STUB}"
+                          connector-ref="soitoolkit-https-connector"
+                          exchange-pattern="request-response"/>
+
+        <logger level="INFO" message="=== Incoming request to CareSystem stub ===" />
+        
+        <cxf:jaxws-service
+                namespace="http://nationellpatientoversikt.se"
+                serviceClass="se.skl.skltpservices.npoadapter.test.stub.CareSystemWS"
+                wsdlLocation="classpath:/interactions/care_system/CARE_SYSTEM_1.1.2.wsdl" />
+
+        <component>
+            <singleton-object class="se.skl.skltpservices.npoadapter.test.stub.CareSystemWS"  />
+        </component>
+
+        <custom-exception-strategy class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"/>
+    </flow>
+
+</mule>

@@ -19,7 +19,6 @@
  */
 package se.skl.skltpservices.npoadapter.mule;
 
-
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractMessageTransformer;
@@ -28,69 +27,46 @@ import org.slf4j.LoggerFactory;
 
 import riv.itintegration.engagementindex._1.ResultCodeEnum;
 import riv.itintegration.engagementindex.updateresponder._1.UpdateResponseType;
-import se.nationellpatientoversikt.SendStatusResponse;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import java.io.StringReader;
-
 /**
- * Checks Outbound Web Service responses. <p/>
- *
- * Different outbound services returns different payloads. EI Update and NPO SendSimpleIndex and SendIndex2 operations returns
- * Java objects according to interfaces.
+ * Checks Outbound Web Service responses.
+ * <p/>
+ * Different outbound services return different payloads. EI Update and NPO SendStatus operations return Java objects according to their
+ * interfaces.
  *
  * @author Peter
  */
 public class CheckOutboundResponseTransformer extends AbstractMessageTransformer {
 
-	
-	private static final Logger log = LoggerFactory.getLogger(CheckOutboundResponseTransformer.class);
+    private static final Logger log = LoggerFactory.getLogger(CheckOutboundResponseTransformer.class);
 
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
         final Object payload = message.getPayload();
 
-        log.debug("Response Payload is: {}", payload);
-        if (payload instanceof UpdateResponseType) {
-            if (((UpdateResponseType) payload).getResultCode() == ResultCodeEnum.ERROR) {
-                final String msg = String.format("Engagement index update operation was rejected. Returned error message is: %s", ((UpdateResponseType) payload).getComment());
-                throw new TransformerException(this, new OutboundResponseException(msg, Ehr13606AdapterError.INDEXUPDATE));
+        if (payload == null) {
+            throw new TransformerException(this, new OutboundResponseException("Null payload after calling outbound service", Ehr13606AdapterError.OUTBOUNDRESPONSE_NULL));
+        } else {
+            log.debug("Response payload is: {}", payload);
+            if (payload instanceof UpdateResponseType) {
+                if (((UpdateResponseType) payload).getResultCode() == ResultCodeEnum.ERROR) {
+                    final String msg = String.format("Engagement index update operation was rejected. Returned error message is: %s", ((UpdateResponseType) payload).getComment());
+                    throw new TransformerException(this, new OutboundResponseException(msg, Ehr13606AdapterError.INDEXUPDATE));
+                }
+                log.debug("EI Update response is OK");
+            } else if (payload instanceof Boolean) {
+                if (!(Boolean) payload) {
+                    throw new TransformerException(this, new OutboundResponseException("SendStatus call to NPOv1 producer failed", Ehr13606AdapterError.INDEXUPDATE_SENDSTATUS));
+                }
+                log.debug("SendStatus to NPOv1 producer response is true");
+            } else {
+                throw new TransformerException(this, 
+                                               new OutboundResponseException("Unrecognised response type " + payload.getClass().getName() + " after calling outbound service", 
+                                               Ehr13606AdapterError.OUTBOUNDRESPONSE_UNRECOGNISED));
             }
-            log.debug("EI Update response is OK");
-        } else if (payload instanceof Boolean) {
-            if (!(Boolean) payload) {
-                throw new TransformerException(this, new OutboundResponseException("Update index operation was rejected by NPO", Ehr13606AdapterError.INDEXUPDATE));
-            }
-            log.debug("NPO SendSimpleIndex/SendIndex2 response is OK");
         }
-
         return message;
-    }
-
-    /**
-     * Returns a {@link javax.xml.stream.XMLStreamReader} positioned at the payload body tag of @type
-     *
-     * @param envelope the envelope as a string.
-     * @param type the expected body type.
-     * @return the stream reader positioned at the body object.
-     * @throws XMLStreamException when any I/O error occurs.
-     */
-    protected XMLStreamReader findBodyType(final String envelope, final Class<?> type) throws XMLStreamException {
-        final XMLStreamReader xmlStreamReader = OutboundPreProcessor.xmlInputFactory.createXMLStreamReader(new StringReader(envelope));
-
-        xmlStreamReader.getEventType();
-
-        while (xmlStreamReader.hasNext()) {
-            if (xmlStreamReader.hasName() && type.getSimpleName().equals(xmlStreamReader.getLocalName())) {
-                break;
-            }
-            xmlStreamReader.next();
-        }
-
-        return xmlStreamReader;
     }
 }

@@ -40,7 +40,6 @@ public abstract class AbstractIntegrationTestCase extends AbstractTestCase {
                 + ",teststub-services/getcarecontacts-teststub-service.xml"
                 + ",teststub-services/takvagval-teststub-service.xml"
                 + ",teststub-services/ei-update-teststub-service.xml"
-                + ",teststub-services/caresystem-teststub-service.xml"
-                + ",teststub-services/npo-teststub-service.xml";
+                + ",teststub-services/caresystem-teststub-service.xml";
     }
 }

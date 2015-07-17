@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd">
+	<ehr_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1001Dia19381221704420090512083015558900000"/>
+	<ehr_system root="1.2.752.129.2.1.4.1" extension="SE2321000164-1004"/>
+	<rm_id>EN 13606</rm_id>
+	<subject_of_care root="1.2.752.129.2.1.3.1" extension="192712049550"/>
+	<time_created value="20080526192900"/>
+	<all_compositions>
+		<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia">
+			<displayName value="Informationsmängd diagnos"/>
+		</meaning>
+		<name nullFlavor="NA"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1004Dia19381221704420090512083134940624000-1"/>
+		<synthesised nullFlavor="NA"/>
+		<attestations>
+			<reason_for_attestation nullFlavor="NA"/>
+			<time value="20080512141012"/>
+			<target_rc_id nullFlavor="NA"/>
+			<attester>
+				<performer nullFlavor="NA"/>
+			</attester>
+		</attestations>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20080512132022"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia">
+				<displayName value="Diagnos"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<links>
+				<follow_link value="false"/>
+				<nature code="LINK-A0"/>
+				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="vko"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00010"/>
+			</links>
+			<links>
+				<follow_link value="true"/>
+				<nature nullFlavor="NA"/>
+				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="dia"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1004Dia19381221704420090512083134940624000-1"/>
+			</links>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-kod">
+					<displayName value="Diagnoskod"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="CD" codeSystem="1.2.752.116.1.1.1.1.1" code="C18.0">
+					<displayName value="Cecalcancer"/>
+				</value>
+			</items>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-typ">
+					<displayName value="Diagnostyp"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Huvuddiagnos"/>
+			</items>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-tid">
+					<displayName value="Händelsetidpunkt"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="TS" value="200805111210"/>
+			</items>
+		</content>
+	</all_compositions>
+	<all_compositions>
+		<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia">
+			<displayName value="Informationsmängd diagnos"/>
+		</meaning>
+		<name nullFlavor="NA"/>
+		<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1004Dia19381221704420090512083134940624000-1"/>
+		<synthesised nullFlavor="NA"/>
+		<attestations>
+			<reason_for_attestation nullFlavor="NA"/>
+			<time value="20080512141012"/>
+			<target_rc_id nullFlavor="NA"/>
+			<attester>
+				<performer nullFlavor="NA"/>
+			</attester>
+		</attestations>
+		<other_participations>
+			<function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+				<displayName value="Informationsägare"/>
+			</function>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+			<performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+		</other_participations>
+		<committal>
+			<committer nullFlavor="NA"/>
+			<ehr_system nullFlavor="NA"/>
+			<time_committed value="20080512132022"/>
+		</committal>
+		<composer>
+			<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+			<performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		</composer>
+		<content xsi:type="ENTRY">
+			<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia">
+				<displayName value="Diagnos"/>
+			</meaning>
+			<name nullFlavor="NA"/>
+			<rc_id nullFlavor="NA"/>
+			<synthesised nullFlavor="NA"/>
+			<links>
+				<follow_link value="false"/>
+				<nature code="LINK-A0"/>
+				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="vko"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00010"/>
+			</links>
+			<links>
+				<follow_link value="false"/>
+				<nature nullFlavor="NA"/>
+				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="dia"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1001Dia19381221704420090512083015564737000-1"/>
+			</links>
+			<uncertainty_expressed nullFlavor="NA"/>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-kod">
+					<displayName value="Diagnoskod"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="CD" codeSystem="1.2.752.116.1.1.1.1.1" code="D63.0">
+					<displayName value="Anemi vid tumörsjukdom"/>
+				</value>
+			</items>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-typ">
+					<displayName value="Diagnostyp"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id root="1.2.752.129.2.1.2.1" extension="123456-7890-00004"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="ST" value="Bidiagnos"/>
+			</items>
+			<items xsi:type="ELEMENT">
+				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-tid">
+					<displayName value="Händelsetidpunkt"/>
+				</meaning>
+				<name nullFlavor="NA"/>
+				<rc_id nullFlavor="NA"/>
+				<synthesised nullFlavor="NA"/>
+				<value xsi:type="TS" value="200805111210"/>
+			</items>
+		</content>
+	</all_compositions>
+	<demographic_extract xsi:type="ORGANISATION">
+		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		<telecom xsi:type="TEL.PHONE" value="tel:+46196021292"/>
+		<telecom xsi:type="TEL.EMAIL" value="mailto:medicinkliniken.uso@orebroll.se"/>
+		<code nullFlavor="NA"/>
+		<desc nullFlavor="NA"/>
+		<name value="Medicinska kliniken USÖ"/>
+		<addr>
+			<part type="AL">Universitetssjukhuset Örebro  701 85 ÖREBRO</part>
+		</addr>
+		<addr>
+			<part type="CEN">Universitetssjukhuset Örebro</part>
+		</addr>
+	</demographic_extract>
+	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+		<extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		<id root="1.2.752.129.2.1.2.1" extension="SE2321000164-aen014"/>
+		<name>
+			<part value="Anders Englund"/>
+		</name>
+		<role>
+			<profession codeSystem="1.2.752.129.2.2.1.4" code="201010">
+				<displayName value="Överläkare"/>
+			</profession>
+			<scopingOrganisation_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037594896"/>
+		</role>
+	</demographic_extract>
+</ehr_extract>
