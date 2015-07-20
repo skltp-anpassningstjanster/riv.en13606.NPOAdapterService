@@ -20,20 +20,20 @@
 package se.skl.skltpservices.npoadapter.mule;
 
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
+import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
-import skl.tp.vagvalsinfo.v2.VirtualiseringsInfoType;
+import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
+import se.skl.skltpservices.npoadapter.mapper.error.OutboundResponseException;
+import se.skl.skltpservices.npoadapter.router.RouteData.Route;
+import se.skl.skltpservices.npoadapter.router.Router;
 
 /**
- * Maps incoming TAK HamtaAllaVirtualiseringarResponseType to a single CareSystem address String
- * (without leading http:// or https://).
+ * Maps hsaId to a producer url using tak cache.
  *
  * @author Martin Flower
  */
@@ -41,8 +41,13 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
 	
 	private static final Logger log = LoggerFactory.getLogger(InboundCSTakLookupTransformer.class);
 	
+	private Router router;
+	public void setRouter(Router router) {
+	    this.router = router;
+	}
+	
     @Override
-    public Object transformMessage(MuleMessage message, String outputEncoding) {
+    public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
 
         log.info("InboundCSTakLookupTransformer");
         
@@ -52,50 +57,23 @@ public class InboundCSTakLookupTransformer extends AbstractMessageTransformer {
         if (StringUtils.isBlank(hsaId)) {
             throw new IllegalStateException("invocation property hsaId is missing");
         } else {
-            try {
-                HamtaAllaVirtualiseringarResponseType h = (HamtaAllaVirtualiseringarResponseType)message.getPayload();
-                List<VirtualiseringsInfoType> a = h.getVirtualiseringsInfo();
-                log.debug("Retrieved " + a.size() + " VirtualiseringsInfoType");
-                for (VirtualiseringsInfoType v : a) {
-                    
-                   /*
-                         <virtualiseringsInfo>
-                            <virtualiseringsInfoId>16</virtualiseringsInfoId>
-                            <receiverId>VS-1</receiverId>
-                            <rivProfil>RIVEN13606</rivProfil>
-                            <tjansteKontrakt>http://nationellpatientoversikt.se:SendStatus</tjansteKontrakt>
-                            <fromTidpunkt>2014-11-14T00:00:00.000</fromTidpunkt>
-                            <tomTidpunkt>2014-11-14T00:00:00.000</tomTidpunkt>
-                            <adress>https://33.33.33.1:33002/npoadapter/caresystem/stub</adress>
-                         </virtualiseringsInfo>                     
-                    */
-                    
-                    if (log.isDebugEnabled()) {
-                        log.debug(v.getVirtualiseringsInfoId() + " " + v.getReceiverId() + " " + v.getRivProfil() + " " + v.getAdress());
-                    }
-                    
-                    if (hsaId.equalsIgnoreCase(v.getReceiverId())
-                        &&
-                       "RIVEN13606".equalsIgnoreCase(v.getRivProfil())
-                        &&
-                       "http://nationellpatientoversikt.se:SendStatus".equalsIgnoreCase(v.getTjansteKontrakt())) {
-                        careSystemUrl = v.getAdress();
-                        if (careSystemUrl != null) {
-                            if (careSystemUrl.startsWith("https://")) {
-                                careSystemUrl = careSystemUrl.substring("https://".length());
-                            }
-                            if (careSystemUrl.startsWith("http://")) {
-                                careSystemUrl = careSystemUrl.substring("http://".length());
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-            	throw new IllegalStateException(e.getMessage(), e);
+            Route route = router.getCallbackRoute(hsaId);
+            if (route == null) {
+                throw new TransformerException(this, 
+                                               new OutboundResponseException("hsaId:" + hsaId + " does not map to a producer url for contract " + Router.CONTRACT_CALLBACK, 
+                                                                             Ehr13606AdapterError.ROUTE_CALLBACK_MISSING));
             }
+            if (StringUtils.isBlank(route.getUrl())) {
+                throw new TransformerException(this, 
+                        new OutboundResponseException("hsaId:" + hsaId + " producer url is blank for contract " + Router.CONTRACT_CALLBACK, 
+                                                      Ehr13606AdapterError.ROUTE_CALLBACK_URL_BLANK));
+            }
+            careSystemUrl = route.getUrl();
         }
-        if (StringUtils.isBlank(careSystemUrl)) {
-            throw new IllegalStateException("No care system url found (no producer vägval) - hsaId:" + hsaId);
+        if (careSystemUrl.startsWith("https://")) {
+            careSystemUrl = careSystemUrl.substring("https://".length());
+        } else if (careSystemUrl.startsWith("http://")) {
+            careSystemUrl = careSystemUrl.substring("http://".length());
         }
         message.setPayload(careSystemUrl);
         log.debug("Mapped hsaId:" + hsaId + " to CareSystem url:" + careSystemUrl);

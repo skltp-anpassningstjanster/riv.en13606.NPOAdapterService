@@ -50,10 +50,14 @@ public class Router implements MuleContextAware {
 	private final Object $lock = new Object[0];
 
     static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+    
+    public static final String NAMESPACE_CALLBACK = "http://nationellpatientoversikt.se";
+    public static final String CONTRACT_CALLBACK  = "http://nationellpatientoversikt.se:SendStatus";
+    
     static final List<String> CONTRACTS = Arrays.asList(
             "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21",
             "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT",
-            "http://nationellpatientoversikt.se:SendStatus");
+            CONTRACT_CALLBACK);
 
     private URL takWSDL;
     private String takCacheFilename;
@@ -69,9 +73,20 @@ public class Router implements MuleContextAware {
         this.takCacheFilename = takCacheFilename;
     }
 
-    //
+    /**
+     * @param logicalAddress - producer's hsaId
+     * @return route - returns null if no route found 
+     */
     public RouteData.Route getRoute(final String logicalAddress) {
         return getRoute(logicalAddress, false);
+    }
+
+    /**
+     * @param logicalAddress - producer's hsaId
+     * @return route - returns null if no route found 
+     */
+    public RouteData.Route getCallbackRoute(final String logicalAddress) {
+        return getRoute(logicalAddress, true);
     }
 
     //
@@ -92,9 +107,9 @@ public class Router implements MuleContextAware {
     //
     void reloadRoutingData0() {
         try {
-            log.info("NPOAdapter: Load routing data from TAK");
+            log.info("NPOAdapter: loading routing data from TAK");
             final HamtaAllaVirtualiseringarResponseType data = getRoutingDataFromSource();
-            log.info("retrieved {} VirtualiseringsInfo",data.getVirtualiseringsInfo().size());
+            log.info("retrieved {} VirtualiseringsInfo", data.getVirtualiseringsInfo().size());
             final RouteData routeData = toRouteData(data);
             RouteData.save(routeData, takCacheFilename);
             setRouteData(routeData);
