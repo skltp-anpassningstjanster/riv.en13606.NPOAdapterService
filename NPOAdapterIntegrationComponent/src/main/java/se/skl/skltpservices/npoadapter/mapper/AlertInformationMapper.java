@@ -22,6 +22,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
@@ -420,7 +421,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	/**
 	 * Maps PharmaceuticalHypersensitiviy element.
 	 * @param cluster CLUSTER from Items-list.
-	 * @return JAXB entity for PharmaceituicalHypersensitiviy element.
+	 * @return JAXB entity for PharmaceuticalHypersensitiviy element.
 	 */
 	protected PharmaceuticalHypersensitivityType mapPharmaceuticalHypersensitivity(final CLUSTER cluster) {
 		final PharmaceuticalHypersensitivityType type = new PharmaceuticalHypersensitivityType();
@@ -436,6 +437,10 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 						break;
 					case SUBSTANS_EJ_ATC:
 						type.setNonATCSubstance(EHRUtil.getElementTextValue(elm));
+						if (StringUtils.isBlank(type.getNonATCSubstanceComment())) {
+						    // default - if EJ_ATC_KOM is missing
+						    type.setNonATCSubstanceComment("comment not provided by care system");
+						}
 						break;
 					case EJ_ATC_KOM:
 						type.setNonATCSubstanceComment(EHRUtil.getElementTextValue(elm));

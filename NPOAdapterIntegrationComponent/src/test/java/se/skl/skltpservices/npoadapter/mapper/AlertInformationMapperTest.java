@@ -77,12 +77,15 @@ public class AlertInformationMapperTest {
 		ELEMENT substans = new ELEMENT();
 		substans.setMeaning(cdType("upp-okh-lmo-sub"));
 		substans.setValue(cdType(TEST_DATA_1, TEST_DATA_2, TEST_DATA_3));
+		
 		ELEMENT substansEjAtc = new ELEMENT();
 		substansEjAtc.setMeaning(cdType("upp-okh-lmo-sea"));
 		substansEjAtc.setValue(EHRUtil.stType(TEST_DATA_1));
+		
 		ELEMENT substansEjAtcComment = new ELEMENT();
 		substansEjAtcComment.setMeaning(cdType("upp-okh-lmo-eak"));
 		substansEjAtcComment.setValue(EHRUtil.stType(TEST_DATA_2));
+		
 		ELEMENT pharma = new ELEMENT();
 		pharma.setMeaning(cdType("upp-okh-lmo-lmp"));
 		pharma.setValue(cdType(TEST_DATA_1, TEST_DATA_2, TEST_DATA_3));
