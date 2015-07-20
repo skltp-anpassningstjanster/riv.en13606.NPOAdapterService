@@ -26,9 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Keeps routing information, main routing is from northbound NPO consumer to southbound care system.
- * Though, a callback flag indicates that it's about an internal NPO specific route, i.e. the same logical
- * address can be used for 2 different kinds of routes (a main consumer-producer route, and a callback route). <p/>
+ * Stores routing information. 
+ * Main routing is from NPOv2 consumer to NPOv1 producer (care system).
+ * Second routing for callback from NPOAdapter to NPOv1 producer (care system).
+ * <p/>
  *
  * Route data is serialized to a file store.
  *
@@ -40,7 +41,6 @@ public class RouteData implements Serializable {
 
     static final long serialVersionUID = 1L;
     public static final String CALLBACK_PREFIX = "callback:";
-    private static final String NPO_NAMESPACE = "http://nationellpatientoversikt.se";
 
     //
     private HashMap<String, Route> map = new HashMap<String, Route>();
@@ -86,16 +86,22 @@ public class RouteData implements Serializable {
         public static String key(final String key, boolean callback) {
             return (callback) ? (CALLBACK_PREFIX + key) : key;
         }
+        
+        public String toString() {
+            return "soapAction:" + soapAction + " url:" + url;
+        }
     }
 
 
-    //
+    // Factory method for creating a Route
     static Route route(final String serviceContract, final String url) {
         final Route route = new Route();
         route.setSoapAction(serviceContract);
         route.setUrl(url);
-        if (serviceContract.startsWith(NPO_NAMESPACE)) {
+        if (serviceContract.startsWith(Router.NAMESPACE_CALLBACK)) {
             route.setCallback(true);
+        } else {
+            route.setCallback(false);
         }
         return route;
     }
@@ -120,13 +126,12 @@ public class RouteData implements Serializable {
     //
     void setRoute(final String logicalAddress, final Route route) {
         if (map.containsKey(route.key(logicalAddress))) {
-            log.error("NPOAdapter: Duplicate routes exists for: " + logicalAddress + ",and " + route + " has been ignored/skipped");
+            log.error("NPOAdapter: Duplicate routes exists for: " + logicalAddress + ". " + route + " has been ignored/skipped");
             log.info("NPOAdapter: Current route for " + logicalAddress + " is " + getRoute(logicalAddress, route.isCallback()));
         } else {
             map.put(route.key(logicalAddress), route);
         }
     }
-
 
     static boolean save(final RouteData routingData, final String fileName) {
         boolean rc = false;

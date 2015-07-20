@@ -26,22 +26,24 @@ package se.skl.skltpservices.npoadapter.mapper.error;
  */
 public enum Ehr13606AdapterError {
 	
-	NOERROR     ("0000"),
-	UNDEFINED   ("1000"),
-	MAPREQUEST  ("2001"),
-	MAPRESPONSE ("2011"),
-	MAPRIVREQUEST ("2002"),
-	MAPRIVRESPONSE ("2012"),
-	INDEXUPDATE ("3001"),
-	INDEXUPDATE_MESSAGE_TYPE ("3002"),
-	INDEXUPDATE_MISSING_TYPE ("3003"),
-    INDEXUPDATE_SENDSTATUS ("3004"),
-	ROUTE		("4001"),
-	UNSUPPORTED ("5000"),
-	MISSINGDATA ("6000"),
-	INVALIDATA ("6001"),
+	NOERROR                       ("0000"),
+	UNDEFINED                     ("1000"),
+	MAPREQUEST                    ("2001"),
+	MAPRESPONSE                   ("2011"),
+	MAPRIVREQUEST                 ("2002"),
+	MAPRIVRESPONSE                ("2012"),
+	INDEXUPDATE                   ("3001"),
+	INDEXUPDATE_MESSAGE_TYPE      ("3002"),
+	INDEXUPDATE_MISSING_TYPE      ("3003"),
+    INDEXUPDATE_SENDSTATUS        ("3004"),
+	ROUTE		                  ("4001"),
+    ROUTE_CALLBACK_MISSING        ("4001"),
+    ROUTE_CALLBACK_URL_BLANK      ("4002"),
+	UNSUPPORTED                   ("5000"),
+	MISSINGDATA                   ("6000"),
+	INVALIDATA                    ("6001"),
     OUTBOUNDRESPONSE_UNRECOGNISED ("7001"),
-    OUTBOUNDRESPONSE_NULL ("7002");
+    OUTBOUNDRESPONSE_NULL         ("7002");
     
 	private String errorCode;
 	

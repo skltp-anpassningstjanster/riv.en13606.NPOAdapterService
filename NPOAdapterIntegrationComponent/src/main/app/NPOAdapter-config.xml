@@ -43,7 +43,9 @@
         <spring:property name="eiLogicalAddress" value="${LOGICAL_ADDRESS_EI}" />
     </custom-transformer>
     
-    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundCSTakLookupTransformer"                  name="cs-taklookup-transformer"/>
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.InboundCSTakLookupTransformer"                  name="cs-taklookup-transformer">
+        <spring:property name="router" ref="router" />
+    </custom-transformer>
     
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundCSSendStatusTransformer"                name="cs-sendstatus-transformer"/>
     
