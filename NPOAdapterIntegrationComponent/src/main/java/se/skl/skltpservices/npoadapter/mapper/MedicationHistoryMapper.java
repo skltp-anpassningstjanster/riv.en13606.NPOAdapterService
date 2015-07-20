@@ -54,6 +54,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
@@ -207,10 +208,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class, true, true);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            //patient.getAccountableHealthcareProfessional().setAuthorTime(SAKNAS);
+            patient.getAccountableHealthcareProfessional().setAuthorTime("not provided by producer care system");
         }
         if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            //patient.getLegalAuthenticator().setSignatureTime(SAKNAS);
+            patient.getLegalAuthenticator().setSignatureTime("not provided by producer care system");
         }
         return patient;
     }
@@ -255,8 +256,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         //mpt.getPrescriptionId().setExtension("TODO");
         
         mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.I);
-
-        //mpt.getPrescriptionStatus().setCode("TODO");
+        
+        // TODO
+        // En aktiv ordination är den sista i sin ordinationskedja. 
+        // Alla andra ordinationer i samma ordinationskedja är inaktiva.
+        
+        mpt.setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE); // mandatory
         
         if (ehr13606values.containsKey("lkm-dst-bet-low")) {
             mpt.setStartOfTreatment(ehr13606values.get("lkm-dst-bet-low"));
@@ -325,6 +330,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().setAtcCode(new CVType());
         
         mpt.getDrug().getDrug().getAtcCode().setCode(ehr13606values.get("lkm-lkm-lpr-atc"));
+        mpt.getDrug().getDrug().getAtcCode().setCodeSystem("1.2.752.129.2.2.3.1.1");
         mpt.getDrug().getDrug().getAtcCode().setOriginalText(ehr13606values.get("lkm-lva-typ"));
         mpt.getDrug().getDrug().getAtcCode().setDisplayName(ehr13606values.get("lkm-lkm-lva-pre"));
         
