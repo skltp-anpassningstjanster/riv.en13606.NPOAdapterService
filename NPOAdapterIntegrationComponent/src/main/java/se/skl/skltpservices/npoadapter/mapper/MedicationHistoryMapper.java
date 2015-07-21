@@ -257,9 +257,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.I);
         
-        // TODO
-        // En aktiv ordination är den sista i sin ordinationskedja. 
-        // Alla andra ordinationer i samma ordinationskedja är inaktiva.
+        // Note : tjänstekontraktsbeskrivning
+        // 'En aktiv ordination är den sista i sin ordinationskedja. Alla andra ordinationer i samma ordinationskedja är inaktiva.'
+        // No indication that a 13606 ordination contain a chain of prescriptions
         
         mpt.setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE); // mandatory
         
