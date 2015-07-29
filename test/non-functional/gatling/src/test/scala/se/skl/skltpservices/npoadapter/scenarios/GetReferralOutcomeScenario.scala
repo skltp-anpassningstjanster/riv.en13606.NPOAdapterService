@@ -8,6 +8,6 @@ object GetReferralOutcomeScenario extends {
   val relativeUrl     = "getreferraloutcome/v3"
   val regex1          = "id>192712089550"
   val regex2          = "Body><GetReferralOutcomeResponse"
-  val length          = 3281
+  val length          = 3271
   
 } with AbstractGetRequest

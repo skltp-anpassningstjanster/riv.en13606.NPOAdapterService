@@ -20,23 +20,28 @@ class TP05Timeout extends Simulation {
   //   # Ange i millesekunder hur länge en ändpunkt skall vänta innan ett synkront anrop avbryts
   //   SERVICE_TIMEOUT_MS=20000
   
-  val baseURL:String    = "http://localhost:33001"
+  val baseUrl:String  = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
+                            System.getProperty("baseUrl")
+                        } else {
+                            "http://localhost:33001/npoadapter/"
+                        }
+  
   val times:Int         = 1
   val simultaneousUsers = 1
   val adapterTimeout    = 20000 milliseconds
   
   
-  val httpProtocol = http.baseURL(baseURL)
+  val httpProtocol = http.baseURL(baseUrl)
     
   val getSequential = scenario("Get " + times + " times sequentially")
                      .exec((session) => session.set("adapterTimeoutInMilliseconds", adapterTimeout))
-                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
+/*                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
                      .repeat(times){exec(GetCareContactsScenario.requestTimesout)}
                      .repeat(times){exec(GetCareDocumentationScenario.requestTimesout)}
                      .repeat(times){exec(GetDiagnosisScenario.requestTimesout)}
                      .repeat(times){exec(GetImagingOutcomeScenario.requestTimesout)}
                      .repeat(times){exec(GetLaboratoryOrderOutcomeScenario.requestTimesout)}
-                     .repeat(times){exec(GetMedicationHistoryScenario.requestTimesout)}
+*/                     .repeat(times){exec(GetMedicationHistoryScenario.requestTimesout)}
                      .repeat(times){exec(GetReferralOutcomeScenario.requestTimesout)}
                      
   setUp (getSequential

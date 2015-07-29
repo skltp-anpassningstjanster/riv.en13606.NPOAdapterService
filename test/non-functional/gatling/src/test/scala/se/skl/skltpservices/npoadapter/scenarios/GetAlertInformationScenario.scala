@@ -8,6 +8,6 @@ object GetAlertInformationScenario extends {
     val relativeUrl     = "getalertinformation/v2"
     val regex1          = "id>192712019550"
     val regex2          = "Body><GetAlertInformationResponse"
-    val length          = 25840
+    val length          = 25416
     
 } with AbstractGetRequest

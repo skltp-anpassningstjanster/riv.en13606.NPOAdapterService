@@ -23,12 +23,17 @@ class TP04NonBlockingOnDelay extends Simulation {
   //   # Ange i millesekunder hur länge en ändpunkt skall vänta innan ett synkront anrop avbryts
   //   SERVICE_TIMEOUT_MS=20000
   
-  val baseURL:String    = "http://localhost:33001"
+  val baseUrl:String  = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
+                            System.getProperty("baseUrl")
+                        } else {
+                            "http://localhost:33001/npoadapter/"
+                        }
+  
   val times:Int         = 2
   val pause:Int         = 0
-  val simultaneousUsers = 5
+  val simultaneousUsers = 100
   
-  val httpProtocol = http.baseURL(baseURL)
+  val httpProtocol = http.baseURL(baseUrl)
     
   val getSequential = scenario("Get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.delayedRequestWithoutTimeout)}

@@ -14,12 +14,9 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP01Simultaneous200Users extends Simulation {
 
-  val httpProtocol = http.baseURL("http://localhost:33001")
-  val totalUsers:Int            = 5     // 200
-  val maxRequestsPerSecond:Int  = 200   // 200
-  val rampDuration              = 1 seconds    // 1
-  val maxDuration               = 5 minutes
-  val ramp                      = 5 seconds
+  val totalUsers:Int            = 200
+  val rampDuration              = 2 seconds
+  val maxDuration               = 1 minutes
   
   val baseUrl:String  = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
                             System.getProperty("baseUrl")
@@ -27,7 +24,7 @@ class TP01Simultaneous200Users extends Simulation {
                             "http://localhost:33001/npoadapter/"
                         }
   
-  val simultaneousRequest = scenario("Simultaneous")
+  val simultaneousRequest = scenario("Simultaneous") // .exec(GetAlertInformationScenario.request)
                       .uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),
                         exec(GetCareContactsScenario.request),
@@ -36,11 +33,12 @@ class TP01Simultaneous200Users extends Simulation {
                         exec(GetImagingOutcomeScenario.request),
                         exec(GetLaboratoryOrderOutcomeScenario.request),
                         exec(GetMedicationHistoryScenario.request),
+                        exec(GetMedicationHistoryScenario.request)
+                        exec(GetReferralOutcomeScenario.request),
                         exec(GetReferralOutcomeScenario.request)
                      )
-    
+
    setUp(simultaneousRequest.inject(rampUsers(totalUsers) over (rampDuration))
        .protocols(http.baseURL(baseUrl).disableResponseChunksDiscarding)) 
-       .throttle(reachRps(maxRequestsPerSecond) in (rampDuration))
        .maxDuration(maxDuration)
 }

@@ -11,6 +11,6 @@ object GetImagingOutcomeScenario extends {
   val requestFileName = "GetImagingOutcomeRequest.xml"
   val regex1          = "id>192712059550"
   val regex2          = "<result><ns2:resultCode>OK</ns2:resultCode><ns2:logId>0</ns2:logId></result></GetImagingOutcomeResponse></soap:Body></soap:Envelope>"
-  val length          = 10862
+  val length          = 10140
 
 } with AbstractGetRequest

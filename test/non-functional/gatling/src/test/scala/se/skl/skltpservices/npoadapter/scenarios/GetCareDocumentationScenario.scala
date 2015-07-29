@@ -8,6 +8,6 @@ object GetCareDocumentationScenario extends {
   val relativeUrl     = "getcaredocumentation/v2"
   val regex1          = "id>192712039550"
   val regex2          = "Body><GetCareDocumentationResponse"
-  val length          = 13211
+  val length          = 13174
   
 } with AbstractGetRequest
