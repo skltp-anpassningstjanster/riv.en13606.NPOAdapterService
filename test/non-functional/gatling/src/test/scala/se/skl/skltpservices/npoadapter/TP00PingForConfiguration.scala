@@ -15,6 +15,6 @@ class TP00PingForConfiguration extends Simulation {
   val times:Int = 2
   val getSequentialTimes = scenario("PingForConfiguration " + times + " times sequentially")
                                    .repeat(times){exec(PingForConfigurationScenario.request)}
-    
+
   setUp (getSequentialTimes.inject(atOnceUsers(1)).protocols(http.baseURL(baseUrl)))
 }

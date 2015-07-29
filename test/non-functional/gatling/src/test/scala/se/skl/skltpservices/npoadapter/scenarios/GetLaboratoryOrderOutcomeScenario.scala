@@ -8,6 +8,6 @@ object GetLaboratoryOrderOutcomeScenario extends {
   val requestFileName = "GetLaboratoryOrderOutcomeRequest.xml"
   val regex1          = "id>192712069550"
   val regex2          = "Body><GetLaboratoryOrderOutcomeResponse"
-  val length          = 5870
+  val length          = 5898
   
 } with AbstractGetRequest
