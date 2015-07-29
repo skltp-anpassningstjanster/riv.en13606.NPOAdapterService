@@ -70,6 +70,19 @@ mvn gatling:execute -PTP01Simultaneous200Users -DbaseUrl=http://ine-tit-app03.st
        <simulationClass>se.skl.skltpservices.npoadapter.TP01Simultaneous200Users</simulationClass>
       </properties>
     </profile>
+    
+    <profile>
+      <id>TP04NonBlockingOnDelay</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP04NonBlockingOnDelay</simulationClass>
+      </properties>
+    </profile>
 
+    <profile>
+      <id>TP05Timeout</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP05Timeout</simulationClass>
+      </properties>
+    </profile>
   </profiles>
 </project>

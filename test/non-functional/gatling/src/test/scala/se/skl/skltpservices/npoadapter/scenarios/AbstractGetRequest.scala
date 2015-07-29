@@ -3,6 +3,7 @@ package se.skl.skltpservices.npoadapter.scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.check.HttpCheck
+import scala.concurrent.duration._
 
 trait AbstractGetRequest {
   
@@ -127,8 +128,7 @@ trait AbstractGetRequest {
                         .check(regex("faultstring"))
                         .check(responseTimeInMillis.saveAs("responseTimeInMillis"))
                         .check(responseTimeInMillis.greaterThanOrEqual((session) => {
-                              println ("adapter timeout:" + (session("adapterTimeoutInMilliseconds")).as[Int])
-                              ((session("adapterTimeoutInMilliseconds")).as[Int])
+                              (session("adapterTimeoutInMilliseconds")).as[Duration].toMillis
                        }))
                        )
                   
