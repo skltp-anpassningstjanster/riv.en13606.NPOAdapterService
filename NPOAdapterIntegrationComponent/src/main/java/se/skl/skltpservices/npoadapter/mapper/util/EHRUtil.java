@@ -619,10 +619,11 @@ public final class EHRUtil {
         // sometimes careUnitHSAId, sometimes careUnitHSAid
         if (mapperRequest.getCareUnitHSAId().size() + mapperRequest.getCareUnitHSAid().size() > 1) {
             throw new IllegalArgumentException("Only one careUnitHSAId/careUnitHSAid element can be handled");
+
         } else if (mapperRequest.getCareUnitHSAId().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAId().get(0))) {
             hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
 
-        } else if (mapperRequest.getCareUnitHSAid().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAId().get(0))) {
+        } else if (mapperRequest.getCareUnitHSAid().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAid().get(0))) {
             hsaId.setValue(stType(mapperRequest.getCareUnitHSAid().get(0)));
         }
 
