@@ -23702,6 +23702,34 @@ ISO 2008  All rights reserved
          </urn1:patientId>
       </urn1:GetReferralOutcome>
    </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3:GetReferralOutcome"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 2"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:33001/npoadapter/getreferraloutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetReferralOutcome>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAid>?</urn1:careUnitHSAid>
+         <urn1:patientId>
+            <urn2:id>?</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+         <!--Optional:-->
+         <urn1:datePeriod>
+            <!--Optional:-->
+            <urn2:start>?</urn2:start>
+            <!--Optional:-->
+            <urn2:end>?</urn2:end>
+            <!--You may enter ANY elements at this point-->
+         </urn1:datePeriod>
+         <!--Optional:-->
+         <urn1:sourceSystemHSAId>?</urn1:sourceSystemHSAId>
+         <!--Zero or more repetitions:-->
+         <urn1:careContactId>?</urn1:careContactId>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetReferralOutcome>
+   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3:GetReferralOutcome"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetMedicationHistoryResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21}GetMedicationHistoryResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:33001/npoadapter/getmedicationhistory/v2?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:33001/npoadapter/getmedicationhistory/v2?wsdl"><con:part><con:url>http://localhost:33001/npoadapter/getmedicationhistory/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetMedicationHistoryInteraction" targetNamespace="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryInitiator:2" xmlns:tjsr="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2" xmlns:tns="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21">
@@ -41035,20 +41063,28 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
    </soapenv:Header>
    <soapenv:Body>
       <urn1:GetMedicationHistory>
+         <urn1:careUnitHSAId>respondAfterAdapterTimeout</urn1:careUnitHSAId>
          <urn1:patientId>
             <urn2:id>199901011122</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
       </urn1:GetMedicationHistory>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="medicationMedicalRecord"><con:configuration><path>count(//*:GetMedicationHistoryResponse/*:medicationMedicalRecord)</path><content>4</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetReferralOutcome"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="GetReferralOutcome" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getreferraloutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
+</soapenv:Envelope>
+
+]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="medicationMedicalRecord"><con:configuration><path>count(//*:GetMedicationHistoryResponse/*:medicationMedicalRecord)</path><content>4</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetReferralOutcome"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="GetReferralOutcome" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getreferraloutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:urn="urn:riv:itintegration:registry:1" 
+xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3" 
+xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
    <soapenv:Header>
       <urn:LogicalAddress>VS-1</urn:LogicalAddress>
    </soapenv:Header>
    <soapenv:Body>
       <urn1:GetReferralOutcome>
+         <urn1:careUnitHSAid>respondAfterAdapterTimeout</urn1:careUnitHSAid>
          <urn1:patientId>
-            <urn2:id>199901011122</urn2:id>
+            <urn2:id>192712089550</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
       </urn1:GetReferralOutcome>
@@ -41286,6 +41322,7 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
    </soapenv:Header>
    <soapenv:Body>
       <urn1:GetReferralOutcome>
+         <urn1:careUnitHSAId>respondAfterAdapterTimeout</urn1:careUnitHSAId>
          <urn1:patientId>
             <urn2:id>199901011122</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
@@ -41360,4 +41397,4 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
          </urn1:engagementTransaction>
       </urn1:Update>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="ResultCode"><con:configuration><path>count(//*:UpdateResponse/*:ResultCode)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="ResultCode OK"><con:configuration><path>count(//*:UpdateResponse[*:ResultCode='OK'])</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="comment OK"><con:configuration><path>count(//*:UpdateResponse[*:comment='OK'])</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:engagementindex:UpdateResponder:1:Update"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>protocolHostAndPort</con:name><con:value>https://qa.esb.ntjp.se:443</con:value></con:property></con:properties></con:testSuite><con:properties><con:property><con:name>baseUri</con:name><con:value>http://localhost:33001/npoadapter</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="ResultCode"><con:configuration><path>count(//*:UpdateResponse/*:ResultCode)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="ResultCode OK"><con:configuration><path>count(//*:UpdateResponse[*:ResultCode='OK'])</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:assertion type="XPath Match" name="comment OK"><con:configuration><path>count(//*:UpdateResponse[*:comment='OK'])</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:engagementindex:UpdateResponder:1:Update"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>protocolHostAndPort</con:name><con:value>https://test.esb.ntjp.se:443</con:value></con:property></con:properties></con:testSuite><con:properties><con:property><con:name>baseUri</con:name><con:value>http://localhost:33001/npoadapter</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
