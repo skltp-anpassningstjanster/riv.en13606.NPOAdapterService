@@ -7,11 +7,8 @@ import io.gatling.jdbc.Predef._
 import se.skl.skltpservices.npoadapter.scenarios.GetImagingOutcomeScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetImagingOutcomeExtraLargeScenario 
 
-class TP02ExtraLargeResponse extends Simulation {
+class TP02ExtraLargeResponse extends Simulation with HasBaseURL {
 
-  // TODO - externalise constants
-
-  val baseURL:String = "http://localhost:33001"
   val httpProtocol = http.baseURL(baseURL).extraInfoExtractor(extraInfo => List(extraInfo.response.body))
     
   val getImagingOutcome1MB = scenario("Get imaging outcome 1 MB")

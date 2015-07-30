@@ -13,7 +13,7 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP04NonBlockingOnDelay extends Simulation {
+class TP04NonBlockingOnDelay extends Simulation with HasBaseURL {
 
   // Send lots of requests to the adapter
   // Responses from source system are delayed, but adapter doesn't timeout
@@ -23,18 +23,10 @@ class TP04NonBlockingOnDelay extends Simulation {
   //   # Ange i millesekunder hur länge en ändpunkt skall vänta innan ett synkront anrop avbryts
   //   SERVICE_TIMEOUT_MS=20000
   
-  val baseUrl:String  = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
-                            System.getProperty("baseUrl")
-                        } else {
-                            "http://localhost:33001/npoadapter/"
-                        }
-  
   val times:Int         = 2
   val pause:Int         = 0
   val simultaneousUsers = 100
   
-  val httpProtocol = http.baseURL(baseUrl)
-    
   val getSequential = scenario("Get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.delayedRequestWithoutTimeout)}
                      .pause(pause)
@@ -57,7 +49,7 @@ class TP04NonBlockingOnDelay extends Simulation {
 // We don't want Gatling to timeout during the tests    
 // Gatling timeout is set in GATLING_HOME/conf/gatling.conf
 //
-// Not possible to set timeout programmatically once the test has started.
+// Unfortunately it is not possible to set timeout programmatically once the test has started.
 //    
 //    System.setProperty("gatling.http.ahc.requestTimeout", "10")
 //    println("requestTimeout:" + System.getProperty("http.ahc:requestTimeout"))
@@ -68,5 +60,5 @@ class TP04NonBlockingOnDelay extends Simulation {
 //    println(System.getProperty("http.ahc.requestTimeout"))
   }
     
-  setUp (getSequential.inject(atOnceUsers(simultaneousUsers)).protocols(httpProtocol))
+  setUp (getSequential.inject(atOnceUsers(simultaneousUsers)).protocols(http.baseURL(baseURL)))
 }

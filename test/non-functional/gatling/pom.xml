@@ -4,16 +4,59 @@
 
 <!--
 
-# PingForConfiguration - default:localhost:33001 (http)
-mvn gatling:execute -PPingForConfiguration
-mvn gatling:execute -PPingForConfiguration -DbaseUrl=http://localhost:33001/npoadapter/pfc
-mvn gatling:execute -PPingForConfiguration -DbaseUrl=http://ine-dit-app03.sth.basefarm.net:11006/npoadapter/pfc
-mvn gatling:execute -PPingForConfiguration -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/pfc
-mvn gatling:execute -PPingForConfiguration -DbaseUrl=http://ine-sit-app03.sth.basefarm.net:11006/npoadapter/pfc
 
-# TP01Simultaneous200Users - default:localhost:33001 (http)
+default:localhost:33001 (http)
+
+# PingForConfiguration (default profile)
+mvn gatling:execute
+mvn gatling:execute -DbaseUrl=http://localhost:33001/npoadapter/pfc
+mvn gatling:execute -DbaseUrl=http://ine-dit-app03.sth.basefarm.net:11006/npoadapter/pfc
+mvn gatling:execute -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/pfc
+mvn gatling:execute -DbaseUrl=http://ine-sit-app03.sth.basefarm.net:11006/npoadapter/pfc
+
+# TP01Simultaneous200Users
 mvn gatling:execute -PTP01Simultaneous200Users
 mvn gatling:execute -PTP01Simultaneous200Users -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP02ExtraLargeResponse
+mvn gatling:execute -PTP02ExtraLargeResponse
+mvn gatling:execute -PTP02ExtraLargeResponse -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP03MaxTimePerMegabyte
+mvn gatling:execute -PTP03MaxTimePerMegabyte
+mvn gatling:execute -PTP03MaxTimePerMegabyte -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP04NonBlockingOnDelay
+mvn gatling:execute -PTP04NonBlockingOnDelay
+mvn gatling:execute -PTP04NonBlockingOnDelay -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP05Timeout
+mvn gatling:execute -PTP05Timeout
+mvn gatling:execute -PTP05Timeout -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP06Soak
+mvn gatling:execute -PTP06Soak
+mvn gatling:execute -PTP06Soak -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP07SendSimpleIndex
+mvn gatling:execute -PTP07SendSimpleIndex
+mvn gatling:execute -PTP07SendSimpleIndex -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP08Sequential
+mvn gatling:execute -PTP08Sequential
+mvn gatling:execute -PTP08Sequential -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP09Parallel200Users
+mvn gatling:execute -PTP09Parallel200Users
+mvn gatling:execute -PTP09Parallel200Users -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP10Requests40PerSecond
+mvn gatling:execute -PTP10Requests40PerSecond
+mvn gatling:execute -PTP10Requests40PerSecond -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+
+# TP11SlowSourceSystem
+mvn gatling:execute -PTP11SlowSourceSystem
+mvn gatling:execute -PTP11SlowSourceSystem -DbaseUrl=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
 
 -->
 
@@ -72,6 +115,20 @@ mvn gatling:execute -PTP01Simultaneous200Users -DbaseUrl=http://ine-tit-app03.st
     </profile>
     
     <profile>
+      <id>TP02ExtraLargeResponse</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP02ExtraLargeResponse</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP03MaxTimePerMegabyte</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP03MaxTimePerMegabyte</simulationClass>
+      </properties>
+    </profile>
+
+    <profile>
       <id>TP04NonBlockingOnDelay</id>
       <properties>
        <simulationClass>se.skl.skltpservices.npoadapter.TP04NonBlockingOnDelay</simulationClass>
@@ -84,5 +141,48 @@ mvn gatling:execute -PTP01Simultaneous200Users -DbaseUrl=http://ine-tit-app03.st
        <simulationClass>se.skl.skltpservices.npoadapter.TP05Timeout</simulationClass>
       </properties>
     </profile>
+    
+    <profile>
+      <id>TP06Soak</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP06Soak</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP07SendSimpleIndex</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP07SendSimpleIndex</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP08Sequential</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP08Sequential</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP09Parallel200Users</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP09Parallel200Users</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP10Requests40OPerSecond</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP10Requests40PerSecond</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP11SlowSourceSystem</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP11SlowSourceSystem</simulationClass>
+      </properties>
+    </profile>
+    
   </profiles>
 </project>

@@ -13,9 +13,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP09Parallel200Users extends Simulation {
+class TP09Parallel200Users extends Simulation with HasBaseURL {
 
-  val httpProtocol = http.baseURL("http://localhost:33001")
   val totalUsers:Int            = 100   // 200
   val maxRequestsPerSecond:Int  = 20    // 40
   val rampSeconds:Int           = 50    // 50
@@ -36,7 +35,7 @@ class TP09Parallel200Users extends Simulation {
                     }
     
   setUp(getParallel.inject(rampUsers(totalUsers) over (rampSeconds seconds))
-                    .protocols(httpProtocol))
+                    .protocols(http.baseURL(baseURL)))
       .throttle(reachRps(maxRequestsPerSecond) in (rampSeconds seconds))
       .maxDuration(maxDuration seconds)
 }

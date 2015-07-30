@@ -13,11 +13,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP03MaxTimePerMegabyte extends Simulation {
+class TP03MaxTimePerMegabyte extends Simulation with HasBaseURL {
 
-  // TODO - externalise constants
-
-  val baseURL:String = "http://localhost:33001"
   val times:Int      = 3
   val pause:Int      = 1
   
