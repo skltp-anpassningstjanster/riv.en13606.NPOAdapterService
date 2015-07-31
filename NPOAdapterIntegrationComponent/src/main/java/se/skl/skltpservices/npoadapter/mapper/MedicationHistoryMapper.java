@@ -297,34 +297,39 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().setDrug(new DrugType());
         
         mpt.getDrug().getDrug().setNplId(new CVType());
-        
-        //mpt.getDrug().getDrug().getNplId().setCode("TODO");
+        mpt.getDrug().getDrug().getNplId().setCode(getNonBlank(ehr13606values,"lkm-lkm-lpr-npl"));
+        mpt.getDrug().getDrug().getNplId().setCodeSystem("1.2.752.129.2.1.5.1");
+        mpt.getDrug().getDrug().getNplId().setDisplayName(getNonBlank(null)); // Produktnamn. Handelsnamn i SIL. Text som anger namnet på den aktuella läkemedelsprodukten.
         
         mpt.getDrug().getDosage().add(new DosageType());
         mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
         mpt.getDrug().getDosage().get(0).setShortNotation(ehr13606values.get("lkm-dst-kno"));
-        mpt.getDrug().getDosage().get(0).setUnitDose(new CVType());
-        mpt.getDrug().getDosage().get(0).getUnitDose().setOriginalText(ehr13606values.get("lkm-dst-den"));
-        mpt.getDrug().getDosage().get(0).setSetDosage(new SetDosageType());
-        mpt.getDrug().getDosage().get(0).getSetDosage().setUnstructuredDosageInformation(new UnstructuredDosageInformationType());
         
-        if (ehr13606values.containsKey("lkm-dst-ext")) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-                "lkm-lva-ext- extemporeberedning beskriving:" + ehr13606values.get("lkm-lva-ext"));
-        }
-        if (ehr13606values.containsKey("lkm-dst-max")) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-            (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
-            "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
-        }
-        if (StringUtils.isEmpty(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText())) {
-            //mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText("TODO - unstructured dosage information text");
+        
+        if (ehr13606values.containsKey("lkm-dst-den")) {
+            mpt.getDrug().getDosage().get(0).setUnitDose(new CVType());
+            mpt.getDrug().getDosage().get(0).getUnitDose().setOriginalText(ehr13606values.get("lkm-dst-den"));
         }
         
-        mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
-        mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
-        //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
+        if (ehr13606values.containsKey("lkm-lva-ext") || ehr13606values.containsKey("lkm-dst-max") ) {
+            mpt.getDrug().getDosage().get(0).setSetDosage(new SetDosageType());
+            mpt.getDrug().getDosage().get(0).getSetDosage().setUnstructuredDosageInformation(new UnstructuredDosageInformationType());
+            
+            if (ehr13606values.containsKey("lkm-dst-ext")) {
+                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
+                    "lkm-lva-ext- extemporeberedning beskriving:" + ehr13606values.get("lkm-lva-ext"));
+            }
+            if (ehr13606values.containsKey("lkm-dst-max")) {
+                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
+                (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
+                "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
+            }
+        }
+        
         if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
+            mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
+            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
+            //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
         }
@@ -339,11 +344,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().setRouteOfAdministration(new CVType());
         mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
         mpt.getDrug().getDrug().getRouteOfAdministration().setDisplayName(ehr13606values.get("lkm-lkm-lpr-ber"));
-        
-        if (ehr13606values.containsKey("lkm-lkm-lpr-npl")) {
-            mpt.getDrug().getDrug().setNplId(new CVType());
-            mpt.getDrug().getDrug().getNplId().setCode(ehr13606values.get("lkm-lkm-lpr-npl"));
-        }
         
         
         // --- DispensationAuthorization
@@ -362,17 +362,22 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             }
             
             mpt.getDispensationAuthorization().setDispensationAuthorizationId(new IIType());
-            //mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("TODO authorization id");
+            mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("1.2.752.129.2.1.2.1");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
-            //mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
+            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime(ehr13606values.get("lkm-ord-tid")); // Beslutstidpunkt/förskrivningsstidpunkt. Tidpunkt då beslut fattas om förskrivning.
 
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
                     (ehr13606values.containsKey("lkm-for-uiv") ? "utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +
                     (ehr13606values.containsKey("lkm-for-mpt") ? "mängd per tillfälle:" + ehr13606values.get("lkm-for-mpt") + " " : "") +
                     (ehr13606values.containsKey("lkm-for-dbs") ? "distributionssätt:"  + ehr13606values.get("lkm-for-dbs") : ""));
             
-            mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
+            if (StringUtils.isNotBlank(mpt.getDispensationAuthorization().getDispensationAuthorizerComment())) {
+                mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
+            } else {
+                mpt.getDispensationAuthorization().setPrescriptionSignatura("");
+            }
+            
         }
         
         // ---
