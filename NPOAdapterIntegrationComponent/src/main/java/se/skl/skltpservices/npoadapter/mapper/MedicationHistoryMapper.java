@@ -332,7 +332,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().getAtcCode().setCode(ehr13606values.get("lkm-lkm-lpr-atc"));
         mpt.getDrug().getDrug().getAtcCode().setCodeSystem("1.2.752.129.2.2.3.1.1");
         mpt.getDrug().getDrug().getAtcCode().setOriginalText(ehr13606values.get("lkm-lva-typ"));
-        mpt.getDrug().getDrug().getAtcCode().setDisplayName(ehr13606values.get("lkm-lkm-lva-pre"));
+        mpt.getDrug().getDrug().getAtcCode().setDisplayName(getNonBlank(ehr13606values,"lkm-lkm-lva-pre","lkm-lva-typ","lkm-lkm-lpr-atc"));
         
         mpt.getDrug().getDrug().setRouteOfAdministration(new CVType());
         mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
@@ -430,7 +430,24 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         return bodyType;
     }
 
-    
+
+    // Return first value from a list of keys. Default to NA.
+    protected String getNonBlank(Map<String, String> ehr13606values, String... keys) {
+        String result = null;
+        if (ehr13606values != null && ehr13606values.size() > 0 && keys != null && keys.length > 0) {
+            int i = 0;
+            while (StringUtils.isBlank(result) && i < keys.length) {
+                result = ehr13606values.get(keys[i]);
+                i++;
+            }
+        }
+        if (StringUtils.isBlank(result)) {
+            result = "NA";
+        }
+        return result;
+    }
+
+
     // Retrieve ehr values from message and store in a map
     private Map<String,String> retrieveValues(COMPOSITION composition, int compositionIndex) {
         

@@ -22,9 +22,12 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -84,4 +87,25 @@ public class MedicationHistoryMapperTest {
             assertNotNull(mmr.getMedicationMedicalRecordBody());
         }
     }
+    
+    @Test
+    public void getNonBlank() {
+        
+        Map<String,String> ehr13606values = new HashMap<String,String>();
+        ehr13606values.put("aaa", "aaavalue");
+        ehr13606values.put("bbb", "bbbvalue");
+        ehr13606values.put("ccc", "cccvalue");
+        ehr13606values.put("ddd", "dddvalue");
+        
+        MedicationHistoryMapper objectUnderTest = new MedicationHistoryMapper();
+        assertEquals("aaavalue", objectUnderTest.getNonBlank(ehr13606values, "aaa","bbb","ccc"));
+        assertEquals("dddvalue", objectUnderTest.getNonBlank(ehr13606values, "ddd","",null));
+        assertEquals("NA"      , objectUnderTest.getNonBlank(ehr13606values, "eee","",null));
+        assertEquals("NA"      , objectUnderTest.getNonBlank(ehr13606values, (String[])null));
+        assertEquals("cccvalue", objectUnderTest.getNonBlank(ehr13606values, "ccc","bbb","ccc"));
+        assertEquals("NA"      , objectUnderTest.getNonBlank((Map<String,String>)null, (String[])null));
+        assertEquals("NA"      , objectUnderTest.getNonBlank(new HashMap<String,String>(), ""));
+        assertEquals("cccvalue", objectUnderTest.getNonBlank(ehr13606values, null,"","    ","ccc"));
+    }
+    
 }
