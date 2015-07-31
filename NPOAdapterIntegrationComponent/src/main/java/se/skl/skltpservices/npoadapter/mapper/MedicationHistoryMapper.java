@@ -207,7 +207,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         }
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class, true, true);
+        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
             patient.getAccountableHealthcareProfessional().setAuthorTime("not provided by producer care system");
         }
@@ -281,9 +281,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             );
         }
         
-        mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
-        mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
-        //mpt.getPrincipalPrescriptionReason().get(0).getReason().setCode("TODO");
+        // mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
+        // mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
         
         mpt.setEvaluationTime  (ehr13606values.get("lkm-ord-utv"));
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
