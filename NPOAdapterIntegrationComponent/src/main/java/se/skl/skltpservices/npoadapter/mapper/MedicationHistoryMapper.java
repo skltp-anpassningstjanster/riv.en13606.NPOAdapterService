@@ -54,6 +54,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -288,10 +289,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
         
         
-        // --- Drug
+        // === Drug ===
         
         mpt.setDrug(new DrugChoiceType());
 
+        // --- Drug/Drug - läkemedelsprodukt
+        
         mpt.getDrug().setDrug(new DrugType());
         
         mpt.getDrug().getDrug().setNplId(new CVType());
@@ -338,14 +341,15 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
         mpt.getDrug().getDrug().getRouteOfAdministration().setDisplayName(ehr13606values.get("lkm-lkm-lpr-ber"));
         
-        mpt.getDrug().setDrugArticle(new DrugArticleType());
-        mpt.getDrug().getDrugArticle().setNplPackId(new CVType());
-        
-        mpt.getDrug().getDrugArticle().getNplPackId().setCode(ehr13606values.get("lkm-lkm-lpr-npl"));
+        if (ehr13606values.containsKey("lkm-lkm-lpr-npl")) {
+            mpt.getDrug().getDrug().setNplId(new CVType());
+            mpt.getDrug().getDrug().getNplId().setCode(ehr13606values.get("lkm-lkm-lpr-npl"));
+        }
         
 
-        // --- Generics
-
+        // --- Drug/Generics - generika/utbytesgrupp
+        
+        /*
         if (ehr13606values.containsKey("lkm-lva-ubg-lfn") ||
             ehr13606values.containsKey("lkm-lva-ubg-sub") ||
             ehr13606values.containsKey("lkm-lva-ubg-sty")) {
@@ -358,10 +362,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             mpt.getDrug().getGenerics().getStrength().setUnit(ehr13606values.get("lkm-lva-ubg-sty"));
             mpt.getDrug().getGenerics().getStrength().setValue(0); // TODO - maybe parse lkm-lva-ubg-sty and retrieve a numeric value?
         }
+        */
         
         
-        // --- Merchandise
+        // --- Drug/Merchandise - handelsvara - ordination av handelsvaror stödjs inte i 13606
 
+        /*
         if (ehr13606values.containsKey("lkm-lkm-lva-fbe") ||
             ehr13606values.containsKey("lkm-lkm-lva-fst") ||
             ehr13606values.containsKey("lkm-lkm-lpr-spi") ||
@@ -392,8 +398,19 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                      (ehr13606values.containsKey("lkm-lkm-lva-fna") ? "lkm-lkm-lva-fna:förpackningsnamn:" + ehr13606values.get("lkm-lkm-lva-fna") + " " : "") +
                      (ehr13606values.containsKey("lkm-lkm-lpr-prs") ? "lkm-lkm-lpr-prs:produktstyrka:"    + ehr13606values.get("lkm-lkm-lpr-prs") : "") );
         }
-        
+        */
 
+        
+        // --- Drug/DrugArticle - läkemedelsartikel - not used
+        // mpt.getDrug().setDrugArticle(new DrugArticleType());
+        
+        // --- Drug/UnstructuredDrugInformation - fritextval/extemporeberedning - not used
+        // mpt.getDrug().setUnstructuredDrugInformation(new UnstructuredDrugInformationType());
+
+        
+        // === end of Drug
+
+        
         // --- DispensationAuthorization
         
         if (ehr13606values.containsKey("lkm-for-fpe") ||
