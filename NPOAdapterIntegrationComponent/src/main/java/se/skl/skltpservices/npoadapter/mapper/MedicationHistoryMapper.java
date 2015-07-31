@@ -289,7 +289,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
         
         
-        // === Drug ===
+        // --- Drug
         
         mpt.setDrug(new DrugChoiceType());
 
@@ -346,70 +346,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             mpt.getDrug().getDrug().getNplId().setCode(ehr13606values.get("lkm-lkm-lpr-npl"));
         }
         
-
-        // --- Drug/Generics - generika/utbytesgrupp
-        
-        /*
-        if (ehr13606values.containsKey("lkm-lva-ubg-lfn") ||
-            ehr13606values.containsKey("lkm-lva-ubg-sub") ||
-            ehr13606values.containsKey("lkm-lva-ubg-sty")) {
-            
-            mpt.getDrug().setGenerics(new GenericsType());
-            mpt.getDrug().getGenerics().setForm(ehr13606values.get("lkm-lva-ubg-lfn"));
-            mpt.getDrug().getGenerics().setSubstance(ehr13606values.get("lkm-lva-ubg-sub"));
-            
-            mpt.getDrug().getGenerics().setStrength(new PQType());
-            mpt.getDrug().getGenerics().getStrength().setUnit(ehr13606values.get("lkm-lva-ubg-sty"));
-            mpt.getDrug().getGenerics().getStrength().setValue(0); // TODO - maybe parse lkm-lva-ubg-sty and retrieve a numeric value?
-        }
-        */
-        
-        
-        // --- Drug/Merchandise - handelsvara - ordination av handelsvaror stödjs inte i 13606
-
-        /*
-        if (ehr13606values.containsKey("lkm-lkm-lva-fbe") ||
-            ehr13606values.containsKey("lkm-lkm-lva-fst") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-spi") ||
-            ehr13606values.containsKey("lkm-lkm-lva-vnr") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-prt") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-prn") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-pna") ||
-            ehr13606values.containsKey("lkm-lkm-lva-fna") ||
-            ehr13606values.containsKey("lkm-lkm-lva-prs")) {
-                
-            mpt.getDrug().setMerchandise(new MerchandiseType());
-            
-            mpt.getDrug().getMerchandise().setArticleNumber(new CVType());
-            
-            if (ehr13606values.containsKey("lkm-lkm-lva-fbe")) {
-                mpt.getDrug().getMerchandise().getArticleNumber().setOriginalText(ehr13606values.get("lkm-lkm-lva-fbe") );
-            }
-            if (ehr13606values.containsKey("lkm-lkm-lva-fst")) {
-                mpt.getDrug().getMerchandise().getArticleNumber().setOriginalText(mpt.getDrug().getMerchandise().getArticleNumber().getOriginalText() + " " + ehr13606values.get("lkm-lkm-lva-fst") );
-            }
-            
-            mpt.getDrug().getMerchandise().getArticleNumber().setCode(
-                     (ehr13606values.containsKey("lkm-lkm-lpr-spi") ? "lkm-lkm-lpr-spi:spec id:"          + ehr13606values.get("lkm-lkm-lpr-spi") + " " : "") + 
-                     (ehr13606values.containsKey("lkm-lkm-lva-vnr") ? "lkm-lkm-lva-vnr:varunummer:"       + ehr13606values.get("lkm-lkm-lva-vnr") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prt") ? "lkm-lkm-lpr-prt:produkttype:"      + ehr13606values.get("lkm-lkm-lpr-prt") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prn") ? "lkm-lkm-lpr-prn:produktnamn:"      + ehr13606values.get("lkm-lkm-lpr-prn") + " " : "") + 
-                     (ehr13606values.containsKey("lkm-lkm-lpr-pna") ? "lkm-lkm-lpr-pna:"                  + ehr13606values.get("lkm-lkm-lpr-pna") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lva-fna") ? "lkm-lkm-lva-fna:förpackningsnamn:" + ehr13606values.get("lkm-lkm-lva-fna") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prs") ? "lkm-lkm-lpr-prs:produktstyrka:"    + ehr13606values.get("lkm-lkm-lpr-prs") : "") );
-        }
-        */
-
-        
-        // --- Drug/DrugArticle - läkemedelsartikel - not used
-        // mpt.getDrug().setDrugArticle(new DrugArticleType());
-        
-        // --- Drug/UnstructuredDrugInformation - fritextval/extemporeberedning - not used
-        // mpt.getDrug().setUnstructuredDrugInformation(new UnstructuredDrugInformationType());
-
-        
-        // === end of Drug
-
         
         // --- DispensationAuthorization
         
