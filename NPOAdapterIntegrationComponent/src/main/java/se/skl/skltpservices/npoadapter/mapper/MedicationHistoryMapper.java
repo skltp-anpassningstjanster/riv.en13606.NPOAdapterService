@@ -54,6 +54,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -206,7 +207,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         }
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class, true, true);
+        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
             patient.getAccountableHealthcareProfessional().setAuthorTime("not provided by producer care system");
         }
@@ -280,9 +281,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             );
         }
         
-        mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
-        mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
-        //mpt.getPrincipalPrescriptionReason().get(0).getReason().setCode("TODO");
+        // mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
+        // mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
         
         mpt.setEvaluationTime  (ehr13606values.get("lkm-ord-utv"));
         mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
@@ -292,37 +292,44 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         mpt.setDrug(new DrugChoiceType());
 
+        // --- Drug/Drug - läkemedelsprodukt
+        
         mpt.getDrug().setDrug(new DrugType());
         
         mpt.getDrug().getDrug().setNplId(new CVType());
-        
-        //mpt.getDrug().getDrug().getNplId().setCode("TODO");
+        mpt.getDrug().getDrug().getNplId().setCode(getNonBlank(ehr13606values,"lkm-lkm-lpr-npl"));
+        mpt.getDrug().getDrug().getNplId().setCodeSystem("1.2.752.129.2.1.5.1");
+        mpt.getDrug().getDrug().getNplId().setDisplayName(getNonBlank(null)); // Produktnamn. Handelsnamn i SIL. Text som anger namnet på den aktuella läkemedelsprodukten.
         
         mpt.getDrug().getDosage().add(new DosageType());
         mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
         mpt.getDrug().getDosage().get(0).setShortNotation(ehr13606values.get("lkm-dst-kno"));
-        mpt.getDrug().getDosage().get(0).setUnitDose(new CVType());
-        mpt.getDrug().getDosage().get(0).getUnitDose().setOriginalText(ehr13606values.get("lkm-dst-den"));
-        mpt.getDrug().getDosage().get(0).setSetDosage(new SetDosageType());
-        mpt.getDrug().getDosage().get(0).getSetDosage().setUnstructuredDosageInformation(new UnstructuredDosageInformationType());
         
-        if (ehr13606values.containsKey("lkm-dst-ext")) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-                "lkm-lva-ext- extemporeberedning beskriving:" + ehr13606values.get("lkm-lva-ext"));
-        }
-        if (ehr13606values.containsKey("lkm-dst-max")) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-            (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
-            "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
-        }
-        if (StringUtils.isEmpty(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText())) {
-            //mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText("TODO - unstructured dosage information text");
+        
+        if (ehr13606values.containsKey("lkm-dst-den")) {
+            mpt.getDrug().getDosage().get(0).setUnitDose(new CVType());
+            mpt.getDrug().getDosage().get(0).getUnitDose().setOriginalText(ehr13606values.get("lkm-dst-den"));
         }
         
-        mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
-        mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
-        //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
+        if (ehr13606values.containsKey("lkm-lva-ext") || ehr13606values.containsKey("lkm-dst-max") ) {
+            mpt.getDrug().getDosage().get(0).setSetDosage(new SetDosageType());
+            mpt.getDrug().getDosage().get(0).getSetDosage().setUnstructuredDosageInformation(new UnstructuredDosageInformationType());
+            
+            if (ehr13606values.containsKey("lkm-dst-ext")) {
+                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
+                    "lkm-lva-ext- extemporeberedning beskriving:" + ehr13606values.get("lkm-lva-ext"));
+            }
+            if (ehr13606values.containsKey("lkm-dst-max")) {
+                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
+                (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
+                "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
+            }
+        }
+        
         if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
+            mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
+            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
+            //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
         }
@@ -332,68 +339,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().getAtcCode().setCode(ehr13606values.get("lkm-lkm-lpr-atc"));
         mpt.getDrug().getDrug().getAtcCode().setCodeSystem("1.2.752.129.2.2.3.1.1");
         mpt.getDrug().getDrug().getAtcCode().setOriginalText(ehr13606values.get("lkm-lva-typ"));
-        mpt.getDrug().getDrug().getAtcCode().setDisplayName(ehr13606values.get("lkm-lkm-lva-pre"));
+        mpt.getDrug().getDrug().getAtcCode().setDisplayName(getNonBlank(ehr13606values,"lkm-lkm-lva-pre","lkm-lva-typ","lkm-lkm-lpr-atc"));
         
         mpt.getDrug().getDrug().setRouteOfAdministration(new CVType());
         mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
         mpt.getDrug().getDrug().getRouteOfAdministration().setDisplayName(ehr13606values.get("lkm-lkm-lpr-ber"));
         
-        mpt.getDrug().setDrugArticle(new DrugArticleType());
-        mpt.getDrug().getDrugArticle().setNplPackId(new CVType());
         
-        mpt.getDrug().getDrugArticle().getNplPackId().setCode(ehr13606values.get("lkm-lkm-lpr-npl"));
-        
-
-        // --- Generics
-
-        if (ehr13606values.containsKey("lkm-lva-ubg-lfn") ||
-            ehr13606values.containsKey("lkm-lva-ubg-sub") ||
-            ehr13606values.containsKey("lkm-lva-ubg-sty")) {
-            
-            mpt.getDrug().setGenerics(new GenericsType());
-            mpt.getDrug().getGenerics().setForm(ehr13606values.get("lkm-lva-ubg-lfn"));
-            mpt.getDrug().getGenerics().setSubstance(ehr13606values.get("lkm-lva-ubg-sub"));
-            
-            mpt.getDrug().getGenerics().setStrength(new PQType());
-            mpt.getDrug().getGenerics().getStrength().setUnit(ehr13606values.get("lkm-lva-ubg-sty"));
-            mpt.getDrug().getGenerics().getStrength().setValue(0); // TODO - maybe parse lkm-lva-ubg-sty and retrieve a numeric value?
-        }
-        
-        
-        // --- Merchandise
-
-        if (ehr13606values.containsKey("lkm-lkm-lva-fbe") ||
-            ehr13606values.containsKey("lkm-lkm-lva-fst") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-spi") ||
-            ehr13606values.containsKey("lkm-lkm-lva-vnr") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-prt") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-prn") ||
-            ehr13606values.containsKey("lkm-lkm-lpr-pna") ||
-            ehr13606values.containsKey("lkm-lkm-lva-fna") ||
-            ehr13606values.containsKey("lkm-lkm-lva-prs")) {
-                
-            mpt.getDrug().setMerchandise(new MerchandiseType());
-            
-            mpt.getDrug().getMerchandise().setArticleNumber(new CVType());
-            
-            if (ehr13606values.containsKey("lkm-lkm-lva-fbe")) {
-                mpt.getDrug().getMerchandise().getArticleNumber().setOriginalText(ehr13606values.get("lkm-lkm-lva-fbe") );
-            }
-            if (ehr13606values.containsKey("lkm-lkm-lva-fst")) {
-                mpt.getDrug().getMerchandise().getArticleNumber().setOriginalText(mpt.getDrug().getMerchandise().getArticleNumber().getOriginalText() + " " + ehr13606values.get("lkm-lkm-lva-fst") );
-            }
-            
-            mpt.getDrug().getMerchandise().getArticleNumber().setCode(
-                     (ehr13606values.containsKey("lkm-lkm-lpr-spi") ? "lkm-lkm-lpr-spi:spec id:"          + ehr13606values.get("lkm-lkm-lpr-spi") + " " : "") + 
-                     (ehr13606values.containsKey("lkm-lkm-lva-vnr") ? "lkm-lkm-lva-vnr:varunummer:"       + ehr13606values.get("lkm-lkm-lva-vnr") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prt") ? "lkm-lkm-lpr-prt:produkttype:"      + ehr13606values.get("lkm-lkm-lpr-prt") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prn") ? "lkm-lkm-lpr-prn:produktnamn:"      + ehr13606values.get("lkm-lkm-lpr-prn") + " " : "") + 
-                     (ehr13606values.containsKey("lkm-lkm-lpr-pna") ? "lkm-lkm-lpr-pna:"                  + ehr13606values.get("lkm-lkm-lpr-pna") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lva-fna") ? "lkm-lkm-lva-fna:förpackningsnamn:" + ehr13606values.get("lkm-lkm-lva-fna") + " " : "") +
-                     (ehr13606values.containsKey("lkm-lkm-lpr-prs") ? "lkm-lkm-lpr-prs:produktstyrka:"    + ehr13606values.get("lkm-lkm-lpr-prs") : "") );
-        }
-        
-
         // --- DispensationAuthorization
         
         if (ehr13606values.containsKey("lkm-for-fpe") ||
@@ -410,17 +362,22 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             }
             
             mpt.getDispensationAuthorization().setDispensationAuthorizationId(new IIType());
-            //mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("TODO authorization id");
+            mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("1.2.752.129.2.1.2.1");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
-            //mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime("TODO author time");
+            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime(ehr13606values.get("lkm-ord-tid")); // Beslutstidpunkt/förskrivningsstidpunkt. Tidpunkt då beslut fattas om förskrivning.
 
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
                     (ehr13606values.containsKey("lkm-for-uiv") ? "utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +
                     (ehr13606values.containsKey("lkm-for-mpt") ? "mängd per tillfälle:" + ehr13606values.get("lkm-for-mpt") + " " : "") +
                     (ehr13606values.containsKey("lkm-for-dbs") ? "distributionssätt:"  + ehr13606values.get("lkm-for-dbs") : ""));
             
-            mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
+            if (StringUtils.isNotBlank(mpt.getDispensationAuthorization().getDispensationAuthorizerComment())) {
+                mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
+            } else {
+                mpt.getDispensationAuthorization().setPrescriptionSignatura("");
+            }
+            
         }
         
         // ---
@@ -430,7 +387,24 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         return bodyType;
     }
 
-    
+
+    // Return first value from a list of keys. Default to NA.
+    protected String getNonBlank(Map<String, String> ehr13606values, String... keys) {
+        String result = null;
+        if (ehr13606values != null && ehr13606values.size() > 0 && keys != null && keys.length > 0) {
+            int i = 0;
+            while (StringUtils.isBlank(result) && i < keys.length) {
+                result = ehr13606values.get(keys[i]);
+                i++;
+            }
+        }
+        if (StringUtils.isBlank(result)) {
+            result = "NA";
+        }
+        return result;
+    }
+
+
     // Retrieve ehr values from message and store in a map
     private Map<String,String> retrieveValues(COMPOSITION composition, int compositionIndex) {
         

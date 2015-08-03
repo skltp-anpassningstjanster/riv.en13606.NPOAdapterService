@@ -12,17 +12,11 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP01Simultaneous200Users extends Simulation {
+class TP01Simultaneous200Users extends Simulation with HasBaseURL {
 
   val totalUsers:Int            = 200
   val rampDuration              = 2 seconds
   val maxDuration               = 1 minutes
-  
-  val baseUrl:String  = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
-                            System.getProperty("baseUrl")
-                        } else {
-                            "http://localhost:33001/npoadapter/"
-                        }
   
   val simultaneousRequest = scenario("Simultaneous") // .exec(GetAlertInformationScenario.request)
                       .uniformRandomSwitch(
@@ -39,6 +33,6 @@ class TP01Simultaneous200Users extends Simulation {
                      )
 
    setUp(simultaneousRequest.inject(rampUsers(totalUsers) over (rampDuration))
-       .protocols(http.baseURL(baseUrl).disableResponseChunksDiscarding)) 
+       .protocols(http.baseURL(baseURL).disableResponseChunksDiscarding)) 
        .maxDuration(maxDuration)
 }

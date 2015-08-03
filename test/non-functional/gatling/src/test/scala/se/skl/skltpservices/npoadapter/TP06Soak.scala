@@ -17,12 +17,11 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
  * Test for memory leaks in the Adapter JVM.
  * Test for degraded performance over time.
  */
-class TP06Soak extends Simulation {
+class TP06Soak extends Simulation with HasBaseURL {
 
   // TODO - deduce parameters for 50% CPU
   // TODO - can we add assertions that check for degraded performance over time?
   
-  val httpProtocol = http.baseURL("http://localhost:33001")
   val totalUsers:Int            = 50
   val maxRequestsPerSecond:Int  = 20
   val rampSeconds:Int           = 20
@@ -43,7 +42,7 @@ class TP06Soak extends Simulation {
                     }
     
   setUp(getParallel.inject(rampUsers(totalUsers) over (rampSeconds seconds))
-                    .protocols(httpProtocol))
+                    .protocols(http.baseURL(baseURL)))
       .throttle(reachRps(maxRequestsPerSecond) in (rampSeconds seconds))
       .maxDuration(maxDuration seconds)
 }

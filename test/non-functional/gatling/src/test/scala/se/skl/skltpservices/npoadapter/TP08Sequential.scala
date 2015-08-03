@@ -13,11 +13,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP08Sequential extends Simulation {
+class TP08Sequential extends Simulation with HasBaseURL {
 
-  // TODO - externalise constants
-
-  val baseURL:String = "http://localhost:33001"
   val times:Int      = 50   // 1000
   val pause:Int      = 2
   
@@ -40,5 +37,5 @@ class TP08Sequential extends Simulation {
                      .pause(pause)
                      .repeat(times){exec(GetReferralOutcomeScenario.request)}
     
-  setUp (getSequentialTimes.inject(atOnceUsers(1)).protocols(httpProtocol))
+  setUp (getSequentialTimes.inject(atOnceUsers(1)).protocols(http.baseURL(baseURL)))
 }
