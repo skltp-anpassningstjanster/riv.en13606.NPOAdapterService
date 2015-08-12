@@ -129,12 +129,9 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
 			final GetAlertInformationType request = unmarshal(payloadAsXMLStreamReader(message));
-
 			EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
-            
 			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(
 			        EHRUtil.requestType(request, MEANING_UPP, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
-            
 			return message;
 		} catch (Exception err) {
 			throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -145,7 +142,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapResponse(MuleMessage message) throws MapperException {
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			final GetAlertInformationResponseType response = mapResponseType(ehrResp, message);
+			final GetAlertInformationResponseType response = mapResponse(ehrResp, message);
 			message.setPayload(marshal(response));
 			return message;
 		} catch (Exception err) {
@@ -169,13 +166,11 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	
 	/**
      * Create response.
-	 * Collects organisation and healthcare-professional into maps with HSAId as key.
-	 * So other functions don't need to iterate over document each time.
 	 * @param ehrResp response to be loaded into soap-payload.
 	 * @param uniqueId mule-message uniqueId.
 	 * @return a alertinformation response.
 	 */
-	protected GetAlertInformationResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+	protected GetAlertInformationResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
 		final GetAlertInformationResponseType response = new GetAlertInformationResponseType();
 		
 		response.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));

@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
@@ -66,8 +68,9 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	@Override
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
-			final GetDiagnosisType req = unmarshal(payloadAsXMLStreamReader(message));
-            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_DIA, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+			final GetDiagnosisType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_DIA, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
             throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -78,7 +81,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			final GetDiagnosisResponseType resp = mapResponseType(ehrResp, message.getUniqueId());
+			final GetDiagnosisResponseType resp = mapResponse(ehrResp, message);
 			message.setPayload(marshal(resp));
             return message;
 		} catch (Exception err) {
@@ -108,22 +111,25 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 	 * @param uniqueId mule-message uniqueId.
 	 * @return a diagnosis response.
 	 */
-	protected GetDiagnosisResponseType mapResponseType(RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
+	protected GetDiagnosisResponseType mapResponse(RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
 		final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
-		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
+		resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
 		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
 				
 		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
 		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
-		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
-			final DiagnosisType type = new DiagnosisType();
-			type.setDiagnosisHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
-			type.getDiagnosisHeader().setCareContactId(getCareContactId(comp));
-			type.setDiagnosisBody(mapDiagnosisBodyType(comp));
-			resp.getDiagnosis().add(type);
+		for(COMPOSITION composition13606 : ehrExctract.getAllCompositions()) {
+            if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
+    			final DiagnosisType type = new DiagnosisType();
+    			type.setDiagnosisHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
+    			type.getDiagnosisHeader().setCareContactId(getCareContactId(composition13606));
+    			type.setDiagnosisBody(mapDiagnosisBodyType(composition13606));
+    			resp.getDiagnosis().add(type);
+            }
 		}
 		
 		return resp;

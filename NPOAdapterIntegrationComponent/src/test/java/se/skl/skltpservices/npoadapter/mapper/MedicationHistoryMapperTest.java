@@ -23,6 +23,8 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -72,8 +75,10 @@ public class MedicationHistoryMapperTest {
 
     @Test
     public void testMapFromEhrToMedicationHistory() {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
         MedicationHistoryMapper mapper = new MedicationHistoryMapper();
-        GetMedicationHistoryResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
+        GetMedicationHistoryResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
         assertNotNull(responseType);
 
         dump(responseType);

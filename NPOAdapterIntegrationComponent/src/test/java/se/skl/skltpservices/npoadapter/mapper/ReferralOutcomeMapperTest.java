@@ -22,6 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.ReferralOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.enums._3.ReferralOutcomeTypeCodeEnum;
@@ -68,8 +71,10 @@ public class ReferralOutcomeMapperTest {
 
     @Test
     public void testMapFromEhrToMedicationHistory() throws JAXBException {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
         ReferralOutcomeMapper mapper = new ReferralOutcomeMapper();
-        GetReferralOutcomeResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract));
+        GetReferralOutcomeResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
         assertNotNull(responseType);
 
         dump(responseType);

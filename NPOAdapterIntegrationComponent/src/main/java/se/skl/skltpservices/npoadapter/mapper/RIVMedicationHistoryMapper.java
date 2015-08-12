@@ -59,7 +59,7 @@ public class RIVMedicationHistoryMapper extends MedicationHistoryMapper {
 		try {
 			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
-			final GetMedicationHistoryResponseType responseType = map(riv13606REQUESTEHREXTRACTResponseType, message.getUniqueId());
+			final GetMedicationHistoryResponseType responseType = mapResponse(riv13606REQUESTEHREXTRACTResponseType, message);
 			message.setPayload(marshal(responseType));
             return message;
 		} catch (Exception err) {

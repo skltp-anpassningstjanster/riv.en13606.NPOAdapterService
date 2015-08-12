@@ -37,65 +37,72 @@ public final class IntegrationTestDataUtil {
 	private static final String PERSON_ID_TYPE = "1.2.752.129.2.1.3";
 	private static final String TIME_START = "20100101000000";
 	private static final String TIME_END = "21160101235959";
-	private static final String CARE_UNIT_HSA_ID = UUID.randomUUID().toString();
 	
 	public static final int TRIGGER_INFO_MESSAGE = 0;
 	public static final int TRIGGER_WARNING_MESSAGE = 1;
 	public static final int TRIGGER_ERROR_MESSAGE = 2;
 	public static final int NO_TRIGGER = 3;
 	
-	public static GetCareDocumentationType createGetCareDocumentationType(int triggerType) {
-		final GetCareDocumentationType type = new GetCareDocumentationType();
-		type.setPatientId(docPersonIdType(triggerType));
-		type.setSourceSystemHSAid(SOURCE_SYSTEM_HSA_ID);
-		type.setTimePeriod(docDatePeriodType());
-		type.getCareUnitHSAid().add(CARE_UNIT_HSA_ID);
-		return type;
-	}
-	
-	public static GetCareContactsType createGetCareContactsType(int triggerType) {
+    public static GetAlertInformationType createAlertInformationType(int triggerType) {
+        final GetAlertInformationType type = new GetAlertInformationType();
+        type.setPatientId(docPersonIdType(triggerType));
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setTimePeriod(docDatePeriodType());
+        return type;
+    }
+    
+
+    public static GetCareContactsType createGetCareContactsType(int triggerType) {
 		final GetCareContactsType type = new GetCareContactsType();
 		type.setPatientId(conPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(conDatePeriodType());
-		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	
+	
+    public static GetCareDocumentationType createGetCareDocumentationType(int triggerType) {
+        final GetCareDocumentationType type = new GetCareDocumentationType();
+        type.setPatientId(docPersonIdType(triggerType));
+        type.setSourceSystemHSAid(SOURCE_SYSTEM_HSA_ID);
+        type.setTimePeriod(docDatePeriodType());
+        return type;
+    }
+
+    
 	public static GetDiagnosisType createGetDiagnosisType(int triggerType) {
 		final GetDiagnosisType type = new GetDiagnosisType();
 		type.setPatientId(docPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(docDatePeriodType());
-		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	
-	public static GetLaboratoryOrderOutcomeType createGetLaboratoryOrderOutcomeType(int triggerType) {
-		final GetLaboratoryOrderOutcomeType type = new GetLaboratoryOrderOutcomeType();
-		type.setPatientId(labPersonIdType());
-		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
-		type.setTimePeriod(labDatePeriodType());
-		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
-		return type;
-	}
-	
-	public static GetAlertInformationType createAlertInformationType(int triggerType) {
-		final GetAlertInformationType type = new GetAlertInformationType();
-		type.setPatientId(docPersonIdType(triggerType));
-		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
-		type.setTimePeriod(docDatePeriodType());
-//		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
-		return type;
-	}
-	
+
+	public static GetImagingOutcomeType createImagingOutcomeType(int triggerType) {
+        GetImagingOutcomeType type = new GetImagingOutcomeType();
+        type.setPatientId(undPersonIdType(triggerType));
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setDatePeriod(undDatePeriodType());
+        return type;
+    }
+
+    
+    public static GetLaboratoryOrderOutcomeType createGetLaboratoryOrderOutcomeType(int triggerType) {
+        final GetLaboratoryOrderOutcomeType type = new GetLaboratoryOrderOutcomeType();
+        type.setPatientId(labPersonIdType());
+        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
+        type.setTimePeriod(labDatePeriodType());
+        return type;
+    }
+
+    
     public static GetMedicationHistoryType createMedicationHistoryType(
             int triggerType) {
         final GetMedicationHistoryType type = new GetMedicationHistoryType();
         type.setPatientId(actPersonIdType(triggerType));
         type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
         type.setDatePeriod(actDatePeriodType());
-        type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
         return type;
     }
     
@@ -105,20 +112,9 @@ public final class IntegrationTestDataUtil {
         type.setPatientId(undPersonIdType(triggerType));
         type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
         type.setDatePeriod(undDatePeriodType());
-        type.getCareUnitHSAid().add(CARE_UNIT_HSA_ID);
         return type;
     }
     
-    
-    public static GetImagingOutcomeType createImagingOutcomeType(int triggerType) {
-        GetImagingOutcomeType type = new GetImagingOutcomeType();
-        type.setPatientId(undPersonIdType(triggerType));
-        type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
-        type.setDatePeriod(undDatePeriodType());
-        type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
-        return type;
-    }
-
     
 	private static riv.clinicalprocess.healthcond.description._2.PersonIdType docPersonIdType(int triggerType) {
 		final riv.clinicalprocess.healthcond.description._2.PersonIdType personIdType = new riv.clinicalprocess.healthcond.description._2.PersonIdType();

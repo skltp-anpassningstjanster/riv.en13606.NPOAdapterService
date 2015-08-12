@@ -112,7 +112,7 @@ public class AlertInformationMapperTest {
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
         
-        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
         assertNotNull(response);
         assertFalse(response.getAlertInformation().isEmpty());
         assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
@@ -128,7 +128,7 @@ public class AlertInformationMapperTest {
         when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(null);
         when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
         
-        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
         assertNotNull(response);
         assertFalse(response.getAlertInformation().isEmpty());
         assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
@@ -156,7 +156,7 @@ public class AlertInformationMapperTest {
 	    when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(careUnitHsaIds);
 	    when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
 	    
-		GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+		GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
 		assertNotNull(response);
 		assertFalse(response.getAlertInformation().isEmpty());
 		assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
@@ -181,7 +181,7 @@ public class AlertInformationMapperTest {
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(careUnitHsaIds);
         when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
-        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
         assertNotNull(response);
         assertTrue(response.getAlertInformation().isEmpty());
     }

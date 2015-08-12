@@ -22,6 +22,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
@@ -109,8 +110,9 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	@Override
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
-			final GetImagingOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UND_BDI, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+			final GetImagingOutcomeType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_UND_BDI, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
 			if (err instanceof MapperException) {
@@ -126,7 +128,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapResponse(MuleMessage message) throws MapperException {
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			final GetImagingOutcomeResponseType resp = mapResponseType(ehrResp, message.getUniqueId());
+			final GetImagingOutcomeResponseType resp = mapResponse(ehrResp, message);
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
@@ -138,9 +140,9 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
-	public GetImagingOutcomeResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
+	public GetImagingOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
 		final GetImagingOutcomeResponseType resp = new GetImagingOutcomeResponseType();
-		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
+		resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
 		
 		if (ehrResp.getEhrExtract().isEmpty()) {
 			log.debug("Empty ehrResp");
@@ -148,20 +150,24 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 		}
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
 		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
 		// Process a list of compositions.
 		// Compositions come in pairs ("und","vbe")
-		for (COMPOSITION comp : ehrExtract.getAllCompositions()) {
-			if (StringUtils.equals(EHRUtil.getCDCode(comp.getMeaning()), UNDERSOKNINGS_RESULTAT)) {
-				final COMPOSITION und = comp;
-				final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), VARDBEGARAN);
-				final ImagingOutcomeType type = new ImagingOutcomeType();
-
-				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, true, true));
-		        
-				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
-		        type.setImagingOutcomeBody(mapBody(ehr13606values));
-		        resp.getImagingOutcome().add(type);
+		for (COMPOSITION composition13606 : ehrExtract.getAllCompositions()) {
+			if (StringUtils.equals(EHRUtil.getCDCode(composition13606.getMeaning()), UNDERSOKNINGS_RESULTAT)) {
+	            if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
+			    
+    				final COMPOSITION und = composition13606;
+    				final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), VARDBEGARAN);
+    				final ImagingOutcomeType type = new ImagingOutcomeType();
+    
+    				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, true, true));
+    		        
+    				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
+    		        type.setImagingOutcomeBody(mapBody(ehr13606values));
+    		        resp.getImagingOutcome().add(type);
+	            }
 			}
 		}
         return resp;

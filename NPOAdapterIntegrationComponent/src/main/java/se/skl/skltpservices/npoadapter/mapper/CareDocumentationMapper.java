@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 
+import java.util.List;
+
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +69,9 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		log.debug("Transforming request");
 		try {
-			final GetCareDocumentationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_VOO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+			final GetCareDocumentationType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VOO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
 		} catch (Exception err) {
 			throw new MapperException("Exception when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -79,8 +82,8 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		log.debug("Transforming response - start");
 		try {
-			final RIV13606REQUESTEHREXTRACTResponseType resp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			final GetCareDocumentationResponseType responseType = mapResponseType(message.getUniqueId(), resp);
+			final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
+			final GetCareDocumentationResponseType responseType = mapResponse(response, message);
 			message.setPayload(marshal(responseType));
 	        log.debug("Transformed response - end");
             return message;
@@ -100,14 +103,13 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 	/**
 	 * Maps EHREXTRACT from RIV13606REQUESTEHREXTRACT to GetCareDocumentationResponse <p/>
      *
-     * @param unqiueId the unique message correlation id.
 	 * @param ehrResp subset from RIV136060REQUESTEHREXTRACT.
 	 * @return GetCareDocumentationType for marshaling.
 	 */
-	protected GetCareDocumentationResponseType mapResponseType(final String unqiueId, final RIV13606REQUESTEHREXTRACTResponseType ehrResp) {
+	protected GetCareDocumentationResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
 	    log.debug("Populating GetCareDocumentationResponse using ehrResp (" + ehrResp.getClass().getName() + ")");
 		final GetCareDocumentationResponseType getCareDocumentationResponse = new GetCareDocumentationResponseType();
-		getCareDocumentationResponse.setResult(EHRUtil.resultType(unqiueId, ehrResp.getResponseDetail(), Result.class));
+		getCareDocumentationResponse.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), Result.class));
 
         if (ehrResp.getEhrExtract().isEmpty()) {
 			return getCareDocumentationResponse;
@@ -115,14 +117,17 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 		
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
 		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
-		for (COMPOSITION comp : ehrExtract.getAllCompositions()) {
-			final CareDocumentationType doc = new CareDocumentationType();
-			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class, true, true));
-			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(comp.getLinks()));
-            doc.getCareDocumentationHeader().setSourceSystemHSAid(EHRUtil.getSystemHSAId(ehrExtract));
-			doc.setCareDocumentationBody(mapBodyType(comp));
-			getCareDocumentationResponse.getCareDocumentation().add(doc);
+		for (COMPOSITION composition13606 : ehrExtract.getAllCompositions()) {
+            if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
+    			final CareDocumentationType doc = new CareDocumentationType();
+    			doc.setCareDocumentationHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, TIME_ELEMENT, CPatientSummaryHeaderType.class, true, true));
+    			doc.getCareDocumentationHeader().setCareContactId(EHRUtil.careContactId(composition13606.getLinks()));
+                doc.getCareDocumentationHeader().setSourceSystemHSAid(EHRUtil.getSystemHSAId(ehrExtract));
+    			doc.setCareDocumentationBody(mapBodyType(composition13606));
+    			getCareDocumentationResponse.getCareDocumentation().add(doc);
+            }
 		}		
         log.debug("Finished populating GetCareDocumentationResponse");
 		return getCareDocumentationResponse;

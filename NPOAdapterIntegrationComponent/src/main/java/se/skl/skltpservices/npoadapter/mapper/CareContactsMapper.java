@@ -56,29 +56,30 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class, GetCareContactsResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    
+    @Override
+    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
+        try {
+            final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+            message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+            return message;
+        } catch (Exception err) {
+            throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
+        }
+    }
+
 
     @Override
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
     	try {
     		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-            message.setPayload(marshal(map(response.getEhrExtract())));
+            message.setPayload(marshal(mapResponse(response.getEhrExtract(), message)));
             return message;
     	} catch (Exception err) {
     		throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
     	}
     }
-
-    @Override
-    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
-    	try {
-    		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
-        	message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
-            return message;
-    	} catch (Exception err) {
-    		throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
-    	}
-    }
-
 
 
     /**
@@ -87,17 +88,22 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return the corresponding riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType response type
      */
-    protected GetCareContactsResponseType map(final List<EHREXTRACT> ehrExtractList) {
+    protected GetCareContactsResponseType mapResponse(final List<EHREXTRACT> ehrExtractList, MuleMessage message) {
 
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
         if (!ehrExtractList.isEmpty()) {
+            
+            List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
+            
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
             for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
-                final CareContactType contactType = new CareContactType();
-                contactType.setCareContactHeader(mapHeader(ehrExtract, i));
-                contactType.setCareContactBody(mapBody(ehrExtract, i));
-                responseType.getCareContact().add(contactType);
+                if (EHRUtil.retain(ehrExtract.getAllCompositions().get(i), careUnitHsaIds, log)) {
+                    final CareContactType contactType = new CareContactType();
+                    contactType.setCareContactHeader(mapHeader(ehrExtract, i));
+                    contactType.setCareContactBody(mapBody(ehrExtract, i));
+                    responseType.getCareContact().add(contactType);
+                }
             }
         }
 

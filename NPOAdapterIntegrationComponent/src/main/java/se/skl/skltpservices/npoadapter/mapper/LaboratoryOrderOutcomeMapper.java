@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
@@ -57,8 +59,9 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	@Override
 	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
 		try {
-			final GetLaboratoryOrderOutcomeType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
+			final GetLaboratoryOrderOutcomeType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
             throw new MapperException("Exception when mapping response", err, Ehr13606AdapterError.MAPREQUEST);
@@ -69,7 +72,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType ehrResponse = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			GetLaboratoryOrderOutcomeResponseType resp = mapResponseType(ehrResponse, message.getUniqueId());
+			GetLaboratoryOrderOutcomeResponseType resp = mapResponse(ehrResponse, message);
 			message.setPayload(marshal(resp));
 			return message;
 		} catch (Exception err) {
@@ -77,26 +80,29 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		}
 	}
 	
-	protected GetLaboratoryOrderOutcomeResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
+	protected GetLaboratoryOrderOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
 		final GetLaboratoryOrderOutcomeResponseType resp = new GetLaboratoryOrderOutcomeResponseType();
-		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
+		resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
 		if(ehrResp.getEhrExtract().isEmpty()) {
 			return resp;
 		}
 		
 		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
 		SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
-		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
-			if(comp.getMeaning() != null) {
-				if(StringUtils.equals(comp.getMeaning().getCode(), "und")) {
-					final COMPOSITION und = comp;
-					final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), "vbe");
-					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
-					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
-					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
-					type.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
-					resp.getLaboratoryOrderOutcome().add(type);
+		for(COMPOSITION composition13606 : ehrExtract.getAllCompositions()) {
+			if(composition13606.getMeaning() != null) {
+				if(StringUtils.equals(composition13606.getMeaning().getCode(), "und")) {
+		            if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
+    					final COMPOSITION und = composition13606;
+    					final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), "vbe");
+    					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
+    					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
+    					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
+    					type.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
+    					resp.getLaboratoryOrderOutcome().add(type);
+		            }
 				}
 			}
 		}
@@ -107,7 +113,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		if(resp.getResult() == null) {
 			final ResultType resultType = new ResultType();
 			resultType.setResultCode(ResultCodeEnum.OK);
-			resultType.setLogId(uniqueId);
+			resultType.setLogId(message.getUniqueId());
 			resp.setResult(resultType);
 		}
 		return resp;

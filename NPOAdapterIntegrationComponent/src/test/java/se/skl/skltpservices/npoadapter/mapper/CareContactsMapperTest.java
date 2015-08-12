@@ -21,6 +21,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.api.MuleMessage;
+
 import riv.clinicalprocess.logistics.logistics._2.*;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
@@ -29,6 +31,7 @@ import se.skl.skltpservices.npoadapter.test.Util;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -39,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Peter on 2014-07-28.
@@ -74,9 +79,11 @@ public class CareContactsMapperTest {
 
 
     @Test
-    public void testMapFromEhrToCareContratcs() {
+    public void testMapFromEhrToCareContracts() {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
         CareContactsMapper mapper = new CareContactsMapper();
-        GetCareContactsResponseType responseType = mapper.map(Arrays.asList(ehrextract));
+        GetCareContactsResponseType responseType = mapper.mapResponse(Arrays.asList(ehrextract), mockMessage);
         assertNotNull(responseType);
 
         dump(responseType);

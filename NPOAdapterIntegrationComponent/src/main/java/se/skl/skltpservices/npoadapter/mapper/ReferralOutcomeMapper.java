@@ -123,6 +123,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         try {
             final GetReferralOutcomeType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_UND, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
         } catch (Exception err) {
@@ -137,7 +138,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     		final RIV13606REQUESTEHREXTRACTResponseType ehrResponse 
     		   = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
     		
-    		GetReferralOutcomeResponseType rivtaResponse = map(ehrResponse, message.getUniqueId());
+    		GetReferralOutcomeResponseType rivtaResponse = mapResponse(ehrResponse, message);
     		
             message.setPayload(marshal(rivtaResponse));
             return message;
@@ -152,22 +153,26 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      *
      * @return GetReferralOutcomeResponseType response type
      */
-    protected GetReferralOutcomeResponseType map(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, String uniqueId) {
+    protected GetReferralOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, MuleMessage message) {
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
-        GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList);
-        responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
+        GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList, message);
+        responseType.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResponse.getResponseDetail(), ResultType.class));
         return responseType;
     }
     
     
-    protected GetReferralOutcomeResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList) {
+    protected GetReferralOutcomeResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
         GetReferralOutcomeResponseType responseType = new GetReferralOutcomeResponseType();
         if (!ehrExtractList.isEmpty()) {
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-            final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
-            referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(ehrExtract));
-            referralOutcomeRecordType.setReferralOutcomeBody(mapBody(ehrExtract));
-            responseType.getReferralOutcome().add(referralOutcomeRecordType);
+            
+            List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
+            if (EHRUtil.retain(ehrExtract.getAllCompositions().get(0), careUnitHsaIds, log)) {
+                final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
+                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(ehrExtract));
+                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(ehrExtract));
+                responseType.getReferralOutcome().add(referralOutcomeRecordType);
+            }
         }
         return responseType;
     }
