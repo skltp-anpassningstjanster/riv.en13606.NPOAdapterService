@@ -23,13 +23,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.description._2.AlertInformationBodyType;
 import riv.clinicalprocess.healthcond.description._2.CVType;
@@ -49,7 +54,7 @@ import se.skl.skltpservices.npoadapter.test.Util;
 
 public class AlertInformationMapperTest {
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
-	private static EHREXTRACT ehrExctract;
+	private static EHREXTRACT ehrExtract;
 	
 	private static AlertInformationMapper mapper;
 	
@@ -62,8 +67,8 @@ public class AlertInformationMapperTest {
 	@BeforeClass
 	public static void init() throws JAXBException {
 		mapper = new AlertInformationMapper();
-		ehrExctract = Util.loadEhrTestData(Util.ALERT_TEST_FILE);
-		ehrResp.getEhrExtract().add(ehrExctract);
+		ehrExtract = Util.loadEhrTestData(Util.ALERT_TEST_FILE);
+		ehrResp.getEhrExtract().add(ehrExtract);
 		
 		//SensitivyElement.
 		ELEMENT agensOverkanslighet = new ELEMENT();
@@ -101,17 +106,86 @@ public class AlertInformationMapperTest {
 		testCluster.getParts().add(pharma);
 	}
 	
+
+    @Test
+    public void testMapResponseType() throws Exception {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
+        
+        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        assertNotNull(response);
+        assertFalse(response.getAlertInformation().isEmpty());
+        assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
+        assertNotNull(response.getAlertInformation().get(0).getAlertInformationHeader());
+        assertEquals("Givare", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("Enhet", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+    }
+
+    @Test
+    public void testMapResponseTypeNullFilter() throws Exception {
+        
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(null);
+        when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
+        
+        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        assertNotNull(response);
+        assertFalse(response.getAlertInformation().isEmpty());
+        assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
+        assertNotNull(response.getAlertInformation().get(0).getAlertInformationHeader());
+        assertEquals("Givare", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("Enhet", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+    }
+    
 	@Test
-	public void testMapResponseType() throws Exception {
-		GetAlertInformationResponseType resp = mapper.mapResponseType(ehrResp, TEST_DATA_1);
-		assertNotNull(resp);
-		assertFalse(resp.getAlertInformation().isEmpty());
-		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationBody());
-		assertNotNull(resp.getAlertInformation().get(0).getAlertInformationHeader());
-        assertEquals("Givare", resp.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
-        assertEquals("Enhet", resp.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+	public void testMapResponseTypeFilter() throws Exception {
+	    
+	    List<String> careUnitHsaIds = new ArrayList<String>();
+	    careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ENQUIRY-VE-1");
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ENHET");
+	    
+	    MuleMessage mockMessage = mock(MuleMessage.class);
+	    when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(careUnitHsaIds);
+	    when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
+	    
+		GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+		assertNotNull(response);
+		assertFalse(response.getAlertInformation().isEmpty());
+		assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
+		assertNotNull(response.getAlertInformation().get(0).getAlertInformationHeader());
+        assertEquals("Givare", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("Enhet", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
 	}
 	
+    @Test
+    public void testMapResponseTypeFilterNoMatches() throws Exception {
+        
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(careUnitHsaIds);
+        when(mockMessage.getUniqueId()).thenReturn(TEST_DATA_1);
+        GetAlertInformationResponseType response = mapper.mapResponseType(ehrResp, mockMessage);
+        assertNotNull(response);
+        assertTrue(response.getAlertInformation().isEmpty());
+    }
+    
 	private static CD cdType(final String code) {
 		final CD cd = new CD();
 		cd.setCode(code);

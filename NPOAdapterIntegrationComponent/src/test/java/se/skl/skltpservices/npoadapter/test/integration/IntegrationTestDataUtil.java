@@ -85,7 +85,7 @@ public final class IntegrationTestDataUtil {
 		type.setPatientId(docPersonIdType(triggerType));
 		type.setSourceSystemHSAId(SOURCE_SYSTEM_HSA_ID);
 		type.setTimePeriod(docDatePeriodType());
-		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
+//		type.getCareUnitHSAId().add(CARE_UNIT_HSA_ID);
 		return type;
 	}
 	

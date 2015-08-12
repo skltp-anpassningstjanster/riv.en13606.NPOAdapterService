@@ -21,11 +21,19 @@ package se.skl.skltpservices.npoadapter.mapper.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.StringUtils;
+import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
 
 import se.rivta.en13606.ehrextract.v11.AD;
 import se.rivta.en13606.ehrextract.v11.ADXP;
@@ -70,6 +78,10 @@ import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
  */
 public final class EHRUtil {
 
+    public static final String CAREUNITHSAIDS    = "careUnitHsaIds";
+    public static final String INFORMATIONSÄGARE = "iag";
+    
+    
     private static final ParameterType versionParameter = new ParameterType();
 
     static {
@@ -577,12 +589,14 @@ public final class EHRUtil {
         }
 
         for (FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
-            if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+            if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), INFORMATIONSÄGARE)) {
                 if (careGiver.getPerformer() != null) {
+                    // <performer extension="Enhet" root="1.2.752.129.2.1.4.1"/>
                     header.getAccountableHealthcareProfessional()
                              .setHealthcareProfessionalCareUnitHSAId(careGiver.getPerformer().getExtension());
                 }
                 if (careGiver.getHealthcareFacility() != null) {
+                    // <healthcare_facility extension="Givare" root="1.2.752.129.2.1.4.1"/>
                     header.getAccountableHealthcareProfessional()
                              .setHealthcareProfessionalCareGiverHSAId(careGiver.getHealthcareFacility().getExtension());
                 }
@@ -591,15 +605,123 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(header, type);
     }
 
+    
     /**
-     * Mandatory in Svarstjansten.
-     *
-     * hsa_id transaction_id version
-     *
-     *
+     * @return true if this composition should be retained. Otherwise, filter it out.
      */
-    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(final T rivRequestType, final CD meaning, final String messageId,
-            final Object logicalAddress) {
+    public static boolean retain(COMPOSITION composition13606, List<String> careUnitHsaIds, Logger log) {
+        
+        if (careUnitHsaIds == null || careUnitHsaIds.isEmpty()) {
+            log.debug("There no care unit hsa ids in the incoming request to filter against");
+            return true;
+        } else {
+            String compositionCareUnitHsaId = "";
+            for (FUNCTIONALROLE careGiver : composition13606.getOtherParticipations()) {
+                if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), INFORMATIONSÄGARE)) {
+                    if (careGiver.getPerformer() != null) {
+                        // <performer extension="Enhet" root="1.2.752.129.2.1.4.1"/>
+                        if (StringUtils.isNotBlank(careGiver.getPerformer().getExtension())) {
+                            compositionCareUnitHsaId = careGiver.getPerformer().getExtension().toUpperCase(); // uppercase
+                        }
+                    }
+                }
+            }
+            if (StringUtils.isBlank(compositionCareUnitHsaId)) {
+                log.debug("There no care unit hsa ids in composition");
+                return false;
+            } else {
+                if (log.isDebugEnabled()) {
+                    String id = "";
+                    if (composition13606.getRcId() != null) {
+                        id = composition13606.getRcId().getExtension();
+                    }
+                    log.debug("composition {} contains care unit {}", id, compositionCareUnitHsaId );
+                }
+                return careUnitHsaIds.contains(compositionCareUnitHsaId); // uppercase
+            }
+        }
+    }
+
+    
+    /**
+     * If the request contains a list of care units, store the values as an invocation parameter list.
+     * 
+     * Note the 'i' is sometimes lower case, sometimes upper case.
+     */
+    public static <T> void storeCareUnitHsaIdsAsInvocationProperties(final T rivRequestType, MuleMessage message, Logger log) {
+        
+        final Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
+
+        List<String> careUnitHsaIds = null;
+        
+        if ( (mapperRequest.getCareUnitHSAid() == null || mapperRequest.getCareUnitHSAid().isEmpty())
+            &&
+             (mapperRequest.getCareUnitHSAId() == null || mapperRequest.getCareUnitHSAId().isEmpty())
+           ) {
+            log.debug("Request contains no careUnitHSAid or careUnitHSAId");
+        } else if ( (mapperRequest.getCareUnitHSAid() != null && !mapperRequest.getCareUnitHSAid().isEmpty())
+                    &&
+                    (mapperRequest.getCareUnitHSAId() != null && !mapperRequest.getCareUnitHSAId().isEmpty())
+                  ) {
+            throw new IllegalArgumentException("Request contains both careUnitHSAid and careUnitHSAId");
+        } else if (mapperRequest.getCareUnitHSAid() == null || mapperRequest.getCareUnitHSAid().isEmpty()) {
+            careUnitHsaIds = mapperRequest.getCareUnitHSAId();
+        } else {
+            careUnitHsaIds = mapperRequest.getCareUnitHSAid();
+        }
+        
+        if (careUnitHsaIds != null && !careUnitHsaIds.isEmpty()) {
+            // ensure ids are uppercase and unique
+            List<String> careUnitHsaIdsUpperCase = new ArrayList<String>();
+            for (String careUnitHsaIdUnknownCase : careUnitHsaIds) {
+                if (StringUtils.isNotEmpty(careUnitHsaIdUnknownCase)) {
+                    careUnitHsaIdsUpperCase.add(careUnitHsaIdUnknownCase.toUpperCase());
+                }
+            }
+            Set<String> uniqueCareUnitHsaIdUpperCase = new LinkedHashSet<String>(careUnitHsaIdsUpperCase);
+            careUnitHsaIds = new ArrayList<String>(uniqueCareUnitHsaIdUpperCase);
+            if (log.isDebugEnabled()) {
+                log.debug("Storing {} careUnitHsaIds from request", careUnitHsaIds.size());
+                for (String careUnitHsaId : careUnitHsaIds) {
+                    log.info(careUnitHsaId);
+                }
+            }
+            message.setInvocationProperty(CAREUNITHSAIDS, careUnitHsaIds);
+        }
+    }
+
+    
+    @SuppressWarnings("unchecked")
+    public static List<String> retrieveCareUnitHsaIdsInvocationProperties(MuleMessage message, Logger log) {
+        
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        
+        Object o = message.getInvocationProperty(CAREUNITHSAIDS);
+        if (o != null) {
+            try {
+                careUnitHsaIds = (List<String>)o;
+            } catch (ClassCastException c) {
+                throw new RuntimeException("invocation parameter careUnitHsaIds - expecting List<String>, received " + o.getClass().getName());
+            }
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieved {} values for invocation property {}", careUnitHsaIds.size(), CAREUNITHSAIDS);
+            for (String careUnitHsaId : careUnitHsaIds) {
+                log.debug(careUnitHsaId);
+            }
+        }
+        
+        return careUnitHsaIds;
+    }
+
+    
+    /**
+     * Create a 13606 request containing mandatory elements hsa_id, transaction_id, version
+     */
+    public static <T> RIV13606REQUESTEHREXTRACTRequestType requestType(
+            final T rivRequestType, final CD meaning, final String messageId, final Object producerHsaId) {
+        
         final RIV13606REQUESTEHREXTRACTRequestType request = new RIV13606REQUESTEHREXTRACTRequestType();
         final Request mapperRequest = XMLBeanMapper.getInstance().map(rivRequestType, Request.class);
 
@@ -607,34 +729,19 @@ public final class EHRUtil {
         request.setSubjectOfCareId(iiType(mapperRequest.getPatientId()));
         request.setTimePeriod(IVLTSType(mapperRequest.getTimePeriod()));
 
-        /**
-         * HSAId is mandatory in Svarstjansten. Put LogicalAddress if no specific careUnitHSAId was specified.
-         */
-
+        // hsa_id
         final ParameterType hsaId = new ParameterType();
         hsaId.setName(stType("hsa_id"));
-
-        hsaId.setValue(stType(logicalAddress.toString()));
-
-        // sometimes careUnitHSAId, sometimes careUnitHSAid
-        if (mapperRequest.getCareUnitHSAId().size() + mapperRequest.getCareUnitHSAid().size() > 1) {
-            throw new IllegalArgumentException("Only one careUnitHSAId/careUnitHSAid element can be handled");
-
-        } else if (mapperRequest.getCareUnitHSAId().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAId().get(0))) {
-            hsaId.setValue(stType(mapperRequest.getCareUnitHSAId().get(0)));
-
-        } else if (mapperRequest.getCareUnitHSAid().size() == 1 && !StringUtils.isEmpty(mapperRequest.getCareUnitHSAid().get(0))) {
-            hsaId.setValue(stType(mapperRequest.getCareUnitHSAid().get(0)));
-        }
-
+        hsaId.setValue(stType(producerHsaId.toString()));
         request.getParameters().add(hsaId);
 
-        // Create tansaction_id param
+        // transaction_id
         final ParameterType transactionId = new ParameterType();
         transactionId.setName(stType("transaction_id"));
         transactionId.setValue(stType(messageId));
-
         request.getParameters().add(transactionId);
+        
+        // version
         request.getParameters().add(versionParameter);
 
         return request;

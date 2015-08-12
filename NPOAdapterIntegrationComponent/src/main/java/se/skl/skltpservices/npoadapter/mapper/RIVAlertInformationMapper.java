@@ -56,7 +56,7 @@ public class RIVAlertInformationMapper extends AlertInformationMapper {
 		try {
 			final GetEhrExtractResponseType ehrResp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 			final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrResp);
-			final GetAlertInformationResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, message.getUniqueId());
+			final GetAlertInformationResponseType responseType = mapResponseType(riv13606REQUESTEHREXTRACTResponseType, message);
 			message.setPayload(marshal(responseType));
 			return message;
 		} catch (Exception err) {

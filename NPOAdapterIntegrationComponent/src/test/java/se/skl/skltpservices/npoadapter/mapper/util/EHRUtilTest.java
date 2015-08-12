@@ -19,36 +19,64 @@
  */
 package se.skl.skltpservices.npoadapter.mapper.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.UUID;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.junit.Test;
+import org.mule.api.MuleMessage;
+import org.slf4j.LoggerFactory;
 
 import riv.clinicalprocess.healthcond.description._2.DatePeriodType;
 import riv.clinicalprocess.healthcond.description._2.PersonIdType;
 import riv.clinicalprocess.healthcond.description._2.ResultType;
 import riv.clinicalprocess.healthcond.description.enums._2.ResultCodeEnum;
+import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisType;
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.EN;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.ENXP;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.PERSON;
+import se.rivta.en13606.ehrextract.v11.ParameterType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailType;
+import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
+import se.rivta.en13606.ehrextract.v11.SECTION;
+import se.rivta.en13606.ehrextract.v11.SOFTWAREORDEVICE;
+import se.rivta.en13606.ehrextract.v11.ST;
+import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 public class EHRUtilTest {
-	
-	private static final String TEST_CODE_SYSTEM = "1.2.752.129.2.2.2.1";
-	private static final String TEST_CODE = "voo";
-	
+    
 	private static final String TEST_VALUE_1 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_2 = UUID.randomUUID().toString();
 	private static final String TEST_VALUE_3 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_4 = UUID.randomUUID().toString();
-	private static final String TEST_VALUE_5 = UUID.randomUUID().toString();
 	
 	private static final int TEST_INT_VALUE_1 = 500;
 
@@ -186,38 +214,25 @@ public class EHRUtilTest {
 
     //
     private GetDiagnosisType createDiagnosisTestRequest() {
-        GetDiagnosisType req = new GetDiagnosisType();
-        req.setPatientId(new PersonIdType());
-        req.getPatientId().setId("PatientIdUnitTest");
-        req.getPatientId().setType("PatientTypeUnitTest");
-        req.setSourceSystemHSAId("SourceSystemHSAUnitTest");
-        req.setTimePeriod(new DatePeriodType());
-        req.getTimePeriod().setEnd("EndUnitTest");
-        req.getTimePeriod().setStart("StartUnitTest");
-        req.getCareUnitHSAId().add("CareUnitHSAIdUnitTest");
-        return req;
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testRequestWithTooManyHSAId() throws MapperException {
-        final CD purpose = createCD("codeUnitTest");
-        purpose.setCodeSystem("codeSystemUnitTest");
-
-        final GetDiagnosisType req = createDiagnosisTestRequest();
-
-        req.getCareUnitHSAId().add("anotherCareUnitHSAIdUnitTest");
-        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
+        GetDiagnosisType requestRivta = new GetDiagnosisType();
+        requestRivta.setPatientId(new PersonIdType());
+        requestRivta.getPatientId().setId("PatientIdUnitTest");
+        requestRivta.getPatientId().setType("PatientTypeUnitTest");
+        requestRivta.setSourceSystemHSAId("SourceSystemHSAUnitTest");
+        requestRivta.setTimePeriod(new DatePeriodType());
+        requestRivta.getTimePeriod().setEnd("EndUnitTest");
+        requestRivta.getTimePeriod().setStart("StartUnitTest");
+        requestRivta.getCareUnitHSAId().add("CareUnitHSAIdUnitTest");
+        return requestRivta;
     }
 
     @Test
-    public void testRequestWithNoneHSAId() throws MapperException {
+    public void testRequestWithNoCareUnitHsaId() throws MapperException {
         final CD purpose = createCD("codeUnitTest");
         purpose.setCodeSystem("codeSystemUnitTest");
-
-
         final GetDiagnosisType req = createDiagnosisTestRequest();
         req.getCareUnitHSAId().clear();
-        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
+        final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "producerHsaId");
         assertEquals(3, reqOut.getParameters().size());
     }
 
@@ -226,25 +241,32 @@ public class EHRUtilTest {
         final CD purpose = createCD("codeUnitTest");
         purpose.setCodeSystem("codeSystemUnitTest");
 
-        final GetDiagnosisType req = createDiagnosisTestRequest();
+        final GetDiagnosisType requestRivta = createDiagnosisTestRequest();
 
-		final RIV13606REQUESTEHREXTRACTRequestType reqOut = EHRUtil.requestType(req, purpose, "id", "logicalAddress");
+		final RIV13606REQUESTEHREXTRACTRequestType request13606 = EHRUtil.requestType(requestRivta, purpose, "id", "producerHsaId");
 
-		assertEquals(reqOut.getMeanings().get(0).getCode(), purpose.getCode());
-		assertEquals(reqOut.getMeanings().get(0).getCodeSystem(), purpose.getCodeSystem());
-		assertEquals(reqOut.getSubjectOfCareId().getRoot(), req.getPatientId().getType());
-		assertEquals(reqOut.getSubjectOfCareId().getExtension(), req.getPatientId().getId());
-		assertEquals(reqOut.getTimePeriod().getHigh().getValue(), req.getTimePeriod().getEnd());
-		assertEquals(reqOut.getTimePeriod().getLow().getValue(), req.getTimePeriod().getStart());
-		assertEquals(3, reqOut.getParameters().size());
-		for(ParameterType param : reqOut.getParameters()) {
-			if(param.getName().getValue().equals("version")) {
-				assertEquals("1.1", param.getValue().getValue());
-			} else if(param.getName().getValue().equals("hsa_id")) {
-				assertEquals(req.getCareUnitHSAId().get(0), param.getValue().getValue());
-			} else if(param.getName().getValue().equals("transaction_id")) {
-				assertEquals("id", param.getValue().getValue());
-			}
+		assertEquals(request13606.getMeanings().get(0).getCode(), purpose.getCode());
+		assertEquals(request13606.getMeanings().get(0).getCodeSystem(), purpose.getCodeSystem());
+		assertEquals(request13606.getSubjectOfCareId().getRoot(), requestRivta.getPatientId().getType());
+		assertEquals(request13606.getSubjectOfCareId().getExtension(), requestRivta.getPatientId().getId());
+		assertEquals(request13606.getTimePeriod().getHigh().getValue(), requestRivta.getTimePeriod().getEnd());
+		assertEquals(request13606.getTimePeriod().getLow().getValue(), requestRivta.getTimePeriod().getStart());
+		assertEquals(3, request13606.getParameters().size());
+		
+		for (ParameterType param : request13606.getParameters()) {
+	        switch (param.getName().getValue()) {
+	        case "version":
+                assertEquals("1.1", param.getValue().getValue());
+                break;
+	        case "hsa_id":
+                assertEquals("producerHsaId", param.getValue().getValue());
+                break;
+	        case "transaction_id":
+                assertEquals("id", param.getValue().getValue());
+                break;
+            default:
+                fail("unexpected parameter value " + param.getName().getValue());
+	        }
 		}
 	}
 
@@ -254,6 +276,154 @@ public class EHRUtilTest {
         final XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         final Date date = EHRUtil.toDate(xmlCal);
         assertEquals(cal.getTime(), date);
+    }
+
+    
+    @Test
+    public void storeCareUnitHsaIds() {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+
+        GetAlertInformationType getAlertInformationType = new GetAlertInformationType();
+        getAlertInformationType.getCareUnitHSAId().add("def");
+        getAlertInformationType.getCareUnitHSAId().add("abc");
+        getAlertInformationType.getCareUnitHSAId().add("def");
+        getAlertInformationType.getCareUnitHSAId().add("ABC");
+        getAlertInformationType.getCareUnitHSAId().add("");
+        getAlertInformationType.getCareUnitHSAId().add(null);
+        getAlertInformationType.getCareUnitHSAId().add("def");
+        EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(getAlertInformationType, mockMessage, LoggerFactory.getLogger(EHRUtil.class));
+        
+        List<String> expectedStored = new ArrayList<String>();
+        expectedStored.add("DEF");
+        expectedStored.add("ABC");
+        verify(mockMessage).setInvocationProperty(EHRUtil.CAREUNITHSAIDS, expectedStored);
+    }
+    
+    
+    @Test
+    public void retrieveCareUnitHsaIds() {
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getInvocationProperty(EHRUtil.CAREUNITHSAIDS)).thenReturn(careUnitHsaIds);
+        List<String> retrievedCareUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(mockMessage, LoggerFactory.getLogger(EHRUtil.class));
+        
+        assertTrue(retrievedCareUnitHsaIds == careUnitHsaIds);
+    }
+
+    
+    @Test
+    public void retainWithNullFilterAndMissingHsaId() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension("");
+        
+        assertTrue(EHRUtil.retain(composition13606, null, LoggerFactory.getLogger(EHRUtil.class)));
+    }
+
+    
+
+    @Test
+    public void retainWithNullFilter() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension("abc");
+        
+        assertTrue(EHRUtil.retain(composition13606, null, LoggerFactory.getLogger(EHRUtil.class)));
+    }
+
+    
+    @Test
+    public void retainWithEmptyFilter() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension("abc");
+        
+        assertTrue(EHRUtil.retain(composition13606, new ArrayList<String>(), LoggerFactory.getLogger(EHRUtil.class)));
+    }
+    
+    
+    @Test
+    public void retainWithFilterMatch() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension("abc");
+        
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        
+        assertTrue(EHRUtil.retain(composition13606, careUnitHsaIds, LoggerFactory.getLogger(EHRUtil.class)));
+    }
+    
+
+    @Test
+    public void retainWithFilterNoMatch() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension("zzz");
+        
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        
+        assertFalse(EHRUtil.retain(composition13606, careUnitHsaIds, LoggerFactory.getLogger(EHRUtil.class)));
+    }
+
+    
+    @Test
+    public void retainWithFilterMissingHsaId() {
+        
+        COMPOSITION composition13606 = new COMPOSITION();
+        composition13606.getOtherParticipations().add(new FUNCTIONALROLE());
+        composition13606.getOtherParticipations().get(0).setFunction(new CD());
+        composition13606.getOtherParticipations().get(0).getFunction().setCode(EHRUtil.INFORMATIONSÄGARE);
+        composition13606.getOtherParticipations().get(0).setPerformer(new II());
+        composition13606.getOtherParticipations().get(0).getPerformer().setExtension(null);
+        
+        List<String> careUnitHsaIds = new ArrayList<String>();
+        careUnitHsaIds.add("abc");
+        careUnitHsaIds.add("def");
+        careUnitHsaIds.add("ABC");
+        careUnitHsaIds.add("");
+        careUnitHsaIds.add(null);
+        careUnitHsaIds.add("def");
+        
+        assertFalse(EHRUtil.retain(composition13606, careUnitHsaIds, LoggerFactory.getLogger(EHRUtil.class)));
     }
     
 }
