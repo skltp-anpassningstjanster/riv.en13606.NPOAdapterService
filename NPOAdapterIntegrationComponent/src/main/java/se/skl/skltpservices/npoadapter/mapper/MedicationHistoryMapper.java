@@ -36,25 +36,19 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.DrugArticleType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.GenericsType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessionalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.IIType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordBodyType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.MerchandiseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.PrescriptionReasonType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -136,6 +130,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         try {
             final GetMedicationHistoryType request = unmarshal(payloadAsXMLStreamReader(message));
+            EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
             message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(request, MEANING_LKM_ORD, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
             return message;
         } catch (Exception err) {
@@ -150,7 +145,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     		final RIV13606REQUESTEHREXTRACTResponseType ehrResponse 
     		   = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
     		
-    		GetMedicationHistoryResponseType rivtaResponse = map(ehrResponse, message.getUniqueId());
+    		GetMedicationHistoryResponseType rivtaResponse = mapResponse(ehrResponse, message);
     		
             message.setPayload(marshal(rivtaResponse));
             return message;
@@ -166,27 +161,27 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
      * @param ehrExtractList the EHR_EXTRACT XML Java bean.
      * @return GetMedicationHistoryResponseType response type
      */
-    protected GetMedicationHistoryResponseType map(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, String uniqueId) {
-
+    protected GetMedicationHistoryResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, MuleMessage message) {
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         log.debug("list of EHREXTRACT - " + ehrExtractList.size());
-        GetMedicationHistoryResponseType responseType = mapEhrExtract(ehrExtractList);
-        
-        responseType.setResult(EHRUtil.resultType(uniqueId, ehrResponse.getResponseDetail(), ResultType.class));
-        
+        GetMedicationHistoryResponseType responseType = mapEhrExtract(ehrExtractList, message);
+        responseType.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResponse.getResponseDetail(), ResultType.class));
         return responseType;
     }
     
     
-    protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList) {
+    protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
         GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if (!ehrExtractList.isEmpty()) {
+            List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
             for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
-                final MedicationMedicalRecordType medicationMedicalRecordType = new MedicationMedicalRecordType();
-                medicationMedicalRecordType.setMedicationMedicalRecordHeader(mapHeader(ehrExtract, i));
-                medicationMedicalRecordType.setMedicationMedicalRecordBody(mapBody(ehrExtract, i));
-                responseType.getMedicationMedicalRecord().add(medicationMedicalRecordType);
+                if (EHRUtil.retain(ehrExtract.getAllCompositions().get(i), careUnitHsaIds, log)) {
+                    final MedicationMedicalRecordType medicationMedicalRecordType = new MedicationMedicalRecordType();
+                    medicationMedicalRecordType.setMedicationMedicalRecordHeader(mapHeader(ehrExtract, i));
+                    medicationMedicalRecordType.setMedicationMedicalRecordBody(mapBody(ehrExtract, i));
+                    responseType.getMedicationMedicalRecord().add(medicationMedicalRecordType);
+                }
             }
         }
         return responseType;

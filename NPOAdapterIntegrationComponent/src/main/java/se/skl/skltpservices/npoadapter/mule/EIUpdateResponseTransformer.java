@@ -39,6 +39,8 @@ public class EIUpdateResponseTransformer extends AbstractMessageTransformer {
     @Override
     public Object transformMessage(MuleMessage message, String outputEncoding) {
 
+        log.debug(message.getCorrelationId());
+        
         Boolean result = Boolean.FALSE;
         
         try {

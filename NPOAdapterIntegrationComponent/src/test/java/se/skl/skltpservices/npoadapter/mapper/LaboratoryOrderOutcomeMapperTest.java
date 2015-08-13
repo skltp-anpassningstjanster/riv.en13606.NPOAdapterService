@@ -20,6 +20,8 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
@@ -28,6 +30,7 @@ import javax.xml.bind.JAXBException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.GetLaboratoryOrderOutcomeResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
@@ -52,7 +55,9 @@ public class LaboratoryOrderOutcomeMapperTest {
 	
 	@Test
 	public void testMapResponseType() throws Exception {
-		final GetLaboratoryOrderOutcomeResponseType type = mapper.mapResponseType(ehrResp, TEST_UNIQUE_ID);
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
+		final GetLaboratoryOrderOutcomeResponseType type = mapper.mapResponse(ehrResp, mockMessage);
 		assertNotNull(type.getResult());
 	}
 	

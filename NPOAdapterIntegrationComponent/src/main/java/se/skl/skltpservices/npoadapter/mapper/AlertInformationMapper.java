@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.util.List;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
@@ -44,7 +46,18 @@ import riv.clinicalprocess.healthcond.description._2.UnstructuredAlertInformatio
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationResponseType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.GetAlertInformationType;
 import riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.CLUSTER;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.II;
+import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.LINK;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
@@ -115,9 +128,10 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	@Override
 	public MuleMessage mapRequest(MuleMessage message) throws MapperException {
 		try {
-			final GetAlertInformationType req = unmarshal(payloadAsXMLStreamReader(message));
-			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(EHRUtil.requestType(req, MEANING_UPP, message.getUniqueId(),
-					message.getInvocationProperty("route-logical-address"))));
+			final GetAlertInformationType request = unmarshal(payloadAsXMLStreamReader(message));
+			EHRUtil.storeCareUnitHsaIdsAsInvocationProperties(request, message, log);
+			message.setPayload(riv13606REQUESTEHREXTRACTRequestType(
+			        EHRUtil.requestType(request, MEANING_UPP, message.getUniqueId(), message.getInvocationProperty("route-logical-address"))));
 			return message;
 		} catch (Exception err) {
 			throw new MapperException("Error when mapping request", err, Ehr13606AdapterError.MAPREQUEST);
@@ -128,8 +142,8 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 	public MuleMessage mapResponse(MuleMessage message) throws MapperException {
 		try {
 			final RIV13606REQUESTEHREXTRACTResponseType ehrResp = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-			final GetAlertInformationResponseType resp = mapResponseType(ehrResp, message.getUniqueId());
-			message.setPayload(marshal(resp));
+			final GetAlertInformationResponseType response = mapResponse(ehrResp, message);
+			message.setPayload(marshal(response));
 			return message;
 		} catch (Exception err) {
 			throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
@@ -149,38 +163,44 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 		}
 	}
 	
+	
 	/**
      * Create response.
-	 * Collects organisation and healthcare-professional into maps with HSAId as key.
-	 * So other functions don't need to iterate over document each time.
 	 * @param ehrResp response to be loaded into soap-payload.
 	 * @param uniqueId mule-message uniqueId.
 	 * @return a alertinformation response.
 	 */
-	protected GetAlertInformationResponseType mapResponseType(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, final String uniqueId) {
-		final GetAlertInformationResponseType resp = new GetAlertInformationResponseType();
+	protected GetAlertInformationResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+		final GetAlertInformationResponseType response = new GetAlertInformationResponseType();
 		
-		resp.setResult(EHRUtil.resultType(uniqueId, ehrResp.getResponseDetail(), ResultType.class));
-		if(ehrResp.getEhrExtract().isEmpty()) {
-			return resp;
+		response.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
+		if (ehrResp.getEhrExtract().isEmpty()) {
+			return response;
 		}
 				
-		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
-		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
+		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
+		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+		
+		List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
 		/**
 		 * TODO: This might need to be change to be able to handle references to other UPP-objects.
 		 */
-		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
-			final AlertInformationType type = new AlertInformationType();
-			type.setAlertInformationHeader(EHRUtil.patientSummaryHeader(comp, sharedHeaderExtract, null, PatientSummaryHeaderType.class));
-			type.setAlertInformationBody(mapBodyType(comp));
-			resp.getAlertInformation().add(type);
+		for (COMPOSITION composition13606 : ehrExtract.getAllCompositions()) {
+		    
+		    if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
+    			final AlertInformationType alertInformation = new AlertInformationType();
+    			
+    			alertInformation.setAlertInformationHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, null, PatientSummaryHeaderType.class));
+                alertInformation.setAlertInformationBody(mapBodyType(composition13606));
+                response.getAlertInformation().add(alertInformation);
+		    }
 		}
-		
-		return resp;
+		return response;
 	}
-	/**
+	
+
+    /**
 	 * Maps AlertInformationBodyType per composition.
 	 * @param comp, entity from all_compositions.
 	 * @return AlertInformationBodyType-element JAXB entity.

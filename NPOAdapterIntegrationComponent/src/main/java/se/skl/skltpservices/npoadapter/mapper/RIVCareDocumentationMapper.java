@@ -56,7 +56,7 @@ public class RIVCareDocumentationMapper extends CareDocumentationMapper {
 		try {
 			final GetEhrExtractResponseType resp = ehrExtractResponseType(payloadAsXMLStreamReader(message));
 	        final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(resp);
-			final GetCareDocumentationResponseType responseType = mapResponseType(message.getUniqueId(), riv13606REQUESTEHREXTRACTResponseType);
+			final GetCareDocumentationResponseType responseType = mapResponse(riv13606REQUESTEHREXTRACTResponseType, message);
 			message.setPayload(marshal(responseType));
             return message;
 		} catch (Exception err) {

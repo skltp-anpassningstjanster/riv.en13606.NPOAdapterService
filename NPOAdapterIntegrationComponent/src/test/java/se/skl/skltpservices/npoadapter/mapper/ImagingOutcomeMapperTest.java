@@ -22,6 +22,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.Reader;
@@ -78,7 +79,9 @@ public class ImagingOutcomeMapperTest {
 	
     @Test
     public void testMapFromEhrToImagingOutcome() throws JAXBException {
-        GetImagingOutcomeResponseType responseType = mapper.mapResponseType(ehrResp,"uniqueId");
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
+        GetImagingOutcomeResponseType responseType = mapper.mapResponse(ehrResp, mockMessage);
         assertNotNull(responseType);
 
         dump(responseType);
