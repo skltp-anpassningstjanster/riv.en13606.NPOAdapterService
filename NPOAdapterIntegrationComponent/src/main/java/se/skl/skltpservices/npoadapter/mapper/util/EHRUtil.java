@@ -646,7 +646,7 @@ public final class EHRUtil {
     /**
      * If the request contains a list of care units, store the values as an invocation parameter list.
      * 
-     * Note the 'i' is sometimes lower case, sometimes upper case.
+     * Note the 'i' is sometimes lower case (CareDocumentation, ReferralOutcome), otherwise upper case.
      */
     public static <T> void storeCareUnitHsaIdsAsInvocationProperties(final T rivRequestType, MuleMessage message, Logger log) {
         
