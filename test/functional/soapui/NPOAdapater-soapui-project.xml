@@ -24567,7 +24567,46 @@ ISO 2008  All rights reserved
          </urn1:patientId>
       </urn1:GetMedicationHistory>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetCareContactsResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21}GetCareContactsResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl"><con:part><con:url>http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetCareContactsInteraction" targetNamespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsInitiator:2" xmlns:tjsr="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 2"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:33001/npoadapter/getmedicationhistory/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2" xmlns:urn2="urn:riv:clinicalprocess:activityprescription:actoutcome:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetMedicationHistory>
+         <!--Zero or more repetitions:-->
+         <urn1:careUnitHSAId>?</urn1:careUnitHSAId>
+         <!--Zero or more repetitions:-->
+         <urn1:careGiverHSAId>?</urn1:careGiverHSAId>
+         <urn1:patientId>
+            <urn2:id>?</urn2:id>
+            <urn2:type>?</urn2:type>
+            <!--You may enter ANY elements at this point-->
+         </urn1:patientId>
+         <!--Optional:-->
+         <urn1:datePeriod>
+            <!--Optional:-->
+            <urn2:start>?</urn2:start>
+            <!--Optional:-->
+            <urn2:end>?</urn2:end>
+            <!--You may enter ANY elements at this point-->
+         </urn1:datePeriod>
+         <!--Optional:-->
+         <urn1:sourceSystemHSAId>?</urn1:sourceSystemHSAId>
+         <!--Zero or more repetitions:-->
+         <urn1:careContactId>?</urn1:careContactId>
+         <!--Optional:-->
+         <urn1:prescriptionChainId>
+            <urn2:root>?</urn2:root>
+            <!--Optional:-->
+            <urn2:extension>?</urn2:extension>
+            <!--You may enter ANY elements at this point-->
+         </urn1:prescriptionChainId>
+         <!--Optional:-->
+         <urn1:prescriptionStatus>?</urn1:prescriptionStatus>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetMedicationHistory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetCareContactsResponderBinding" type="wsdl" bindingName="{urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21}GetCareContactsResponderBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl"><con:part><con:url>http://localhost:33001/npoadapter/getcarecontacts/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetCareContactsInteraction" targetNamespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tjsi="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsInitiator:2" xmlns:tjsr="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" xmlns:tns="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xs:schema targetNamespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21">
       <xs:import namespace="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:2" schemaLocation="http://localhost:33001/npoadapter/getcarecontacts/v2?xsd=GetCareContactsResponder_2.0.xsd"/>
@@ -40248,6 +40287,10 @@ ISO 2008  All rights reserved
 	       <urn2:id>191212121212</urn2:id>
 	       <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
 	    </urn1:patientId>
+         <urn1:timePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:timePeriod>
       </urn1:GetAlertInformation>
    </soapenv:Body>
 </soapenv:Envelope>
@@ -40272,6 +40315,10 @@ ISO 2008  All rights reserved
 	       <urn2:id>191212121212</urn2:id>
 	       <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
 	    </urn1:patientId>
+         <urn1:timePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:timePeriod>
 	 </urn1:GetCareContacts>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="careContacts"><con:configuration><path>count(//*:GetCareContactsResponse/*:careContact)</path><content>4</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:logistics:logistics:GetCareContactsResponder:3:GetCareContacts"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetCareDocumentation"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="GetCareDocumentation" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getcaredocumentation/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
@@ -40291,6 +40338,10 @@ ISO 2008  All rights reserved
             <urn2:id>191212121212</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
+         <urn1:timePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:timePeriod>
       </urn1:GetCareDocumentation>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="careDocumentation"><con:configuration><path>count(//*:GetCareDocumentationResponse/*:careDocumentation)</path><content>3</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetDiagnosis"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="GetDiagnosis" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getdiagnosis/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2" xmlns:urn2="urn:riv:clinicalprocess:healthcond:description:2">
@@ -40307,9 +40358,13 @@ ISO 2008  All rights reserved
          <urn1:careUnitHSAId>ENQUIRY-VE-1</urn1:careUnitHSAId>
          <urn1:careUnitHSAId>jjjkkklll</urn1:careUnitHSAId>         
          <urn1:patientId>
-	            <urn2:id>191212121212</urn2:id>
-	            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
-	         </urn1:patientId>
+	       <urn2:id>191212121212</urn2:id>
+	       <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
+         </urn1:patientId>
+         <urn1:timePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:timePeriod>
       </urn1:GetDiagnosis>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="diagnosis"><con:configuration><path>count(//*:GetDiagnosisResponse/*:diagnosis)</path><content>2</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetImagingOutcome"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetImagingOutcomeResponderBinding</con:interface><con:operation>GetImagingOutcome</con:operation><con:request name="GetImagingOutcome" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getimagingoutcome/v1</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -40332,6 +40387,10 @@ ISO 2008  All rights reserved
 	       <urn2:id>191212121212</urn2:id>
 	       <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
+         <urn1:datePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:datePeriod>
       </urn1:GetImagingOutcome>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="imagingOutcome"><con:configuration><path>count(//*:GetImagingOutcomeResponse/*:imagingOutcome)</path><content>4</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcomeResponder:1:GetImagingOutcome"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetLaboratoryOrderOutcome"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetLaboratoryOrderOutcomeResponderBinding</con:interface><con:operation>GetLaboratoryOrderOutcome</con:operation><con:request name="GetLaboratoryOrderOutcome" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getlaboratoryorderoutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
@@ -40351,6 +40410,10 @@ ISO 2008  All rights reserved
             <urn2:id>1911212121212</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
+         <urn1:timePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:timePeriod>
       </urn1:GetLaboratoryOrderOutcome>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="laboratoryOrderOutcome"><con:configuration><path>count(//*:GetLaboratoryOrderOutcomeResponse/*:laboratoryOrderOutcome)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcomeResponder:3:GetLaboratoryOrderOutcome"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetMedicationHistory"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="GetMedicationHistory" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getmedicationhistory/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2" xmlns:urn2="urn:riv:clinicalprocess:activityprescription:actoutcome:2">
@@ -40370,6 +40433,10 @@ ISO 2008  All rights reserved
             <urn2:id>199901011122</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
+         <urn1:datePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:datePeriod>
       </urn1:GetMedicationHistory>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="medicationMedicalRecord"><con:configuration><path>count(//*:GetMedicationHistoryResponse/*:medicationMedicalRecord) > 2</path><content>true</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="GetReferralOutcome"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="GetReferralOutcome" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/getreferraloutcome/v3</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3" xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
@@ -40389,6 +40456,10 @@ ISO 2008  All rights reserved
             <urn2:id>199901011122</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
+         <urn1:datePeriod>
+            <urn2:start>20150430</urn2:start>
+            <urn2:end>20150531</urn2:end>
+         </urn1:datePeriod>
       </urn1:GetReferralOutcome>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response"/><con:assertion type="XPath Match" name="referralOutcome"><con:configuration><path>count(//*:GetReferralOutcomeResponse/*:referralOutcome)</path><content>1</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3:GetReferralOutcome"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="NotifyAlive"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>NPOSoap</con:interface><con:operation>NotifyAlive</con:operation><con:request name="NotifyAlive" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#protocolHostAndPort}/npoadapter/npo/v1</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
@@ -41354,7 +41425,7 @@ xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
    <soapenv:Body>
       <urn1:GetDiagnosis>
          <urn1:patientId>
-	            <urn2:id>191212121212</urn2:id>
+	            <urn2:id>19121212121212</urn2:id>
 	            <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
 	         </urn1:patientId>
       </urn1:GetDiagnosis>
@@ -41381,7 +41452,7 @@ xmlns:urn2="urn:riv:clinicalprocess:healthcond:actoutcome:3">
    <soapenv:Body>
       <urn1:GetLaboratoryOrderOutcome>
          <urn1:patientId>
-            <urn2:id>1911212121212</urn2:id>
+            <urn2:id>19121212121212</urn2:id>
             <urn2:type>1.2.752.129.2.1.3.1</urn2:type>
          </urn1:patientId>
       </urn1:GetLaboratoryOrderOutcome>

@@ -23,6 +23,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.Reader;
@@ -38,6 +39,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mule.api.MuleMessage;
 
@@ -114,4 +116,50 @@ public class ImagingOutcomeMapperTest {
     	    fail(e.getLocalizedMessage());
     	}
     }
+    
+    
+    @Test
+    public void datePeriod() {
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getInvocationProperty("route-logical-address")).thenReturn("abc");
+        
+        String getImagingOutcomeRequestXml 
+        = " <urn1:GetImagingOutcome xmlns:urn1=\"urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcomeResponder:1\" " +
+          "                         xmlns:urn2=\"urn:riv:clinicalprocess:healthcond:actoutcome:3\">  "+ 
+          "  <urn1:patientId>                             " +
+          "   <urn2:id>191212121212</urn2:id>             " +
+          "   <urn2:type>1.2.752.129.2.1.3.1</urn2:type>  " +
+          "  </urn1:patientId>                            " +
+          "  <urn1:datePeriod>                            " +
+          "   <urn2:start>20150430</urn2:start>           " +
+          "   <urn2:end>20150531</urn2:end>               " +
+          "  </urn1:datePeriod>                           " +
+          " </urn1:GetImagingOutcome>                     ";
+        
+        Reader stringReader = new StringReader(getImagingOutcomeRequestXml);
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        try {
+            try {
+                XMLStreamReader sr = factory.createXMLStreamReader(stringReader);
+                when(mockMessage.getPayload()).thenReturn(sr);
+                @SuppressWarnings("unused")
+                MuleMessage ignoredInMockitoContext = mapper.mapRequest(mockMessage);
+
+                ArgumentCaptor<Object> argument = ArgumentCaptor.forClass(Object.class);
+                verify(mockMessage).setPayload(argument.capture());
+                
+                String payload13606 = (String)argument.getValue();             
+                
+//              <?xml version="1.0" encoding="UTF-8" standalone="yes"?><RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1"><subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3.1"/><meanings codeSystem="1.2.752.129.2.2.2.1" code="und-bdi"/><parameters><name value="hsa_id"/><value value="abc"/></parameters><parameters><name value="transaction_id"/></parameters><parameters><name value="version"/><value value="1.1"/></parameters></RIV13606REQUEST_EHR_EXTRACT_request>
+                
+                assertTrue(payload13606.contains("<time_period>"));                
+                
+            } catch (XMLStreamException xe) {
+                fail (xe.getLocalizedMessage());
+            }
+        } catch (MapperException me) {
+            fail(me.getLocalizedMessage());
+        }
+    }
+    
 }

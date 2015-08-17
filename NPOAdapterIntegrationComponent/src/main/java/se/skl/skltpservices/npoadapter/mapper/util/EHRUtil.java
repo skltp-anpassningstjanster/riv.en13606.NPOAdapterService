@@ -74,7 +74,6 @@ import se.skl.skltpservices.npoadapter.mapper.XMLBeanMapper;
  * Utility class to create and map common EHR types.
  * 
  * @author torbjorncla
- *
  */
 public final class EHRUtil {
 
@@ -89,21 +88,20 @@ public final class EHRUtil {
         versionParameter.setValue(stType("1.1"));
     }
 
-    private static ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+    private static ThreadLocal<SimpleDateFormat> yyyyMMddFormatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
         public SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyyMMddHHmmss");
+            return new SimpleDateFormat("yyyyMMdd");
         }
     };
 
-    //
     public static String formatTimestamp(Date timestamp) {
-        return formatter.get().format(timestamp);
+        return yyyyMMddFormatter.get().format(timestamp);
     }
-
     //
-    public static Date parseTimestamp(String timestamp) throws ParseException {
-        return formatter.get().parse(timestamp);
+    
+    public static Date parseTimePeriod(String dateString) throws ParseException {
+        return yyyyMMddFormatter.get().parse(dateString);
     }
 
     public static String getElementTextValue(final ELEMENT e) {
@@ -898,6 +896,16 @@ public final class EHRUtil {
 
         public void setTimePeriod(DatePeriod timePeriod) {
             this.timePeriod = timePeriod;
+        }
+        
+        // ImagingOutcome, MedicationHistory, ReferralOutcome
+        
+        public DatePeriod getDatePeriod() {
+            return timePeriod;
+        }
+        
+        public void setDatePeriod(DatePeriod datePeriod) {
+            timePeriod = datePeriod;
         }
 
         // RIV-TA : GetAlertInformation, GetCareContacts, GetDiagnosis, GetImagingOutcome, GetLaboratoryOrderOutcome, GetMedicationHistory
