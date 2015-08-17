@@ -35,8 +35,8 @@ public final class IntegrationTestDataUtil {
 	private static final String SOURCE_SYSTEM_HSA_ID = UUID.randomUUID().toString();
 	private static final String PERSON_ID = "191212121212";
 	private static final String PERSON_ID_TYPE = "1.2.752.129.2.1.3";
-	private static final String TIME_START = "20100101000000";
-	private static final String TIME_END = "21160101235959";
+	private static final String TIME_START = "20100101";
+	private static final String TIME_END = "21160101";
 	
 	public static final int TRIGGER_INFO_MESSAGE = 0;
 	public static final int TRIGGER_WARNING_MESSAGE = 1;
