@@ -28,20 +28,20 @@ import java.util.List;
 public final class EHRUtil {
 
 
-    private static ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+    private static ThreadLocal<SimpleDateFormat> yyyyMMddFormatter = new ThreadLocal<SimpleDateFormat>() {
         @Override
         public SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyyMMddHHmmss");
+            return new SimpleDateFormat("yyyyMMdd");
         }
     };
 
     public static String formatTimestamp(Date timestamp) {
-        return formatter.get().format(timestamp);
+        return yyyyMMddFormatter.get().format(timestamp);
     }
     //
     
-    public static Date parseTimestamp(String timestamp) throws ParseException {
-        return formatter.get().parse(timestamp);
+    public static Date parseTimePeriod(String dateString) throws ParseException {
+        return yyyyMMddFormatter.get().parse(dateString);
     }
 
     public static class Request {

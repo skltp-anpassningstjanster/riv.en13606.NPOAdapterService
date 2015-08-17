@@ -30,8 +30,6 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.xml.messaging.saaj.packaging.mime.internet.ParseException;
-
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -49,8 +47,8 @@ import se.skl.skltpservices.npoadapter.test.Util;
  * Test stub always returning a fix response.
  */
 @WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service",
-        endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType",
-        portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
+      endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType",
+               portName = "RIV13606REQUEST_EHR_EXTRACT_Port",
         targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 	
@@ -65,12 +63,12 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     private static final String UND_KON = "und-kon";
     private static final String UND_BDI = "und-bdi";
     
-    //Public accessible for testing.
-    public static final String NOT_IMPLEMENTED_YET_TEXT = "This function is not yet implemented";
+    // Public accessible for testing.
+    public static final String NOT_IMPLEMENTED_YET_TEXT    = "This function is not yet implemented";
     public static final String INTEGRATION_TEST_ERROR_TEXT = "This is an error message";
-    public static final String PATIENT_ID_TRIGGER_ERROR = "triggerError";
-    public static final String PATIENT_ID_TRIGGER_WARNING = "triggerWarning";
-    public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
+    public static final String PATIENT_ID_TRIGGER_ERROR    = "triggerError";
+    public static final String PATIENT_ID_TRIGGER_WARNING  = "triggerWarning";
+    public static final String PATIENT_ID_TRIGGER_INFO     = "triggerInfo";
 
     static Map<String, EHREXTRACT> responseCache = Collections.synchronizedMap(new HashMap<String, EHREXTRACT>());
         
@@ -124,7 +122,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             Thread.sleep(delayMilliseconds);
         }
         
-    	//See if error flow is triggered.
+    	// See if error flow is triggered.
     	switch(request.getSubjectOfCareId().getExtension()) {
     	case PATIENT_ID_TRIGGER_ERROR:
     		return createAlternativeResponse(ResponseDetailTypeCodes.E, INTEGRATION_TEST_ERROR_TEXT);
@@ -142,8 +140,13 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             return responseType;
         }
 
-        if (request.getTimePeriod() != null) {
-            final Date ts = EHRUtil.parseTimestamp(request.getTimePeriod().getLow().getValue());
+        if (request.getTimePeriod() == null) {
+            log.info("received request without timePeriod");
+        } else {
+            log.info("received request timePeriod.low :" + request.getTimePeriod().getLow ().getValue());
+            log.info("received request timePeriod.high:" + request.getTimePeriod().getHigh().getValue());
+            
+            final Date ts = EHRUtil.parseTimePeriod(request.getTimePeriod().getLow().getValue());
             if (ts.after(new Date())) {
                 log.info("Start time after current time, simulate not found and return an empty response...");
                 return responseType;

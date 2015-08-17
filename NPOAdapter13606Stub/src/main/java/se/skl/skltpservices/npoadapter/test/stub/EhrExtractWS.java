@@ -30,8 +30,6 @@ import javax.xml.bind.JAXBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.xml.messaging.saaj.packaging.mime.internet.ParseException;
-
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -143,7 +141,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         }
 
         if (request.getTimePeriod() != null) {
-            final Date ts = EHRUtil.parseTimestamp(request.getTimePeriod().getLow().getValue());
+            final Date ts = EHRUtil.parseTimePeriod(request.getTimePeriod().getLow().getValue());
             if (ts.after(new Date())) {
                 log.info("Start time after current time, simulate not found and return an empty response...");
                 return responseType;

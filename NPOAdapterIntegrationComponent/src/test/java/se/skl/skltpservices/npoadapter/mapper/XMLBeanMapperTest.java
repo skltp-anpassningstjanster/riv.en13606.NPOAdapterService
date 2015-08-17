@@ -57,8 +57,7 @@ public class XMLBeanMapperTest {
             try {
 				Util.dump(this, writer);
 			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			    throw new RuntimeException(e);
 			}
             return writer.toString();
         }
