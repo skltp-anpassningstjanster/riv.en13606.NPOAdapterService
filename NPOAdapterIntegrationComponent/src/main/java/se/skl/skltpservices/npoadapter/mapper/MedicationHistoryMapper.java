@@ -204,10 +204,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
         if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            patient.getAccountableHealthcareProfessional().setAuthorTime("not provided by producer care system");
+            log.error("Unable to populate mandatory field authorTime"); // yyyyMMddHHmmss
+            patient.getAccountableHealthcareProfessional().setAuthorTime(null);
         }
         if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            patient.getLegalAuthenticator().setSignatureTime("not provided by producer care system");
+            log.error("Unable to populate mandatory field signatureTime"); // yyyyMMddHHmmss
+            patient.getLegalAuthenticator().setSignatureTime(null);
         }
         return patient;
     }

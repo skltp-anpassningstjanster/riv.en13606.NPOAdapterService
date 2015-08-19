@@ -421,8 +421,10 @@ public final class EHRUtil {
         return null;
     }
 
-    private static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, final Map<String, ORGANISATION> orgs,
-            final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final AUDITINFO committal) {
+    private static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, 
+                                                                     final Map<String, ORGANISATION> orgs,
+                                                                     final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> healthcareProfessionals, 
+                                                                     final AUDITINFO committal) {
         final HealthcareProfessional resultProfessional = new HealthcareProfessional();
 
         String careGiverHSAId = null;
@@ -464,15 +466,14 @@ public final class EHRUtil {
         }
         resultProfessional.setHealthcareProfessionalHSAId(careUnitHSAId);
 
-        // --- care unit, author time, name, role
-        if (careUnitHSAId != null && hps.containsKey(careUnitHSAId)) {
-            final IDENTIFIEDHEALTHCAREPROFESSIONAL careUnitProfessional = hps.get(careUnitHSAId);
+        resultProfessional.setHealthcareProfessionalCareUnitHSAId(careUnitHSAId);
 
-            resultProfessional.setHealthcareProfessionalCareUnitHSAId(careUnitHSAId);
+        if (committal != null && committal.getTimeCommitted() != null) {
+            resultProfessional.setAuthorTime(committal.getTimeCommitted().getValue());
+        }
 
-            if (committal != null && committal.getTimeCommitted() != null) {
-                resultProfessional.setAuthorTime(committal.getTimeCommitted().getValue());
-            }
+        if (careUnitHSAId != null && healthcareProfessionals.containsKey(careUnitHSAId)) {
+            final IDENTIFIEDHEALTHCAREPROFESSIONAL careUnitProfessional = healthcareProfessionals.get(careUnitHSAId);
 
             if (!careUnitProfessional.getName().isEmpty() && !careUnitProfessional.getName().get(0).getPart().isEmpty()) {
                 resultProfessional.setHealthcareProfessionalName(careUnitProfessional.getName().get(0).getPart().get(0).getValue());
