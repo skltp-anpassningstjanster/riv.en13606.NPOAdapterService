@@ -8,6 +8,6 @@ object GetMedicationHistoryScenario extends {
   val requestFileName = "GetMedicationHistoryRequest.xml"
   val regex1          = "id>192712079550"
   val regex2          = "Body><GetMedicationHistoryResponse"
-  val length          = 13281
+  val length          = 12631
   
 } with AbstractGetRequest

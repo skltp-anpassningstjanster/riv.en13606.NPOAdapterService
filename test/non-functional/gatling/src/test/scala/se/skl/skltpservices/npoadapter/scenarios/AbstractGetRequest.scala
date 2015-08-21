@@ -35,7 +35,7 @@ trait AbstractGetRequest {
   val request = exec((session) => {
                       session("careUnitHSAId").asOption[String] match {
                         case None => {
-                          session.set("careUnitHSAId", "?");
+                          session.set("careUnitHSAId", "");
                         }
                         case _ => {session}
                       }
