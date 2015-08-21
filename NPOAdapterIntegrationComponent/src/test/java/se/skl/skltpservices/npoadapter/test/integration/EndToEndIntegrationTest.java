@@ -25,6 +25,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.apache.cxf.endpoint.Client;
@@ -37,6 +48,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleEvent;
 import org.mule.construct.Flow;
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+import org.xml.sax.SAXException;
 
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -65,29 +78,69 @@ import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCa
 public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
 	// TODO: Collect Endpoints from configuration
+    private static final String ALERT_INFORMATION_ENDPOINT  = "http://localhost:33001/npoadapter/getalertinformation/v2";
+    private static final String CARE_CONTACTS_ENDPOINT      = "http://localhost:33001/npoadapter/getcarecontacts/v2";
 	private static final String CARE_DOCUMENTATION_ENDPOINT = "http://localhost:33001/npoadapter/getcaredocumentation/v2";
-	private static final String CARE_CONTACTS_ENDPOINT      = "http://localhost:33001/npoadapter/getcarecontacts/v2";
 	private static final String DIAGNOSIS_ENDPOINT          = "http://localhost:33001/npoadapter/getdiagnosis/v2";
+    private static final String IMAGING_OUTCOME_ENDPOINT    = "http://localhost:33001/npoadapter/getimagingoutcome/v1";
 	private static final String LABORATORY_ENDPOINT         = "http://localhost:33001/npoadapter/getlaboratoryorderoutcome/v3";
-	private static final String ALERT_INFORMATION_ENDPOINT  = "http://localhost:33001/npoadapter/getalertinformation/v2";
     private static final String MEDICATION_HISTORY_ENDPOINT = "http://localhost:33001/npoadapter/getmedicationhistory/v2";
     private static final String REFERRAL_OUTCOME_ENDPOINT   = "http://localhost:33001/npoadapter/getreferraloutcome/v3";
-    private static final String IMAGING_OUTCOME_ENDPOINT    = "http://localhost:33001/npoadapter/getimagingoutcome/v1";
 	
 	private static final String LOGICAL_ADDRESS_VS_1 = "VS-1";
     private static final String LOGICAL_ADDRESS_VS_2 = "VS-2";
 	private static final String INVALID_LOGICAL_ADDRESS = "XX000000-00";
 	
 	
+    private final GetAlertInformationResponderInterface       getAlertInformationResponderInterface;
 	private final GetCareDocumentationResponderInterface      getCareDocumentationServices;
 	private final GetCareContactsResponderInterface           getCareContactsServices;
 	private final GetDiagnosisResponderInterface              getDiagnosisServices;
 	private final GetLaboratoryOrderOutcomeResponderInterface getLaboratoryOrderOutcomeServices;
-	private final GetAlertInformationResponderInterface       getAlertInformationResponderInterface;
+    private final GetImagingOutcomeResponderInterface         getImagingOutcomeResponderInterface;
     private final GetMedicationHistoryResponderInterface      getMedicationHistoryResponderInterface;
     private final GetReferralOutcomeResponderInterface        getReferralOutcomeResponderInterface;
-    private final GetImagingOutcomeResponderInterface         getImagingOutcomeResponderInterface;
 
+    
+    JaxbUtil jaxbUtil = new JaxbUtil(GetAlertInformationResponseType.class, 
+                                     GetCareContactsResponseType.class, 
+                                     GetCareDocumentationResponseType.class,
+                                     GetDiagnosisResponseType.class,
+                                     GetImagingOutcomeResponseType.class,
+                                     GetLaboratoryOrderOutcomeResponseType.class,
+                                     GetMedicationHistoryResponseType.class,
+                                     GetReferralOutcomeResponseType.class);
+
+    
+    private riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory alertInformationObjectFactory
+    = new riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory();
+    
+    private riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory careContactsObjectFactory
+    = new riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory();
+    
+    @SuppressWarnings("unused")
+    private riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory careDocumentationObjectFactory
+    = new riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory();
+    
+    @SuppressWarnings("unused")
+    private riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory diagnosisObjectFactory
+    = new riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory();
+    
+    @SuppressWarnings("unused")
+    private riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory imagingOutcomeObjectFactory
+    = new riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory();
+    
+    @SuppressWarnings("unused")
+    private riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory laboratoryOrderOutcomeObjectFactory
+    = new riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory();
+    
+    @SuppressWarnings("unused")
+    private riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory medicationHistoryObjectFactory
+    = new riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory();
+    
+    private riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory referralOutcomeObjectFactory
+    = new riv.clinicalprocess.healthcond.actoutcome.getreferraloutcomeresponder._3.ObjectFactory();
+    
     //
     static Object create(JaxWsProxyFactoryBean jaxWs) {
         final HTTPClientPolicy policy = new HTTPClientPolicy();
@@ -152,12 +205,37 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	super.doSetUp();
     }
 
+
+    
+    // AlertInformation
+    
+    @Test
+    public void GetAlertInformationEN13606SuccessTest() {
+        GetAlertInformationResponseType resp = getAlertInformationResponderInterface.getAlertInformation(
+                LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(resp.getAlertInformation().isEmpty());
+    }
+
+    @Test
+    public void GetAlertInformationRIVSuccessTest() {
+        GetAlertInformationResponseType response = getAlertInformationResponderInterface.getAlertInformation(
+                LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(response.getAlertInformation().isEmpty());
+        
+        validateXmlAgainstSchema(alertInformationObjectFactory.createGetAlertInformationResponse(response),
+                                "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
+                                "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
+                                "/interactions/GetAlertInformationInteraction/GetAlertInformationResponder_2.0.xsd");
+    }
+
+    
+    // CareContacts
+    
     @Test
     public void GetCareContactsEN13606SourceSuccessTest() {
 		GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareContact().isEmpty());
     }
-
 
     @Test
     public void GetCareContactsNotFoundTest() {
@@ -167,22 +245,23 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertTrue(resp.getCareContact().isEmpty());
     }
 
-
     @Test
     public void GetEhrCareContactsRIVSourceSuccessTest() {
-        GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
-        assertFalse(resp.getCareContact().isEmpty());
+        GetCareContactsResponseType response = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(response.getCareContact().isEmpty());
+
+        validateXmlAgainstSchema(careContactsObjectFactory.createGetCareContactsResponse(response),
+                "/core_components/clinicalprocess_logistics_logistics_enum_2.0.xsd", 
+                "/core_components/clinicalprocess_logistics_logistics_2.0.xsd",
+                "/interactions/GetCareContactsInteraction/GetCareContactsResponder_2.0.xsd");
     }
+
+    
+    // CareDocumentation
     
     @Test
     public void GetCareDocumentationEN136060SuccessTest() {
 		GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
-		assertFalse(resp.getCareDocumentation().isEmpty());
-    }
-    
-    @Test
-    public void GetCareDocumentationRIVSourceSuccessTest() {
-    	GetCareDocumentationResponseType resp = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
 		assertFalse(resp.getCareDocumentation().isEmpty());
     }
     
@@ -197,6 +276,23 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertNotNull(resp.getResult());
         assertEquals(resp.getResult().getResultCode(), ResultCodeEnum.ERROR);
     }
+
+    @Test
+    public void GetCareDocumentationRIVSourceSuccessTest() {
+        GetCareDocumentationResponseType response = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
+        assertFalse(response.getCareDocumentation().isEmpty());
+
+        /* TODO
+        validateXmlAgainstSchema(careDocumentationObjectFactory.createGetCareDocumentationResponse(response),
+                "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
+                "/core_components/clinicalprocess_healthcond_description_2.1_ext.xsd",
+                "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
+                "/interactions/GetCareDocumentationInteraction/GetCareDocumentationResponder_2.1.xsd");
+        */
+    }
+    
+    
+    // Diagnosis
     
     @Test
     public void GetDiagnosisEN136060SuccessTest() {
@@ -206,10 +302,57 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Test
     public void GetDiagnosisRIVSuccessTest() {
-    	GetDiagnosisResponseType resp = getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetDiagnosisType(IntegrationTestDataUtil.NO_TRIGGER));
-    	assertFalse(resp.getDiagnosis().isEmpty());
+    	GetDiagnosisResponseType response = getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetDiagnosisType(IntegrationTestDataUtil.NO_TRIGGER));
+    	assertFalse(response.getDiagnosis().isEmpty());
+
+    	/* TODO
+        validateXmlAgainstSchema(diagnosisObjectFactory.createGetDiagnosisResponse(response),
+                "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
+                "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
+                "/interactions/GetDiagnosisInteraction/GetDiagnosisResponder_2.0.xsd");
+        */
     }
 
+    
+    // ImagingOutcome
+    
+    @Test
+    public void GetImagingOutcomeEN13606SuccessTest() {
+        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
+        assertTrue (resp.getImagingOutcome().size() == 4);
+        assertEquals("Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", resp.getImagingOutcome().get(0).getImagingOutcomeBody().getResultReport());
+    }
+    
+    @Ignore
+    public void GetImagingOutcomeEN13606Exception() {
+        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        type.setPatientId(null);
+        try{
+            getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
+            fail("Exception expected");
+        } catch (SOAPFaultException me) {
+            assertTrue(me.getMessage().startsWith("Marshalling Error: cvc-complex-type.2.4.a: Invalid content was found"));
+        }
+    }
+    
+    @Test
+    public void GetImagingOutcomeRIVSuccessTest() {
+        GetImagingOutcomeType giot = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
+        GetImagingOutcomeResponseType response = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_2, giot);
+        assertFalse(response.getImagingOutcome().isEmpty());
+
+        /* TODO
+        validateXmlAgainstSchema(imagingOutcomeObjectFactory.createGetImagingOutcomeResponse(response),
+                "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
+         */
+    }
+
+    
+    // LaboratoryOrderOutcome
+    
     @Test
     public void GetLaboratoryOrderOutcomeEN13606SuccessTest() {
     	GetLaboratoryOrderOutcomeResponseType resp =  getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_1, 
@@ -219,26 +362,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Test
     public void GetLaboratoryOrderOutcomeRIVSuccessTest() {
-    	GetLaboratoryOrderOutcomeResponseType resp = getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2,
+    	GetLaboratoryOrderOutcomeResponseType response = getLaboratoryOrderOutcomeServices.getLaboratoryOrderOutcome(LOGICAL_ADDRESS_VS_2,
     			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
-    	assertFalse(resp.getLaboratoryOrderOutcome().isEmpty());
-    }
-    
-    @Test
-    public void GetAlertInformationEN13606SuccessTest() {
-    	GetAlertInformationResponseType resp = getAlertInformationResponderInterface.getAlertInformation(
-    			LOGICAL_ADDRESS_VS_1, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
-    	assertFalse(resp.getAlertInformation().isEmpty());
-    }
+    	assertFalse(response.getLaboratoryOrderOutcome().isEmpty());
 
-    @Test
-    public void GetAlertInformationRIVSuccessTest() {
-    	GetAlertInformationResponseType resp = getAlertInformationResponderInterface.getAlertInformation(
-    			LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
-    	assertFalse(resp.getAlertInformation().isEmpty());
+        /* TODO
+        validateXmlAgainstSchema(laboratoryOrderOutcomeObjectFactory.createGetLaboratoryOrderOutcomeResponse(response),
+                "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.0.xsd");
+         */
     }
     
-    // ---
+
+    // MedicationHistory
 	
     @Test
     public void GetMedicationHistoryEN13606SuccessTest() {
@@ -249,12 +386,20 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Test
     public void GetMedicationHistoryRIVSuccessTest() {
-        GetMedicationHistoryResponseType resp = getMedicationHistoryResponderInterface.getMedicationHistory(
+        GetMedicationHistoryResponseType response = getMedicationHistoryResponderInterface.getMedicationHistory(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
-        assertFalse(resp.getMedicationMedicalRecord().isEmpty());
+        assertFalse(response.getMedicationMedicalRecord().isEmpty());
+
+        /* TODO
+        validateXmlAgainstSchema(medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response),
+                "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
+                "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
+                "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
+         */
     }
     
-    // ---
+
+    // ReferralOutcome
     
     @Ignore
     public void GetReferralOutcomeEN13606SuccessTest() {
@@ -275,40 +420,42 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     @Ignore
     public void GetReferralOutcomeRIVSuccessTest() {
-        GetReferralOutcomeResponseType resp = getReferralOutcomeResponderInterface.getReferralOutcome(
+        GetReferralOutcomeResponseType response = getReferralOutcomeResponderInterface.getReferralOutcome(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
-        assertFalse(resp.getReferralOutcome().isEmpty());
+        assertFalse(response.getReferralOutcome().isEmpty());
+
+        validateXmlAgainstSchema(referralOutcomeObjectFactory.createGetReferralOutcomeResponse(response),
+                "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                "/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeResponder_3.0.xsd");
     }
+
     
     // ---
     
-    @Test
-    public void GetImagingOutcomeEN13606SuccessTest() {
-        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
-        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
-        assertTrue (resp.getImagingOutcome().size() == 4);
-        assertEquals("Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", resp.getImagingOutcome().get(0).getImagingOutcomeBody().getResultReport());
-    }
-    
-    @Ignore
-    public void GetImagingOutcomeEN13606Exception() {
-        GetImagingOutcomeType type = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
-        type.setPatientId(null);
-        try{
-	        getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_1, type);
-	        fail("Exception expected");
-        } catch (SOAPFaultException me) {
-            assertTrue(me.getMessage().startsWith("Marshalling Error: cvc-complex-type.2.4.a: Invalid content was found"));
+    // response type has no XmlRootElement, so we need to pass in a root element to help jaxb with its marshalling
+    private void validateXmlAgainstSchema(Object element, String ... xsds) {
+        
+        String xml = jaxbUtil.marshal(element);
+        logger.debug(xml);
+        List<Source> schemaFiles = new ArrayList<Source>();
+        for (String xsd : xsds) {
+            schemaFiles.add(new StreamSource(getClass().getResourceAsStream(xsd)));
+        }
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = factory.newSchema(schemaFiles.toArray(new StreamSource[schemaFiles.size()]));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(new StringReader(xml)));
+            assertTrue(true);
+        } catch (SAXException | IOException e) {
+            e.printStackTrace();
+            fail();
         }
     }
     
-    @Test
-    public void GetImagingOutcomeRIVSuccessTest() {
-    	GetImagingOutcomeType giot = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
-        GetImagingOutcomeResponseType resp = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_2, giot);
-        assertFalse(resp.getImagingOutcome().isEmpty());
-    }
-
+    
+    
     // ---
     
     @Test
