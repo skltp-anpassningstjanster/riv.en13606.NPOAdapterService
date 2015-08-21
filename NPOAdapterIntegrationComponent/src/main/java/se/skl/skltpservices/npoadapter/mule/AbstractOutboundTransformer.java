@@ -60,7 +60,7 @@ public abstract class AbstractOutboundTransformer extends AbstractMessageTransfo
      * @throws AdapterException when no mapper can be found.
      */
     protected Mapper getMapper(final MuleMessage message) throws RouteException {
-        // check thar routing has been done.
+        // check that routing has been done.
         log.debug("check for route information in message properties");
         if (message.getInvocationProperty(ROUTE_ENDPOINT_URL) == null) {
             throw new RouteException("Unable to find a route to logical address: " + message.getInvocationProperty((ROUTE_LOGICAL_ADDRESS)));

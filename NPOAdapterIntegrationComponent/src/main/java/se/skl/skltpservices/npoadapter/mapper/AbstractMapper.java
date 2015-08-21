@@ -70,7 +70,7 @@ public abstract class AbstractMapper {
     public static final String INFO_UPP         = "upp";
 
     static final String NS_EN_EXTRACT          = "urn:riv13606:v1.1:RIV13606REQUEST_EHR_EXTRACT";
-    static final String NS_RIV_EXTRACT         = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21";
+    public static final String NS_RIV_EXTRACT  = "urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract";
     
     static final String NS_ALERT_2             = "urn:riv:clinicalprocess:healthcond:description:GetAlertInformation:2:rivtabp21";
     static final String NS_CARECONTACTS_2      = "urn:riv:clinicalprocess:logistics:logistics:GetCareContacts:2:rivtabp21";

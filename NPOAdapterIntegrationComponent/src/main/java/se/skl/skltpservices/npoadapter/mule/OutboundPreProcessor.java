@@ -88,7 +88,7 @@ public class OutboundPreProcessor implements MessageProcessor {
         		log.error("Unable to find route to outbound system (source), logical address: \"{}\"", logicalAddress);
         	}
         } catch (Exception err) {
-        	log.error("Unablie to route to outbound system", err);
+        	log.error("Unable to route to outbound system", err);
         }
         return event;
     }
