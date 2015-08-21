@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.skl.skltpservices.npoadapter.mapper.AbstractMapper;
 import skl.tp.vagvalsinfo.v2.HamtaAllaAnropsBehorigheterResponseType;
 import skl.tp.vagvalsinfo.v2.HamtaAllaVirtualiseringarResponseType;
 import skl.tp.vagvalsinfo.v2.SokVagvalsInfoInterface;
@@ -80,7 +81,7 @@ public class SokVagvalWS implements SokVagvalsInfoInterface {
         infoType = new VirtualiseringsInfoType();
         infoType.setReceiverId("VS-2");
         infoType.setRivProfil("RIVTABP21");
-        infoType.setTjansteKontrakt("urn:riv:ehr:patientsummary:GetEhrExtractResponder:1:GetEhrExtract:rivtabp21");
+        infoType.setTjansteKontrakt(AbstractMapper.NS_RIV_EXTRACT);
         infoType.setVirtualiseringsInfoId("ID-2");
         infoType.setAdress("http://localhost:33001/npoadapter/getehrextract/stub");
         infoType.setFromTidpunkt(fromNow(-2));
