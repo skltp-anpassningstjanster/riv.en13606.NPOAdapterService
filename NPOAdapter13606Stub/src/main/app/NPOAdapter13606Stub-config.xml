@@ -15,8 +15,6 @@
         <spring:import resource="classpath:services/ping-for-configuration-service.xml"/>
     </spring:beans>
 
-    <custom-transformer class="org.soitoolkit.commons.mule.log.correlationid.CreateCorrelationIdTransformer" name="create-correlation-id">
-        <spring:property name="integrationScenario" value="npo-adapter-type-1" />
-    </custom-transformer>
+    <custom-transformer class="se.skl.skltpservices.npoadapter.mule.UseOrCreateCorrelationIdTransformer" name="create-correlation-id"/>
 </mule>
 
