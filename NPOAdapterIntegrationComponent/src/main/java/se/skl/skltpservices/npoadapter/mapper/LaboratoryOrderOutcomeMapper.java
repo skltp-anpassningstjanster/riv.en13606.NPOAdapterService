@@ -122,11 +122,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	
 	
 	 // TODO: Refactor, too complex.
-<<<<<<< HEAD
-	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healthcareProfessional) {
-=======
 	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final Map<String, ORGANISATION> orgs) {
->>>>>>> e69f6ff2398bc2c6a4b9090b0c7be76ed48a04ee
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
 		
 		//Undersokningsresultat.har ansvarig
@@ -202,13 +198,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 											type.setResultComment(EHRUtil.getElementTextValue(elm));
 											break;
 										case "und-und-ure-stp":
-<<<<<<< HEAD
-											type.setAccountableHealthcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healthcareProfessional));
-											type.getAccountableHealthcareProfessional().setAuthorTime(EHRUtil.padTimestampIfNecessary(type.getAccountableHealthcareProfessional().getAuthorTime()));
-=======
 											//Resolved 2015-08-25
-											type.setRegistrationTime(EHRUtil.getElementTimeValue(elm));
->>>>>>> e69f6ff2398bc2c6a4b9090b0c7be76ed48a04ee
+											type.setRegistrationTime(EHRUtil.padTimestampIfNecessary(EHRUtil.getElementTimeValue(elm)));
 											break;
 											
 									}
