@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
@@ -98,8 +99,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     					final COMPOSITION und = composition13606;
     					final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), "vbe");
     					final LaboratoryOrderOutcomeType type = new LaboratoryOrderOutcomeType();
-    					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
-    					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, type.getLaboratoryOrderOutcomeHeader().getAccountableHealthcareProfessional()));
+    					type.setLaboratoryOrderOutcomeHeader(EHRUtil.patientSummaryHeader(vbe, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
+    					type.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, sharedHeaderExtract.healthcareProfessionals(), sharedHeaderExtract.organisations()));
     					type.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
     					resp.getLaboratoryOrderOutcome().add(type);
 		            }
@@ -121,11 +122,57 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	
 	
 	 // TODO: Refactor, too complex.
-	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healtcareProfessional) {
+	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final Map<String, ORGANISATION> orgs) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
-		//TODO: Verify if this is commital time from und or vbe
-		if(vbe.getCommittal() != null && vbe.getCommittal().getTimeCommitted() != null) {
-			type.setRegistrationTime(vbe.getCommittal().getTimeCommitted().getValue());
+		
+		//Undersokningsresultat.har ansvarig
+		if(und.getComposer() != null) {
+			final EHRUtil.HealthcareProfessional hp = EHRUtil.healthcareProfessionalType(und.getComposer(), orgs, hps, und.getCommittal());
+			final HealthcareProfessionalType hpType = new HealthcareProfessionalType();
+		
+			//Undersokningsresultat.registreringstidpunkt
+			hpType.setAuthorTime(hp.getAuthorTime());
+		
+			//Vard- och omsorgspersonal.personal-id
+			hpType.setHealthcareProfessionalHSAId(hp.getHealthcareProfessionalHSAId());
+			//Vard- och omsorgspersonal.namn
+			hpType.setHealthcareProfessionalName(hp.getHealthcareProfessionalName());
+		
+			if(hp.getHealthcareProfessionalOrgUnit() != null) {
+				final OrgUnitType orgType = new OrgUnitType();
+				orgType.setOrgUnitAddress(hp.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
+				orgType.setOrgUnitEmail(hp.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
+				orgType.setOrgUnitHSAId(hp.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
+				orgType.setOrgUnitLocation(hp.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
+				orgType.setOrgUnitName(hp.getHealthcareProfessionalOrgUnit().getOrgUnitName());
+				orgType.setOrgUnitTelecom(hp.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
+				hpType.setHealthcareProfessionalOrgUnit(orgType);			
+			}
+		
+			if(hp.getHealthcareProfessionalRoleCode() != null) {
+				final CVType cvType = new CVType();
+				cvType.setCode(hp.getHealthcareProfessionalRoleCode().getCode());
+				cvType.setCodeSystem(hp.getHealthcareProfessionalRoleCode().getCodeSystem());
+				cvType.setCodeSystemName(hp.getHealthcareProfessionalRoleCode().getCodeSystemName());
+				cvType.setCodeSystemVersion(hp.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
+				cvType.setDisplayName(hp.getHealthcareProfessionalRoleCode().getDisplayName());
+				cvType.setOriginalText(hp.getHealthcareProfessionalRoleCode().getOriginalText());
+				hpType.setHealthcareProfessionalRoleCode(cvType);
+			}
+
+			//Overwrite
+			for (FUNCTIONALROLE careGiver : und.getOtherParticipations()) {
+	            if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), "iag")) {
+	                if (careGiver.getPerformer() != null) {
+	                    hpType.setHealthcareProfessionalCareUnitHSAId(careGiver.getPerformer().getExtension());
+	                }
+	                if (careGiver.getHealthcareFacility() != null) {
+	                    hpType.setHealthcareProfessionalCareGiverHSAId(careGiver.getHealthcareFacility().getExtension());
+	                }
+	            }
+	        }
+		
+			type.setAccountableHealthcareProfessional(hpType);
 		}
 		for(CONTENT content : und.getContent()) {
 			if(content instanceof ENTRY) {
@@ -151,7 +198,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 											type.setResultComment(EHRUtil.getElementTextValue(elm));
 											break;
 										case "und-und-ure-stp":
-											type.setAccountableHealthcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healtcareProfessional));
+											//Resolved 2015-08-25
+											type.setRegistrationTime(EHRUtil.getElementTimeValue(elm));
 											break;
 											
 									}
@@ -176,7 +224,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		return type;
 	}
 	
-	//
+	/**
 	protected HealthcareProfessionalType mapAccountableHealthcareProfessional(final String authorTime, final HealthcareProfessionalType healtcareProfessional) {
 		final HealthcareProfessionalType type = new HealthcareProfessionalType();
 		type.setAuthorTime(authorTime);
@@ -188,6 +236,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 		type.setHealthcareProfessionalRoleCode(healtcareProfessional.getHealthcareProfessionalRoleCode());
 		return type;
 	}
+	**/
 
 	protected OrderType mapOrder(final COMPOSITION vbe) {
 		if(vbe == null) {

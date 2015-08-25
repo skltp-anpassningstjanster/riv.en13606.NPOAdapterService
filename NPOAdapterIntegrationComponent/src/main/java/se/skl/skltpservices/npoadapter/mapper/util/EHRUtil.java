@@ -421,7 +421,7 @@ public final class EHRUtil {
         return null;
     }
 
-    private static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, 
+    public static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, 
                                                                      final Map<String, ORGANISATION> orgs,
                                                                      final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> healthcareProfessionals, 
                                                                      final AUDITINFO committal) {
@@ -486,7 +486,6 @@ public final class EHRUtil {
         }
 
         // ---
-
         return resultProfessional;
     }
 
