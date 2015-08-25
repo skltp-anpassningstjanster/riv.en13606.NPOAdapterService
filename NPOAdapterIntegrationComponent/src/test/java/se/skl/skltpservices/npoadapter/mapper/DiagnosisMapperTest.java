@@ -91,7 +91,7 @@ public class DiagnosisMapperTest {
 						break;
 					case DiagnosisMapper.TIME_ELEMENT:
 						time = (TS) elm.getValue();
-						assertEquals(time.getValue(), body.getDiagnosisTime());
+						assertTrue(body.getDiagnosisTime().startsWith(time.getValue()));
 						break;
 					case DiagnosisMapper.TYPE_ELEMENT:
 						simpleText = (ST) elm.getValue();

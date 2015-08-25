@@ -118,15 +118,16 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 			return resp;
 		}
 				
-		final EHREXTRACT ehrExctract = ehrResp.getEhrExtract().get(0);
-		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExctract);
+		final EHREXTRACT ehrExtract = ehrResp.getEhrExtract().get(0);
+		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
 		
-		for(COMPOSITION composition13606 : ehrExctract.getAllCompositions()) {
+		for(COMPOSITION composition13606 : ehrExtract.getAllCompositions()) {
             if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
     			final DiagnosisType type = new DiagnosisType();
     			type.setDiagnosisHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, TIME_ELEMENT, PatientSummaryHeaderType.class));
     			type.getDiagnosisHeader().setCareContactId(getCareContactId(composition13606));
+                type.getDiagnosisHeader().setDocumentTime(EHRUtil.padTimestampIfNecessary(type.getDiagnosisHeader().getDocumentTime()));
     			type.setDiagnosisBody(mapDiagnosisBodyType(composition13606));
     			resp.getDiagnosis().add(type);
             }
@@ -165,7 +166,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
   							case TIME_ELEMENT:
   								if(elm.getValue() instanceof TS) {
   									type.setDiagnosisTime(((TS)elm.getValue()).getValue());
-  								}
+  									type.setDiagnosisTime(EHRUtil.padTimestampIfNecessary(type.getDiagnosisTime()));  								}
   								break;
   							case TYPE_ELEMENT:
   								if(elm.getValue() instanceof ST) {

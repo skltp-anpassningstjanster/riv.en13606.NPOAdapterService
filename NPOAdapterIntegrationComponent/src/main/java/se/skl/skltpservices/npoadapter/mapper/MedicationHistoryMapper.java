@@ -326,7 +326,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
             mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
-            //mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit("TODO dose unit");
+            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit(""); // Mandatory
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
             mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
         }
@@ -362,7 +362,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("1.2.752.129.2.1.2.1");
             
             mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
-            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime(ehr13606values.get("lkm-ord-tid")); // Beslutstidpunkt/förskrivningsstidpunkt. Tidpunkt då beslut fattas om förskrivning.
+            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime(
+                    ehr13606values.containsKey("lkm-for-tid") ? ehr13606values.get("lkm-for-tid") : "");
+                    // Beslutstidpunkt/förskrivningsstidpunkt. Tidpunkt då beslut fattas om förskrivning.
 
             mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
                     (ehr13606values.containsKey("lkm-for-uiv") ? "utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +

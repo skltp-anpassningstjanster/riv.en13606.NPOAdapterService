@@ -421,7 +421,7 @@ public final class EHRUtil {
         return null;
     }
 
-    private static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, 
+    public static HealthcareProfessional healthcareProfessionalType(final FUNCTIONALROLE composer, 
                                                                      final Map<String, ORGANISATION> orgs,
                                                                      final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> healthcareProfessionals, 
                                                                      final AUDITINFO committal) {
@@ -486,7 +486,6 @@ public final class EHRUtil {
         }
 
         // ---
-
         return resultProfessional;
     }
 
@@ -770,6 +769,25 @@ public final class EHRUtil {
         }
         return null;
     }
+    
+    
+    /**
+     * Timestamp in format yyyyMMddHHmmss - sometimes needs to be padded with zeros. 
+     */
+    public static String padTimestampIfNecessary(String timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        StringBuilder result = new StringBuilder(timestamp);
+        while (result.length() < "yyyyMMddHHmmss".length()) {
+            result.append("0");
+        }
+        return result.toString();
+    }
+
+
+    // --- --------------------------------------------------------------------
+    
 
     // Generic baseline of data types to be able to convert between schemas (java packages).
     //
@@ -1392,7 +1410,5 @@ public final class EHRUtil {
         public void setLegalAuthenticatorRoleCode(CV legalAuthenticatorRoleCode) {
             this.legalAuthenticatorRoleCode = legalAuthenticatorRoleCode;
         }
-
     }
-
 }
