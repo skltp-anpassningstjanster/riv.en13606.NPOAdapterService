@@ -121,7 +121,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 	
 	
 	 // TODO: Refactor, too complex.
-	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healtcareProfessional) {
+	protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe, final HealthcareProfessionalType healthcareProfessional) {
 		final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
 		//TODO: Verify if this is commital time from und or vbe
 		if(vbe.getCommittal() != null && vbe.getCommittal().getTimeCommitted() != null) {
@@ -151,7 +151,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 											type.setResultComment(EHRUtil.getElementTextValue(elm));
 											break;
 										case "und-und-ure-stp":
-											type.setAccountableHealthcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healtcareProfessional));
+											type.setAccountableHealthcareProfessional(mapAccountableHealthcareProfessional(EHRUtil.getElementTimeValue(elm), healthcareProfessional));
+											type.getAccountableHealthcareProfessional().setAuthorTime(EHRUtil.padTimestampIfNecessary(type.getAccountableHealthcareProfessional().getAuthorTime()));
 											break;
 											
 									}

@@ -282,13 +282,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetCareDocumentationResponseType response = getCareDocumentationServices.getCareDocumentation(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetCareDocumentationType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(response.getCareDocumentation().isEmpty());
 
-        /* TODO
         validateXmlAgainstSchema(careDocumentationObjectFactory.createGetCareDocumentationResponse(response),
                 "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
                 "/core_components/clinicalprocess_healthcond_description_2.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
                 "/interactions/GetCareDocumentationInteraction/GetCareDocumentationResponder_2.1.xsd");
-        */
     }
     
     
@@ -305,12 +303,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     	GetDiagnosisResponseType response = getDiagnosisServices.getDiagnosis(LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createGetDiagnosisType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(response.getDiagnosis().isEmpty());
 
-    	/* TODO
         validateXmlAgainstSchema(diagnosisObjectFactory.createGetDiagnosisResponse(response),
                 "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
                 "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
                 "/interactions/GetDiagnosisInteraction/GetDiagnosisResponder_2.0.xsd");
-        */
     }
 
     
@@ -342,12 +338,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetImagingOutcomeResponseType response = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_2, giot);
         assertFalse(response.getImagingOutcome().isEmpty());
 
-        /* TODO
         validateXmlAgainstSchema(imagingOutcomeObjectFactory.createGetImagingOutcomeResponse(response),
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                 "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
-         */
     }
 
     
@@ -366,12 +361,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(response.getLaboratoryOrderOutcome().isEmpty());
 
-        /* TODO
         validateXmlAgainstSchema(laboratoryOrderOutcomeObjectFactory.createGetLaboratoryOrderOutcomeResponse(response),
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                 "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.0.xsd");
-         */
     }
     
 
@@ -390,12 +384,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(response.getMedicationMedicalRecord().isEmpty());
 
-        /* TODO
         validateXmlAgainstSchema(medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response),
                 "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
                 "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
-         */
     }
     
 
