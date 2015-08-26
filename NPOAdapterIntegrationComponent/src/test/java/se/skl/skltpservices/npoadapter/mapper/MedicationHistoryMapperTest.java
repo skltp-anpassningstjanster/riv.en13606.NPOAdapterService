@@ -91,6 +91,11 @@ public class MedicationHistoryMapperTest {
             assertNotNull(mmr.getMedicationMedicalRecordHeader());
             assertNotNull(mmr.getMedicationMedicalRecordBody());
         }
+        
+        assertEquals("NA"               ,mmrs.get(0).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug().getNplId().getDisplayName());
+        assertEquals("NA"               ,mmrs.get(1).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug().getNplId().getDisplayName());
+        assertEquals("Namn, Medicin Två",mmrs.get(2).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug().getNplId().getDisplayName());
+        assertEquals("NA"               ,mmrs.get(3).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug().getNplId().getDisplayName());
     }
     
     @Test
