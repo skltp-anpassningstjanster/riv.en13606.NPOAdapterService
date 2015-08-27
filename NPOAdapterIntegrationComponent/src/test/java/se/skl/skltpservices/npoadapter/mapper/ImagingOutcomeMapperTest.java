@@ -152,7 +152,7 @@ public class ImagingOutcomeMapperTest {
                 
 //              <?xml version="1.0" encoding="UTF-8" standalone="yes"?><RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1"><subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3.1"/><meanings codeSystem="1.2.752.129.2.2.2.1" code="und-bdi"/><parameters><name value="hsa_id"/><value value="abc"/></parameters><parameters><name value="transaction_id"/></parameters><parameters><name value="version"/><value value="1.1"/></parameters></RIV13606REQUEST_EHR_EXTRACT_request>
                 
-                assertTrue(payload13606.contains("<time_period>"));                
+                assertTrue(payload13606.contains("<time_period"));                
                 
             } catch (XMLStreamException xe) {
                 fail (xe.getLocalizedMessage());
