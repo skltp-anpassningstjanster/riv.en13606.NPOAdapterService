@@ -234,13 +234,15 @@ public final class EHRUtil {
     }
 
     //
-    static IVLTS IVLTSType(final DatePeriod datePeriod) {
+    protected static IVLTS IVLTSType(final DatePeriod datePeriod) {
         if (datePeriod == null) {
             return null;
         }
         final IVLTS ivlts = new IVLTS();
         ivlts.setLow(tsType(datePeriod.getStart()));
         ivlts.setHigh(tsType(datePeriod.getEnd()));
+        ivlts.setLowClosed(true);
+        ivlts.setHighClosed(true);
         return ivlts;
     }
 

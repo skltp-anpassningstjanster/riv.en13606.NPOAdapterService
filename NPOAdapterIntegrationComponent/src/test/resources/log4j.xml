@@ -97,7 +97,7 @@
 
 	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
     <logger name="httpclient.wire.content">
-        <level value="ERROR"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>
