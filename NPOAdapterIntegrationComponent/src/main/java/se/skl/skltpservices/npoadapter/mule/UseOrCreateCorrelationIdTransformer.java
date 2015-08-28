@@ -35,7 +35,7 @@ public class UseOrCreateCorrelationIdTransformer extends AbstractMessageTransfor
 	
 	private static final Logger log = LoggerFactory.getLogger(UseOrCreateCorrelationIdTransformer.class);
 	public static final String CORRELATION_ID 			= "soitoolkit_correlationId";
-	public static final String INTEGRATION_SCENARIO 	= "soitoolkit_correlationId";
+	public static final String INTEGRATION_SCENARIO 	= "soitoolkit_integrationScenario";
 	public static final String X_SKLTP_CORRELATION_ID 	= "x-skltp-correlation-id";
 	
     /**
