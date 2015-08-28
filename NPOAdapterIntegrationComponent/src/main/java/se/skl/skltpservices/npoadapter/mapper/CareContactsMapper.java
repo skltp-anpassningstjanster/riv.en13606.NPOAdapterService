@@ -144,8 +144,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
         headerType.setAccountableHealthcareProfessional(mapProfessional(composition, ehrExtract.getDemographicExtract()));
 
         headerType.setApprovedForPatient(false);
-        headerType.setNullified(false);
-        headerType.setNullifiedReason(null);
 
         return headerType;
 
@@ -203,7 +201,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             professionalType.setHealthcareProfessionalName(EHRUtil.getPartValue(professional.getName()));
             final HEALTHCAREPROFESSIONALROLE role = EHRUtil.firstItem(professional.getRole());
             if (role != null) {
-               final CVType cvType = EHRUtil.cvType(role.getProfession(), CVType.class);
+                final CVType cvType = EHRUtil.cvType(role.getProfession(), CVType.class);
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
             }
         }
