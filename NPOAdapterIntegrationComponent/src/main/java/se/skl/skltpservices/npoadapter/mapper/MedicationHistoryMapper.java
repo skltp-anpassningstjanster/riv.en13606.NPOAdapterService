@@ -296,7 +296,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         mpt.getDrug().getDrug().setNplId(new CVType());
         mpt.getDrug().getDrug().getNplId().setCode(getNonBlank(ehr13606values,"lkm-lkm-lpr-npl"));
         mpt.getDrug().getDrug().getNplId().setCodeSystem("1.2.752.129.2.1.5.1");
-        mpt.getDrug().getDrug().getNplId().setDisplayName(getNonBlank(null)); // Produktnamn. Handelsnamn i SIL. Text som anger namnet på den aktuella läkemedelsprodukten.
+        mpt.getDrug().getDrug().getNplId().setDisplayName(getNonBlank(ehr13606values,"lkm-lkm-lpr-pna","lkm-lkm-lpr-prn")); // Produktnamn. Handelsnamn i SIL. Text som anger namnet på den aktuella läkemedelsprodukten.
         
         mpt.getDrug().getDosage().add(new DosageType());
         mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
