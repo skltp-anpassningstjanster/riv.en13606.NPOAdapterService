@@ -85,6 +85,7 @@ public class CareDocumentationMapperTest {
             assertTrue(responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
             assertTrue(responseXml.contains("<GetCareDocumentationResponse"));
             assertTrue(responseXml.contains("documentId>SE2321000164-1006Dok19381221704420090512082720692684000-1</"));
+            assertTrue(responseXml.contains("Allmänmedicinska mottagningen vårdcentralen Forshaga"));
 
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());
