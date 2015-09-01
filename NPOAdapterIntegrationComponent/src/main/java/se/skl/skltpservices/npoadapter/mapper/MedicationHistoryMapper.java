@@ -43,6 +43,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.GenericsType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessionalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.IIType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.LengthOfTreatmentType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordBodyType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
@@ -432,16 +433,23 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 									switch (dosageElm.getMeaning().getCode()) {
                 									case DOSERINGSSTEG_BEHANDLINGSTID:
                 										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof IVLTS) {
+                											if(dosage.getLengthOfTreatment() == null) {
+                												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
+                											}
                 											final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
                 											final PQIntervalType interval = new PQIntervalType();
                 											interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
                 											interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
-                											dosage.setLengthOfTreatment(interval);
+                											dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 										}
                 										break;
                 									case DOSERINGSSTEG_MAXTID:
                 										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof BL) {
-                											dosage.setIsMaximumTreatmentTime(((BL) dosageElm.getValue()).isValue());
+                											boolean m = ((BL) dosageElm.getValue()).isValue();
+                											if(dosage.getLengthOfTreatment() == null) {
+                												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
+                											}
+                											dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(m);
                 										}
                 										break;
                 									case DOSERINGSSTEG_DOSERINGSANVISNING:

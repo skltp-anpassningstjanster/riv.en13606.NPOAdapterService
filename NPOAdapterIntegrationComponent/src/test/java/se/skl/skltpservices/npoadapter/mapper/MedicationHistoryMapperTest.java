@@ -193,9 +193,9 @@ public class MedicationHistoryMapperTest {
     	final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
     	assertEquals(1, drug.getDosage().size());
     	final DosageType dos = drug.getDosage().get(0);
-    	assertEquals(Double.valueOf("20150305000000"), dos.getLengthOfTreatment().getLow());
-    	assertNull(dos.getLengthOfTreatment().getHigh());
-    	assertTrue(dos.isIsMaximumTreatmentTime());
+    	assertEquals(Double.valueOf("20150305000000"), dos.getLengthOfTreatment().getTreatmentInterval().getLow());
+    	assertNull(dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
+    	assertTrue(dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
     	assertEquals("Putar med magen", dos.getDosageInstruction());
     	assertEquals("eo", dos.getShortNotation());
     }
