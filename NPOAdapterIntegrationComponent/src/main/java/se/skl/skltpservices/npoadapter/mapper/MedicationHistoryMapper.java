@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,19 +37,25 @@ import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.DrugArticleType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.GenericsType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessionalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.IIType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordBodyType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.OrgUnitType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
@@ -63,10 +70,12 @@ import se.rivta.en13606.ehrextract.v11.CONTENT;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.INT;
 import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.PQ;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
@@ -74,6 +83,7 @@ import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil.HealthcareProfessional;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 
@@ -100,6 +110,55 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     public static final CD MEANING_LKM_ORD = new CD();
     
     protected static final String TIME_ELEMENT = "lkm-ord-tid";
+    
+    /**
+     * TODO: OOIDER
+     */
+    private static final String INFORMATIONSMANGD_LAKEMEDEL_ORDINATION = "lko";
+    private static final String INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING = "lkf";
+    private static final String INFORMATIONSMANGD_VARDKONTAKT = "vko";
+    
+    private static final String DELTAGARE_UTVARDERAS_AV = "utv";
+    
+    private static final String LAKEMEDELS_ORDINATION = "lkm-ord";
+    private static final String LAKEMEDELS_ORDINATION_NOT = "lkm-ord-not";
+    private static final String LAKEMEDELS_ORDINATION_UTVARDERINGSTIDPUNKT = "lkm-ord-utv";
+    private static final String LAKEMEDELS_ORDINATION_ANDAMAL = "lkm-ord-and";
+    private static final String LAKEMEDELS_ORDINATION_ORDINATIONS_KEDJA = "lkm-ord-oki";
+    private static final String LAKEMEDELS_ORDINATION_TIDPUNKT = "lkm-ord-tid";
+    
+    private static final String LAKEMDELSVAL = "lkm-lva";
+    private static final String LAKEMDELSVAL_KOMMENTAR = "lkm-lva-kom";
+    private static final String EXTEMPORERINGSBEREDNING = "lkm-lva-ext";
+    
+    private static final String LAKEMEDELSVARA = "lkm-lkm-lva";
+    private static final String LAKEMEDELSVARA_NPL_PACKID = "lkm-lkm-lva-npl";
+    
+    private static final String LAKEMEDELSPRODUKT = "lkm-lkm-lpr";
+    private static final String LAKEMEDELSPRODUKT_NPLID = "lkm-lkm-lpr-npl";
+    private static final String LAKEMEDELSPRODUKT_ATC = "lkm-lkm-lpr-atc";
+    private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM = "lkm-lkm-lpr-ber";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA = "lkm-lkm-lpr-prs";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET = "lkm-lkm-lpr-pre";
+    
+    private static final String UTBYTESGRUPP = "lkm-lva-ubg";
+    private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN = "lkm-lva-ubg-sty";
+    private static final String UTBYTESGRUPP_SUBSTANSGRUPPNAMN = "lkm-lva-ubg-sub";
+    private static final String UTBYTESGRUPP_LAKMEDELSFORMNAMN = "lkm-lva-ubg-lfn";
+    
+    private static final String LAKEMEDELDOSERING = "lkm-dos";
+    private static final String DOSERINGSSTEG_BEHANDLINGSTID = "lkm-dst-bet";
+    private static final String DOSERINGSSTEG_MAXTID = "lkm-dst-max";
+    private static final String DOSERINGSSTEG_DOSERINGSANVISNING = "lkm-dst-dan";
+    private static final String DOSERINGSSTEG_DOSERINGSENHET = "lkm-dst-den";
+    private static final String DOSERINGSSTEG_KORTNOTATION = "lkm-dst-kno";
+    
+    private static final String FORSKRIVNING = "lkm-for";
+    private static final String FORSKRIVNING_UTLAMMNIGS_INTERVAL = "lkm-for-uiv";
+    private static final String FORSKRIVNING_TOTALMAGNG = "lkm-for-tot";
+    private static final String FORSKRIVNING_FORPACKNINGSENHET = "lkm-for-fpe";
+    private static final String FORSKRIVNING_DISTRIBUTIONSMETOD = "lkm-for-dbs";
+    private static final String FORSKRIVNING_FORSKRIVNINGSTIDPUNKT = "lkm-for-tid";
     
     static {
         MEANING_LKM_ORD.setCodeSystem("1.2.752.129.2.2.2.1");
@@ -171,324 +230,417 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     
     
     protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
-        GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
-        if (!ehrExtractList.isEmpty()) {
-            List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
-            final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-            for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
-                if (EHRUtil.retain(ehrExtract.getAllCompositions().get(i), careUnitHsaIds, log)) {
-                    final MedicationMedicalRecordType medicationMedicalRecordType = new MedicationMedicalRecordType();
-                    medicationMedicalRecordType.setMedicationMedicalRecordHeader(mapHeader(ehrExtract, i));
-                    medicationMedicalRecordType.setMedicationMedicalRecordBody(mapBody(ehrExtract, i));
-                    responseType.getMedicationMedicalRecord().add(medicationMedicalRecordType);
+        final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
+        if(!ehrExtractList.isEmpty()) {
+        	final EHREXTRACT ehrExtract = ehrExtractList.get(0);
+        	final Map<String, COMPOSITION> lkfs = new HashMap<String, COMPOSITION>();
+        	final Map<String, COMPOSITION> lkos = new HashMap<String, COMPOSITION>();
+        	
+        	//Sort all compositions in maps so that they easly can be obtained by rc_id
+        	sortCompositions(ehrExtract.getAllCompositions(), lkos, lkfs);
+        	
+        	for(COMPOSITION lko : lkos.values()) {
+        		final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
+        		
+        		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+                final PatientSummaryHeaderType patient = 
+                		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
+                
+                //Apply specific rules to header for this TK
+                patient.setLegalAuthenticator(null); 
+                //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
+                
+                //Map body, Content 1..1
+                final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
+                
+                //Map utv
+                HealthcareProfessional utvProfessional = null;
+                for(FUNCTIONALROLE fr : lko.getOtherParticipations()) {
+                	if(fr.getFunction() != null && StringUtils.equals(DELTAGARE_UTVARDERAS_AV, fr.getFunction().getCode())) {
+                		utvProfessional = 
+                				EHRUtil.healthcareProfessionalType(fr, sharedHeaderExtract.organisations(), 
+                						sharedHeaderExtract.healthcareProfessionals(), null);
+                	}
                 }
-            }
+                
+                if(!lko.getContent().isEmpty() && lko.getContent().get(0) instanceof ENTRY) {
+                	final ENTRY content = (ENTRY) lko.getContent().get(0);
+                	if(content.getMeaning() != null 
+                			&& StringUtils.equals(content.getMeaning().getCode(), LAKEMEDELS_ORDINATION)) {
+                		//Set careContent header value and find lkf-id
+                		IIType lkfId = null;
+                		for(LINK link : content.getLinks()) {
+                			if(link.getTargetType() != null && link.getTargetType().getCode() != null) {
+                				switch (link.getTargetType().getCode()) {
+                				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING:
+                					if(!link.getTargetId().isEmpty()) {
+                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class);
+                					}
+                					break;
+                				case INFORMATIONSMANGD_VARDKONTAKT:
+                					if(!link.getTargetId().isEmpty()) {
+                						final II careContactId = link.getTargetId().get(0);
+                						patient.setCareContactId(careContactId.getExtension());
+                					}
+                					break;
+                				}
+                			}
+                		}
+                		//Continue build body
+                		//Forskrivning // Ordination
+                		final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
+                		prescription.setPrescriptionId(lkfId);
+                		
+                		//Forskrivning
+                		if(prescription.getPrescriptionId() != null 
+                				&& prescription.getPrescriptionId().getExtension() != null) {
+                			final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
+                			prescription.setDispensationAuthorization(dispensationAuth);
+                			dispensationAuth.setDispensationAuthorizationId(lkfId);
+                			
+                			if(lkfs.containsKey(prescription.getPrescriptionId().getExtension())) {
+                				final COMPOSITION lkf = lkfs.get(prescription.getPrescriptionId().getExtension());
+                                               				
+                				//Map lkf 
+                				for(CONTENT lkfContent : lkf.getContent()) {
+                					if(lkfContent.getMeaning() != null && StringUtils.equals(lkfContent.getMeaning().getCode(), FORSKRIVNING)) {
+                						if(lkfContent instanceof ENTRY) {
+                							final ENTRY lkfEntry = (ENTRY) lkfContent;
+                							
+                							//Map lkf healthcare pro
+                							final FUNCTIONALROLE lkfFunc = lkfEntry.getInfoProvider();
+                							HealthcareProfessional lkfPro = EHRUtil.healthcareProfessionalType(lkfFunc, 
+                									sharedHeaderExtract.organisations(), 
+                            						sharedHeaderExtract.healthcareProfessionals(), null);
+                							
+                							dispensationAuth.setDispensationAuthorizer(new HealthcareProfessionalType());
+                							dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalHSAId(lkfPro.getHealthcareProfessionalHSAId());
+                							dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalName(lkfPro.getHealthcareProfessionalName());
+                							
+                							final CVType lkfCv = new CVType();
+                                			lkfCv.setCode(lkfPro.getHealthcareProfessionalRoleCode().getCode());
+                                			lkfCv.setCodeSystem(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystem());
+                                			lkfCv.setCodeSystemName(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemName());
+                                			lkfCv.setCodeSystemVersion(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
+                                			lkfCv.setDisplayName(lkfPro.getHealthcareProfessionalRoleCode().getDisplayName());
+                                			lkfCv.setOriginalText(lkfPro.getHealthcareProfessionalRoleCode().getOriginalText());
+                                			dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalRoleCode(lkfCv);
+                                			
+                                			final OrgUnitType lkfOrg = new OrgUnitType();
+                                			lkfOrg.setOrgUnitAddress(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
+                                			lkfOrg.setOrgUnitEmail(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
+                                			lkfOrg.setOrgUnitHSAId(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
+                                			lkfOrg.setOrgUnitLocation(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
+                                			lkfOrg.setOrgUnitName(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitName());
+                                			lkfOrg.setOrgUnitTelecom(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
+                                			dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalOrgUnit(lkfOrg);
+                							
+                							//Map lkf body
+                							for(ITEM lkfItem : lkfEntry.getItems()) {
+                								if(lkfItem instanceof ELEMENT) {
+                									final ELEMENT lkfElement = (ELEMENT) lkfItem;
+                									if(lkfElement.getMeaning() != null && lkfElement.getMeaning().getCode() != null) {
+                										switch (lkfElement.getMeaning().getCode()) {
+                										case FORSKRIVNING_UTLAMMNIGS_INTERVAL:
+                											if(lkfElement.getValue() != null && lkfElement.getValue() instanceof INT) {
+                												final INT intValue = (INT) lkfElement.getValue();
+                												final PQType pq = new PQType();
+                												pq.setValue(intValue.getValue().doubleValue());
+                												dispensationAuth.setMinimumDispensationInterval(pq);
+                											} else if(lkfElement.getValue() != null && lkfElement.getValue() instanceof PQ) {
+                												final PQ pqValue = (PQ) lkfElement.getValue();
+                												final PQType pq = new PQType();
+                												pq.setUnit(pqValue.getUnit());
+                												pq.setValue(pqValue.getValue());
+                												dispensationAuth.setMinimumDispensationInterval(pq);
+                											}
+                											break;
+                										case FORSKRIVNING_TOTALMAGNG: 
+                											if(lkfElement.getValue() instanceof PQ) {
+                												final PQ amPq = (PQ) lkfElement.getValue();
+                												dispensationAuth.setTotalAmount(amPq.getValue());
+                											}
+                											break;
+                										case FORSKRIVNING_FORPACKNINGSENHET:
+                											dispensationAuth.setPackageUnit(EHRUtil.getSTValue(lkfElement.getValue()));
+                											break;
+                										case FORSKRIVNING_DISTRIBUTIONSMETOD:
+                											dispensationAuth.setDistributionMethod(EHRUtil.getSTValue(lkfElement.getValue()));
+                											break;
+                										case FORSKRIVNING_FORSKRIVNINGSTIDPUNKT:
+                											if(dispensationAuth.getDispensationAuthorizer() == null) {
+                												dispensationAuth.setDispensationAuthorizer(new HealthcareProfessionalType());
+                											}
+                											dispensationAuth.getDispensationAuthorizer().setAuthorTime(EHRUtil.getTSValue(lkfElement.getValue()));
+                											break;
+                										}
+                									}
+                								}
+                							}
+                						}
+                					}
+                				}
+                			}
+                		}
+                		
+                		
+                		//Ordination
+                		/** TODO: Mandatory fields but none existing in NPO
+                		 * TypeOfPrescription
+                		 * PrescriptionStatus
+                		 */
+                		String authorTime = null;
+                		for(ITEM item : content.getItems()) {
+                			if(item instanceof ELEMENT) {
+                				final ELEMENT elm = (ELEMENT) item;
+                				switch (EHRUtil.getCDCode(item.getMeaning())) {
+                				case LAKEMEDELS_ORDINATION_NOT:
+                					prescription.setPrescriptionNote(EHRUtil.getSTValue(elm.getValue()));
+                					break;
+                				case LAKEMEDELS_ORDINATION_UTVARDERINGSTIDPUNKT:
+                					prescription.setEvaluationTime(EHRUtil.getTSValue(elm.getValue()));
+                					break;
+                				case LAKEMEDELS_ORDINATION_ANDAMAL:
+                					prescription.setTreatmentPurpose(EHRUtil.getSTValue(elm.getValue()));
+                					break;
+                				case LAKEMEDELS_ORDINATION_ORDINATIONS_KEDJA:
+                					if(elm.getValue() instanceof II) {
+                						prescription.setPrescriptionChainId(EHRUtil.iiType((II) elm.getValue(), IIType.class));
+                					}
+                					break;
+                				case LAKEMEDELS_ORDINATION_TIDPUNKT:
+                					authorTime = EHRUtil.getTSValue(elm.getValue());
+                					break;
+                				}
+                			} else if (item instanceof CLUSTER) {
+                				//Map Dosering (lkm-dos) och Lakemedelsval (lkm-lva)
+                				if(prescription.getDrug() == null) {
+                					prescription.setDrug(new DrugChoiceType());
+                				}
+                				final CLUSTER cluster = (CLUSTER) item;
+                				if(cluster.getMeaning() != null 
+                						&& StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
+                					//NPO Specc, En Lakemedelsordination innehaller en och endast en Dosering
+                					final DosageType dosage = new DosageType();
+                					prescription.getDrug().getDosage().add(dosage);
+                					for(ITEM dosageItem : cluster.getParts()) {
+                						if(dosageItem instanceof CLUSTER) {
+                							final CLUSTER dosageStep = (CLUSTER) dosageItem;
+                							for(ITEM dosageStepItem : dosageStep.getParts()) {
+                								final ELEMENT dosageElm = (ELEMENT) dosageStepItem;
+                								if(dosageElm.getMeaning() != null && dosageElm.getMeaning().getCode() != null) {
+                									switch (dosageElm.getMeaning().getCode()) {
+                									case DOSERINGSSTEG_BEHANDLINGSTID:
+                										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof IVLTS) {
+                											final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
+                											final PQIntervalType interval = new PQIntervalType();
+                											interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
+                											interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
+                											dosage.setLengthOfTreatment(interval);
+                										}
+                										break;
+                									case DOSERINGSSTEG_MAXTID:
+                										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof BL) {
+                											dosage.setIsMaximumTreatmentTime(((BL) dosageElm.getValue()).isValue());
+                										}
+                										break;
+                									case DOSERINGSSTEG_DOSERINGSANVISNING:
+                										dosage.setDosageInstruction(EHRUtil.getSTValue(dosageElm.getValue()));
+                										break;
+                									case DOSERINGSSTEG_DOSERINGSENHET:
+                										dosage.setUnitDose(new CVType());
+                										dosage.getUnitDose().setDisplayName(EHRUtil.getSTValue(dosageElm.getValue()));
+                										dosage.getUnitDose().setOriginalText(EHRUtil.getSTValue(dosageElm.getValue()));
+                										break;
+                									case DOSERINGSSTEG_KORTNOTATION:
+                										dosage.setShortNotation(EHRUtil.getSTValue(dosageElm.getValue()));
+                										break;
+                									}
+                								}
+                							}
+                						}
+                					}	
+                				} else if(cluster.getMeaning() != null 
+                						&& StringUtils.equals(LAKEMDELSVAL, cluster.getMeaning().getCode())) {
+                					for(ITEM clusterItem : cluster.getParts()) {
+                						if(clusterItem instanceof ELEMENT) {
+                							final ELEMENT clusterElm = (ELEMENT) clusterItem;
+                							if(clusterElm.getMeaning() != null && clusterElm.getMeaning().getCode() != null) {
+                								switch (clusterElm.getMeaning().getCode()) {
+                								case LAKEMDELSVAL_KOMMENTAR:
+                									prescription.getDrug().setComment(EHRUtil.getSTValue(clusterElm.getValue()));
+                									break;
+                								case EXTEMPORERINGSBEREDNING:
+                									final UnstructuredDrugInformationType ext = new UnstructuredDrugInformationType();
+                									ext.setUnstructuredInformation(EHRUtil.getSTValue(clusterElm.getValue()));
+                									prescription.getDrug().setUnstructuredDrugInformation(ext);
+                									break;
+                								}
+                							}
+                						} else if (clusterItem instanceof CLUSTER) {
+                							final CLUSTER innerCluster = (CLUSTER) clusterItem;
+                							//Lakemedelsvara (lkm-lkm-lva)	
+                							if(innerCluster.getMeaning() != null 
+                									&& StringUtils.equals(LAKEMEDELSVARA, innerCluster.getMeaning().getCode())) {
+                								final DrugArticleType drugArticle = new DrugArticleType();
+                								for(ITEM innerClusterItem : innerCluster.getParts()) {
+                									if(innerClusterItem instanceof ELEMENT) {
+                										final ELEMENT lakemedelsElm = (ELEMENT) innerClusterItem;
+                										if(lakemedelsElm.getMeaning() != null && lakemedelsElm.getMeaning().getCode() != null) {
+                											switch(lakemedelsElm.getMeaning().getCode()) {
+                												case LAKEMEDELSVARA_NPL_PACKID:
+                												if(lakemedelsElm.getValue() != null) {
+                													final II drugCvII = (II) lakemedelsElm.getValue();
+                													final CVType drugCv = new CVType();
+                													drugCv.setCodeSystem(drugCvII.getRoot());
+                													drugCv.setDisplayName(drugCvII.getExtension());
+                													drugCv.setOriginalText(drugCvII.getExtension());
+                													drugArticle.setNplPackId(drugCv);
+                												}
+                												break;
+                											}
+                										}
+                										//Lakemdelsprodukt
+                									} else if (innerClusterItem instanceof CLUSTER) {
+                										final CLUSTER prodCluster = (CLUSTER) innerClusterItem;
+                										if(prodCluster.getMeaning() != null 
+                												&& StringUtils.equals(prodCluster.getMeaning().getCode(), LAKEMEDELSPRODUKT)) {
+                											prescription.getDrug().setDrug(new DrugType());
+                											for(ITEM prodItem : prodCluster.getParts()) {
+                												if(prodItem instanceof ELEMENT) {
+                													final ELEMENT prodElm = (ELEMENT) prodItem;
+                													if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
+                														switch (prodElm.getMeaning().getCode()) {
+                															case LAKEMEDELSPRODUKT_NPLID:
+                															if(prodElm.getValue() instanceof II) {
+                																final CVType drugProdCV = new CVType();
+                																final II drugProdII = (II) prodElm.getValue();
+                																drugProdCV.setCodeSystem(drugProdII.getRoot());
+                																drugProdCV.setDisplayName(drugProdII.getExtension());
+                																drugProdCV.setOriginalText(drugProdII.getExtension());
+                																prescription.getDrug().getDrug().setNplId(drugProdCV);
+                															}
+                															break;
+                															case LAKEMEDELSPRODUKT_ATC:
+                															if(prodElm.getValue() instanceof CD) {
+                																final CVType drugAtcCv = new CVType();
+                																final CD drugAtcCd = (CD) prodElm.getValue();
+                																drugAtcCv.setCode(drugAtcCd.getCode());
+                																drugAtcCv.setCodeSystem(drugAtcCd.getCodeSystem());
+                																drugAtcCv.setDisplayName(EHRUtil.getSTValue(drugAtcCd.getDisplayName()));
+                																prescription.getDrug().getDrug().setAtcCode(drugAtcCv);
+                															}
+                															break;
+                															case LAKEMEDELSPRODUKT_BEREDNINGSFORM:
+                																prescription.getDrug().getDrug().setPharmaceuticalForm(EHRUtil.getSTValue(prodElm.getValue()));
+                															break;
+                															case LAKEMEDELSPRODUKT_PRODUKT_STYRKA:
+                																if(prodElm.getValue() instanceof PQ) {
+                																	final PQ styrka = (PQ) prodElm.getValue();
+                																	prescription.getDrug().getDrug().setStrength(styrka.getValue());
+                																	prescription.getDrug().getDrug().setStrengthUnit(styrka.getUnit());
+                																}
+                															break;
+                															case LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET:
+                																prescription.getDrug().getDrug().setStrengthUnit(EHRUtil.getSTValue(prodElm.getValue()));
+                															break;
+                														}
+                													}
+                												}
+                											}
+                										} else if (prodCluster.getMeaning() != null && StringUtils.equals(prodCluster.getMeaning().getCode(), UTBYTESGRUPP)) {
+                											prescription.getDrug().setGenerics(new GenericsType());
+                											for(ITEM utbItem : prodCluster.getParts()) {
+                												if(utbItem instanceof ELEMENT) {
+                													final ELEMENT utbElm = (ELEMENT) utbItem;
+                													if(utbElm.getMeaning() != null && utbElm.getMeaning().getCode() != null) {
+                														switch(utbElm.getMeaning().getCode()) {
+                														case UTBYTESGRUPP_STYRKEGRUPPNAMN:
+                															prescription.getDrug().getGenerics().setStrength(new PQType());
+                															prescription.getDrug().getGenerics().getStrength().setUnit(EHRUtil.getSTValue(utbElm.getValue()));
+                															break;
+                														case UTBYTESGRUPP_LAKMEDELSFORMNAMN:
+                															prescription.getDrug().getGenerics().setForm(EHRUtil.getSTValue(utbElm.getValue()));
+                															break;
+                														case UTBYTESGRUPP_SUBSTANSGRUPPNAMN:
+                															prescription.getDrug().getGenerics().setSubstance(EHRUtil.getSTValue(utbElm.getValue()));
+                															break;
+                														}
+                													}
+                												}
+                											}
+                										}
+                									}
+                								}
+                								prescription.getDrug().setDrugArticle(drugArticle);
+                							}
+                						}
+                					}
+                				}
+                			}
+                		}
+                		
+                		
+                		prescription.setPrescriber(patient.getAccountableHealthcareProfessional());
+                		//Set lkm-ord-tid
+                		prescription.getPrescriber().setAuthorTime(authorTime);
+                		
+                		//Map Utv
+                		if(utvProfessional != null) {
+                			prescription.setEvaluator(new HealthcareProfessionalType());
+                			prescription.getEvaluator().setAuthorTime(prescription.getEvaluationTime());
+                			prescription.getEvaluator().setHealthcareProfessionalHSAId(utvProfessional.getHealthcareProfessionalHSAId());
+                			prescription.getEvaluator().setHealthcareProfessionalName(utvProfessional.getHealthcareProfessionalName());
+                			
+                			final CVType cv = new CVType();
+                			cv.setCode(utvProfessional.getHealthcareProfessionalRoleCode().getCode());
+                			cv.setCodeSystem(utvProfessional.getHealthcareProfessionalRoleCode().getCodeSystem());
+                			cv.setCodeSystemName(utvProfessional.getHealthcareProfessionalRoleCode().getCodeSystemName());
+                			cv.setCodeSystemVersion(utvProfessional.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
+                			cv.setDisplayName(utvProfessional.getHealthcareProfessionalRoleCode().getDisplayName());
+                			cv.setOriginalText(utvProfessional.getHealthcareProfessionalRoleCode().getOriginalText());
+                			prescription.getEvaluator().setHealthcareProfessionalRoleCode(cv);
+                			
+                			final OrgUnitType org = new OrgUnitType();
+                			org.setOrgUnitAddress(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
+                			org.setOrgUnitEmail(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
+                			org.setOrgUnitHSAId(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
+                			org.setOrgUnitLocation(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
+                			org.setOrgUnitName(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitName());
+                			org.setOrgUnitTelecom(utvProfessional.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
+                			prescription.getEvaluator().setHealthcareProfessionalOrgUnit(org);
+                			
+                		}
+                		
+                		body.setMedicationPrescription(prescription);
+                	}
+                	
+                }
+                
+                record.setMedicationMedicalRecordBody(body);
+                record.setMedicationMedicalRecordHeader(patient);
+                responseType.getMedicationMedicalRecord().add(record);
+        	}
+        	
         }
+    	
         return responseType;
     }
-
-    /**
-     * Maps contact header information.
-     *
-     * @param ehrExtract the extract.
-     * @param compositionIndex the actual composition in the list.
-     * @return the target header information.
-     */
-    private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract, final int compositionIndex) {
-        final COMPOSITION composition = ehrExtract.getAllCompositions().get(compositionIndex);
-        if (composition.getComposer() == null) {
-            // Note that lkf has no composer - does this mean lkf compositions should be ignored?
-            log.warn("composition " + compositionIndex + " has a null composer");
-        }
-        final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
-        
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
-        if (StringUtils.isBlank(patient.getAccountableHealthcareProfessional().getAuthorTime())) {
-            log.error("Unable to populate mandatory field authorTime"); // yyyyMMddHHmmss
-            patient.getAccountableHealthcareProfessional().setAuthorTime(null);
-        }
-        if (StringUtils.isBlank(patient.getLegalAuthenticator().getSignatureTime())) {
-            log.error("Unable to populate mandatory field signatureTime"); // yyyyMMddHHmmss
-            patient.getLegalAuthenticator().setSignatureTime(null);
-        }
-        return patient;
-    }
     
     
-    /**
-     * Create a MedicationMedicalRecord using the information
-     * in the current ehr13606 composition.
-     *
-     * @param ehrExtract the extract containing the current composition
-     * @param compositionIndex the actual composition in the list.
-     * @return a new MedicationMedicalRecord
-     */
-    private MedicationMedicalRecordBodyType mapBody(final EHREXTRACT ehrExtract, final int compositionIndex) {
-    
-        final COMPOSITION composition = ehrExtract.getAllCompositions().get(compositionIndex);
-        
-        // parse this composition into values stored in a Map
-        Map<String,String> ehr13606values = retrieveValues(composition, compositionIndex);
-        
-        // use the ehr values to build a medication medical history record body
-        MedicationMedicalRecordBodyType bodyType = buildBody(ehr13606values);
-        
-        return bodyType;
-    }
-
-
-    /* 
-    * Create a MedicationMedicalRecord for outgoing message.
-    * Use values from ehr 13606 incoming message.
-    * Populate values in outgoing message if there is data in the incoming message.
-    * 
-    * Attempt to avoid empty elements in the outgoing message
-    * (this is why we check for data before creating outgoing objects).
-    */
-    private MedicationMedicalRecordBodyType buildBody (Map<String, String> ehr13606values) {
-        
-        MedicationPrescriptionType mpt = new MedicationPrescriptionType();
-        
-        mpt.setPrescriptionId(new IIType());
-        mpt.getPrescriptionId().setRoot(INFO_LKM_ORD);
-        //mpt.getPrescriptionId().setExtension("TODO");
-        
-        mpt.setTypeOfPrescription(TypeOfPrescriptionEnum.I);
-        
-        // Note : tjänstekontraktsbeskrivning
-        // 'En aktiv ordination är den sista i sin ordinationskedja. Alla andra ordinationer i samma ordinationskedja är inaktiva.'
-        // No indication that a 13606 ordination contain a chain of prescriptions
-        
-        mpt.setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE); // mandatory
-        
-        if (ehr13606values.containsKey("lkm-dst-bet-low")) {
-            mpt.setStartOfTreatment(ehr13606values.get("lkm-dst-bet-low"));
-        } else if (ehr13606values.containsKey("lkm-for-tid")) {
-            mpt.setStartOfTreatment(ehr13606values.get("lkm-for-tid"));
-        } else {
-            mpt.setStartOfTreatment(ehr13606values.get("lkm-ord-tid"));
-        }
-        
-        mpt.setEndOfTreatment(ehr13606values.get("lkm-dst-bet-high"));
-        
-        mpt.setPrescriptionNote(ehr13606values.get("lkm-ord-not"));
-        if (ehr13606values.containsKey("lkm-lva-kom")) {
-            mpt.setPrescriptionNote(
-              mpt.getPrescriptionNote() + (StringUtils.isNotBlank(mpt.getPrescriptionNote()) ? " " : "") +  ehr13606values.get("lkm-lva-kom")
-            );
-        }
-        
-        // mpt.getPrincipalPrescriptionReason().add(new PrescriptionReasonType());
-        // mpt.getPrincipalPrescriptionReason().get(0).setReason(new CVType());
-        
-        mpt.setEvaluationTime  (ehr13606values.get("lkm-ord-utv"));
-        mpt.setTreatmentPurpose(ehr13606values.get("lkm-ord-and"));
-        
-        
-        // --- Drug
-        
-        mpt.setDrug(new DrugChoiceType());
-
-        // --- Drug/Drug - läkemedelsprodukt
-        
-        mpt.getDrug().setDrug(new DrugType());
-        
-        mpt.getDrug().getDrug().setNplId(new CVType());
-        mpt.getDrug().getDrug().getNplId().setCode(getNonBlank(ehr13606values,"lkm-lkm-lpr-npl"));
-        mpt.getDrug().getDrug().getNplId().setCodeSystem("1.2.752.129.2.1.5.1");
-        mpt.getDrug().getDrug().getNplId().setDisplayName(getNonBlank(ehr13606values,"lkm-lkm-lpr-pna","lkm-lkm-lpr-prn")); // Produktnamn. Handelsnamn i SIL. Text som anger namnet på den aktuella läkemedelsprodukten.
-        
-        mpt.getDrug().getDosage().add(new DosageType());
-        mpt.getDrug().getDosage().get(0).setDosageInstruction(ehr13606values.get("lkm-dst-dan"));
-        mpt.getDrug().getDosage().get(0).setShortNotation(ehr13606values.get("lkm-dst-kno"));
-        
-        
-        if (ehr13606values.containsKey("lkm-dst-den")) {
-            mpt.getDrug().getDosage().get(0).setUnitDose(new CVType());
-            mpt.getDrug().getDosage().get(0).getUnitDose().setOriginalText(ehr13606values.get("lkm-dst-den"));
-        }
-        
-        if (ehr13606values.containsKey("lkm-lva-ext") || ehr13606values.containsKey("lkm-dst-max") ) {
-            mpt.getDrug().getDosage().get(0).setSetDosage(new SetDosageType());
-            mpt.getDrug().getDosage().get(0).getSetDosage().setUnstructuredDosageInformation(new UnstructuredDosageInformationType());
-            
-            if (ehr13606values.containsKey("lkm-dst-ext")) {
-                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-                    "lkm-lva-ext- extemporeberedning beskriving:" + ehr13606values.get("lkm-lva-ext"));
-            }
-            if (ehr13606values.containsKey("lkm-dst-max")) {
-                mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().setText(
-                (StringUtils.isNotBlank(mpt.getDrug().getDosage().get(0).getSetDosage().getUnstructuredDosageInformation().getText()) ? " " : "") +
-                "lkm-dst-max - maxtid " + ehr13606values.get("lkm-dst-max"));
-            }
-        }
-        
-        if (ehr13606values.containsKey("lkm-lkm-lva-prm")) {
-            mpt.getDrug().getDosage().get(0).getSetDosage().setSingleDose(new SingleDoseType());
-            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().setDose(new PQIntervalType());
-            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setUnit(""); // Mandatory
-            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setHigh(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
-            mpt.getDrug().getDosage().get(0).getSetDosage().getSingleDose().getDose().setLow(new Double(ehr13606values.get("lkm-lkm-lva-prm")));
-        }
-        
-        mpt.getDrug().getDrug().setAtcCode(new CVType());
-        
-        mpt.getDrug().getDrug().getAtcCode().setCode(ehr13606values.get("lkm-lkm-lpr-atc"));
-        mpt.getDrug().getDrug().getAtcCode().setCodeSystem("1.2.752.129.2.2.3.1.1");
-        mpt.getDrug().getDrug().getAtcCode().setOriginalText(ehr13606values.get("lkm-lva-typ"));
-        mpt.getDrug().getDrug().getAtcCode().setDisplayName(getNonBlank(ehr13606values,"lkm-lkm-lva-pre","lkm-lva-typ","lkm-lkm-lpr-atc"));
-        
-        mpt.getDrug().getDrug().setRouteOfAdministration(new CVType());
-        mpt.getDrug().getDrug().getRouteOfAdministration().setCode(ehr13606values.get("lkm-lkm-lpr-ber"));
-        mpt.getDrug().getDrug().getRouteOfAdministration().setDisplayName(ehr13606values.get("lkm-lkm-lpr-ber"));
-        
-        
-        // --- DispensationAuthorization
-        
-        if (ehr13606values.containsKey("lkm-for-fpe") ||
-            ehr13606values.containsKey("lkm-for-tot") ||
-            ehr13606values.containsKey("lkm-for-uiv") ||
-            ehr13606values.containsKey("lkm-for-mpt") ||
-            ehr13606values.containsKey("lkm-for-dbs")) {
-            
-            mpt.setDispensationAuthorization(new DispensationAuthorizationType());
-            
-            mpt.getDispensationAuthorization().setPackageUnit(ehr13606values.get("lkm-for-fpe"));
-            if (ehr13606values.containsKey("lkm-for-tot")) {
-                mpt.getDispensationAuthorization().setTotalAmount(new Double(ehr13606values.get("lkm-for-tot")));
-            }
-            
-            mpt.getDispensationAuthorization().setDispensationAuthorizationId(new IIType());
-            mpt.getDispensationAuthorization().getDispensationAuthorizationId().setRoot("1.2.752.129.2.1.2.1");
-            
-            mpt.getDispensationAuthorization().setDispensationAuthorizer(new HealthcareProfessionalType());
-            mpt.getDispensationAuthorization().getDispensationAuthorizer().setAuthorTime(
-                    ehr13606values.containsKey("lkm-for-tid") ? ehr13606values.get("lkm-for-tid") : "");
-                    // Beslutstidpunkt/förskrivningsstidpunkt. Tidpunkt då beslut fattas om förskrivning.
-
-            mpt.getDispensationAuthorization().setDispensationAuthorizerComment(
-                    (ehr13606values.containsKey("lkm-for-uiv") ? "utlämningsinterval:" + ehr13606values.get("lkm-for-uiv") + " " : "") +
-                    (ehr13606values.containsKey("lkm-for-mpt") ? "mängd per tillfälle:" + ehr13606values.get("lkm-for-mpt") + " " : "") +
-                    (ehr13606values.containsKey("lkm-for-dbs") ? "distributionssätt:"  + ehr13606values.get("lkm-for-dbs") : ""));
-            
-            if (StringUtils.isNotBlank(mpt.getDispensationAuthorization().getDispensationAuthorizerComment())) {
-                mpt.getDispensationAuthorization().setPrescriptionSignatura(mpt.getDispensationAuthorization().getDispensationAuthorizerComment());
-            } else {
-                mpt.getDispensationAuthorization().setPrescriptionSignatura("");
-            }
-            
-        }
-        
-        // ---
-
-        final MedicationMedicalRecordBodyType bodyType = new MedicationMedicalRecordBodyType();
-        bodyType.setMedicationPrescription(mpt);
-        return bodyType;
-    }
-
-
-    // Return first value from a list of keys. Default to NA.
-    protected String getNonBlank(Map<String, String> ehr13606values, String... keys) {
-        String result = null;
-        if (ehr13606values != null && ehr13606values.size() > 0 && keys != null && keys.length > 0) {
-            int i = 0;
-            while (StringUtils.isBlank(result) && i < keys.length) {
-                result = ehr13606values.get(keys[i]);
-                i++;
-            }
-        }
-        if (StringUtils.isBlank(result)) {
-            result = "NA";
-        }
-        return result;
-    }
-
-
-    // Retrieve ehr values from message and store in a map
-    private Map<String,String> retrieveValues(COMPOSITION composition, int compositionIndex) {
-        
-        Map<String,String> values = new LinkedHashMap<String,String>(); // Linked in order to preserve order of insertion
-        for (final CONTENT content : composition.getContent()) {
-            for (final ITEM item : ((ENTRY) content).getItems()) {
-                retrieveItemValue(item, values);
-            }
-        }
-        
-        if (log.isDebugEnabled()) {
-            log.debug("incoming composition : " + compositionIndex);
-            Iterator<String> it = values.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                log.debug("|" + key + "|" + values.get(key) + "|");
-            }
-        }
-        
-        return values;
-     }
-    
-
-    /*
-     * Retrieve item values from incoming message and store 
-     * as Strings in a Map.
-     * Basing processing on Strings means converting numerics
-     * and objects to String. This makes processing slightly less
-     * efficient, but simplifies coding in parent methods.
-     */
-    private void retrieveItemValue(ITEM item, Map<String,String> values) {
-        
-        if (item.getMeaning() != null) {
-            String code = item.getMeaning().getCode();
-            if (StringUtils.isNotBlank(code)) {
-                
-                if (item instanceof ELEMENT) {
-                    String text = "";    
-                    ANY value = ((ELEMENT)item).getValue();
-                    if (value != null) {
-                               if (value instanceof ST) {
-                            text = ((ST)value).getValue();
-                        } else if (value instanceof PQ) {
-                            text = ((PQ)value).getValue().toString();
-                        } else if (value instanceof INT) {
-                            text = ((INT)value).getValue().toString();
-                        } else if (value instanceof TS) {
-                            text = ((TS)value).getValue();
-                        } else if (value instanceof BL) {
-                            text = ((BL)value).isValue().toString();
-                        } else if (value instanceof CD) {
-                            text = ((CD)value).getCode();
-                        } else if (value instanceof II) {
-                            text = ((II)value).getRoot();
-                        } else if (value instanceof IVLTS) {
-                            // lkm-dst-bet is more complex
-                            // split into two String values
-                            // lkm-dst-bet-low, lkm-dst-bet-high
-                            String low = ((IVLTS)value).getLow().getValue();
-                            if (StringUtils.isNotBlank(low)) {
-                                values.put(code + "-low", low);
-                            }
-                            if (((IVLTS)value).getHigh().getNullFlavor() == null ) {
-                                String high = ((IVLTS)value).getHigh().getValue();
-                                if (StringUtils.isNotBlank(high)) {
-                                    values.put(code + "-high", high);
-                                }
-                            }
-                        } else {
-                            log.error("Code " + code + " has unknown value type " + value.getClass().getCanonicalName());
-                        }
-                               
-                        if (StringUtils.isNotBlank(text)) {
-                           values.put(code, text);
-                        }
-                    }
-                } else if (item instanceof CLUSTER) {
-                    CLUSTER cluster = (CLUSTER)item;
-                    for (ITEM childItem : cluster.getParts()) {
-                        retrieveItemValue(childItem, values);
-                    }
-                } else {
-                    log.error("ITEM is neither an ELEMENT nor a CLUSTER:" + item.getMeaning().getCode());
-                }
-            }
-        }
+    protected void sortCompositions(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
+    	for(COMPOSITION c : comps) {
+    		if(c.getMeaning() != null && c.getMeaning().getCode() != null 
+    				&& c.getRcId() != null && c.getRcId().getExtension() != null) {
+    			switch(c.getMeaning().getCode()) {
+    				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING:
+    					lkf.put(c.getRcId().getExtension(), c);
+    					break;
+    				case INFORMATIONSMANGD_LAKEMEDEL_ORDINATION:
+    					lko.put(c.getRcId().getExtension(), c);
+    					break;
+    			}
+    		}
+    	}
     }
 }
