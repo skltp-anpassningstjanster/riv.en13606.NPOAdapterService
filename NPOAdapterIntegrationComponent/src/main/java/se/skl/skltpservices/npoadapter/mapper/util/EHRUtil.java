@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 
 import se.rivta.en13606.ehrextract.v11.AD;
 import se.rivta.en13606.ehrextract.v11.ADXP;
+import se.rivta.en13606.ehrextract.v11.ANY;
 import se.rivta.en13606.ehrextract.v11.ATTESTATIONINFO;
 import se.rivta.en13606.ehrextract.v11.AUDITINFO;
 import se.rivta.en13606.ehrextract.v11.BL;
@@ -104,6 +105,7 @@ public final class EHRUtil {
         return yyyyMMddFormatter.get().parse(dateString);
     }
 
+    
     public static String getElementTextValue(final ELEMENT e) {
         if (e != null && e.getValue() instanceof ST) {
             ST text = (ST) e.getValue();
@@ -176,6 +178,25 @@ public final class EHRUtil {
         parameterType.setName(stType(name));
         parameterType.setValue(stType(value));
         return parameterType;
+    }
+    
+    /**
+     * Return TS value from ANY
+     * @param obj
+     * @return String value, might be null
+     */
+    public static String getTSValue(final ANY obj) {
+    	if(obj instanceof TS && obj != null) {
+    		return ((TS)obj).getValue();
+    	}
+    	return null;
+    }
+    
+    public static String getSTValue(final ANY obj) {
+    	if(obj instanceof ST && obj != null) {
+    		return ((ST)obj).getValue();
+    	}
+    	return null;
     }
 
     public static ELEMENT findEntryElement(final List<CONTENT> contents, final String type) {
@@ -296,6 +317,15 @@ public final class EHRUtil {
         }
 
         return XMLBeanMapper.getInstance().map(timePeriod, type);
+    }
+    
+    public static Double tsToDouble(final TS ts) {
+    	try {
+    		if(ts.getValue() != null) {
+    			return Double.valueOf(ts.getValue());
+    		}
+    	} catch (NumberFormatException nfe) {}
+    	return null;
     }
 
     //
