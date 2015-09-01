@@ -21,14 +21,28 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Scanner;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
 import se.rivta.en13606.ehrextract.v11.CD;
@@ -41,6 +55,7 @@ import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
@@ -49,7 +64,7 @@ import se.skl.skltpservices.npoadapter.test.Util;
 public class DiagnosisMapperTest {
 	
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
-	private static EHREXTRACT ehrExctract;
+	private static EHREXTRACT ehrExtract;
 	private static final DiagnosisMapper mapper = Mockito.spy(new DiagnosisMapper());
 	
 	private final static CD cd = new CD();
@@ -57,11 +72,13 @@ public class DiagnosisMapperTest {
 	
 	private static final String TEST_DATA_1 = UUID.randomUUID().toString();
 	private static final String TEST_DATA_2 = UUID.randomUUID().toString();
-		
+
+    private static final Logger log = LoggerFactory.getLogger(DiagnosisMapperTest.class);
+	
 	@BeforeClass
 	public static void init() throws JAXBException {
-		ehrExctract = Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
-		ehrResp.getEhrExtract().add(ehrExctract);
+		ehrExtract = Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
+		ehrResp.getEhrExtract().add(ehrExtract);
 		
 		cd.setCode(TEST_DATA_1);
 		cd.setId(TEST_DATA_2);
@@ -74,7 +91,7 @@ public class DiagnosisMapperTest {
 		boolean typeTouch = false;
 		CD cd = null;
 		
-		for(COMPOSITION comp : ehrExctract.getAllCompositions()) {
+		for(COMPOSITION comp : ehrExtract.getAllCompositions()) {
 			DiagnosisBodyType body = Mockito.spy(mapper.mapDiagnosisBodyType(comp));
 			TS time = null;
 			ST simpleText = null;
@@ -104,4 +121,62 @@ public class DiagnosisMapperTest {
 			assertTrue(typeTouch);
 		}
 	}
+	
+    @Test
+    public void mapResponse() {
+
+        DiagnosisMapper objectUnderTest = new DiagnosisMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.DIAGNOSIS_TEST_FILE), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+        
+        // pass the <RIV13606REQUEST_EHR_EXTRACT_response/> message into the Mapper - expect back a <GetDiagnosisResponse/>
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
+
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String)argumentCaptor.getValue();
+
+            log.debug(responseXml);
+            
+            assertTrue(responseXml.contains("GetDiagnosisResponse>"));
+            assertTrue(responseXml.contains("typeOfDiagnosis>Huvuddiagnos"));
+            assertTrue(responseXml.contains("chronicDiagnosis>true"));
+            assertTrue(responseXml.contains("documentId>SE2321000164-1004Dia19381221704420090512083134940624000-1</"));
+            assertTrue(responseXml.contains("healthcareProfessionalCareUnitHSAId>SE2321000164-12ab"));
+            assertTrue(responseXml.contains("healthcareProfessionalCareGiverHSAId>SE2321000164-ab12"));            
+            assertTrue(responseXml.contains("relatedDiagnosis><"));
+            assertTrue(responseXml.contains("documentId>SE123-relatedDiagnosis<"));
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+	
+	
+	
 }
