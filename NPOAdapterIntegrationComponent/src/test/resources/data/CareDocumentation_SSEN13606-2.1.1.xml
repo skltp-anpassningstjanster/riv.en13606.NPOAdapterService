@@ -170,9 +170,14 @@
 		<code code="Vårdgivare" codeSystem="1.2.752.129.2.2.1.3"/>
 		<desc value="ÖLL"/>
 		<name value="Barn- och ungdomskliniken USÖ"/>
-		<addr>
-			<part type="AL">Universitetssjukhuset Örebro  701 85 ÖREBRO</part>
-		</addr>
+
+<addr>
+  <part type="AL">Europavägen 4, 667 32, Forshaga</part>
+</addr>
+<addr>
+  <part type="CEN">Allmänmedicinska mottagningen vårdcentralen Forshaga</part>
+</addr>
+
 	</demographic_extract>
 	<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
 		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037590003ollvgiv-1"/>

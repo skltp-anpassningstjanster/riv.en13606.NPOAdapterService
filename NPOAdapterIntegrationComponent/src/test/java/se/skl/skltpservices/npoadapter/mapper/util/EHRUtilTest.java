@@ -60,6 +60,7 @@ import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
 import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
 import se.rivta.en13606.ehrextract.v11.II;
 import se.rivta.en13606.ehrextract.v11.INT;
+import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.PERSON;
 import se.rivta.en13606.ehrextract.v11.ParameterType;
@@ -116,7 +117,17 @@ public class EHRUtilTest {
 		INT intType = EHRUtil.intType(TEST_INT_VALUE_1);
 		assertEquals(TEST_INT_VALUE_1, intType.getValue().intValue());
 	}
-		
+
+	@Test
+	public void testIVLTS() {
+	    DatePeriodType datePeriod = new DatePeriodType();
+	    datePeriod.setStart("20100131");
+	    datePeriod.setEnd("20201231");
+	    IVLTS ivlts = EHRUtil.IVLTSType(datePeriod);
+	    assertTrue(ivlts.isLowClosed());
+        assertTrue(ivlts.isHighClosed());
+	}
+	
 	@Test
 	public void testTsType() {
 		TS ts = EHRUtil.tsType(TEST_VALUE_1);

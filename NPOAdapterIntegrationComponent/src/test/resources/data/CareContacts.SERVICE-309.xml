@@ -1,0 +1,753 @@
+<SOAP-ENV:Body>
+  <RIV13606REQUEST_EHR_EXTRACT_response
+    xmlns="urn:riv13606:v1.1">
+    <ehr_extract xmlns:s01="urn:riv13606:v1.1"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ehr_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:EhrId:194102069046"></ehr_id>
+      <ehr_system root="1.2.752.129.2.1.4.1" extension="HSATEST2-CSD"></ehr_system>
+      <rm_id>EN 13606</rm_id>
+      <subject_of_care root="1.2.752.129.2.1.3.1"
+        extension="194102069046"></subject_of_care>
+      <time_created value="20150827134220"></time_created>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15434"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150616114004"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150616114847"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="Kan ej visas"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15473"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150616132433"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150616132958"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-P001041"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15612"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150824104150"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150824104232"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="Kan ej visas"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Dagsjukv[0xc3][0xa5]rd"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15628"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150825102958"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825103022"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="Kan ej visas"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15636"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true" highClosed="true">
+          <low value="20150825103257"></low>
+          <high value="20150825103257"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F9"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825103320"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F9"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="Kan ej visas"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Telefon"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15644"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150825103457"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825103620"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Annan"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:3746"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true" highClosed="true">
+          <low value="20141111132048"></low>
+          <high value="20150820104550"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="SE2321000214-E013514"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825104642"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="SE2321000214-E013514"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="V[0xc3][0xa5]rdtillf[0xc3][0xa4]lle"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15662"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true" highClosed="true">
+          <low value="20150823104916"></low>
+          <high value="20150825104916"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F9"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825105245"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F9"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="V[0xc3][0xa5]rdtillf[0xc3][0xa4]lle"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Avslutad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15734"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150825140000"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825122023"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Ej p[0xc3][0xa5]b[0xc3][0xb6]rjad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15786"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150822120000"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825123216"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Ej p[0xc3][0xa5]b[0xc3][0xb6]rjad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <all_compositions>
+        <meaning code="vko" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName
+            value="Informationsm[0xc3][0xa4]ngd V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:Contact:15831"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <session_time lowClosed="true">
+          <low value="20150826090000"></low>
+          <high nullFlavor="NI"></high>
+        </session_time>
+        <other_participations>
+          <function code="ute" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Utf[0xc3][0xb6]rande enhet"></displayName>
+          </function>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></performer>
+        </other_participations>
+        <other_participations>
+          <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+            <displayName value="Informations[0xc3][0xa4]gare"></displayName>
+          </function>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-0001"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+        </other_participations>
+        <committal>
+          <committer nullFlavor="NA"></committer>
+          <ehr_system nullFlavor="NA"></ehr_system>
+          <time_committed value="20150825125035"></time_committed>
+        </committal>
+        <composer>
+          <healthcare_facility root="1.2.752.129.2.1.4.1"
+            extension="TSE2321000214-13F8"></healthcare_facility>
+          <performer root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></performer>
+        </composer>
+        <content xsi:type="ENTRY">
+          <meaning code="vko-vko" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="V[0xc3][0xa5]rd- och omsorgskontakt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <uncertainty_expressed value="false"></uncertainty_expressed>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-typ" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontakttyp"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Bes[0xc3][0xb6]k"></value>
+          </items>
+          <items xsi:type="ELEMENT">
+            <meaning code="vko-vko-sta" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Kontaktstatus"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Ej p[0xc3][0xa5]b[0xc3][0xb6]rjad"></value>
+          </items>
+        </content>
+      </all_compositions>
+      <demographic_extract xsi:type="ORGANISATION">
+        <extract_id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></extract_id>
+        <id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></id>
+        <telecom xsi:type="TEL.PHONE" value="063-153000"></telecom>
+        <code nullFlavor="NA"></code>
+        <desc nullFlavor="NA"></desc>
+        <name value="Barn- och ungdomsmedicin"></name>
+        <addr>
+          <part type="CEN">[0xc3][0x96]stersund</part>
+        </addr>
+      </demographic_extract>
+      <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+        <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000214-P001041"></extract_id>
+        <id root="1.2.752.129.2.1.4.1" extension="SE2321000214-P001041"></id>
+        <name>
+          <part value="Agneta Engstr[0xc3][0xb6]m"></part>
+        </name>
+        <role>
+          <profession code="Not implemented" codeSystem="1.2.752.129.2.2.1.4">
+            <displayName value="L[0xc3][0xa4]kare"></displayName>
+          </profession>
+        </role>
+      </demographic_extract>
+      <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+        <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000214-0040650"></extract_id>
+        <id root="1.2.752.129.2.1.4.1" extension="SE2321000214-0040650"></id>
+        <name>
+          <part value="Susanne Lindell"></part>
+        </name>
+        <role>
+          <profession code="Not implemented" codeSystem="1.2.752.129.2.2.1.4">
+            <displayName value="Administrat[0xc3][0xb6]r"></displayName>
+          </profession>
+        </role>
+      </demographic_extract>
+    </ehr_extract>
+  </RIV13606REQUEST_EHR_EXTRACT_response>
+</SOAP-ENV:Body>

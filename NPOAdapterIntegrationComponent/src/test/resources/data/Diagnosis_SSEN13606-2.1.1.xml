@@ -74,7 +74,7 @@
 				<name nullFlavor="NA"/>
 				<rc_id nullFlavor="NA"/>
 				<synthesised nullFlavor="NA"/>
-				<value xsi:type="ST" value="Huvuddiagnos"/>
+				<value xsi:type="ST" value="Kronisk diagnos"/>
 			</items>
 			<items xsi:type="ELEMENT">
 				<meaning codeSystem="1.2.752.129.2.2.2.1" code="dia-dia-tid">
@@ -135,7 +135,7 @@
 				<follow_link value="false"/>
 				<nature nullFlavor="NA"/>
 				<target_type codeSystem="1.2.752.129.2.2.2.1.1" code="dia"/>
-				<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1001Dia19381221704420090512083015564737000-1"/>
+				<target_id root="1.2.752.129.2.1.2.1" extension="SE123-relatedDiagnosis"/>
 			</links>
 			<uncertainty_expressed nullFlavor="NA"/>
 			<items xsi:type="ELEMENT">

@@ -105,8 +105,6 @@ public class CareContactsMapperTest {
 
         assertNotNull(careContactHeader.getPatientId());
         assertFalse(careContactHeader.isApprovedForPatient());
-        assertFalse(careContactHeader.isNullified());
-        assertNull(careContactHeader.getNullifiedReason());
     }
 
     private void verifyAccountableHealthcareProfessional(HealthcareProfessionalType accountableHealthcareProfessional) {
