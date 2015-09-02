@@ -81,9 +81,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
     /**
      * UPP Informationsobjekt
      */
-    @SuppressWarnings("unused")
     private final static String INAKTUELL_TIDPUNKT = "upp-upp-itp";
-    @SuppressWarnings("unused")
     private final static String KOM_INAKTUELL_TIDPUNKT = "upp-upp-kin";
     private final static String KONST_DATUM = "upp-upp-kdt";
     private final static String VERIFIERAD_TIDPUNKT = "upp-upp-vtp";
@@ -120,7 +118,6 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
     private final static String EJ_STRUKTURERAD_VARNING_INNEHALL = "upp-est-inh";
     
     private final static String UPPMARKSAMMAD_ARBETSMILJORISK = "upp-arb";
-    @SuppressWarnings("unused")
     private final static String SMITTFORANDE = "upp-arb-smf";
     private final static String SMITTVAG = "upp-arb-smf-vag";
     private final static String SMITTSAM_SJUKDOM = "upp-arb-smf-sjd";
@@ -243,6 +240,16 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
 								for(RelatedAlertInformationType rai : type.getRelatedAlertInformation()) {
 									rai.setRelationComment(EHRUtil.getElementTextValue((ELEMENT) item)); 
 								}
+							}
+							break;
+						case INAKTUELL_TIDPUNKT:
+							if(item instanceof ELEMENT) {
+								type.setObsoleteTime(EHRUtil.getElementTimeValue((ELEMENT) item));
+							}
+							break;
+						case KOM_INAKTUELL_TIDPUNKT:
+							if(item instanceof ELEMENT) {
+								type.setObsoleteComment(EHRUtil.getElementTextValue((ELEMENT) item));
 							}
 							break;
 						default:
