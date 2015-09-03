@@ -35,6 +35,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -203,8 +204,8 @@ public abstract class AbstractMapper {
     }
     
     protected SharedHeaderExtract extractInformation(final EHREXTRACT ehrExtract) {
-    	final Map<String, ORGANISATION> orgs = new HashMap<String, ORGANISATION>();
-		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new HashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
+    	final Map<String, ORGANISATION> orgs = new LinkedHashMap<String, ORGANISATION>(); // LinkedHashMap preserves insertion order
+		final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps = new LinkedHashMap<String, IDENTIFIEDHEALTHCAREPROFESSIONAL>();
 		
 		for (IDENTIFIEDENTITY entity : ehrExtract.getDemographicExtract()) {
 		    
