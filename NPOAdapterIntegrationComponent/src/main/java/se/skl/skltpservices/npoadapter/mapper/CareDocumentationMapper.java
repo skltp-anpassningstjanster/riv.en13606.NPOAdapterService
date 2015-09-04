@@ -37,6 +37,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -63,6 +64,18 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         MEANING_VOO.setCode(INFO_VOO);
     }
 
+    
+    public CareDocumentationMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-CAREDOCUMENTATION"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
+                            "/core_components/clinicalprocess_healthcond_description_2.1_ext.xsd",
+                            "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
+                            "/interactions/GetCareDocumentationInteraction/GetCareDocumentationResponder_2.1.xsd");
+    }
+
+    
     @Override
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         log.debug("Transforming request");
@@ -168,7 +181,9 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
 
     protected String marshal(final GetCareDocumentationResponseType response) {
         final JAXBElement<GetCareDocumentationResponseType> el = objFactory.createGetCareDocumentationResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
 
     protected boolean isClinicalDocumentTypeCode(final String code) {

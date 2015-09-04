@@ -118,19 +118,15 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     private riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory careContactsObjectFactory
     = new riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory careDocumentationObjectFactory
     = new riv.clinicalprocess.healthcond.description.getcaredocumentationresponder._2.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory diagnosisObjectFactory
     = new riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory imagingOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory laboratoryOrderOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory();
     
@@ -160,13 +156,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
     	final JaxWsProxyFactoryBean jaxWs = new JaxWsProxyFactoryBean();
 
-        /**
-         * Schema validation
-         */
-        //final Map<String, Object> props = new HashMap<String, Object>();
-    	//props.put("schema-validation-enabled", true);
-    	//jaxWs.setProperties(props);
-
+        jaxWs.setServiceClass(GetAlertInformationResponderInterface.class);
+        jaxWs.setAddress(ALERT_INFORMATION_ENDPOINT);
+        getAlertInformationResponderInterface = (GetAlertInformationResponderInterface) create(jaxWs);
+        
 		jaxWs.setServiceClass(GetCareContactsResponderInterface.class);
 		jaxWs.setAddress(CARE_CONTACTS_ENDPOINT);
 		getCareContactsServices = (GetCareContactsResponderInterface) create(jaxWs);
@@ -182,10 +175,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 		jaxWs.setServiceClass(GetLaboratoryOrderOutcomeResponderInterface.class);
 		jaxWs.setAddress(LABORATORY_ENDPOINT);
 		getLaboratoryOrderOutcomeServices = (GetLaboratoryOrderOutcomeResponderInterface) create(jaxWs);
-		
-		jaxWs.setServiceClass(GetAlertInformationResponderInterface.class);
-		jaxWs.setAddress(ALERT_INFORMATION_ENDPOINT);
-		getAlertInformationResponderInterface = (GetAlertInformationResponderInterface) create(jaxWs);
 		
         jaxWs.setServiceClass(GetMedicationHistoryResponderInterface.class);
         jaxWs.setAddress(MEDICATION_HISTORY_ENDPOINT);
@@ -394,14 +383,14 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
     // ReferralOutcome
     
-    @Ignore
+    @Test
     public void GetReferralOutcomeEN13606SuccessTest() {
         GetReferralOutcomeType type = IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
         GetReferralOutcomeResponseType resp = getReferralOutcomeResponderInterface.getReferralOutcome(LOGICAL_ADDRESS_VS_1, type);
         assertFalse(resp.getReferralOutcome().isEmpty());
     }
     
-    @Ignore
+    @Test
     public void GetReferralOutcomeEN13606NullTest() {
         try {
             @SuppressWarnings("unused")
@@ -411,7 +400,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         } 
     }
     
-    @Ignore
+    @Test
     public void GetReferralOutcomeRIVSuccessTest() {
         GetReferralOutcomeResponseType response = getReferralOutcomeResponderInterface.getReferralOutcome(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createReferralOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
@@ -419,6 +408,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
 
         validateXmlAgainstSchema(referralOutcomeObjectFactory.createGetReferralOutcomeResponse(response),
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                 "/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeResponder_3.0.xsd");
     }

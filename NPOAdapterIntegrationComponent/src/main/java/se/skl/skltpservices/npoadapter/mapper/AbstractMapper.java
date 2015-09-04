@@ -19,24 +19,42 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBElement;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
+import org.xml.sax.SAXException;
 
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractResponseType;
 import riv.ehr.patientsummary.getehrextractresponder._1.GetEhrExtractType;
-import se.rivta.en13606.ehrextract.v11.*;
-import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.ObjectFactory;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 /**
  * Abstracts all mapper implementations.
@@ -82,39 +100,43 @@ public abstract class AbstractMapper {
     static final String NS_MEDICATIONHISTORY   = "urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistory:2:rivtabp21";
     static final String NS_REFERRALOUTCOME     = "urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcome:3:rivtabp21";
 
+
+    protected boolean schemaValidationActivated = false;
+    
+    protected Validator schemaValidator = null;
     
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
     static {
-        // contacts
-        map.put(mapperKey(NS_EN_EXTRACT, NS_CARECONTACTS_2), new CareContactsMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_CARECONTACTS_2), new RIVCareContactsMapper());
-
-        // docs
-        map.put(mapperKey(NS_EN_EXTRACT, NS_CAREDOCUMENTATION_2), new CareDocumentationMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_CAREDOCUMENTATION_2), new RIVCareDocumentationMapper());
-        
-        //dia
-        map.put(mapperKey(NS_EN_EXTRACT, NS_DIAGNOSIS_2), new DiagnosisMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_DIAGNOSIS_2), new RIVDiagnosisMapper());
-        
-        //lab
-        map.put(mapperKey(NS_EN_EXTRACT, NS_LABORATORY_3), new LaboratoryOrderOutcomeMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_LABORATORY_3), new RIVLaboratoryOrderOutcomeMapper());
-        
-        //imaging
-        map.put(mapperKey(NS_EN_EXTRACT, NS_IMAGING_1), new ImagingOutcomeMapper());
-        map.put(mapperKey(NS_RIV_EXTRACT, NS_IMAGING_1), new RIVImagingOutcomeMapper());
-        
-        //alertinfo
+        // alertinformation
         map.put(mapperKey(NS_EN_EXTRACT, NS_ALERT_2), new AlertInformationMapper());
         map.put(mapperKey(NS_RIV_EXTRACT, NS_ALERT_2), new RIVAlertInformationMapper());
         
-        //medicationhistory
+        // carecontacts
+        map.put(mapperKey(NS_EN_EXTRACT, NS_CARECONTACTS_2), new CareContactsMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_CARECONTACTS_2), new RIVCareContactsMapper());
+
+        // caredocumentation
+        map.put(mapperKey(NS_EN_EXTRACT, NS_CAREDOCUMENTATION_2), new CareDocumentationMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_CAREDOCUMENTATION_2), new RIVCareDocumentationMapper());
+        
+        // diagnosis
+        map.put(mapperKey(NS_EN_EXTRACT, NS_DIAGNOSIS_2), new DiagnosisMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_DIAGNOSIS_2), new RIVDiagnosisMapper());
+        
+        // laboratoryorderoutcome
+        map.put(mapperKey(NS_EN_EXTRACT, NS_LABORATORY_3), new LaboratoryOrderOutcomeMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_LABORATORY_3), new RIVLaboratoryOrderOutcomeMapper());
+        
+        // imagingoutcome
+        map.put(mapperKey(NS_EN_EXTRACT, NS_IMAGING_1), new ImagingOutcomeMapper());
+        map.put(mapperKey(NS_RIV_EXTRACT, NS_IMAGING_1), new RIVImagingOutcomeMapper());
+        
+        // medicationhistory
         map.put(mapperKey(NS_EN_EXTRACT, NS_MEDICATIONHISTORY), new MedicationHistoryMapper());
         map.put(mapperKey(NS_RIV_EXTRACT, NS_MEDICATIONHISTORY), new RIVMedicationHistoryMapper());
         
-        //referraloutcome
+        // referraloutcome
         map.put(mapperKey(NS_EN_EXTRACT, NS_REFERRALOUTCOME), new ReferralOutcomeMapper());
         map.put(mapperKey(NS_RIV_EXTRACT, NS_REFERRALOUTCOME), new RIVReferralOutcomeMapper());
     }
@@ -225,5 +247,39 @@ public abstract class AbstractMapper {
 		
 		return new SharedHeaderExtract(orgs, hps, EHRUtil.getSystemHSAId(ehrExtract), ehrExtract.getSubjectOfCare());
     }
+    
+    
+    protected void initialiseValidator(String ... xsds) {
+        List<Source> schemaFiles = new ArrayList<Source>();
+        for (String xsd : xsds) {
+            schemaFiles.add(new StreamSource(getClass().getResourceAsStream(xsd)));
+        }
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = factory.newSchema(schemaFiles.toArray(new StreamSource[schemaFiles.size()]));
+            schemaValidator = schema.newValidator();
+        } catch (SAXException s) {
+            throw new RuntimeException(new InstantiationException("Failed to instantiate schema: " + s.getMessage()));
+        }
+        
+    }
 
+    
+    protected void validateXmlAgainstSchema(String xml, Validator validator, Logger log) {
+        if (schemaValidationActivated) {
+            if (StringUtils.isBlank(xml)) {
+                log.error("Attempted to validate empty string");
+            } else {
+                try {
+                    validator.validate(new StreamSource(new StringReader(xml)));
+                    log.debug("response passed schema validation");
+                } catch (SAXException e) {
+                    log.error("response failed schema validation: " + e.getMessage());
+                    log.debug(xml);
+                } catch (IOException e) {
+                    throw new RuntimeException("Unexpected exception whilst validating xml against schema", e);
+                }
+            }
+        }
+    }
 }

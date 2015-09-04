@@ -24,6 +24,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.healthcond.actoutcome._3.*;
@@ -36,6 +38,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -48,6 +51,8 @@ import javax.xml.stream.XMLStreamReader;
  */
 public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapper {
 
+    protected static final Logger log = LoggerFactory.getLogger(LaboratoryOrderOutcomeMapper.class);
+    
     private static final JaxbUtil jaxb = new JaxbUtil(GetLaboratoryOrderOutcomeType.class);
     private static final ObjectFactory objFactory = new ObjectFactory();
 
@@ -55,6 +60,16 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     static {
         MEANING.setCodeSystem("1.2.752.129.2.2.2.1");
         MEANING.setCode(INFO_UND_KKM_KLI);
+    }
+
+    public LaboratoryOrderOutcomeMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-LABORATORYORDEROUTCOME"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                            "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.0.xsd");
     }
 
     @Override
@@ -381,7 +396,9 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 
     protected String marshal(final GetLaboratoryOrderOutcomeResponseType response) {
         final JAXBElement<GetLaboratoryOrderOutcomeResponseType> el = objFactory.createGetLaboratoryOrderOutcomeResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
 
     protected GetLaboratoryOrderOutcomeType unmarshal(final XMLStreamReader reader) {

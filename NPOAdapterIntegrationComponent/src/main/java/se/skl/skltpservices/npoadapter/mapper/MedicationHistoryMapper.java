@@ -20,8 +20,6 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,17 +50,10 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.SetDosageType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.SingleDoseType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDosageInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredInformationType;
-import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
-import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.ANY;
 import se.rivta.en13606.ehrextract.v11.BL;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.CLUSTER;
@@ -79,13 +70,12 @@ import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.PQ;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.rivta.en13606.ehrextract.v11.ST;
-import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil.HealthcareProfessional;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 
 /**
@@ -171,6 +161,16 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
     
+    public MedicationHistoryMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-MEDICATIONHISTORY"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
+                            "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
+                            "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
+    }
+
+
     protected GetMedicationHistoryType unmarshal(final XMLStreamReader reader) {
         try {
             return  (GetMedicationHistoryType) jaxb.unmarshal(reader);
@@ -182,7 +182,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     
     protected String marshal(final GetMedicationHistoryResponseType response) {
         final JAXBElement<GetMedicationHistoryResponseType> el = objectFactory.createGetMedicationHistoryResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
     
 
