@@ -96,7 +96,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
 	
     public ImagingOutcomeMapper() {
-        /**
     	schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-IMAGINGOUTCOME"));
         log.debug("schema validation is activated? " + schemaValidationActivated);
         
@@ -104,7 +103,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                             "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
-                            **/
     }
 
 
@@ -112,7 +110,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
 		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
         String xml = jaxb.marshal(el);
-        //validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
         return xml;
 	}
 
