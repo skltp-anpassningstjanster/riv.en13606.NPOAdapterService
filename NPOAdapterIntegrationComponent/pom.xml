@@ -60,7 +60,7 @@
 
     <dependency>
       <groupId>org.soitoolkit.commons.poms.mule-dependencies</groupId>
-      <artifactId>soitoolkit-mule-3.3.0-dependencies</artifactId>
+      <artifactId>soitoolkit-mule-${mule.version}-dependencies</artifactId>
       <type>pom</type>
     </dependency>
 

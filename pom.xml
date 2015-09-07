@@ -8,7 +8,7 @@
     <parent>
         <groupId>se.skltp.commons</groupId>
         <artifactId>skltp-commons-mule-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
@@ -24,6 +24,7 @@
         <mockito.version>1.9.5</mockito.version>
         <lombok.version>1.14.4</lombok.version>
         <dozer.version>5.5.1</dozer.version>
+        <mule.version>3.3.1</mule.version>
     </properties>
 
     <scm>
@@ -90,7 +91,7 @@
 
             <dependency>
                 <groupId>org.soitoolkit.commons.poms.mule-dependencies</groupId>
-                <artifactId>soitoolkit-mule-3.3.0-dependencies</artifactId>
+                <artifactId>soitoolkit-mule-${mule.version}-dependencies</artifactId>
                 <version>${soitoolkit.version}</version>
                 <type>pom</type>
             </dependency>
