@@ -65,6 +65,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 
 /**
@@ -98,6 +99,18 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private static final String EHR13606_TILL = "TILL";
     private static final String SAKNAS        = "saknas";
 
+    
+    public ReferralOutcomeMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-REFERRALOUTCOME"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                            "/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeResponder_3.0.xsd");
+    }
+
+    
     // unmarshall xml stream into a GetReferralOutcomeType
     protected GetReferralOutcomeType unmarshal(final XMLStreamReader reader) {
         log.debug("unmarshal");
@@ -115,7 +128,9 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     
     protected String marshal(final GetReferralOutcomeResponseType response) {
         final JAXBElement<GetReferralOutcomeResponseType> el = objectFactory.createGetReferralOutcomeResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
     
 
@@ -273,28 +288,28 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         if (ehr13606values.containsKey("und-und-uat-kod")) {
             bodyType.getAct().get(0).setActCode(new ActCodeType());
             bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
-            bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod"));
+            bodyType.getAct().get(0).getActCode().setCodeSystem(ehr13606values.get("und-und-uat-kod-system"));
         }
         
-        bodyType.getAct().get(0).setActId(ehr13606values.get("vbe-rc-id"));
-        bodyType.getAct().get(0).setActText(ehr13606values.get("und-kon-ure-kty"));
+//      bodyType.getAct().get(0).setActId(ehr13606values.get("vbe-rc-id"));
+        bodyType.getAct().get(0).setActText(ehr13606values.get("und-und-uat-txt")); // und-kon-ure-kty
         if (StringUtils.isBlank(bodyType.getAct().get(0).getActText())) {
             bodyType.getAct().get(0).setActText(SAKNAS);
         }
         if (ehr13606values.containsKey("und-und-res-und")) {
-            // We need to confirm that und-und-res-und contains text - we have no sample data so far
+            // There is no data in qa for und-und-res-und need to confirm that element contains text
             bodyType.getAct().get(0).getActResult().add(new MultimediaType());
             bodyType.getAct().get(0).getActResult().get(0).setMediaType(MediaTypeEnum.TEXT_PLAIN);
             bodyType.getAct().get(0).getActResult().get(0).setValue(ehr13606values.get("und-und-res-und").getBytes(Charset.forName("UTF-8")));
         }
         
-        bodyType.getAct().get(0).setActTime(ehr13606values.get("und-kon-ure-kty-high"));
+        bodyType.getAct().get(0).setActTime(ehr13606values.get("und-und-uat-txt-high"));
 
         //
         
         ReferralType rt = new ReferralType();
 
-        rt.setReferralId(ehr13606values.get("und-kon-ure"));
+        rt.setReferralId(ehr13606values.get("und-kon-ure-id"));
         if (StringUtils.isBlank(rt.getReferralId())) {
             rt.setReferralId(SAKNAS);
         }
@@ -307,7 +322,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         
         rt.setReferralAuthor(new HealthcareProfessionalType());
         
-        rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-root"))); // root="1.2.752.129.2.1.2.1" extension="SONSVE"
+        rt.getReferralAuthor().setHealthcareProfessionalName((ehr13606values.get("vbe-composer-performer-extension")));
         rt.getReferralAuthor().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
         if (StringUtils.isBlank(rt.getReferralAuthor().getAuthorTime())) {
             rt.getReferralAuthor().setAuthorTime(SAKNAS);
@@ -322,9 +337,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     // Retrieve ehr values from message and store in a map
     private void retrieveValues(COMPOSITION composition, Map<String,String> values) {
         for (final CONTENT content : composition.getContent()) {
-            for (final ITEM item : ((ENTRY) content).getItems()) {
-                retrieveItemValue(item, values);
-            }
+            retrieveContentValue(content, values);
         }
         
         if ("vbe".equals(composition.getMeaning().getCode())) {
@@ -344,11 +357,37 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             
             if (composition.getComposer() != null) {
                 if (composition.getComposer().getPerformer() != null) {
-                    values.put("vbe-composer-performer-root", composition.getComposer().getPerformer().getRoot());
+                    values.put("vbe-composer-performer-extension", composition.getComposer().getPerformer().getExtension());
                 }
             }
         }
     }
+
+    private void retrieveContentValue(CONTENT content, Map<String, String> values) {
+        
+        for (final ITEM item : ((ENTRY) content).getItems()) {
+            retrieveItemValue(item, values);
+        }
+        
+        // links contains und-kon-ure-id
+        if ("und-kon-ure".equals(content.getMeaning().getCode())) {
+            String undKonUreId = "";
+            for (se.rivta.en13606.ehrextract.v11.LINK link : content.getLinks()) {
+                if (link.getTargetId() != null) {
+                    for (se.rivta.en13606.ehrextract.v11.II ii : link.getTargetId()) {
+                        if (StringUtils.isNotBlank(ii.getExtension())) {
+                            undKonUreId = ii.getExtension();
+                        }
+                    }
+                }
+            }
+            if (StringUtils.isNotBlank(undKonUreId)) {
+                values.put("und-kon-ure-id", undKonUreId);
+            }
+        }
+        
+    }
+
 
     /*
      * Retrieve item values from incoming message and store 
@@ -369,6 +408,12 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                     if (value != null) {
                                if (value instanceof ST) {
                             text = ((ST)value).getValue();
+                            if ("und-und-uat-kod".equals(item.getMeaning().getCode())) {
+                                String codeSystem = item.getMeaning().getCodeSystem();
+                                if (StringUtils.isNotBlank(codeSystem)) {
+                                    values.put("und-und-uat-kod-system", codeSystem);
+                                }
+                            }
                         } else if (value instanceof TS) {
                             text = ((TS)value).getValue();
                         } else {
@@ -402,6 +447,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                             }
                         }
                     }
+                    
                 } else if (item instanceof CLUSTER) {
                     CLUSTER cluster = (CLUSTER)item;
                     for (ITEM childItem : cluster.getParts()) {

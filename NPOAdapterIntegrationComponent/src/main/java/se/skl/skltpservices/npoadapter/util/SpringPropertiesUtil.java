@@ -19,6 +19,8 @@
  */
 package se.skl.skltpservices.npoadapter.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -36,6 +38,8 @@ import java.util.Properties;
  */
 public class SpringPropertiesUtil extends PropertyPlaceholderConfigurer {
 
+    protected static final Logger log = LoggerFactory.getLogger(SpringPropertiesUtil.class);
+    
     private static Map<String, String> propertiesMap;
     // Default as in PropertyPlaceholderConfigurer
     private int springSystemPropertiesMode = SYSTEM_PROPERTIES_MODE_NEVER;
@@ -57,8 +61,15 @@ public class SpringPropertiesUtil extends PropertyPlaceholderConfigurer {
         }
     }
 
-    //
+    /**
+     * Return null if property is not resolved 
+     */
     public static String getProperty(String name) {
+        if (propertiesMap == null) {
+            log.error("propertiesMap is null");
+            return null;
+//          throw new RuntimeException("propertiesMap is null - incorrectly initialised");
+        }
         return propertiesMap.get(name);
     }
 

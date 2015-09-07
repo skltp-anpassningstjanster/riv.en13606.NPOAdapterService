@@ -71,6 +71,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil.HealthcareProfessional;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 /**
  * Transformer for RIV-TA GetImagingOutcome -> EN13606 Informationsmangd UND-BDI
@@ -94,10 +95,23 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String UNDERSOKNINGS_RESULTAT = "und";
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
 	
+    public ImagingOutcomeMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-IMAGINGOUTCOME"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
+                            "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
+                            "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
+    }
+
+
 	
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
 		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
-		return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
 	}
 
 	

@@ -37,6 +37,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -67,6 +68,15 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
     protected static final String DIA          = "dia";
     protected static final String CHRONIC_DIAGNOSIS = "Kronisk diagnos";
 
+    public DiagnosisMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-DIAGNOSIS"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
+                            "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
+                            "/interactions/GetDiagnosisInteraction/GetDiagnosisResponder_2.0.xsd");
+    }
+
     @Override
     public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
         try {
@@ -94,7 +104,9 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 
     protected String marshal(final GetDiagnosisResponseType response) {
         final JAXBElement<GetDiagnosisResponseType> el = objFactory.createGetDiagnosisResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
 
     protected GetDiagnosisType unmarshal(final XMLStreamReader reader) {

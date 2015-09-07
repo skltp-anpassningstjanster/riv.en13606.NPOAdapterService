@@ -99,6 +99,14 @@ public class XMLBeanMapper {
          *
          * The schemas are similar but not exactly the same so the mapping code has to
          * check both sides (a and b).
+         * 
+         * for example
+         * 
+         *     baseline: se.rivta.en13606.ehrextract.v11.AD.java
+         *          riv: riv.ehr.patientsummary._1.AD.java
+         *          
+         *     baseline: se.rivta.en13606.ehrextract.v11.ResponseDetailType
+         *          riv: riv.ehr.patientsummary.getehrextractresponder._1.ResponseDetailType
          */
         final BeanMappingBuilder builder = new BeanMappingBuilder() {
 
@@ -116,13 +124,13 @@ public class XMLBeanMapper {
 
             /**
              * Makes a mapping and ensures private list fields are traversed during mapping.
-             * Ans also checks that the actual field exists in the destination class.  <p/>
+             * Also checks that the actual field exists in the destination class.  <p/>
              *
-             * Since no set method exists we need to se accessible on private list fields.
+             * Since no set method exists we need to set accessible on private list fields.
              */
             TypeMappingBuilder typeMappingBuilder(final Class<?> src, final Class<?> dst, final List<Field> fields) {
 
-                // log.debug("setup mapping for: {}", src.getSimpleName());
+             // log.debug("setup mapping for class: {}", src.getName());
 
                 final TypeMappingBuilder m = mapping(
                         type(src),
@@ -275,7 +283,12 @@ public class XMLBeanMapper {
                 MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                 final Class<?> a = candidate(metadataReader);
                 if (a != null) {
-                    candidates.add(a);
+                    if (candidates.contains(a)) {
+                        // This occurred when running inside eclipse
+                        log.warn("Classpath problem? Attempted to add duplicate class " + a.getName());
+                    } else {
+                        candidates.add(a);
+                    }
                 }
             }
         }

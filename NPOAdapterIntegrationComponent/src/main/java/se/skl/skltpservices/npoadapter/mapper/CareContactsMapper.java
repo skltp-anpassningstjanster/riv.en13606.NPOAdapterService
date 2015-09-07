@@ -22,6 +22,8 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import riv.clinicalprocess.logistics.logistics._2.*;
@@ -32,6 +34,7 @@ import se.rivta.en13606.ehrextract.v11.*;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
@@ -47,6 +50,8 @@ import java.util.List;
  */
 public class CareContactsMapper extends AbstractMapper implements Mapper {
 
+    protected static final Logger log = LoggerFactory.getLogger(CareContactsMapper.class);
+    
     public static final CD MEANING_VKO = new CD();
     static {
         MEANING_VKO.setCodeSystem("1.2.752.129.2.2.2.1");
@@ -55,6 +60,16 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     private static final JaxbUtil jaxb = new JaxbUtil(GetCareContactsType.class, GetCareContactsResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
+
+    public CareContactsMapper() {
+        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-CARECONTACTS"));
+        log.debug("schema validation is activated? " + schemaValidationActivated);
+        
+        initialiseValidator("/core_components/clinicalprocess_logistics_logistics_enum_2.0.xsd", 
+                            "/core_components/clinicalprocess_logistics_logistics_2.0.xsd",
+                            "/interactions/GetCareContactsInteraction/GetCareContactsResponder_2.0.xsd");
+    }
+
 
     
     @Override
@@ -122,7 +137,9 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
 
     protected String marshal(final GetCareContactsResponseType response) {
         final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(response);
-        return jaxb.marshal(el);
+        String xml = jaxb.marshal(el);
+        validateXmlAgainstSchema(xml, schemaValidator, log);
+        return xml;
     }
 
     /**
