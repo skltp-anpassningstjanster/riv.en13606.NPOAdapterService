@@ -43,6 +43,7 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ImageRecordingType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImageStructuredDataType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingBodyType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
+import riv.clinicalprocess.healthcond.actoutcome._3.OrgUnitType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
 import riv.clinicalprocess.healthcond.actoutcome._3.TimePeriodType;
@@ -61,12 +62,14 @@ import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
+import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
+import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil.HealthcareProfessional;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
 /**
@@ -165,7 +168,46 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
     				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, true, true));
     		        
     				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
-    		        type.setImagingOutcomeBody(mapBody(ehr13606values));
+    				
+    				
+    		        type.setImagingOutcomeBody(mapBody(ehr13606values, und));
+    		        
+    		        //Map VBE healthcarepro
+    		        if(vbe.getComposer() != null) {
+    		        		final HealthcareProfessional hp = EHRUtil.healthcareProfessionalType(vbe.getComposer(), 
+    		        				sharedHeaderExtract.organisations(), sharedHeaderExtract.healthcareProfessionals(), null);
+    		        		if(type.getImagingOutcomeBody().getReferral() != null) {
+    		        			final HealthcareProfessionalType htp = new HealthcareProfessionalType();
+    		        			
+    		        			//htp.setAuthorTime(value);
+    		        			htp.setHealthcareProfessionalCareGiverHSAId(hp.getHealthcareProfessionalCareGiverHSAId());
+    		        			htp.setHealthcareProfessionalCareUnitHSAId(hp.getHealthcareProfessionalCareUnitHSAId());
+    		        			htp.setHealthcareProfessionalHSAId(hp.getHealthcareProfessionalHSAId());
+    		        			htp.setHealthcareProfessionalName(hp.getHealthcareProfessionalName());
+    		        			
+    		        			if(hp.getHealthcareProfessionalOrgUnit() != null) {
+    		        				htp.setHealthcareProfessionalOrgUnit(new OrgUnitType());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitAddress(hp.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitEmail(hp.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitHSAId(hp.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitLocation(hp.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitName(hp.getHealthcareProfessionalOrgUnit().getOrgUnitName());
+    		        				htp.getHealthcareProfessionalOrgUnit().setOrgUnitTelecom(hp.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
+    		        			}
+    		        			
+    		        			if(hp.getHealthcareProfessionalRoleCode() != null) {
+    		        				htp.setHealthcareProfessionalRoleCode(new CVType());
+    		        				htp.getHealthcareProfessionalRoleCode().setCode(hp.getHealthcareProfessionalRoleCode().getCode());
+    		        				htp.getHealthcareProfessionalRoleCode().setCodeSystem(hp.getHealthcareProfessionalRoleCode().getCodeSystem());
+    		        				htp.getHealthcareProfessionalRoleCode().setCodeSystemName(hp.getHealthcareProfessionalRoleCode().getCodeSystemName());
+    		        				htp.getHealthcareProfessionalRoleCode().setCodeSystemVersion(hp.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
+    		        				htp.getHealthcareProfessionalRoleCode().setDisplayName(hp.getHealthcareProfessionalRoleCode().getDisplayName());
+    		        				htp.getHealthcareProfessionalRoleCode().setOriginalText(hp.getHealthcareProfessionalRoleCode().getOriginalText());
+    		        			}
+    		        			type.getImagingOutcomeBody().getReferral().setAccountableHealthcareProfessional(htp);
+    		        		}
+    		        } 
+    		        
     		        resp.getImagingOutcome().add(type);
 	            }
 			}
@@ -174,7 +216,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	}
 	
 	
-    private ImagingBodyType mapBody(Map<String, String> ehr13606values) {
+    private ImagingBodyType mapBody(Map<String, String> ehr13606values, final COMPOSITION und) {
     	
         ImagingBodyType body = new ImagingBodyType();
 
@@ -194,10 +236,11 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         
         body.getImageRecording().add(new ImageRecordingType());
         body.getImageRecording().get(0).setRecordingId(new IIType());
-        body.getImageRecording().get(0).getRecordingId().setRoot(ehr13606values.get("vbe-rc-id"));
+        body.getImageRecording().get(0).getRecordingId().setExtension(und.getRcId().getExtension());
+        body.getImageRecording().get(0).getRecordingId().setRoot(und.getRcId().getRoot());
         
         body.getImageRecording().get(0).setExaminationActivity(new CVType());
-        body.getImageRecording().get(0).getExaminationActivity().setCode(ehr13606values.get("und-und-uat-txt"));
+        body.getImageRecording().get(0).getExaminationActivity().setCode(ehr13606values.get("und-und-uat-kod"));
 
         body.getImageRecording().get(0).setExaminationTimePeriod(new TimePeriodType());
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-low"));
@@ -265,8 +308,8 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
                 // Following are three 'synthetic' keys for retrieving String values 
                 // in incoming objects
                 if (composition.getRcId() != null) {
-                    if (StringUtils.isNotBlank(composition.getRcId().getRoot())) {
-                        values.put("vbe-rc-id", composition.getRcId().getRoot());
+                    if (StringUtils.isNotBlank(composition.getRcId().getExtension())) {
+                        values.put("vbe-rc-id", composition.getRcId().getExtension());
                     }
                 }
                 
@@ -280,7 +323,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
                 
                 if (composition.getComposer() != null) {
                     if (composition.getComposer().getPerformer() != null) {
-                        values.put("vbe-composer-performer-root", composition.getComposer().getPerformer().getRoot());
+                        values.put("vbe-composer-performer-root", composition.getComposer().getPerformer().getExtension());
                     }
                 }
             }
