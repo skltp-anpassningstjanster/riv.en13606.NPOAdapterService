@@ -387,8 +387,7 @@
       <xs:documentation> </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="lengthOfTreatment" type="tns:PQIntervalType" minOccurs="0"/>
-      <xs:element name="isMaximumTreatmentTime" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="lengthOfTreatment" type="tns:LengthOfTreatmentType" minOccurs="0"/>
       <xs:element name="dosageInstruction" type="xs:string" minOccurs="0"/>
       <xs:element name="unitDose" type="tns:CVType" minOccurs="0"/>
       <xs:element name="shortNotation" type="xs:string" minOccurs="0"/>
@@ -642,4 +641,15 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
+
+  <xs:complexType name="LengthOfTreatmentType">
+    <xs:annotation>
+      <xs:documentation> </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="treatmentInterval" type="tns:PQIntervalType"/>
+      <xs:element name="isMaximumTreatmentTime" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
 </xs:schema>

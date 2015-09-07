@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper.util;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 
 import se.rivta.en13606.ehrextract.v11.*;
@@ -49,6 +50,16 @@ public class SharedHeaderExtract {
 	public Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> healthcareProfessionals() {
 		return this.healthcareProfessionals;
 	}
+	
+	public IDENTIFIEDHEALTHCAREPROFESSIONAL getFirstProfessional() {
+	    Iterator<IDENTIFIEDHEALTHCAREPROFESSIONAL> it = healthcareProfessionals.values().iterator();
+	    if (it.hasNext()) {
+	        return it.next();
+	    } else {
+	        return null;
+	    }
+	}
+	
 	
 	public String systemHSAId() {
 		return this.systemHSAId;
