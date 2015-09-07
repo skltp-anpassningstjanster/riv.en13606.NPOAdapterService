@@ -145,7 +145,7 @@ public class MedicationHistoryMapperTest {
     	
     	final MedicationPrescriptionType mpt1 = rec1.getMedicationMedicalRecordBody().getMedicationPrescription();
     	final MedicationPrescriptionType mpt2 = rec2.getMedicationMedicalRecordBody().getMedicationPrescription();
-    	assertEquals("SE1623210002198208149297recept1061", mpt1.getPrescriptionId().getExtension());
+    	assertEquals("SE1623210002198208149297ordination106", mpt1.getPrescriptionId().getExtension());
     	assertEquals("notat", mpt2.getPrescriptionNote());
     	assertEquals("19800101000000", mpt2.getEvaluationTime());
     	assertEquals("SE1623210002198208149297ordination109", mpt2.getPrescriptionChainId().getExtension());

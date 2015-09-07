@@ -290,17 +290,22 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		//Continue build body
                 		//Forskrivning // Ordination
                 		final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
-                		prescription.setPrescriptionId(lkfId);
+                		
+                		if(lko.getRcId() != null) {
+                			final IIType lkoIIType = new IIType();
+                			lkoIIType.setExtension(lko.getRcId().getExtension());
+                			lkoIIType.setRoot(lko.getRcId().getRoot());
+                			prescription.setPrescriptionId(lkoIIType);
+                		}
                 		
                 		//Forskrivning
-                		if(prescription.getPrescriptionId() != null 
-                				&& prescription.getPrescriptionId().getExtension() != null) {
+                		if(lkfId != null) {
                 			final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
                 			prescription.setDispensationAuthorization(dispensationAuth);
                 			dispensationAuth.setDispensationAuthorizationId(lkfId);
                 			
-                			if(lkfs.containsKey(prescription.getPrescriptionId().getExtension())) {
-                				final COMPOSITION lkf = lkfs.get(prescription.getPrescriptionId().getExtension());
+                			if(lkfs.containsKey(lkfId.getExtension())) {
+                				final COMPOSITION lkf = lkfs.get(lkfId.getExtension());
                                                				
                 				//Map lkf 
                 				for(CONTENT lkfContent : lkf.getContent()) {
@@ -441,6 +446,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 											interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
                 											interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
                 											dosage.getLengthOfTreatment().setTreatmentInterval(interval);
+                											
+                											//Set prescriptionStartOfThreatment
+                											prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
                 										}
                 										break;
                 									case DOSERINGSSTEG_MAXTID:
