@@ -96,13 +96,15 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	private static final String UND_SVARSTIDPUNKT = "und-und-ure-stp";
 	
     public ImagingOutcomeMapper() {
-        schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-IMAGINGOUTCOME"));
+        /**
+    	schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-IMAGINGOUTCOME"));
         log.debug("schema validation is activated? " + schemaValidationActivated);
         
         initialiseValidator("/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                             "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
+                            **/
     }
 
 
@@ -110,7 +112,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
 		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        //validateXmlAgainstSchema(xml, schemaValidator, log);
         return xml;
 	}
 
@@ -258,7 +260,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 
         body.getImageRecording().get(0).setExaminationTimePeriod(new TimePeriodType());
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-low"));
-        if (StringUtils.isNoneBlank(ehr13606values.get("und-und-uat-tx-high"))) {
+        if (StringUtils.isNoneBlank(ehr13606values.get("und-und-uat-txt-high"))) {
             body.getImageRecording().get(0).getExaminationTimePeriod().setEnd(ehr13606values.get("und-und-uat-txt-high"));
         }
         
@@ -353,7 +355,6 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
      * efficient, but simplifies coding in parent methods.
      */
     private void retrieveItemValue(ITEM item, Map<String,String> values) {
-        
         if (item.getMeaning() != null) {
             String code = item.getMeaning().getCode();
             if (StringUtils.isNotBlank(code)) {
