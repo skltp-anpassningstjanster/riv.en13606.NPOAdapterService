@@ -12,8 +12,8 @@
         <inbound-endpoint address="${IN_ENDPOINT_PFC}"
                           connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut" />
+                          transformer-refs="create-correlation-id"
+                          responseTransformer-refs="createSoapFaultTransformer" />
 
 
         <cxf:jaxws-service
