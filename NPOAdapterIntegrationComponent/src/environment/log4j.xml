@@ -109,14 +109,18 @@
     </logger>
 
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
+    <!--
     <logger name="httpclient.wire.header">
         <level value="ERROR"/>
     </logger>
+    -->
 
-	 <!-- Level DEBUG: Log the http content transfered during a request/response -->
+    <!-- Level DEBUG: Log the http content transfered during a request/response -->
+    <!--
     <logger name="httpclient.wire.content">
         <level value="ERROR"/>
     </logger>
+    -->
 
     <root>
        <priority value="WARN" />
