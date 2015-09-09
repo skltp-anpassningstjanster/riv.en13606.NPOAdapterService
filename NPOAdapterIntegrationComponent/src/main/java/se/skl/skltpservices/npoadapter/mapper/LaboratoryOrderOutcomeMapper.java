@@ -69,7 +69,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
         initialiseValidator("/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                             "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
-                            "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.0.xsd");
+                            "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.1.xsd");
     }
 
     @Override

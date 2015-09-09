@@ -22,7 +22,7 @@
     xmlns:core="urn:riv:clinicalprocess:healthcond:actoutcome:3"
     xmlns:codes="urn:riv:clinicalprocess:healthcond:actoutcome:enums:3"
     targetNamespace="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3"
-    elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0">
+    elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1">
 
     <xs:import schemaLocation="../../core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd"
         namespace="urn:riv:clinicalprocess:healthcond:actoutcome:3"/>

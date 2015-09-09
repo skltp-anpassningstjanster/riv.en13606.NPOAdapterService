@@ -8,7 +8,7 @@
                 http://www.mulesoft.org/schema/mule/cxf     http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
 
-    <flow name="GetLaboratoryOrderOutcomeResponderService-3.0">
+    <flow name="GetLaboratoryOrderOutcomeResponderService-3.1">
     		
         <inbound-endpoint address="${IN_ENDPOINT_GETLABORATORYORDEROUTCOME}"
                           connector-ref="soitoolkit-http-connector" 
@@ -23,7 +23,7 @@
         <cxf:proxy-service namespace="urn:riv:clinicalprocess:healthcond:actoutcome:GetLaboratoryOrderOutcome:3:rivtabp21"
                            payload="body"
                            service="GetLaboratoryOrderOutcomeResponderService"
-                           wsdlLocation="classpath:/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl" />
+                           wsdlLocation="classpath:/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.1_RIVTABP21.wsdl" />
 
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 
