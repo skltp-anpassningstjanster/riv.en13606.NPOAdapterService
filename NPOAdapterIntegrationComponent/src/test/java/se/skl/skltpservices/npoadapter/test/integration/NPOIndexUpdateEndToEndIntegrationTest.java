@@ -25,9 +25,7 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -111,24 +109,48 @@ public class NPOIndexUpdateEndToEndIntegrationTest extends AbstractIntegrationTe
 		}
 	}
 	
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSendSimpleIndexEiTimeout() {
-        npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_TIMEOUT, createTypeTypeType(categorizations.get(0), true), createParameters());
+		try {
+			npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_TIMEOUT, createTypeTypeType(categorizations.get(0), true), createParameters());
+			fail("expected exception");
+		}
+		catch(SOAPFaultException e) {			
+			assertTrue(e.getMessage().contains("Read timed out"));
+		}
     }
 	
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSendSimpleIndexEiException() {
-        npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_EXCEPTION, createTypeTypeType(categorizations.get(0), true), createParameters());
+		try {
+			npoServices.sendSimpleIndex(EiUpdateWS.SUBJECT_OF_CARE_ID_EI_EXCEPTION, createTypeTypeType(categorizations.get(0), true), createParameters());
+			fail("expected exception");
+		}
+		catch(SOAPFaultException e) {			
+			assertTrue(e.getMessage().contains("Exception occurred in engagementindex"));
+		}
     }
     
-	@Test(expected = SOAPFaultException.class)
+	@Test
 	public void testSendSimpleIndexFailInvalidCategorization() {
-		npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType("FAIL", true), createParameters());
+		try {
+			npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType("FAIL", true), createParameters());
+			fail("expected exception");
+		}
+		catch(SOAPFaultException e) {			
+			assertTrue(e.getMessage().contains("errorCode:3003"));
+		}
 	}
 	
-	@Test(expected = SOAPFaultException.class)
+	@Test
 	public void testSendSimpleIndexFailNullCategorization() {
-		npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType(null, true), createParameters());
+		try {
+			npoServices.sendSimpleIndex(TEST_SUBJECT_OF_CARE, createTypeTypeType(null, true), createParameters());
+			fail("expected exception");
+		}
+		catch(SOAPFaultException e) {			
+			assertTrue(e.getMessage().contains("errorCode:3003"));
+		}
 	}
 	
 	
