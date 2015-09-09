@@ -21,15 +21,14 @@
         <!-- http -->
         <inbound-endpoint address="${IN_ENDPOINT_NPO}"
                           connector-ref="soitoolkit-http-connector"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
-                          exchange-pattern="request-response">
-            <cxf:jaxws-service
-                    namespace="http://nationellpatientoversikt.se"
-                    serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
-                    wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl" 
-            />
-        </inbound-endpoint>
+                          transformer-refs="create-correlation-id objToStr logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer objToStr logRespOut"
+                          exchange-pattern="request-response"/>
+        
+        <cxf:jaxws-service
+        	namespace="http://nationellpatientoversikt.se"
+        	serviceClass="se.skl.skltpservices.npoadapter.ws.NpoWS"
+        	wsdlLocation="classpath:/interactions/npo/NPO_1.1.2.wsdl"/>
         
         <set-variable variableName="sendSimpleIndexRequest" value="#[payload]"/>
 

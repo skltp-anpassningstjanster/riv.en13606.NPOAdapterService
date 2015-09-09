@@ -21,14 +21,13 @@
         <inbound-endpoint address="${IN_ENDPOINT_UPDATE_EI}"
                           connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut" >
+                          transformer-refs="create-correlation-id objToStr logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer objToStr logRespOut"/>
 
             <cxf:jaxws-service
                     namespace="urn:riv:itintegration:engagementindex:Update:1:rivtabp21"
                     serviceClass="se.skl.skltpservices.npoadapter.ws.UpdateWS"
                     wsdlLocation="classpath:/interactions/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl" />
-        </inbound-endpoint>
 
         <set-variable variableName="request" value="#[payload]"/>
 

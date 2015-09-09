@@ -31,7 +31,7 @@
                                 address="${OUT_ENDPOINT_EI}"
                                 exchange-pattern="request-response"
                                 responseTimeout="${SERVICE_TIMEOUT_MS}"
-                                transformer-refs="logReqOut"
+                                transformer-refs="objToStr logReqOut"
                                 responseTransformer-refs="logRespIn check-response-transformer">
 
             <set-property propertyName="x-vp-instance-id" value="${VP_INSTANCE_ID}" />
