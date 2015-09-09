@@ -21,14 +21,16 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -66,7 +68,7 @@ public class ImagingOutcomeMapperTest {
 	@BeforeClass
 	public static void init() throws JAXBException {
 		ehrExtract = Util.loadEhrTestData(Util.IMAGE_TEST_FILE);
-		mapper = new ImagingOutcomeMapper();
+		mapper = (ImagingOutcomeMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_IMAGING_1);
 		ehrResp.getEhrExtract().add(ehrExtract);
 		final MuleMessage mockMessage = mock(MuleMessage.class);
 		when(mockMessage.getUniqueId()).thenReturn("1234");

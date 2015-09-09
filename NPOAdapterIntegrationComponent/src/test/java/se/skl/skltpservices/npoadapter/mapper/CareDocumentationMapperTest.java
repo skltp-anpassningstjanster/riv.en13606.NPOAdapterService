@@ -45,10 +45,15 @@ import se.skl.skltpservices.npoadapter.test.Util;
  */
 public class CareDocumentationMapperTest {
 
+	private CareDocumentationMapper getCareDocumentationMapper() {
+		CareDocumentationMapper mapper = (CareDocumentationMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CAREDOCUMENTATION_2);
+		return mapper;
+	}
+	
     @Test
     public void mapResponse() {
 
-        CareDocumentationMapper objectUnderTest = new CareDocumentationMapper();
+        CareDocumentationMapper objectUnderTest = getCareDocumentationMapper();
 
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();
