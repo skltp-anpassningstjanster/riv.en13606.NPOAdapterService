@@ -62,9 +62,14 @@ public class LaboratoryOrderOutcomeMapperTest {
     public static void init() throws JAXBException {
         ehrExtract = Util.loadEhrTestData(Util.LAB_TEST_FILE);
         ehrResp.getEhrExtract().add(ehrExtract);
-        mapper = Mockito.spy(new LaboratoryOrderOutcomeMapper());
+        mapper = Mockito.spy(getLaboratoryOrderOutcomeMapper());
     }
 
+    private static LaboratoryOrderOutcomeMapper getLaboratoryOrderOutcomeMapper() {
+    	LaboratoryOrderOutcomeMapper mapper = (LaboratoryOrderOutcomeMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_LABORATORY_3);
+    	return mapper;
+    }
+    
     @Test
     public void testMapResponseType() throws Exception {
         MuleMessage mockMessage = mock(MuleMessage.class);
@@ -76,7 +81,7 @@ public class LaboratoryOrderOutcomeMapperTest {
     @Test
     public void mapResponse() {
 
-        LaboratoryOrderOutcomeMapper objectUnderTest = new LaboratoryOrderOutcomeMapper();
+        LaboratoryOrderOutcomeMapper objectUnderTest = getLaboratoryOrderOutcomeMapper();
 
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();

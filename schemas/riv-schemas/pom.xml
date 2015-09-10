@@ -90,13 +90,13 @@
                                     <wsdl>${interactionsdir}/GetImagingOutcomeInteraction/GetImagingOutcomeInteraction_1.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeInteraction_3.1_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${interactionsdir}/GetMedicationHistoryInteraction/GetMedicationHistoryInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${interactionsdir}/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${interactionsdir}/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.1_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${interactionsdir}/UpdateInteraction/UpdateInteraction_1.0_RIVTABP21.wsdl</wsdl>

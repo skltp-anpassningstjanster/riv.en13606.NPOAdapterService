@@ -66,7 +66,7 @@ public class DiagnosisMapperTest {
 
     private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
     private static EHREXTRACT ehrExtract;
-    private static final DiagnosisMapper mapper = Mockito.spy(new DiagnosisMapper());
+    private static DiagnosisMapper mapper;
 
     private final static CD cd = new CD();
     private final static ST st = new ST();
@@ -78,6 +78,8 @@ public class DiagnosisMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
+    	mapper = Mockito.spy(getDiagnosisMapper());
+    	
         ehrExtract = Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
         ehrResp.getEhrExtract().add(ehrExtract);
 
@@ -86,6 +88,11 @@ public class DiagnosisMapperTest {
 
         st.setValue(TEST_DATA_1);
     }
+    
+    private static DiagnosisMapper getDiagnosisMapper() {
+    	DiagnosisMapper mapper = (DiagnosisMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_DIAGNOSIS_2);
+    	return mapper;
+    }    
 
     @Test
     public void testMapDiagnosisBodyType() throws Exception {
@@ -133,7 +140,7 @@ public class DiagnosisMapperTest {
     @Test
     public void mapResponse() {
 
-        DiagnosisMapper objectUnderTest = new DiagnosisMapper();
+        DiagnosisMapper objectUnderTest = getDiagnosisMapper();
 
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();

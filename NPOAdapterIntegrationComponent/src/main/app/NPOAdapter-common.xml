@@ -72,6 +72,8 @@
     <mulexml:jaxb-context name="jaxbContext"
                           packageNames="${SOITOOLKIT_JAXB_CONTEXT_PKGS}"/>
                                                 
+    <custom-transformer class="org.soitoolkit.commons.mule.core.ObjectToStringTransformer" name="objToStr"/>
+    
     <custom-transformer class="se.skl.skltpservices.npoadapter.mule.CreateSoapFaultTransformer"
     					name="createSoapFaultTransformer" />                    
 

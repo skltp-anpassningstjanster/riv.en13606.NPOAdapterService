@@ -24,7 +24,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class AlertInformationMapperTest {
 	
 	@BeforeClass
 	public static void init() throws JAXBException {
-		mapper = new AlertInformationMapper();
+		mapper = getAlertInformationMapper();
 		ehrExtract = Util.loadEhrTestData(Util.ALERT_TEST_FILE);
 		ehrResp.getEhrExtract().add(ehrExtract);
 		
@@ -106,6 +107,10 @@ public class AlertInformationMapperTest {
 		testCluster.getParts().add(pharma);
 	}
 	
+	static AlertInformationMapper getAlertInformationMapper() {
+		AlertInformationMapper mapper = (AlertInformationMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_ALERT_2);
+		return mapper;
+	}
 
     @Test
     public void testMapResponseType() throws Exception {

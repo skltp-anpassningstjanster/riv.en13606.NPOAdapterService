@@ -52,7 +52,7 @@ public class AlertInformationMapperNonAtcCommentTest {
 	
 	@BeforeClass
 	public static void init() throws JAXBException {
-		mapper = new AlertInformationMapper();
+		mapper = AlertInformationMapperTest.getAlertInformationMapper();
 		ehrExctract = Util.loadEhrTestData(Util.ALERT_TEST_FILE);
 		ehrResp.getEhrExtract().add(ehrExctract);
 		

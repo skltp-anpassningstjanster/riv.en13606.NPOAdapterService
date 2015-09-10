@@ -356,7 +356,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
-                "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.0.xsd");
+                "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.1.xsd");
     }
     
 
@@ -412,7 +412,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
-                "/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeResponder_3.0.xsd");
+                "/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeResponder_3.1.xsd");
     }
 
     

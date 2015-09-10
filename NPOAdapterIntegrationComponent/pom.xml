@@ -60,7 +60,7 @@
 
     <dependency>
       <groupId>org.soitoolkit.commons.poms.mule-dependencies</groupId>
-      <artifactId>soitoolkit-mule-3.3.0-dependencies</artifactId>
+      <artifactId>soitoolkit-mule-${mule.version}-dependencies</artifactId>
       <type>pom</type>
     </dependency>
 
@@ -201,7 +201,31 @@
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-log4j-resource</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <!--<outputDirectory>target/classes</outputDirectory> -->
+              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/environment</directory>
+                  <includes>
+                    <include>log4j.xml</include>
+                    <include>log4j.dtd</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
 
     <pluginManagement>

@@ -8,11 +8,11 @@
                 http://www.mulesoft.org/schema/mule/cxf  http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
         ">
 
-    <flow name="GetReferralOutcomeResponderService-3.0">
+    <flow name="GetReferralOutcomeResponderService-3.1">
         <inbound-endpoint address="${IN_ENDPOINT_GETREFERRALOUTCOME}"
                           connector-ref="soitoolkit-http-connector" exchange-pattern="request-response"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
+                          transformer-refs="create-correlation-id objToStr logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer objToStr logRespOut"
                           />
         
         <processor ref="pre-processor" />
@@ -20,7 +20,7 @@
         <cxf:proxy-service namespace="urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcome:3:rivtabp21"
                            payload="body"
                            service="GetReferralOutcomeResponderService"
-                           wsdlLocation="classpath:/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.0_RIVTABP21.wsdl" />
+                           wsdlLocation="classpath:/interactions/GetReferralOutcomeInteraction/GetReferralOutcomeInteraction_3.1_RIVTABP21.wsdl" />
 
         <custom-transformer class="se.skl.skltpservices.npoadapter.mule.OutboundRequestTransformer" />
 

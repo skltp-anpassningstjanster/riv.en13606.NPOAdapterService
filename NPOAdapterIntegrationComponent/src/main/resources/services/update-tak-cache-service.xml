@@ -24,8 +24,8 @@
     <flow name="update-tak-cache-http-flow">
         <inbound-endpoint address="${IN_ENDPOINT_RESET_TAK_CACHE}" connector-ref="soitoolkit-http-connector"
                           exchange-pattern="request-response"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="logRespOut" />
+                          transformer-refs="create-correlation-id objToStr logReqIn"
+                          responseTransformer-refs="objToStr logRespOut" />
         <logger level="INFO" message="Reload TAK cache, HTTP Request" />
         <invoke object-ref="router" method="reloadRoutingData"/>
         <expression-transformer>

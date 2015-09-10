@@ -19,31 +19,34 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.mule.api.MuleMessage;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import riv.clinicalprocess.logistics.logistics._2.*;
-import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
-import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
-import se.skl.skltpservices.npoadapter.test.Util;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.mule.api.MuleMessage;
 
-import static junit.framework.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactType;
+import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
+import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
+import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * Created by Peter on 2014-07-28.
@@ -77,12 +80,16 @@ public class CareContactsMapperTest {
         //Util.dump(root);
     }
 
+	private CareContactsMapper getCareContactsMapper() {
+		CareContactsMapper mapper = (CareContactsMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CARECONTACTS_2);
+		return mapper;
+	}
 
     @Test
     public void testMapFromEhrToCareContracts() {
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
-        CareContactsMapper mapper = new CareContactsMapper();
+        CareContactsMapper mapper = getCareContactsMapper();
         GetCareContactsResponseType responseType = mapper.mapResponse(Arrays.asList(ehrextract), mockMessage);
         assertNotNull(responseType);
 

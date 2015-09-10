@@ -21,6 +21,9 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -28,7 +31,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,6 +46,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mule.api.MuleMessage;
 
+import riv.clinicalprocess.healthcond.actoutcome._3.ECGReferralType;
+import riv.clinicalprocess.healthcond.actoutcome._3.ImageRecordingType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.GetImagingOutcomeResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
@@ -57,11 +61,25 @@ public class ImagingOutcomeMapperTest {
 	private static ImagingOutcomeMapper mapper;
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
 	
+	private static GetImagingOutcomeResponseType resp;
+	
+	private static ImagingOutcomeType record1;
+	
 	@BeforeClass
 	public static void init() throws JAXBException {
 		ehrExtract = Util.loadEhrTestData(Util.IMAGE_TEST_FILE);
-		mapper = new ImagingOutcomeMapper();
+		mapper = (ImagingOutcomeMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_IMAGING_1);
 		ehrResp.getEhrExtract().add(ehrExtract);
+		final MuleMessage mockMessage = mock(MuleMessage.class);
+		when(mockMessage.getUniqueId()).thenReturn("1234");
+		resp = mapper.mapResponse(ehrResp, mockMessage);
+		for(ImagingOutcomeType rec : resp.getImagingOutcome()) {
+			if(rec.getImagingOutcomeHeader().getDocumentId().equals("OREBMKT3_9500619_3_1")) {
+				record1 = rec;
+				break;
+			}
+		}
+	
 	}
 	
 
@@ -79,31 +97,47 @@ public class ImagingOutcomeMapperTest {
         Util.dump(root);
     }
 	
-    @Test
+    @Ignore
     public void dump() throws JAXBException {
     	MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
     	dump(mapper.mapResponse(ehrResp, mockMessage));
     }
     
-	
-    @Ignore
-    public void testMapFromEhrToImagingOutcome() throws JAXBException {
-        MuleMessage mockMessage = mock(MuleMessage.class);
-        when(mockMessage.getUniqueId()).thenReturn("1234");
-        GetImagingOutcomeResponseType responseType = mapper.mapResponse(ehrResp, mockMessage);
-        assertNotNull(responseType);
-
-        dump(responseType);
-        
-        List<ImagingOutcomeType> ros = responseType.getImagingOutcome();
-        
-        assertTrue(ros.size() == 4);
-
-        for (ImagingOutcomeType ro : ros) {
-            assertNotNull(ro.getImagingOutcomeHeader());
-            assertNotNull(ro.getImagingOutcomeBody());
-        }
+    
+	@Test
+	public void testHeader() {
+		assertEquals("OREBMKT3_9500619_3_1", record1.getImagingOutcomeHeader().getDocumentId());
+	}
+    
+    @Test
+    public void testBody() {
+    	assertEquals("DEF", record1.getImagingOutcomeBody().getTypeOfResult().toString());
+    	assertEquals("20090928082247", record1.getImagingOutcomeBody().getResultTime());
+    	assertEquals("Svar: XXXXXXXXX Svarsdatum: 090925 Dikterande läkare: XXXXXXXXX Signerande läkare: XXXXXXXXX", record1.getImagingOutcomeBody().getResultReport());
+    	assertNull(record1.getImagingOutcomeBody().getResultComment());
+    	
+    	assertTrue(record1.getImagingOutcomeBody().getRadiationDose().isEmpty());
+    	assertNull(record1.getImagingOutcomeBody().getPatientData());
+    	
+    }
+    
+    @Test
+    public void testImagingRecordingInBody() {
+    	assertFalse(record1.getImagingOutcomeBody().getImageRecording().isEmpty());
+    	assertEquals(1, record1.getImagingOutcomeBody().getImageRecording().size());
+    	final ImageRecordingType re = record1.getImagingOutcomeBody().getImageRecording().get(0);
+    	assertEquals("OREBMKT3_9500619_3_1", re.getRecordingId().getExtension());
+    	assertEquals("20090928082247", re.getExaminationTimePeriod().getStart());
+    	assertEquals("20090928082247", re.getExaminationTimePeriod().getEnd());
+    }
+    
+    @Test
+    public void testReferralInBody() {
+    	assertNotNull(record1.getImagingOutcomeBody().getReferral());
+    	final ECGReferralType ref = record1.getImagingOutcomeBody().getReferral();
+    	assertEquals("9500619", ref.getReferralId());
+    	assertEquals("Önskad undersökning HKF höger Anamnes, status: XXXXXXXXX", ref.getReferralReason());
     }
     
     @Ignore

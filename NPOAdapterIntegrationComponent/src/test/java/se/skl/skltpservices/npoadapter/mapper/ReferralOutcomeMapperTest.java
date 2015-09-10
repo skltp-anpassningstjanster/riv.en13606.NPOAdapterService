@@ -21,7 +21,10 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -81,12 +84,17 @@ public class ReferralOutcomeMapperTest {
         root.type = responseType;
         Util.dump(root);
     }
+    
+    private ReferralOutcomeMapper getReferralOutcomeMapper() {
+    	ReferralOutcomeMapper mapper = (ReferralOutcomeMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_REFERRALOUTCOME);
+    	return mapper;
+    }
 
     @Test
     public void testMapFromEhrToReferralOutcome() throws JAXBException {
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
-        ReferralOutcomeMapper mapper = new ReferralOutcomeMapper();
+        ReferralOutcomeMapper mapper = getReferralOutcomeMapper();
         GetReferralOutcomeResponseType responseType = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
         assertNotNull(responseType);
 
@@ -104,7 +112,7 @@ public class ReferralOutcomeMapperTest {
 
 	@Test
 	public void testInterpretOutcomeType() {
-		final ReferralOutcomeMapper mapper = new ReferralOutcomeMapper();
+		final ReferralOutcomeMapper mapper = getReferralOutcomeMapper();
 		
 		assertEquals(ReferralOutcomeTypeCodeEnum.SR, mapper.interpretOutcomeType("TILL"));
 		assertEquals(ReferralOutcomeTypeCodeEnum.SS, mapper.interpretOutcomeType("DEF"));
@@ -118,7 +126,7 @@ public class ReferralOutcomeMapperTest {
     @Test
     public void mapResponse() {
 
-        ReferralOutcomeMapper objectUnderTest = new ReferralOutcomeMapper();
+        ReferralOutcomeMapper objectUnderTest = getReferralOutcomeMapper();
 
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();

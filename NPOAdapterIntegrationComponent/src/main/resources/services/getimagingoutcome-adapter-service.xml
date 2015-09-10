@@ -13,8 +13,8 @@
         <inbound-endpoint address="${IN_ENDPOINT_GETIMAGINGOUTCOME}"
                           connector-ref="soitoolkit-http-connector" 
                           exchange-pattern="request-response"
-                          transformer-refs="create-correlation-id logReqIn"
-                          responseTransformer-refs="createSoapFaultTransformer logRespOut"
+                          transformer-refs="create-correlation-id objToStr logReqIn"
+                          responseTransformer-refs="createSoapFaultTransformer objToStr logRespOut"
                           />
                           
         

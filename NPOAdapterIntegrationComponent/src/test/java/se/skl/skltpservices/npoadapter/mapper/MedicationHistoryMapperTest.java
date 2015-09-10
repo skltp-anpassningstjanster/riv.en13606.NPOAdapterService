@@ -29,16 +29,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.validation.constraints.AssertFalse;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleMessage;
 
@@ -52,7 +48,6 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalR
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.OrgUnitType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
-import riv.clinicalprocess.healthcond.description._2.CVType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
 
@@ -78,7 +73,7 @@ public class MedicationHistoryMapperTest {
         
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
-        MedicationHistoryMapper mapper = new MedicationHistoryMapper();
+        MedicationHistoryMapper mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
         resp = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
         
         for(MedicationMedicalRecordType rec : resp.getMedicationMedicalRecord()) {
