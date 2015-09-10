@@ -19,16 +19,31 @@
  */
 package se.skl.skltpservices.npoadapter.test.stub;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
+import javax.xml.ws.WebServiceContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
@@ -42,6 +57,7 @@ import se.rivta.en13606.ehrextract.v11.ResponseDetailTypeCodes;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
+import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 /**
  * Test stub always returning a fix response.
@@ -53,6 +69,8 @@ import se.skl.skltpservices.npoadapter.test.Util;
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 	
 	private static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
+	
+	
 
     private static final String VKO = "vko";
     private static final String VOO = "voo";
@@ -69,9 +87,22 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     public static final String PATIENT_ID_TRIGGER_ERROR = "triggerError";
     public static final String PATIENT_ID_TRIGGER_WARNING = "triggerWarning";
     public static final String PATIENT_ID_TRIGGER_INFO = "triggerInfo";
+    
+    private static final String RESET_CACHE_SSN= "reset-test-data";
 
+    
     static Map<String, EHREXTRACT> responseCache = Collections.synchronizedMap(new HashMap<String, EHREXTRACT>());
         
+    @PostConstruct
+    public void loadTestData() {
+    	log.info("Load test data");
+    	try {
+			resetCache();
+		} catch (Exception e) {
+			log.error("Error loading testdata", e);
+		}
+    }
+    
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTCONTINUATION(RIV13606REQUESTEHREXTRACTCONTINUATIONRequestType request) {
         return null;
@@ -85,6 +116,29 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
+    	if(request.getSubjectOfCareId() != null) {
+    		if(StringUtils.equals(request.getSubjectOfCareId().getExtension(), RESET_CACHE_SSN)) {
+    			final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
+    			final ResponseDetailType detail = new ResponseDetailType();
+    			final ST st = new ST();
+    			try {
+    				resetCache();
+    				detail.setTypeCode(ResponseDetailTypeCodes.I);
+        			st.setValue("testdata cache successfully reset");
+    			} catch (Exception err) {
+    				detail.setTypeCode(ResponseDetailTypeCodes.E);
+    				st.setValue("failed to reset testdata cache, reason: " + err.getMessage());
+    				log.error("Failed to reset cache: ", err);
+    			}
+    			
+    			
+    			detail.setText(st);
+    			resp.getResponseDetail().add(detail);
+    			return resp;
+    		}
+    	}
+    	
+    	
         final String hsaId = validate(request);
         try {
         // sleep between 5 and 10 seconds
@@ -135,10 +189,12 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     	// Return testdata
     	final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
-        if (!request.getSubjectOfCareId().getExtension().startsWith("19")) {
+    	/** Removed to support new dynamic testdata
+    	if (!request.getSubjectOfCareId().getExtension().startsWith("19")) {
             log.info("SubjectOfCareId doesn't start with 19, simulate not found and return an empty response...");
             return responseType;
         }
+        **/
 
         if (request.getTimePeriod() != null) {
             final Date ts = EHRUtil.parseTimePeriod(request.getTimePeriod().getLow().getValue());
@@ -151,39 +207,94 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
         	log.info("Received vko request");
-        	responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
+        	final String vkoKey = cacheKey(request, VKO);
+        	log.info("Query cache for: " + vkoKey);
+        	if(responseCache.containsKey(vkoKey)) {
+        		responseType.getEhrExtract().add(responseCache.get(vkoKey));
+        		log.info("Loaded dyanmictest data: " + vkoKey);
+        	} else {
+        		responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
+        	}
         	break;
         case VOO:
         	log.info("Received voo request");
-        	responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
+        	final String vooKey = cacheKey(request, VOO);
+        	log.info("Query cache for: " + vooKey);
+        	if(responseCache.containsKey(vooKey)) {
+        		responseType.getEhrExtract().add(responseCache.get(vooKey));
+        		log.info("Loaded dynamictest data: " + vooKey);
+        	} else {
+        		responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
+        	}
         	break;
         case DIA:
         	log.info("Received dia request");
-        	responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
+        	final String diaKey = cacheKey(request, DIA);
+        	log.info("Query cache for: " + diaKey);
+        	if(responseCache.containsKey(diaKey)) {
+        		responseType.getEhrExtract().add(responseCache.get(diaKey));
+        		log.info("Loaded dynamictest data: " + diaKey);
+        	} else {
+        		responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
+        	}
         	break;
         case UND_KKM_KLI:
         	log.info("Received und-kkm-kli request");
-        	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
+        	final String undKkmKey = cacheKey(request, UND_KKM_KLI);
+        	log.info("Query cache for: " + undKkmKey);
+        	if(responseCache.containsKey(undKkmKey)) {
+        		responseType.getEhrExtract().add(responseCache.get(undKkmKey));
+        	} else {
+        		responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
+        	}
         	break;
         case UPP:
         	log.info("Received upp request");
-        	responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));
+        	final String uppKey = cacheKey(request, UPP);
+        	log.info("Query cache for: " + uppKey);
+        	if(responseCache.containsKey(uppKey)) {
+        		responseType.getEhrExtract().add(responseCache.get(uppKey));
+        		log.info("Loaded dynamictest data: " + uppKey);
+        	} else {
+        		responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));        		
+        	}
         	break;
         case LKM:
             log.info("Received lkm request");
-            responseType.getEhrExtract().add(getTestData(Util.MEDICALHISTORY_TEST_FILE));
+            final String lkmKey = cacheKey(request, LKM);
+            log.info("Query cache for: " + lkmKey);
+            if(responseCache.containsKey(lkmKey)) {
+            	responseType.getEhrExtract().add(responseCache.get(lkmKey));
+            	log.info("Loaded dynamictest data: " + lkmKey);
+            } else {
+            	responseType.getEhrExtract().add(getTestData(Util.MEDICALHISTORY_TEST_FILE));
+            }
             break;
         case UND_KON:
             log.info("Received und-kon request");
-            responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
+            final String undKonKey = cacheKey(request, UND_KON);
+            log.info("Query cache for: " + undKonKey);
+            if(responseCache.containsKey(undKonKey)) {
+            	responseType.getEhrExtract().add(responseCache.get(undKonKey));
+            	log.info("Loaded dynamictest data: " + undKonKey);
+            } else {
+            	responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
+            }
             break;
         case UND_BDI:
             log.info("Received und-bdi request");
-            if ("ExtraLarge".equals(hsaId)) {
-                // 1MB response - performance test case TP2
-                responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+            final String undBdiKey = cacheKey(request, UND_BDI);
+            log.info("Query cache for: " + undBdiKey);
+            if(responseCache.containsKey(undBdiKey)) {
+            	responseType.getEhrExtract().add(responseCache.get(undBdiKey));
+            	log.info("Loaded dynamictest data: " + undBdiKey);
             } else {
-                responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+            	if ("ExtraLarge".equals(hsaId)) {
+            		// 1MB response - performance test case TP2
+            		responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+            	} else {
+            		responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+            	}            	
             }
             break;
         default:
@@ -249,6 +360,24 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         }
     	return ehrextract;
     }
+        
+    protected void resetCache() throws Exception {
+    	final String path = SpringPropertiesUtil.getProperty("EHR_TESTDATA_PATH");
+    	log.info("Reset testdata cache, load from: " + path);
+    	responseCache.clear();
+    	Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				try {
+					responseCache.put(file.getFileName().toString(), Util.loadDynamicTestData(file));
+					log.info("Cached file: " + file.getFileName().toString());
+				} catch (JAXBException err) {
+					log.error("File: " + file.toString(), err);
+				}
+				return super.visitFile(file, attrs);
+			}
+		});
+    }
 
     //
     protected RIV13606REQUESTEHREXTRACTResponseType createAlternativeResponse(final ResponseDetailTypeCodes code, final String msg) {
@@ -263,5 +392,21 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     	detail.setText(st);
     	resp.getResponseDetail().add(detail);
     	return resp;
+    }
+    
+    protected RIV13606REQUESTEHREXTRACTResponseType missingDataResponse(final String ssn, final String info) {
+    	log.error("Missing test-data-file: %s-%s.xml", ssn, info);
+        final RIV13606REQUESTEHREXTRACTResponseType resp = new RIV13606REQUESTEHREXTRACTResponseType();
+    	final ResponseDetailType detail = new ResponseDetailType();
+    	final ST st = new ST();
+    	st.setValue(String.format("Missing test-data-file: %s-%s.xml", ssn, info));
+    	detail.setTypeCode(ResponseDetailTypeCodes.E);
+    	detail.setText(st);
+    	resp.getResponseDetail().add(detail);
+    	return resp;
+    }
+    
+    protected String cacheKey(final RIV13606REQUESTEHREXTRACTRequestType req, final String info) {
+    	return String.format("%s-%s.xml", req.getSubjectOfCareId().getExtension(), info);
     }
 }

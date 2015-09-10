@@ -383,6 +383,7 @@ public final class EHRUtil {
             return null;
         }
         final CV cv = new CV();
+        
         // Set OriginalValue
         if (elm.getValue() != null && elm.getValue() instanceof ST) {
             cv.setOriginalText(((ST) elm.getValue()).getValue());

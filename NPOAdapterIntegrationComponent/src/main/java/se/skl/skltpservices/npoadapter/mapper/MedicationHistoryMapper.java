@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
+import riv.clinicalprocess.activityprescription.actoutcome._2.AdministrationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
@@ -439,18 +440,20 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 								if(dosageElm.getMeaning() != null && dosageElm.getMeaning().getCode() != null) {
                 									switch (dosageElm.getMeaning().getCode()) {
                 									case DOSERINGSSTEG_BEHANDLINGSTID:
-                										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof IVLTS) {
+                										if(dosageElm.getValue() != null) {
                 											if(dosage.getLengthOfTreatment() == null) {
                 												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
                 											}
-                											final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
-                											final PQIntervalType interval = new PQIntervalType();
-                											interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
-                											interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
-                											dosage.getLengthOfTreatment().setTreatmentInterval(interval);
+                											if(dosageElm.getValue() instanceof IVLTS) {
+                												final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
+                												final PQIntervalType interval = new PQIntervalType();
+                												interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
+                												interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
+                												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 											
-                											//Set prescriptionStartOfThreatment
-                											prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
+                												//Set prescriptionStartOfThreatment
+                												prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
+                											}
                 										}
                 										break;
                 									case DOSERINGSSTEG_MAXTID:
