@@ -247,11 +247,11 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         		final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
         		
         		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
-                final PatientSummaryHeaderType patient = 
+                final PatientSummaryHeaderType patientSummaryHeader = 
                 		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
                 
                 //Apply specific rules to header for this TK
-                patient.setLegalAuthenticator(null); 
+                patientSummaryHeader.setLegalAuthenticator(null); 
                 //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
                 
                 //Map body, Content 1..1
@@ -284,7 +284,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 				case INFORMATIONSMANGD_VARDKONTAKT:
                 					if(!link.getTargetId().isEmpty()) {
                 						final II careContactId = link.getTargetId().get(0);
-                						patient.setCareContactId(careContactId.getExtension());
+                						patientSummaryHeader.setCareContactId(careContactId.getExtension());
                 					}
                 					break;
                 				}
@@ -452,7 +452,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 											
                 												//Set prescriptionStartOfThreatment
-                												prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
+                												if(dosageIvlts.getLow() != null) {
+                													prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
+                												} 
+                												if(dosageIvlts.getHigh() != null) {
+                													prescription.setEndOfTreatment(dosageIvlts.getHigh().getValue());
+                												}
                 											}
                 										}
                 										break;
@@ -602,7 +607,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		}
                 		
                 		
-                		prescription.setPrescriber(patient.getAccountableHealthcareProfessional());
+                		prescription.setPrescriber(patientSummaryHeader.getAccountableHealthcareProfessional());
                 		//Set lkm-ord-tid
                 		prescription.getPrescriber().setAuthorTime(authorTime);
                 		
@@ -639,7 +644,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 }
                 
                 record.setMedicationMedicalRecordBody(body);
-                record.setMedicationMedicalRecordHeader(patient);
+                record.setMedicationMedicalRecordHeader(patientSummaryHeader);
                 responseType.getMedicationMedicalRecord().add(record);
         	}
         	
