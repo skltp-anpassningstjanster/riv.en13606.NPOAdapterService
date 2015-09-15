@@ -621,9 +621,7 @@ public final class EHRUtil {
         //add signaturetime
         //meaning/attenstation/time@value
         if(signatureTime) {
-        	System.out.println("Nu skall jag signatura: " + comp.getRcId().getExtension());
         	if(!comp.getAttestations().isEmpty()) {
-        		System.out.println("### INNE I SIGNATURE TIME ###");
         		final ATTESTATIONINFO info = comp.getAttestations().get(0);
         		if(info.getTime() != null && info.getTime().getValue() != null) {
         			final LegalAuthenticator auth = new LegalAuthenticator();
