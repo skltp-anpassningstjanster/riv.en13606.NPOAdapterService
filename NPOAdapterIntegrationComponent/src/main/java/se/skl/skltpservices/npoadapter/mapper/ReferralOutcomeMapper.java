@@ -158,7 +158,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             message.setPayload(marshal(rivtaResponse));
             return message;
     	} catch (Exception err) {
-    		throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
+    		throw new MapperException("Error when mapping response - " + err.getLocalizedMessage(), err, Ehr13606AdapterError.MAPRESPONSE);
     	}
     }
 

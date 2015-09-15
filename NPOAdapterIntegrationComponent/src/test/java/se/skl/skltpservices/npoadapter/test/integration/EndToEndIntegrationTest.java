@@ -205,6 +205,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertFalse(resp.getAlertInformation().isEmpty());
     }
 
+    @Ignore
     @Test
     public void GetAlertInformationRIVSuccessTest() {
         GetAlertInformationResponseType response = getAlertInformationResponderInterface.getAlertInformation(

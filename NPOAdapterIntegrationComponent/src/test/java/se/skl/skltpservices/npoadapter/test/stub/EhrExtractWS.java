@@ -180,7 +180,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
             break;
         case UND_KON:
             log.info("Received UND-KON Request");
-            responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE));
+            responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE_1));
             break;
         case UND_BDI:
             log.info("Received UND-BDI Request");

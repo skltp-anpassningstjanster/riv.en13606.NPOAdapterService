@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      <ehr_extract>
+        <ehr_id extension="SE162321000156-CKK:EhrId:201103012389"
+          root="1.2.752.129.2.1.2.1" />
+        <ehr_system extension="SE162321000156-CKK" root="1.2.752.129.2.1.2.1" />
+        <rm_id xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="xs:string">EN 13606</rm_id>
+        <subject_of_care extension="201103012389" root="1.2.752.129.2.1.3.1" />
+        <time_created value="20150911125052" />
+
+        <!-- 1:und -->
+        <all_compositions>
+          <meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Undersökningsresultat" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefRep:10948" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <attestations>
+            <reason_for_attestation nullFlavor="NA" />
+            <time value="20150807085010" />
+            <target_rc_id nullFlavor="NA" />
+            <attester>
+              <performer nullFlavor="NA" />
+            </attester>
+          </attestations>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-3QJX" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807085010" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-3QXM"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-3PWN" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Konsultation" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <links>
+              <follow_link value="true" />
+              <nature code="LINK-A0" />
+              <target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1" />
+              <target_id extension="SE162321000156-CKK:RefReq:10929"
+                root="1.2.752.129.2.1.2.1" />
+            </links>
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="CLUSTER">
+              <meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Undersökningsresultat" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <structure_type nullFlavor="NA" />
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="DEF" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstidpunkt" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="20150807085010" xsi:type="TS" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utlåtande" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value
+                  value="
+
+Remissutlåtande
+  Patienten bedöms ha en lättare form av psoriasis  
+
+Åtgärd
+  Får adekvat medicinering.  "
+                  xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Undersökningstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="Hudsjukvården" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="CLUSTER">
+                <meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utförd åtgärd" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <structure_type nullFlavor="NA" />
+                <parts xsi:type="ELEMENT">
+                  <meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Åtgärdskod text" />
+                  </meaning>
+                  <name nullFlavor="NA" />
+                  <rc_id nullFlavor="NA" />
+                  <synthesised nullFlavor="NA" />
+                  <obs_time>
+                    <low value="20150807085010" />
+                    <high value="20150807085010" />
+                  </obs_time>
+                  <value value="Konsultation" xsi:type="ST" />
+                </parts>
+              </parts>
+            </items>
+          </content>
+        </all_compositions>
+        
+        <!-- 2:vbe -->
+        <all_compositions>
+          <meaning code="vbe" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Vårdbegäran" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefReq:11030" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <links>
+            <follow_link value="false" />
+            <nature code="LINK-A0" />
+            <target_type code="vko" codeSystem="1.2.752.129.2.2.2.1" />
+            <target_id extension="SE162321000156-CKK:Con:12102"
+              root="1.2.752.129.2.1.2.1" />
+          </links>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807101300" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-4CDM"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4JRC" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="vbe-vbe" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Vårdbegäran" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="ELEMENT">
+              <meaning code="vbe-vbe-fst" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Frågeställning" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <value value="
+
+Frågeställning
+  Tacksam för utredning.  "
+                xsi:type="ST" />
+            </items>
+          </content>
+        </all_compositions>
+        
+        <!-- 3:und -->
+        <all_compositions>
+          <meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Undersökningsresultat" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefRep:11047" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <attestations>
+            <reason_for_attestation nullFlavor="NA" />
+            <time value="20150807101531" />
+            <target_rc_id nullFlavor="NA" />
+            <attester>
+              <performer nullFlavor="NA" />
+            </attester>
+          </attestations>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807101531" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-3QJX"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-3PWN" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Konsultation" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <links>
+              <follow_link value="true" />
+              <nature code="LINK-A0" />
+              <target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1" />
+              <target_id extension="SE162321000156-CKK:RefReq:11030"
+                root="1.2.752.129.2.1.2.1" />
+            </links>
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="CLUSTER">
+              <meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Undersökningsresultat" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <structure_type nullFlavor="NA" />
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="DEF" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstidpunkt" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="20150807101531" xsi:type="TS" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utlåtande" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="
+
+Bedömt hälsotillstånd
+  Svarar på remissen.  "
+                  xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Undersökningstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="Kirurgisk klinik Karlstad" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="CLUSTER">
+                <meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utförd åtgärd" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <structure_type nullFlavor="NA" />
+                <parts xsi:type="ELEMENT">
+                  <meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Åtgärdskod text" />
+                  </meaning>
+                  <name nullFlavor="NA" />
+                  <rc_id nullFlavor="NA" />
+                  <synthesised nullFlavor="NA" />
+                  <obs_time>
+                    <low value="20150807101531" />
+                    <high value="20150807101531" />
+                  </obs_time>
+                  <value value="Konsultation" xsi:type="ST" />
+                </parts>
+              </parts>
+            </items>
+          </content>
+        </all_compositions>
+        
+        <!-- 4:vbe -->
+        <all_compositions>
+          <meaning code="vbe" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Vårdbegäran" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefReq:10962" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <links>
+            <follow_link value="false" />
+            <nature code="LINK-A0" />
+            <target_type code="vko" codeSystem="1.2.752.129.2.2.2.1" />
+            <target_id extension="SE162321000156-CKK:Con:11813"
+              root="1.2.752.129.2.1.2.1" />
+          </links>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807094100" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-4CDM"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-40SM" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="vbe-vbe" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Vårdbegäran" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="ELEMENT">
+              <meaning code="vbe-vbe-fst" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Frågeställning" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <value
+                value="
+
+Frågeställning
+  Hudförändring. Tacksam för bedömning.  
+
+Aktuellt hälsotillstånd
+  Rodnad och kliande förändring.  
+
+Tidigare och nuvarande sjukdomar
+  Inget känt.  "
+                xsi:type="ST" />
+            </items>
+          </content>
+        </all_compositions>
+        
+        <!-- 5:vbe -->
+        <all_compositions>
+          <meaning code="vbe" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Vårdbegäran" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefReq:10929" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <links>
+            <follow_link value="false" />
+            <nature code="LINK-A0" />
+            <target_type code="vko" codeSystem="1.2.752.129.2.2.2.1" />
+            <target_id extension="SE162321000156-CKK:Con:11699"
+              root="1.2.752.129.2.1.2.1" />
+          </links>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-3QJX" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807084800" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-3QK3"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4LLW" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="vbe-vbe" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Vårdbegäran" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="ELEMENT">
+              <meaning code="vbe-vbe-fst" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Frågeställning" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <value
+                value="
+
+Frågeställning
+  Psoriasis?  
+
+Tidigare och nuvarande sjukdomar
+  Haft besvär med torr hud.  "
+                xsi:type="ST" />
+            </items>
+          </content>
+        </all_compositions>
+        
+        <!-- 6:und -->
+        <all_compositions>
+          <meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Informationsmängd Undersökningsresultat" />
+          </meaning>
+          <name nullFlavor="NA" />
+          <rc_id extension="SE162321000156-CKK:RefRep:10980" root="1.2.752.129.2.1.2.1" />
+          <synthesised nullFlavor="NA" />
+          <attestations>
+            <reason_for_attestation nullFlavor="NA" />
+            <time value="20150807094307" />
+            <target_rc_id nullFlavor="NA" />
+            <attester>
+              <performer nullFlavor="NA" />
+            </attester>
+          </attestations>
+          <other_participations>
+            <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+              <displayName value="Informationsägare" />
+            </function>
+            <healthcare_facility extension="SE162321000156-400S"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          </other_participations>
+          <committal>
+            <committer nullFlavor="NA" />
+            <ehr_system nullFlavor="NA" />
+            <time_committed value="20150807094307" />
+          </committal>
+          <composer>
+            <healthcare_facility extension="SE162321000156-3QXM"
+              root="1.2.752.129.2.1.4.1" />
+            <performer extension="SE162321000156-3PWN" root="1.2.752.129.2.1.4.1" />
+          </composer>
+          <content xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ENTRY">
+            <meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Konsultation" />
+            </meaning>
+            <name nullFlavor="NA" />
+            <rc_id nullFlavor="NA" />
+            <synthesised nullFlavor="NA" />
+            <links>
+              <follow_link value="true" />
+              <nature code="LINK-A0" />
+              <target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1" />
+              <target_id extension="SE162321000156-CKK:RefReq:10962"
+                root="1.2.752.129.2.1.2.1" />
+            </links>
+            <uncertainty_expressed nullFlavor="NA" />
+            <items xsi:type="CLUSTER">
+              <meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Undersökningsresultat" />
+              </meaning>
+              <name nullFlavor="NA" />
+              <rc_id nullFlavor="NA" />
+              <synthesised nullFlavor="NA" />
+              <structure_type nullFlavor="NA" />
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="DEF" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Svarstidpunkt" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="20150807094307" xsi:type="TS" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utlåtande" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value
+                  value="
+
+Remissutlåtande
+  Erbjuder patienten en tid för bedömning.  "
+                  xsi:type="ST" />
+              </parts>
+              <parts xsi:type="ELEMENT">
+                <meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Undersökningstyp" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <value value="Hudsjukvården" xsi:type="ST" />
+              </parts>
+              <parts xsi:type="CLUSTER">
+                <meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Utförd åtgärd" />
+                </meaning>
+                <name nullFlavor="NA" />
+                <rc_id nullFlavor="NA" />
+                <synthesised nullFlavor="NA" />
+                <structure_type nullFlavor="NA" />
+                <parts xsi:type="ELEMENT">
+                  <meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Åtgärdskod text" />
+                  </meaning>
+                  <name nullFlavor="NA" />
+                  <rc_id nullFlavor="NA" />
+                  <synthesised nullFlavor="NA" />
+                  <obs_time>
+                    <low value="20150807094307" />
+                    <high value="20150807094307" />
+                  </obs_time>
+                  <value value="Konsultation" xsi:type="ST" />
+                </parts>
+              </parts>
+            </items>
+          </content>
+        </all_compositions>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-3QK3" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-3QK3" root="1.2.752.129.2.1.4.1" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name value="Kirurgisk klinik Karlstad, Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Centralsjukhuset, 651 85, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Kirurg- och Stomimottagning</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-400S" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-400S" root="1.2.752.129.2.1.4.1" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name value="Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Landstingshuset, 65182, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Landstinget i Värmland</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-4CDM" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-4CDM" root="1.2.752.129.2.1.4.1" />
+          <telecom value="+4654191330" xsi:type="TEL.PHONE" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name
+            value="Hjärt- och akutmedicinkliniken Centralsjukhuset i Karlstad, Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Centralsjukhuset, 651 85, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Hjärtmottagningen hjärt- och
+              akutmedicinkliniken</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-4DQ1" root="1.2.752.129.2.1.4.1" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name
+            value="Hjärt- och akutmedicinkliniken Centralsjukhuset i Karlstad, Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Centralsjukhuset, 651 85, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Hjärt- och akutmedicinkliniken
+              Centralsjukhuset i Karlstad</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-3QXM" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-3QXM" root="1.2.752.129.2.1.4.1" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name value="Hudsjukvården, Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Centralsjukhuset, 651 85, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Hudmottagning CSK</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ORGANISATION">
+          <extract_id extension="SE162321000156-3QJX" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-3QJX" root="1.2.752.129.2.1.4.1" />
+          <code nullFlavor="NA" />
+          <desc nullFlavor="NA" />
+          <name value="Kirurgisk klinik Karlstad, Landstinget i Värmland" />
+          <addr>
+            <part type="AL">Centralsjukhuset, 651 85, Karlstad</part>
+          </addr>
+          <addr>
+            <part type="CEN">Kirurgisk klinik Karlstad</part>
+          </addr>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+          <extract_id extension="SE162321000156-40SM" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-40SM" root="1.2.752.129.2.1.4.1" />
+          <name>
+            <part value="Christina Lorang" />
+          </name>
+          <role>
+            <profession code="Undersköterska" codeSystem="1.2.752.129.2.2.1.4">
+              <displayName value="Undersköterska" />
+            </profession>
+            <scopingOrganisation_id extension="Not implemented"
+              root="1.2.752.129.2.1.4.1" />
+          </role>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+          <extract_id extension="SE162321000156-4JRC" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-4JRC" root="1.2.752.129.2.1.4.1" />
+          <name>
+            <part value="Sofia Ahola" />
+          </name>
+          <role>
+            <profession code="Sjuksköterska" codeSystem="1.2.752.129.2.2.1.4">
+              <displayName value="Sjuksköterska" />
+            </profession>
+            <scopingOrganisation_id extension="Not implemented"
+              root="1.2.752.129.2.1.4.1" />
+          </role>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+          <extract_id extension="SE162321000156-3PWN" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-3PWN" root="1.2.752.129.2.1.4.1" />
+          <name>
+            <part value="Gun de Vahl" />
+          </name>
+          <role>
+            <profession code="Administratör" codeSystem="1.2.752.129.2.2.1.4">
+              <displayName value="Administratör" />
+            </profession>
+            <scopingOrganisation_id extension="Not implemented"
+              root="1.2.752.129.2.1.4.1" />
+          </role>
+        </demographic_extract>
+
+        <demographic_extract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+          <extract_id extension="SE162321000156-4LLW" root="1.2.752.129.2.1.4.1" />
+          <id extension="SE162321000156-4LLW" root="1.2.752.129.2.1.4.1" />
+          <name>
+            <part value="Dhafir Al-Abass" />
+          </name>
+          <role>
+            <profession code="Läkare" codeSystem="1.2.752.129.2.2.1.4">
+              <displayName value="Läkare" />
+            </profession>
+            <scopingOrganisation_id extension="Not implemented"
+              root="1.2.752.129.2.1.4.1" />
+          </role>
+        </demographic_extract>
+
+      </ehr_extract>
