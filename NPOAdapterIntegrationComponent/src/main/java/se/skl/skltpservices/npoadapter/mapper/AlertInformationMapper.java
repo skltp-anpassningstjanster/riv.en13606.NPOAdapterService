@@ -212,7 +212,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                 final AlertInformationType alertInformation = new AlertInformationType();
 
                 alertInformation.setAlertInformationHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, null,
-                        PatientSummaryHeaderType.class));
+                        PatientSummaryHeaderType.class, false, false, true));
                 alertInformation.setAlertInformationBody(mapBodyType(composition13606));
                 response.getAlertInformation().add(alertInformation);
             }

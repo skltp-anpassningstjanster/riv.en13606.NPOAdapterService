@@ -123,7 +123,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 
                         // header
                         laboratoryOrderOutcome.setLaboratoryOrderOutcomeHeader(
-                                EHRUtil.patientSummaryHeader(vbe, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true));
+                                EHRUtil.patientSummaryHeader(vbe, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true, true));
                         laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setSourceSystemHSAId(sourceSystemHSAId);
                         laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
                         if (und.getRcId() != null) {
@@ -134,6 +134,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                         IDENTIFIEDHEALTHCAREPROFESSIONAL firstProfessional = sharedHeaderExtract.getFirstProfessional();    
                         if (firstProfessional != null) {
                             if (firstProfessional.getId() != null && !firstProfessional.getId().isEmpty()) {
+                            	laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setLegalAuthenticator(new LegalAuthenticatorType());
                                 laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator().setLegalAuthenticatorHSAId(
                                     firstProfessional.getId().get(0).getExtension());
                             }

@@ -142,7 +142,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
             if (EHRUtil.retain(composition13606, careUnitHsaIds, log)) {
                 final DiagnosisType type = new DiagnosisType();
                 type.setDiagnosisHeader(EHRUtil.patientSummaryHeader(composition13606, sharedHeaderExtract, TIME_ELEMENT,
-                        PatientSummaryHeaderType.class));
+                        PatientSummaryHeaderType.class, false, false, true));
                 type.getDiagnosisHeader().setCareContactId(getCareContactId(composition13606));
                 type.getDiagnosisHeader().setDocumentTime(EHRUtil.padTimestampIfNecessary(type.getDiagnosisHeader().getDocumentTime()));
                 type.setDiagnosisBody(mapDiagnosisBodyType(composition13606));

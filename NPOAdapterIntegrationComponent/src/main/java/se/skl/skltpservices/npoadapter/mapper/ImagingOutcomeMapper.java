@@ -179,8 +179,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
     				final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), VARDBEGARAN);
     				final ImagingOutcomeType type = new ImagingOutcomeType();
     
-    				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, true, true));
-    		        
+    				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, false, true, true));
     				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
     				
     				

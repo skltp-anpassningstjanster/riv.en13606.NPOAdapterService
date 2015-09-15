@@ -248,7 +248,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         		
         		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
                 final PatientSummaryHeaderType patientSummaryHeader = 
-                		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, true, false);
+                		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, false, false, false);
                 
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 

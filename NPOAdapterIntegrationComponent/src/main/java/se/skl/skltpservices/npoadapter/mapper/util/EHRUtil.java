@@ -562,8 +562,9 @@ public final class EHRUtil {
     public static <T> T patientSummaryHeader(final COMPOSITION comp, 
             final SharedHeaderExtract baseHeader, 
             final String timeElement,
-            final Class<T> type) {
-        return patientSummaryHeader(comp, baseHeader, timeElement, type, false, false);
+            final Class<T> type,
+            final boolean signatureTime) {
+        return patientSummaryHeader(comp, baseHeader, timeElement, type, false, false, signatureTime);
     }
     
 
@@ -575,7 +576,8 @@ public final class EHRUtil {
                                              final String timeElement,
                                              final Class<T> type,
                                              final boolean documentTitle,
-                                             final boolean documentTime) {
+                                             final boolean documentTime,
+                                             final boolean signatureTime) {
         final PatientSummaryHeader header = new PatientSummaryHeader();
 
         if (comp.getRcId() != null) {
@@ -593,6 +595,7 @@ public final class EHRUtil {
             }
         }
 
+        // optional
         if (documentTime) {
             if (!comp.getAttestations().isEmpty()) {
                 final ATTESTATIONINFO info = comp.getAttestations().get(0);
@@ -607,17 +610,30 @@ public final class EHRUtil {
                 }
             }
         }
-
+        
         header.setPatientId(personId(baseHeader.subjectOfCare()));
         header.setAccountableHealthcareProfessional(healthcareProfessionalType(comp.getComposer(), 
                                                     baseHeader.organisations(),
                                                     baseHeader.healthcareProfessionals(), 
                                                     comp.getCommittal()));
 
-        header.setLegalAuthenticator(new LegalAuthenticator());
-        if (header.getAccountableHealthcareProfessional() != null) {
-            header.getLegalAuthenticator().setSignatureTime(header.getAccountableHealthcareProfessional().getAuthorTime());
+        
+        //add signaturetime
+        //meaning/attenstation/time@value
+        if(signatureTime) {
+        	System.out.println("Nu skall jag signatura: " + comp.getRcId().getExtension());
+        	if(!comp.getAttestations().isEmpty()) {
+        		System.out.println("### INNE I SIGNATURE TIME ###");
+        		final ATTESTATIONINFO info = comp.getAttestations().get(0);
+        		if(info.getTime() != null && info.getTime().getValue() != null) {
+        			final LegalAuthenticator auth = new LegalAuthenticator();
+        			auth.setSignatureTime(info.getTime().getValue());
+        			header.setLegalAuthenticator(auth);
+        		}
+        	}
         }
+        
+        	
 
         for (FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
             if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), INFORMATIONSÄGARE)) {
