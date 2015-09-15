@@ -352,13 +352,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     			IntegrationTestDataUtil.createGetLaboratoryOrderOutcomeType(IntegrationTestDataUtil.NO_TRIGGER));
     	assertFalse(response.getLaboratoryOrderOutcome().isEmpty());
     	
-    	/** Mandatory fields missing in NPO
         validateXmlAgainstSchema(laboratoryOrderOutcomeObjectFactory.createGetLaboratoryOrderOutcomeResponse(response),
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                 "/interactions/GetLaboratoryOrderOutcomeInteraction/GetLaboratoryOrderOutcomeResponder_3.1.xsd");
-                **/
     }
     
 

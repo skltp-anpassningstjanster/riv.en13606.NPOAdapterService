@@ -123,24 +123,34 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
 
                         // header
                         laboratoryOrderOutcome.setLaboratoryOrderOutcomeHeader(
-                                EHRUtil.patientSummaryHeader(vbe, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true, true));
+                                EHRUtil.patientSummaryHeader(vbe, sharedHeaderExtract, null, PatientSummaryHeaderType.class, false, true, false));
                         laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setSourceSystemHSAId(sourceSystemHSAId);
                         laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setCareContactId(EHRUtil.careContactId(vbe.getLinks()));
                         if (und.getRcId() != null) {
                             laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setDocumentId(und.getRcId().getExtension());
                         }
                         
-                         
-                        IDENTIFIEDHEALTHCAREPROFESSIONAL firstProfessional = sharedHeaderExtract.getFirstProfessional();    
-                        if (firstProfessional != null) {
-                            if (firstProfessional.getId() != null && !firstProfessional.getId().isEmpty()) {
-                            	laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setLegalAuthenticator(new LegalAuthenticatorType());
-                                laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator().setLegalAuthenticatorHSAId(
-                                    firstProfessional.getId().get(0).getExtension());
-                            }
-                            
-                            laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator().setLegalAuthenticatorName(
-                                EHRUtil.getPartValue(firstProfessional.getName()));
+                        //Legal authenticator 
+                        if(und.getComposer() != null && und.getComposer().getPerformer() != null) {
+                        	if(!und.getAttestations().isEmpty() && und.getAttestations().get(0).getTime() != null) {
+                        		if(sharedHeaderExtract.healthcareProfessionals().containsKey(und.getComposer().getPerformer().getExtension())) {
+                        			if(laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator() == null) {
+                        				laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setLegalAuthenticator(new LegalAuthenticatorType());
+                        			}
+                        			final IDENTIFIEDHEALTHCAREPROFESSIONAL legal = 
+                        					sharedHeaderExtract.healthcareProfessionals().get(und.getComposer().getPerformer().getExtension());
+                        			laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
+                        				.getLegalAuthenticator().setLegalAuthenticatorHSAId(und.getComposer().getPerformer().getExtension());
+                        			
+                        			if(!legal.getName().isEmpty() && !legal.getName().get(0).getPart().isEmpty()) {	
+                        				laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
+                        					.getLegalAuthenticator().setLegalAuthenticatorName(legal.getName().get(0).getPart().get(0).getValue());
+                        			}
+                        				
+                        			laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
+                        				.getLegalAuthenticator().setSignatureTime(und.getAttestations().get(0).getTime().getValue());
+                        		}
+                        	}
                         }
   
                         // body
