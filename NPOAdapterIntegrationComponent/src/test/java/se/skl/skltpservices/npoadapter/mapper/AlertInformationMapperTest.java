@@ -125,6 +125,18 @@ public class AlertInformationMapperTest {
         assertEquals("Givare", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
         assertEquals("Enhet", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
     }
+    
+    @Test
+    public void testTimeElement() throws Exception {
+    	MuleMessage mockMessage = mock(MuleMessage.class);
+    	when(mockMessage.getUniqueId()).thenReturn("messageId");
+    	final GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
+    	
+    	final AlertInformationBodyType body = response.getAlertInformation().get(0).getAlertInformationBody();
+    	assertEquals("20080103153000", body.getAscertainedDate());
+    	assertEquals("20080104153000", body.getVerifiedTime());
+    	
+    }
 
     @Test
     public void testMapResponseTypeNullFilter() throws Exception {
@@ -335,10 +347,10 @@ public class AlertInformationMapperTest {
 		
 		final ELEMENT konstDatum = new ELEMENT();
 		konstDatum.setMeaning(cdType("upp-upp-kdt"));
-		konstDatum.setValue(EHRUtil.stType(TEST_DATA_1));
+		konstDatum.setValue(EHRUtil.tsType(TEST_DATA_1));
 		final ELEMENT verifDatum = new ELEMENT();
 		verifDatum.setMeaning(cdType("upp-upp-vtp"));
-		verifDatum.setValue(EHRUtil.stType(TEST_DATA_2));
+		verifDatum.setValue(EHRUtil.tsType(TEST_DATA_2));
 		final ELEMENT giltlighetsTid = new ELEMENT();
 		giltlighetsTid.setMeaning(cdType("upp-upp-ght"));
 		final IVLTS ivlts = new IVLTS();

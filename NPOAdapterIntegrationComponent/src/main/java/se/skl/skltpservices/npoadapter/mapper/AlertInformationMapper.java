@@ -239,12 +239,12 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                     switch (meaning) {
                     case KONST_DATUM:
                         if (item instanceof ELEMENT) {
-                            type.setAscertainedDate(EHRUtil.getElementTextValue((ELEMENT) item));
+                            type.setAscertainedDate(EHRUtil.getElementTimeValue((ELEMENT) item));
                         }
                         break;
                     case VERIFIERAD_TIDPUNKT:
                         if (item instanceof ELEMENT) {
-                            type.setVerifiedTime(EHRUtil.getElementTextValue((ELEMENT) item));
+                            type.setVerifiedTime(EHRUtil.getElementTimeValue((ELEMENT) item));
                         }
                         break;
                     case GILTLIGHETSTID:
@@ -274,7 +274,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                         break;
                     case KOM_INAKTUELL_TIDPUNKT:
                         if (item instanceof ELEMENT) {
-                            type.setObsoleteComment(EHRUtil.getElementTextValue((ELEMENT) item));
+                            type.setObsoleteComment(EHRUtil.getElementTimeValue((ELEMENT) item));
                         }
                         break;
                     default:
