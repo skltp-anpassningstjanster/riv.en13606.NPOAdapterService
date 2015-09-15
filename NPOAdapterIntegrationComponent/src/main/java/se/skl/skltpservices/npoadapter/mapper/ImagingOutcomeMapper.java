@@ -217,7 +217,11 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
     		        				htp.getHealthcareProfessionalRoleCode().setDisplayName(hp.getHealthcareProfessionalRoleCode().getDisplayName());
     		        				htp.getHealthcareProfessionalRoleCode().setOriginalText(hp.getHealthcareProfessionalRoleCode().getOriginalText());
     		        			}
+    		        			
     		        			type.getImagingOutcomeBody().getReferral().setAccountableHealthcareProfessional(htp);
+    		        			
+    		        			//Author time und-und-ure-stp from und
+    		        			type.getImagingOutcomeBody().getReferral().getAccountableHealthcareProfessional().setAuthorTime(type.getImagingOutcomeBody().getResultTime());
     		        		}
     		        } 
     		        
