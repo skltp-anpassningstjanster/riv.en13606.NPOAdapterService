@@ -257,7 +257,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         body.getImageRecording().get(0).getRecordingId().setRoot(und.getRcId().getRoot());
         
         body.getImageRecording().get(0).setExaminationActivity(new CVType());
-        body.getImageRecording().get(0).getExaminationActivity().setCode(ehr13606values.get("und-und-uat-kod"));
+        body.getImageRecording().get(0).getExaminationActivity().setOriginalText(ehr13606values.get("und-und-uat-kod"));
 
         body.getImageRecording().get(0).setExaminationTimePeriod(new TimePeriodType());
         body.getImageRecording().get(0).getExaminationTimePeriod().setStart(ehr13606values.get("und-und-uat-txt-low"));
