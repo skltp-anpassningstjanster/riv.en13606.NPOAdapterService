@@ -19,10 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,6 +73,7 @@ public class LaboratoryOrderOutcomeMapperTest {
         when(mockMessage.getUniqueId()).thenReturn("1234");
         final GetLaboratoryOrderOutcomeResponseType type = mapper.mapResponse(ehrResp, mockMessage);
         assertNotNull(type.getResult());
+        assertEquals("Klinisk kemi", type.getLaboratoryOrderOutcome().get(0).getLaboratoryOrderOutcomeBody().getDiscipline());
     }
 
     @Test

@@ -55,6 +55,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     
     private static final JaxbUtil jaxb = new JaxbUtil(GetLaboratoryOrderOutcomeType.class);
     private static final ObjectFactory objFactory = new ObjectFactory();
+    
+    private static final String KLINISK_KEMI = "Klinisk kemi";
 
     public static final CD MEANING = new CD();
     static {
@@ -176,6 +178,11 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     protected LaboratoryOrderOutcomeBodyType mapBodyType(final COMPOSITION und, final COMPOSITION vbe,
             final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final Map<String, ORGANISATION> orgs) {
         final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
+        
+        
+        //Static values
+        type.setDiscipline(KLINISK_KEMI);
+        
 
         // Undersokningsresultat.har ansvarig
         if (und.getComposer() != null) {
@@ -229,7 +236,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                 type.setRegistrationTime(EHRUtil.padTimestampIfNecessary(und.getCommittal().getTimeCommitted().getValue()));
             }
         }
-
+        
         for (CONTENT content : und.getContent()) {
             if (content instanceof ENTRY) {
                 final ENTRY entry = (ENTRY) content;
@@ -247,10 +254,6 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                                         type.setResultType(EHRUtil.getElementTextValue(elm));
                                         break;
                                     case "und-kkm-ure-lab":
-                                        type.setDiscipline(EHRUtil.getElementTextValue(elm));
-                                        if (StringUtils.isBlank(type.getDiscipline())) {
-                                            type.setDiscipline("Klinisk kemi"); // default
-                                        }
                                         break;
                                     case "und-und-ure-utl":
                                         type.setResultReport(EHRUtil.getElementTextValue(elm));
