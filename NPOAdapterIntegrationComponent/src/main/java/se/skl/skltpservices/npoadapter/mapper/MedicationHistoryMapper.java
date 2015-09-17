@@ -251,6 +251,15 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 final PatientSummaryHeaderType patientSummaryHeader = 
                 		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, false, false, false);
                 
+                //JIRA: SERVICE-340
+                final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
+                patientSummaryHeader.setAccountableHealthcareProfessional(new HealthcareProfessionalType());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
+                patientSummaryHeader.getAccountableHealthcareProfessional().
+                		setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().
+                		setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
+                
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 
                 //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
@@ -609,7 +618,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		}
                 		
                 		
-                		prescription.setPrescriber(patientSummaryHeader.getAccountableHealthcareProfessional());
+                		prescription.setPrescriber(prescriber);
                 		//Set lkm-ord-tid
                 		prescription.getPrescriber().setAuthorTime(authorTime);
                 		

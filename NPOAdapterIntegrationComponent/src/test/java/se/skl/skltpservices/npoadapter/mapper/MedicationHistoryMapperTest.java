@@ -111,21 +111,16 @@ public class MedicationHistoryMapperTest {
     	assertNotNull(rec);
     	assertNotNull(rec.getMedicationMedicalRecordHeader());
     	
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getDocumentId(), DOC_ID_1);
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId(), "SE162321000230-0011");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getPatientId().getId(), "198208149297");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime(), "20150305000000");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId(), "SE2321000230-102X");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName(), "PascalLars, Gustafsson");
+    	assertEquals(DOC_ID_1, rec.getMedicationMedicalRecordHeader().getDocumentId());
+    	assertEquals("SE162321000230-0011",rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
+    	assertEquals("198208149297", rec.getMedicationMedicalRecordHeader().getPatientId().getId());
+    	assertEquals("20150305000000", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
+    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
     	final riv.clinicalprocess.activityprescription.actoutcome._2.CVType role = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode();
-    	assertEquals(role.getDisplayName(), "Läkare");
-    	assertEquals(role.getCode(), "Läkare");
+    	assertNull(role);
     	final OrgUnitType org = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit();
-    	assertEquals(org.getOrgUnitAddress(), "Sunderby sjukhus  97180 LULEÅ");
-    	assertEquals("test@test.se", org.getOrgUnitEmail());
-    	assertEquals("SE2321000230-LuBo-Kir", org.getOrgUnitHSAId());
-    	assertEquals("0920-282000", org.getOrgUnitTelecom());
-    	assertEquals("LULEÅ", org.getOrgUnitLocation());
+    	assertNull(org);
     	
     	assertEquals("SE2321000230-1016", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
     	assertEquals("SE2321000230-1019", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
