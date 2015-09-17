@@ -13,7 +13,7 @@
 
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
-    <version>1.0.0-RC19</version>
+    <version>1.0.0-RC20-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
@@ -31,7 +31,7 @@
       <url>http://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService</url>
       <connection>scm:git:git://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService.git</connection>
       <developerConnection>scm:git:git://github.com/skltp-anpassningstjanster/riv.en13606.NPOAdapterService.git</developerConnection>
-      <tag>v1.0.0-RC19</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <modules>
