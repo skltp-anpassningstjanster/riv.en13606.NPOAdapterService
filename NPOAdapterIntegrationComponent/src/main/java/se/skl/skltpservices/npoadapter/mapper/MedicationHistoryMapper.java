@@ -52,6 +52,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory;
@@ -256,6 +257,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 
                 //Map body, Content 1..1
                 final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
+                
                 
                 //Map utv
                 HealthcareProfessional utvProfessional = null;
@@ -642,6 +644,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 	}
                 	
                 }
+                
+                // "Endast aktuella lakemedel ska levereras, dvs lakemedel man vet ar utsatta levereras ej".
+                body.getMedicationPrescription().setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE);
                 
                 record.setMedicationMedicalRecordBody(body);
                 record.setMedicationMedicalRecordHeader(patientSummaryHeader);

@@ -47,6 +47,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessi
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.OrgUnitType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
@@ -144,6 +145,8 @@ public class MedicationHistoryMapperTest {
     	assertEquals("notat", mpt2.getPrescriptionNote());
     	assertEquals("19800101000000", mpt2.getEvaluationTime());
     	assertEquals("SE1623210002198208149297ordination109", mpt2.getPrescriptionChainId().getExtension());
+    	assertEquals(PrescriptionStatusEnum.ACTIVE, mpt1.getPrescriptionStatus());
+    	assertEquals(PrescriptionStatusEnum.ACTIVE, mpt2.getPrescriptionStatus());
     }
     
     @Test
