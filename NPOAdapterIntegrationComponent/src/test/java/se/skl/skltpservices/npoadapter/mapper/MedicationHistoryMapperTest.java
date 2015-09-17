@@ -148,7 +148,7 @@ public class MedicationHistoryMapperTest {
     public void testPrescriber() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
-    	assertEquals("20150305000000", hp.getAuthorTime());
+    	assertEquals("20150305000001", hp.getAuthorTime());
     	assertEquals("SE2321000230-102X", hp.getHealthcareProfessionalHSAId());
     }
     

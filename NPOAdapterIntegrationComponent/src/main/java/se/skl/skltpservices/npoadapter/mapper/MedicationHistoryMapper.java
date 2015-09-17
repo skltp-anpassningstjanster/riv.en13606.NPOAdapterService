@@ -460,6 +460,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												final PQIntervalType interval = new PQIntervalType();
                 												interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
                 												interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
+                												
                 												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 											
                 												//Set prescriptionStartOfThreatment
