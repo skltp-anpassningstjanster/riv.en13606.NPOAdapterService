@@ -71,6 +71,8 @@ import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.PQ;
+import se.rivta.en13606.ehrextract.v11.PQTIME;
+import se.rivta.en13606.ehrextract.v11.QTY;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
@@ -460,6 +462,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												final PQIntervalType interval = new PQIntervalType();
                 												interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
                 												interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
+                												if(dosageIvlts.getWidth() != null && dosageIvlts.getWidth() instanceof PQTIME) {
+                													final PQTIME pqTime = (PQTIME) dosageIvlts.getWidth();
+                													interval.setUnit(pqTime.getUnit());
+                												}
                 												
                 												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 											
