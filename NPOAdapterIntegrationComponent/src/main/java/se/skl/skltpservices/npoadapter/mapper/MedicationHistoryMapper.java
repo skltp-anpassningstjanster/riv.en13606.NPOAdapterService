@@ -53,6 +53,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHead
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory;
@@ -658,6 +659,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 
                 // "Endast aktuella lakemedel ska levereras, dvs lakemedel man vet ar utsatta levereras ej".
                 body.getMedicationPrescription().setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE);
+                
+                // "Alla ordinationer som tillhandahalls i NPO1 ar att betrakta som "insattningar"
+                // JIRA: SERVICE-353
+                body.getMedicationPrescription().setTypeOfPrescription(TypeOfPrescriptionEnum.I);
                 
                 applyAdapterSpecificRules(body.getMedicationPrescription().getDrug());
                 
