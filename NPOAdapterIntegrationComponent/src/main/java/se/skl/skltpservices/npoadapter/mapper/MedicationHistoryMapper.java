@@ -664,6 +664,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 // "Endast aktuella lakemedel ska levereras, dvs lakemedel man vet ar utsatta levereras ej".
                 body.getMedicationPrescription().setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE);
                 
+                applyAdapterSpecificRules(body.getMedicationPrescription().getDrug());
+                
                 record.setMedicationMedicalRecordBody(body);
                 record.setMedicationMedicalRecordHeader(patientSummaryHeader);
                 responseType.getMedicationMedicalRecord().add(record);
@@ -688,6 +690,29 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     					break;
     			}
     		}
+    	}
+    }
+    
+    /**
+     * According to TKB only on of drugArticle, drug, merchandise, generics, unstructuredDrugInformation is allowed
+     * 13606 contains more data.
+     * @param drug
+     */
+    protected void applyAdapterSpecificRules(final DrugChoiceType drug) {
+    	if(drug.getDrugArticle() != null) {
+    		drug.setDrug(null);
+    		drug.setMerchandise(null);
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getDrug() != null) {
+    		drug.setMerchandise(null);
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getMerchandise() != null) {
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getGenerics() != null) {
+    		drug.setUnstructuredDrugInformation(null);
     	}
     }
 }
