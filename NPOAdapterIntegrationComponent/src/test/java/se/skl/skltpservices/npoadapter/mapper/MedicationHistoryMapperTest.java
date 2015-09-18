@@ -169,7 +169,10 @@ public class MedicationHistoryMapperTest {
     public void testArticleDrug() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
     	final DrugArticleType dat = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrugArticle();
-    	assertEquals("19861001100155", dat.getNplPackId().getDisplayName());
+    	assertEquals("19861001100155", dat.getNplPackId().getOriginalText());
+    	assertNull(dat.getNplPackId().getCode());
+    	assertNull(dat.getNplPackId().getCodeSystem());
+    	assertNull(dat.getNplPackId().getDisplayName());
     }
     
     

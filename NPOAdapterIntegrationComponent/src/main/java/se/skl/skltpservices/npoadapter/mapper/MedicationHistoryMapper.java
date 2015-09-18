@@ -493,7 +493,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 										break;
                 									case DOSERINGSSTEG_DOSERINGSENHET:
                 										dosage.setUnitDose(new CVType());
-                										dosage.getUnitDose().setDisplayName(EHRUtil.getSTValue(dosageElm.getValue()));
                 										dosage.getUnitDose().setOriginalText(EHRUtil.getSTValue(dosageElm.getValue()));
                 										break;
                 									case DOSERINGSSTEG_KORTNOTATION:
@@ -536,8 +535,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												if(lakemedelsElm.getValue() != null) {
                 													final II drugCvII = (II) lakemedelsElm.getValue();
                 													final CVType drugCv = new CVType();
-                													drugCv.setCodeSystem(drugCvII.getRoot());
-                													drugCv.setDisplayName(drugCvII.getExtension());
                 													drugCv.setOriginalText(drugCvII.getExtension());
                 													drugArticle.setNplPackId(drugCv);
                 												}
@@ -559,8 +556,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 															if(prodElm.getValue() instanceof II) {
                 																final CVType drugProdCV = new CVType();
                 																final II drugProdII = (II) prodElm.getValue();
-                																drugProdCV.setCodeSystem(drugProdII.getRoot());
-                																drugProdCV.setDisplayName(drugProdII.getExtension());
                 																drugProdCV.setOriginalText(drugProdII.getExtension());
                 																prescription.getDrug().getDrug().setNplId(drugProdCV);
                 															}
