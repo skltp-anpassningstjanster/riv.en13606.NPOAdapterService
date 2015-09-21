@@ -52,6 +52,8 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.ResultType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory;
@@ -70,6 +72,8 @@ import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.PQ;
+import se.rivta.en13606.ehrextract.v11.PQTIME;
+import se.rivta.en13606.ehrextract.v11.QTY;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
@@ -250,12 +254,22 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 final PatientSummaryHeaderType patientSummaryHeader = 
                 		(PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, false, false, false);
                 
+                //JIRA: SERVICE-340
+                final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
+                patientSummaryHeader.setAccountableHealthcareProfessional(new HealthcareProfessionalType());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
+                patientSummaryHeader.getAccountableHealthcareProfessional().
+                		setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().
+                		setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
+                
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 
                 //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
                 
                 //Map body, Content 1..1
                 final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
+                
                 
                 //Map utv
                 HealthcareProfessional utvProfessional = null;
@@ -449,6 +463,11 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												final PQIntervalType interval = new PQIntervalType();
                 												interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
                 												interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
+                												if(dosageIvlts.getWidth() != null && dosageIvlts.getWidth() instanceof PQTIME) {
+                													final PQTIME pqTime = (PQTIME) dosageIvlts.getWidth();
+                													interval.setUnit(pqTime.getUnit());
+                												}
+                												
                 												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
                 											
                 												//Set prescriptionStartOfThreatment
@@ -475,7 +494,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 										break;
                 									case DOSERINGSSTEG_DOSERINGSENHET:
                 										dosage.setUnitDose(new CVType());
-                										dosage.getUnitDose().setDisplayName(EHRUtil.getSTValue(dosageElm.getValue()));
                 										dosage.getUnitDose().setOriginalText(EHRUtil.getSTValue(dosageElm.getValue()));
                 										break;
                 									case DOSERINGSSTEG_KORTNOTATION:
@@ -518,8 +536,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 												if(lakemedelsElm.getValue() != null) {
                 													final II drugCvII = (II) lakemedelsElm.getValue();
                 													final CVType drugCv = new CVType();
-                													drugCv.setCodeSystem(drugCvII.getRoot());
-                													drugCv.setDisplayName(drugCvII.getExtension());
                 													drugCv.setOriginalText(drugCvII.getExtension());
                 													drugArticle.setNplPackId(drugCv);
                 												}
@@ -541,8 +557,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 															if(prodElm.getValue() instanceof II) {
                 																final CVType drugProdCV = new CVType();
                 																final II drugProdII = (II) prodElm.getValue();
-                																drugProdCV.setCodeSystem(drugProdII.getRoot());
-                																drugProdCV.setDisplayName(drugProdII.getExtension());
                 																drugProdCV.setOriginalText(drugProdII.getExtension());
                 																prescription.getDrug().getDrug().setNplId(drugProdCV);
                 															}
@@ -607,7 +621,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		}
                 		
                 		
-                		prescription.setPrescriber(patientSummaryHeader.getAccountableHealthcareProfessional());
+                		prescription.setPrescriber(prescriber);
                 		//Set lkm-ord-tid
                 		prescription.getPrescriber().setAuthorTime(authorTime);
                 		
@@ -643,6 +657,15 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 	
                 }
                 
+                // "Endast aktuella lakemedel ska levereras, dvs lakemedel man vet ar utsatta levereras ej".
+                body.getMedicationPrescription().setPrescriptionStatus(PrescriptionStatusEnum.ACTIVE);
+                
+                // "Alla ordinationer som tillhandahalls i NPO1 ar att betrakta som "insattningar"
+                // JIRA: SERVICE-353
+                body.getMedicationPrescription().setTypeOfPrescription(TypeOfPrescriptionEnum.I);
+                
+                applyAdapterSpecificRules(body.getMedicationPrescription().getDrug());
+                
                 record.setMedicationMedicalRecordBody(body);
                 record.setMedicationMedicalRecordHeader(patientSummaryHeader);
                 responseType.getMedicationMedicalRecord().add(record);
@@ -667,6 +690,29 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     					break;
     			}
     		}
+    	}
+    }
+    
+    /**
+     * According to TKB only on of drugArticle, drug, merchandise, generics, unstructuredDrugInformation is allowed
+     * 13606 contains more data.
+     * @param drug
+     */
+    protected void applyAdapterSpecificRules(final DrugChoiceType drug) {
+    	if(drug.getDrugArticle() != null) {
+    		drug.setDrug(null);
+    		drug.setMerchandise(null);
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getDrug() != null) {
+    		drug.setMerchandise(null);
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getMerchandise() != null) {
+    		drug.setGenerics(null);
+    		drug.setUnstructuredDrugInformation(null);
+    	} else if(drug.getGenerics() != null) {
+    		drug.setUnstructuredDrugInformation(null);
     	}
     }
 }

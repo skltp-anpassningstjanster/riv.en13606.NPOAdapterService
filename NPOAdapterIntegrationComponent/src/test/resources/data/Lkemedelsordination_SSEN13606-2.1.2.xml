@@ -56,7 +56,7 @@
                      <name nullFlavor="NA"/>
                      <rc_id nullFlavor="NA"/>
                      <synthesised nullFlavor="NA"/>
-                     <value xsi:type="TS" value="20150305000000"/>
+                     <value xsi:type="TS" value="20150305000001"/>
                   </items>
                   <items xsi:type="ELEMENT">
                      <meaning code="lkm-ord-utv" codeSystem="1.2.752.129.2.2.2.1">
@@ -283,7 +283,7 @@
                      <name nullFlavor="NA"/>
                      <rc_id nullFlavor="NA"/>
                      <synthesised nullFlavor="NA"/>
-                     <value xsi:type="TS" value="20150305000000"/>
+                     <value xsi:type="TS" value="20150305000001"/>
                   </items>
                   <items xsi:type="ELEMENT">
                      <meaning code="lkm-ord-not" codeSystem="1.2.752.129.2.2.2.1">

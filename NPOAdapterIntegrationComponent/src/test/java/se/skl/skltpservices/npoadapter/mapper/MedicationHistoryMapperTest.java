@@ -38,15 +38,21 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mule.api.MuleMessage;
 
+import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugArticleType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.GenericsType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessionalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.MerchandiseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.OrgUnitType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
+import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
 import se.skl.skltpservices.npoadapter.test.Util;
@@ -65,6 +71,8 @@ public class MedicationHistoryMapperTest {
     private static final String DOC_ID_3 = "SE1623210002198208149297ordination111";
     private static final String DOC_ID_4 = "SE1623210002198208149297ordination113";
     
+    private static MedicationHistoryMapper mapper;
+    
     private static final HashMap<String, MedicationMedicalRecordType> records = new HashMap<String, MedicationMedicalRecordType>();
 
     @BeforeClass
@@ -73,7 +81,7 @@ public class MedicationHistoryMapperTest {
         
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
-        MedicationHistoryMapper mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
+        mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
         resp = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
         
         for(MedicationMedicalRecordType rec : resp.getMedicationMedicalRecord()) {
@@ -110,21 +118,16 @@ public class MedicationHistoryMapperTest {
     	assertNotNull(rec);
     	assertNotNull(rec.getMedicationMedicalRecordHeader());
     	
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getDocumentId(), DOC_ID_1);
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId(), "SE162321000230-0011");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getPatientId().getId(), "198208149297");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime(), "20150305000000");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId(), "SE2321000230-102X");
-    	assertEquals(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName(), "PascalLars, Gustafsson");
+    	assertEquals(DOC_ID_1, rec.getMedicationMedicalRecordHeader().getDocumentId());
+    	assertEquals("SE162321000230-0011",rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
+    	assertEquals("198208149297", rec.getMedicationMedicalRecordHeader().getPatientId().getId());
+    	assertEquals("20150305000000", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
+    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
     	final riv.clinicalprocess.activityprescription.actoutcome._2.CVType role = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode();
-    	assertEquals(role.getDisplayName(), "Läkare");
-    	assertEquals(role.getCode(), "Läkare");
+    	assertNull(role);
     	final OrgUnitType org = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit();
-    	assertEquals(org.getOrgUnitAddress(), "Sunderby sjukhus  97180 LULEÅ");
-    	assertEquals("test@test.se", org.getOrgUnitEmail());
-    	assertEquals("SE2321000230-LuBo-Kir", org.getOrgUnitHSAId());
-    	assertEquals("0920-282000", org.getOrgUnitTelecom());
-    	assertEquals("LULEÅ", org.getOrgUnitLocation());
+    	assertNull(org);
     	
     	assertEquals("SE2321000230-1016", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
     	assertEquals("SE2321000230-1019", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
@@ -144,13 +147,17 @@ public class MedicationHistoryMapperTest {
     	assertEquals("notat", mpt2.getPrescriptionNote());
     	assertEquals("19800101000000", mpt2.getEvaluationTime());
     	assertEquals("SE1623210002198208149297ordination109", mpt2.getPrescriptionChainId().getExtension());
+    	assertEquals(PrescriptionStatusEnum.ACTIVE, mpt1.getPrescriptionStatus());
+    	assertEquals(PrescriptionStatusEnum.ACTIVE, mpt2.getPrescriptionStatus());
+    	assertEquals(TypeOfPrescriptionEnum.I, mpt1.getTypeOfPrescription());
+    	assertEquals(TypeOfPrescriptionEnum.I, mpt2.getTypeOfPrescription());
     }
     
     @Test
     public void testPrescriber() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
-    	assertEquals("20150305000000", hp.getAuthorTime());
+    	assertEquals("20150305000001", hp.getAuthorTime());
     	assertEquals("SE2321000230-102X", hp.getHealthcareProfessionalHSAId());
     }
     
@@ -165,21 +172,12 @@ public class MedicationHistoryMapperTest {
     public void testArticleDrug() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
     	final DrugArticleType dat = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrugArticle();
-    	assertEquals("19861001100155", dat.getNplPackId().getDisplayName());
+    	assertEquals("19861001100155", dat.getNplPackId().getOriginalText());
+    	assertNull(dat.getNplPackId().getCode());
+    	assertNull(dat.getNplPackId().getCodeSystem());
+    	assertNull(dat.getNplPackId().getDisplayName());
     }
     
-    @Test
-    public void testDrugDrug() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
-    	final DrugType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug();
-    	assertEquals("J01FA01", drug.getAtcCode().getCode());
-    	assertEquals("1.2.752.129.2.2.3.1.1", drug.getAtcCode().getCodeSystem());
-    	assertEquals("Erytromycin", drug.getAtcCode().getDisplayName());
-    	
-    	assertEquals("Tablett", drug.getPharmaceuticalForm());
-    	assertEquals(Double.valueOf("500"), drug.getStrength());
-    	assertEquals("MG", drug.getStrengthUnit());
-    }
     
     @Test
     public void testDosage() {
@@ -209,5 +207,67 @@ public class MedicationHistoryMapperTest {
     	assertEquals("SE2321000230-102X", d.getDispensationAuthorizer().getHealthcareProfessionalHSAId());
     }
 
-    
+    /**
+     * Rule "only one is allowed"
+     * Priority
+     * 1. drugArticle
+     * 2. drug
+     * 3. merchandise
+     * 4. generics
+     * 5. unstructuredDrugInformation
+     */
+	@Test
+	public void testApplyAdapterSpecificRules() throws Exception {
+		DrugChoiceType testObject = new DrugChoiceType();
+		
+		final DrugArticleType drugArticle = new DrugArticleType();
+		final DrugType drug = new DrugType();
+		final MerchandiseType merchandise = new MerchandiseType();
+		final GenericsType generics = new GenericsType();
+		final UnstructuredDrugInformationType unstructuredDrugInfo = new UnstructuredDrugInformationType();
+		
+		//All populated, only drugArticle should remain
+		testObject.setDrug(drug);
+		testObject.setDrugArticle(drugArticle);
+		testObject.setGenerics(generics);
+		testObject.setMerchandise(merchandise);
+		testObject.setUnstructuredDrugInformation(unstructuredDrugInfo);
+		mapper.applyAdapterSpecificRules(testObject);
+		assertNotNull(testObject.getDrugArticle());
+		assertNull(testObject.getDrug());
+		assertNull(testObject.getMerchandise());
+		assertNull(testObject.getGenerics());
+		assertNull(testObject.getUnstructuredDrugInformation());
+		
+		//Only generics populated, only generics should remain
+		testObject = new DrugChoiceType();
+		testObject.setGenerics(generics);
+		mapper.applyAdapterSpecificRules(testObject);
+		assertNull(testObject.getDrugArticle());
+		assertNull(testObject.getDrug());
+		assertNull(testObject.getMerchandise());
+		assertNotNull(testObject.getGenerics());
+		assertNull(testObject.getUnstructuredDrugInformation());
+		
+		//Unstructured and drug populated, only drug should remain
+		testObject = new DrugChoiceType();
+		testObject.setUnstructuredDrugInformation(unstructuredDrugInfo);
+		testObject.setDrug(drug);
+		mapper.applyAdapterSpecificRules(testObject);
+		assertNull(testObject.getDrugArticle());
+		assertNotNull(testObject.getDrug());
+		assertNull(testObject.getMerchandise());
+		assertNull(testObject.getGenerics());
+		assertNull(testObject.getUnstructuredDrugInformation());
+		
+		//None populated, none should remain
+		testObject = new DrugChoiceType();
+		mapper.applyAdapterSpecificRules(testObject);
+		assertNull(testObject.getDrugArticle());
+		assertNull(testObject.getDrug());
+		assertNull(testObject.getMerchandise());
+		assertNull(testObject.getGenerics());
+		assertNull(testObject.getUnstructuredDrugInformation());
+		
+	}
 }
