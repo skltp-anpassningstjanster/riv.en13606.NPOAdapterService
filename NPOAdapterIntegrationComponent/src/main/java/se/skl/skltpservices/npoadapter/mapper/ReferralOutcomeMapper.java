@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -177,15 +178,32 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     
     
     protected GetReferralOutcomeResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
+
         GetReferralOutcomeResponseType responseType = new GetReferralOutcomeResponseType();
-        if (!ehrExtractList.isEmpty()) {
-            final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-            
-            List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
-            if (EHRUtil.retain(ehrExtract.getAllCompositions().get(0), careUnitHsaIds, log)) {
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
+        
+        if (ehrExtractList == null || ehrExtractList.isEmpty()) {
+            throw new RuntimeException("ehrExtractList is null or empty - malformed 13606 message");
+        }
+        if (ehrExtractList.size() != 1) {
+            log.warn("ehrExtractList size {} - first EHREXTRACT will be processed, others will be ignored - is this a malformed 13606 message?", ehrExtractList.size());
+        }
+        
+        EHREXTRACT ehrExtract = ehrExtractList.get(0);
+        final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
+
+        // retrieve all separate und and vbe compostions, index by rcId
+        // a 'und' will link from composer/performer to a 'vbe'
+        Map<String, COMPOSITION> unds = new HashMap<String, COMPOSITION>();
+        Map<String, COMPOSITION> vbes = new HashMap<String, COMPOSITION>();
+        populateUndsAndVbes(ehrExtract, unds, vbes);
+       
+        for (COMPOSITION und : unds.values()) {
+            if (EHRUtil.retain(und, careUnitHsaIds, log)) {
                 final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
-                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(ehrExtract));
-                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(ehrExtract));
+                COMPOSITION vbe = getLinkedVbeFromUnd(und,vbes);
+                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
+                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(und, vbe));
                 responseType.getReferralOutcome().add(referralOutcomeRecordType);
             }
         }
@@ -194,58 +212,109 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
 
     /**
+     * @param und - current und composition
+     * @param vbes - all vbe compositions
+     * @return linked vbe - default to null
+     */
+    private COMPOSITION getLinkedVbeFromUnd(COMPOSITION und, Map<String, COMPOSITION> vbes) {
+        if (und != null) {
+            if (und.getContent() != null) {
+                if (und.getContent().size() > 0) {
+                    if (und.getContent().get(0).getLinks() != null) {
+                        if (und.getContent().get(0).getLinks().size() > 0) {
+                            if (und.getContent().get(0).getLinks().get(0).getFollowLink() != null) {
+                                if (Boolean.TRUE == und.getContent().get(0).getLinks().get(0).getFollowLink().isValue()) {
+                                    if (und.getContent().get(0).getLinks().get(0).getTargetType() != null) {
+                                        if ("vbe".equals(und.getContent().get(0).getLinks().get(0).getTargetType().getCode())) {
+                                            if (und.getContent().get(0).getLinks().get(0).getTargetId() != null) {
+                                                if (und.getContent().get(0).getLinks().get(0).getTargetId() != null) {
+                                                    if (und.getContent().get(0).getLinks().get(0).getTargetId().size() > 0) {
+                                                        if (und.getContent().get(0).getLinks().get(0).getTargetId().get(0).getExtension() != null) {
+                                                            String vbeRcId = und.getContent().get(0).getLinks().get(0).getTargetId().get(0).getExtension();
+                                                            if (vbes != null) {
+                                                                if (vbes.keySet().size() > 0) {
+                                                                    return vbes.get(vbeRcId);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    private void populateUndsAndVbes(EHREXTRACT ehrExtract,  Map<String, COMPOSITION> unds,  Map<String, COMPOSITION> vbes) {
+        for (COMPOSITION composition : ehrExtract.getAllCompositions()) {
+            if (composition.getRcId() != null && composition.getRcId().getExtension() != null) {
+                String rcId = composition.getRcId().getExtension();
+                
+                if (StringUtils.isBlank(rcId)) {
+                    log.error("composition contains a blank rcId");
+                } else {
+                    if (composition.getMeaning() != null && composition.getMeaning().getCode() != null) {
+                        switch (composition.getMeaning().getCode()) {
+                        case "und" : 
+                            unds.put(rcId, composition);
+                            break;
+                        case "vbe" : 
+                            vbes.put(rcId, composition);
+                            break;
+                        default:
+                            log.warn("Unrecognised meaning code {} in message", composition.getMeaning().getCode());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
+    /**
      * Maps contact header information.
      *
      * @param ehrExtract the extract.
      * @return the target header information.
      */
-    private PatientSummaryHeaderType mapHeader(final EHREXTRACT ehrExtract) {
-        final COMPOSITION composition = ehrExtract.getAllCompositions().get(0);
-        final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
-        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(composition, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class, false, false, true);
+    private PatientSummaryHeaderType mapHeader(COMPOSITION und, SharedHeaderExtract sharedHeaderExtract) {
+        PatientSummaryHeaderType patient = (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(
+                                             und, sharedHeaderExtract, "und-und-ure-stp", PatientSummaryHeaderType.class, false, false, true);
         
         // 'Tidpunkt då dokument skapades' - TKB clinicalprocess healthcond actoutcome
-        if ("" == patient.getDocumentTime() || null == patient.getDocumentTime()) {
-            TS timestamp = ehrExtract.getTimeCreated();
-            if (timestamp != null && StringUtils.isNotBlank(timestamp.getValue())) {
-                patient.setDocumentTime(ehrExtract.getTimeCreated().getValue());
-            } else {
-                patient.setDocumentTime("19000101000000"); // default timestamp
-            }
+        if (StringUtils.isBlank(patient.getDocumentTime())) {
+            patient.setDocumentTime(sharedHeaderExtract.timeCreated());
         }
         return patient;
     }
     
     
     /**
-     * Create a ReferralOutcomeRecord using the information
-     * in the first and second compositions.
+     * Create a ReferralOutcomeRecord using the information in the current und and vbe compositions
      *
-     * @param ehrExtract the extract containing the current composition
      * @return a new ReferralOutcomeBodyTypeRecord
      */
-    private ReferralOutcomeBodyType mapBody(final EHREXTRACT ehrExtract) {
+    private ReferralOutcomeBodyType mapBody(COMPOSITION und, COMPOSITION vbe) {
         
         Map<String,String> ehr13606values = new LinkedHashMap<String,String>();
         
-        if (ehrExtract.getAllCompositions().size() > 0) {
-            final COMPOSITION composition0 = ehrExtract.getAllCompositions().get(0);
-            if (composition0 != null) {
-                // parse this composition into values stored in a Map
-                retrieveValues(composition0, ehr13606values);
-            
-                if (ehrExtract.getAllCompositions().size() > 1) {
-                    final COMPOSITION composition1 = ehrExtract.getAllCompositions().get(1);
-                    retrieveValues(composition1, ehr13606values);
-                }
+        // parse the two compositions into values stored in a Map
+        retrieveUndValues(und, ehr13606values);
+        retrieveVbeValues(vbe, ehr13606values);
                 
-                if (log.isDebugEnabled()) {
-                    Iterator<String> it = ehr13606values.keySet().iterator();
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        log.debug("|" + key + "|" + ehr13606values.get(key) + "|");
-                    }
-                }
+        if (log.isDebugEnabled()) {
+            Iterator<String> it = ehr13606values.keySet().iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                log.debug("|" + key + "|" + ehr13606values.get(key) + "|");
             }
         }
         
@@ -334,35 +403,14 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     }
 
     
-    // Retrieve ehr values from message and store in a map
-    private void retrieveValues(COMPOSITION composition, Map<String,String> values) {
+    // Retrieve ehr values from und composition and store in a map
+    private void retrieveUndValues(COMPOSITION composition, Map<String,String> values) {
         for (final CONTENT content : composition.getContent()) {
             retrieveContentValue(content, values);
         }
-        
-        if ("vbe".equals(composition.getMeaning().getCode())) {
-            if (composition.getRcId() != null) {
-                if (StringUtils.isNotBlank(composition.getRcId().getRoot())) {
-                    values.put("vbe-rc-id", composition.getRcId().getRoot());
-                }
-            }
-            
-            if (composition.getCommittal() != null) {
-                if (composition.getCommittal().getTimeCommitted() != null) {
-                    if (StringUtils.isNotBlank(composition.getCommittal().getTimeCommitted().getValue())) {
-                        values.put("vbe-committal-timecommitted", composition.getCommittal().getTimeCommitted().getValue()); 
-                    }
-                }
-            }
-            
-            if (composition.getComposer() != null) {
-                if (composition.getComposer().getPerformer() != null) {
-                    values.put("vbe-composer-performer-extension", composition.getComposer().getPerformer().getExtension());
-                }
-            }
-        }
     }
 
+    
     private void retrieveContentValue(CONTENT content, Map<String, String> values) {
         
         for (final ITEM item : ((ENTRY) content).getItems()) {
@@ -386,6 +434,35 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
         
+    }
+    
+
+    // Retrieve ehr values from vbe composition and store in a map
+    private void retrieveVbeValues(COMPOSITION composition, Map<String,String> values) {
+        
+        for (final CONTENT content : composition.getContent()) {
+            retrieveContentValue(content, values);
+        }
+        
+        if (composition.getRcId() != null) {
+            if (StringUtils.isNotBlank(composition.getRcId().getRoot())) {
+                values.put("vbe-rc-id", composition.getRcId().getRoot());
+            }
+        }
+        
+        if (composition.getCommittal() != null) {
+            if (composition.getCommittal().getTimeCommitted() != null) {
+                if (StringUtils.isNotBlank(composition.getCommittal().getTimeCommitted().getValue())) {
+                    values.put("vbe-committal-timecommitted", composition.getCommittal().getTimeCommitted().getValue()); 
+                }
+            }
+        }
+        
+        if (composition.getComposer() != null) {
+            if (composition.getComposer().getPerformer() != null) {
+                values.put("vbe-composer-performer-extension", composition.getComposer().getPerformer().getExtension());
+            }
+        }
     }
 
 
