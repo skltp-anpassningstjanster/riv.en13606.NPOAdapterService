@@ -569,7 +569,14 @@ public final class EHRUtil {
     
 
     /**
-     * Create a patientSummaryHeader
+     * @param composition
+     * @param baseHeader
+     * @param timeElement code of the time element
+     * @param type of response
+     * @param include documentTitle
+     * @param include documentTime
+     * @param include signatureTime
+     * @return a patientSummary of the requested type
      */
     public static <T> T patientSummaryHeader(final COMPOSITION comp, 
                                              final SharedHeaderExtract baseHeader, 

@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -178,9 +180,6 @@ public class ReferralOutcomeMapperTest {
             assertTrue(responseXml.contains("referralAuthor><ns2:authorTime>20100503165800<"));
             assertTrue(responseXml.contains("authorTime><ns2:healthcareProfessionalName>SONSVE<"));
             // 
-
-            
-            
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());
         } catch (MapperException e) {
@@ -231,22 +230,20 @@ public class ReferralOutcomeMapperTest {
             log.debug(responseXml);
             log.debug("");
             
+            
+            
+            
+            
+            int occurrences = 0;
+            Pattern p = Pattern.compile("referralOutcomeBody");
+            Matcher m = p.matcher(responseXml);
+            while (m.find()) {
+                occurrences++;
+            }
+            assertEquals(6,occurrences);
+            
             assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
             assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
-            /*
-            assertTrue(responseXml.contains("referralOutcomeTitle>Allmän Remiss Vårdcentralen Strängnäs EDI"));
-            assertTrue(responseXml.contains("referralOutcomeText>Svar: test Svarsdatum: 100503 Dikterande"));
-            assertTrue(responseXml.contains("act><ns2:actCode><ns2:code>620<"));
-            assertTrue(responseXml.contains("<ns2:codeSystem>1.2.752.129.2.2.2.1<"));
-            assertTrue(responseXml.contains("<ns2:actText>Önskad undersökning: test"));
-            assertTrue(responseXml.contains("actText><ns2:actTime>20100504110000<"));
-            assertFalse(responseXml.contains("actResult"));
-            assertTrue(responseXml.contains("referral><ns2:referralId>9871961"));
-            assertTrue(responseXml.contains("referralId><ns2:referralReason>Önskad undersökning  test Anamnes, status: test"));
-            assertTrue(responseXml.contains("referralReason><ns2:referralTime>20100503165800<"));
-            assertTrue(responseXml.contains("referralAuthor><ns2:authorTime>20100503165800<"));
-            assertTrue(responseXml.contains("authorTime><ns2:healthcareProfessionalName>SONSVE<"));
-            */
             
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());

@@ -245,7 +245,7 @@ public abstract class AbstractMapper {
 			}
 		}
 		
-		return new SharedHeaderExtract(orgs, hps, EHRUtil.getSystemHSAId(ehrExtract), ehrExtract.getSubjectOfCare());
+		return new SharedHeaderExtract(orgs, hps, EHRUtil.getSystemHSAId(ehrExtract), ehrExtract.getSubjectOfCare(), ehrExtract.getTimeCreated());
     }
     
     

@@ -23,12 +23,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.mule.util.StringUtils;
+
 import se.rivta.en13606.ehrextract.v11.*;
 
 public class SharedHeaderExtract {
 	
 	private final String systemHSAId;
 	private final II subjectOfCare;
+	private final String timeCreated;
 	
 	private final Map<String, ORGANISATION> organisations;
 	private final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> healthcareProfessionals;
@@ -36,13 +39,20 @@ public class SharedHeaderExtract {
 	public SharedHeaderExtract(final Map<String, ORGANISATION> orgs, 
 								final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, 
 								final String systemHSAId,
-								final II subjectOfCare) {
+								final II subjectOfCare,
+								final TS timeCreated) {
 		this.organisations = Collections.unmodifiableMap(orgs);
 		this.healthcareProfessionals = Collections.unmodifiableMap(hps);
 		this.systemHSAId = systemHSAId;
 		this.subjectOfCare = subjectOfCare;
+		if (timeCreated != null && StringUtils.isNotBlank(timeCreated.getValue())) {
+	        this.timeCreated = timeCreated.getValue();
+		} else {
+		    this.timeCreated = "19000101000000"; // default
+		}
 	}
 	
+    
 	public Map<String, ORGANISATION> organisations() {
 		return this.organisations;
 	}
@@ -68,4 +78,8 @@ public class SharedHeaderExtract {
 	public II subjectOfCare() {
 		return this.subjectOfCare;
 	}
+	
+    public String timeCreated() {
+        return this.timeCreated;
+    }
 }
