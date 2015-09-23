@@ -46,6 +46,7 @@ public class Util {
     public static final String MEDICALHISTORY_TEST_FILE    = "/data/Lkemedelsordination_SSEN13606-2.1.2.xml";
     public static final String REFERRALOUTCOME_TEST_FILE_1 = "/data/Underskning_SSEN13606-2.1.1.xml";
     public static final String REFERRALOUTCOME_TEST_FILE_2 = "/data/Underskning_SSEN13606-2.1.1-SERVICE-322.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_3 = "/data/Underskning_SSEN13606-2.1.1-SERVICE-332.xml";
     
     //
     public static EHREXTRACT loadEhrTestData(final String fileName) throws JAXBException {
