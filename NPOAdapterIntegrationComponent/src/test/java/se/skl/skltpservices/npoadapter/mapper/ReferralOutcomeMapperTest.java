@@ -178,7 +178,7 @@ public class ReferralOutcomeMapperTest {
             assertTrue(responseXml.contains("referralId><ns2:referralReason>Önskad undersökning  test Anamnes, status: test"));
             assertTrue(responseXml.contains("referralReason><ns2:referralTime>20100503165800<"));
             assertTrue(responseXml.contains("referralAuthor><ns2:authorTime>20100503165800<"));
-            assertTrue(responseXml.contains("authorTime><ns2:healthcareProfessionalName>SONSVE<"));
+            assertTrue(responseXml.contains("healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Jarl Sternum<"));
             // 
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());
@@ -230,9 +230,65 @@ public class ReferralOutcomeMapperTest {
             log.debug(responseXml);
             log.debug("");
             
+            int occurrences = 0;
+            Pattern p = Pattern.compile("referralOutcomeBody");
+            Matcher m = p.matcher(responseXml);
+            while (m.find()) {
+                occurrences++;
+            }
+            assertEquals(6,occurrences);
             
+            assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
+            assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
             
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+    
+    
+    @Test
+    public void mapBlekinge() {
+
+        ReferralOutcomeMapper objectUnderTest = getReferralOutcomeMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.REFERRALOUTCOME_TEST_FILE_3), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+        
+        // pass the <RIV13606REQUEST_EHR_EXTRACT_response/> message into the ReferralOutcomeMapper 
+        // expect back a <GetReferralOutcomeResponse/>
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
             
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String)argumentCaptor.getValue();
+            log.debug(responseXml);
+            log.debug("");
             
             int occurrences = 0;
             Pattern p = Pattern.compile("referralOutcomeBody");
@@ -251,4 +307,8 @@ public class ReferralOutcomeMapperTest {
             fail(e.getLocalizedMessage());
         }
     }
+    
+    
 }
+
+

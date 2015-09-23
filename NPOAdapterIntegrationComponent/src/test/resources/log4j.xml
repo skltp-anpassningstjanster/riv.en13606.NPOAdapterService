@@ -87,7 +87,7 @@
 	</logger>
 
 	 <logger name="se.skl.skltpservices.npoadapter">
-        <level value="ERROR"/>
+        <level value="DEBUG"/>
     </logger>
 
     <!-- Level DEBUG: Log http headers transfered during a request/response -->

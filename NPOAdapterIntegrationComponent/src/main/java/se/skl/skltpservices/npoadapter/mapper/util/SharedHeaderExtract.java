@@ -70,6 +70,14 @@ public class SharedHeaderExtract {
 	    }
 	}
 	
+    public ORGANISATION getFirstOrganisation() {
+        Iterator<ORGANISATION> it = organisations.values().iterator();
+        if (it.hasNext()) {
+            return it.next();
+        } else {
+            return null;
+        }
+    }
 	
 	public String systemHSAId() {
 		return this.systemHSAId;
@@ -82,4 +90,16 @@ public class SharedHeaderExtract {
     public String timeCreated() {
         return this.timeCreated;
     }
+    
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nSharedHeaderExtract\n");
+        sb.append("           organisations:" + organisations.size() + "\n");
+        sb.append(" healthcareProfessionals:" + healthcareProfessionals.size() + " \n");
+        sb.append("             systemHSAId:" + systemHSAId + "\n");
+        sb.append("           subjectOfCare:" + subjectOfCare.getExtension() + "\n");
+        return sb.toString();
+    }
+    
 }

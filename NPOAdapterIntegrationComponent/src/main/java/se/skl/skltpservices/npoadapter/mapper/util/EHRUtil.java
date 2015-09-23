@@ -578,7 +578,7 @@ public final class EHRUtil {
      * @param include signatureTime
      * @return a patientSummary of the requested type
      */
-    public static <T> T patientSummaryHeader(final COMPOSITION comp, 
+    public static <T> T patientSummaryHeader(final COMPOSITION composition, 
                                              final SharedHeaderExtract baseHeader, 
                                              final String timeElement,
                                              final Class<T> type,
@@ -587,31 +587,31 @@ public final class EHRUtil {
                                              final boolean signatureTime) {
         final PatientSummaryHeader header = new PatientSummaryHeader();
 
-        if (comp.getRcId() != null) {
-            header.setDocumentId(comp.getRcId().getExtension());
+        if (composition.getRcId() != null) {
+            header.setDocumentId(composition.getRcId().getExtension());
         }
 
         header.setSourceSystemHSAId(baseHeader.systemHSAId());
 
         // optional
         if (documentTitle) {
-            if (comp.getName() == null || StringUtils.isBlank(comp.getName().getValue())) {
+            if (composition.getName() == null || StringUtils.isBlank(composition.getName().getValue())) {
                 header.setDocumentTitle(null); // default
             } else {
-                header.setDocumentTitle(comp.getName().getValue());
+                header.setDocumentTitle(composition.getName().getValue());
             }
         }
 
         // optional
         if (documentTime) {
-            if (!comp.getAttestations().isEmpty()) {
-                final ATTESTATIONINFO info = comp.getAttestations().get(0);
+            if (!composition.getAttestations().isEmpty()) {
+                final ATTESTATIONINFO info = composition.getAttestations().get(0);
                 if (info.getTime() != null) {
                     header.setDocumentTime(info.getTime().getValue());
                 }
             }
             if (timeElement != null) {
-                final ELEMENT time = EHRUtil.findEntryElement(comp.getContent(), timeElement);
+                final ELEMENT time = EHRUtil.findEntryElement(composition.getContent(), timeElement);
                 if (time != null && time.getValue() instanceof TS) {
                     header.setDocumentTime(((TS) time.getValue()).getValue());
                 }
@@ -619,17 +619,17 @@ public final class EHRUtil {
         }
         
         header.setPatientId(personId(baseHeader.subjectOfCare()));
-        header.setAccountableHealthcareProfessional(healthcareProfessionalType(comp.getComposer(), 
+        header.setAccountableHealthcareProfessional(healthcareProfessionalType(composition.getComposer(), 
                                                     baseHeader.organisations(),
                                                     baseHeader.healthcareProfessionals(), 
-                                                    comp.getCommittal()));
+                                                    composition.getCommittal()));
 
         
         //add signaturetime
         //meaning/attenstation/time@value
         if(signatureTime) {
-        	if(!comp.getAttestations().isEmpty()) {
-        		final ATTESTATIONINFO info = comp.getAttestations().get(0);
+        	if(!composition.getAttestations().isEmpty()) {
+        		final ATTESTATIONINFO info = composition.getAttestations().get(0);
         		if(info.getTime() != null && info.getTime().getValue() != null) {
         			final LegalAuthenticator auth = new LegalAuthenticator();
         			auth.setSignatureTime(info.getTime().getValue());
@@ -640,7 +640,7 @@ public final class EHRUtil {
         
         	
 
-        for (FUNCTIONALROLE careGiver : comp.getOtherParticipations()) {
+        for (FUNCTIONALROLE careGiver : composition.getOtherParticipations()) {
             if (careGiver.getFunction() != null && StringUtils.equalsIgnoreCase(careGiver.getFunction().getCode(), INFORMATIONSÄGARE)) {
                 if (careGiver.getPerformer() != null) {
                     // <performer extension="Enhet" root="1.2.752.129.2.1.4.1"/>

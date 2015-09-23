@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" 
+             xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+				<ehr_id root="1.2.752.129.2.1.2.1" extension="TEEESTIGEEEN-100Q_5001182046"/>
+				<ehr_system root="1.2.752.129.2.1.4.1" extension="TEEESTIGEEEN-100Q"/>
+				<rm_id>EN 13606</rm_id>
+				<subject_of_care root="1.2.752.129.2.1.3.1" extension="195001182046"/>
+				<time_created value="20150922112048"/>
+        
+        
+                <!-- und:SE2321000081-NPOINF_7071197_2_1_1 -> vbe:SE2321000081-7071197 -->
+        
+				<all_compositions>
+					<meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+						<displayName value="Informationsmängd Undersökningsresultat"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-NPOINF_7071197_2_1_1"/>
+					<synthesised nullFlavor="NA"/>
+					<other_participations>
+						<function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+							<displayName value="Informationsägare"/>
+						</function>
+						<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000081-L001"/>
+						<performer root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575"/>
+					</other_participations>
+					<committal>
+						<committer nullFlavor="NA"/>
+						<ehr_system nullFlavor="NA"/>
+						<time_committed value="20150703114100"/>
+					</committal>
+					<content xsi:type="ENTRY">
+						<meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Konsultation"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<links>
+							<follow_link value="true"/>
+							<nature code="LINK-A0"/>
+							<target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1"/>
+							<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-7071197"/>
+						</links>
+						<uncertainty_expressed nullFlavor="NA"/>
+						<items xsi:type="CLUSTER">
+							<meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Undersökningsresultat"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<structure_type nullFlavor="NA"/>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstyp"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="PREL"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstidpunkt"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="TS" value="20150703114100"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utlåtande"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Svarsdatum: 150703&#xA;Svar: Koloskopi beställd till i eftermiddag&#xA;"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Undersökningstyp"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Allmän Remiss Medicinmottagningen Karlshamn"/>
+							</parts>
+							<parts xsi:type="CLUSTER">
+								<meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utförd åtgärd"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<structure_type nullFlavor="NA"/>
+								<parts xsi:type="ELEMENT">
+									<meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+										<displayName value="Åtgärdskod text"/>
+									</meaning>
+									<name nullFlavor="NA"/>
+									<rc_id nullFlavor="NA"/>
+									<synthesised nullFlavor="NA"/>
+									<obs_time lowClosed="true" highClosed="true">
+										<low value="20150703114100"/>
+										<high value="20150703114100"/>
+									</obs_time>
+									<value xsi:type="ST" value="Diagnos, fråga: Skov av ulcerös kolit?"/>
+								</parts>
+							</parts>
+						</items>
+					</content>
+				</all_compositions>
+        
+                <!-- vbe SE2321000081-7071197 -->
+        
+				<all_compositions>
+					<meaning code="vbe" codeSystem="1.2.752.129.2.2.2.1">
+						<displayName value="Informationsmängd Vårdbegäran"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-7071197"/>
+					<synthesised nullFlavor="NA"/>
+					<other_participations>
+						<function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+							<displayName value="Informationsägare"/>
+						</function>
+						<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000081-L001"/>
+						<performer root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575"/>
+					</other_participations>
+					<committal>
+						<committer nullFlavor="NA"/>
+						<ehr_system nullFlavor="NA"/>
+						<time_committed value="20150703114100"/>
+					</committal>
+					<composer>
+						<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575_20047"/>
+						<performer root="1.2.752.129.2.1.2.1" extension="MO0775"/>
+					</composer>
+					<content xsi:type="ENTRY">
+						<meaning code="vbe-vbe" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Vårdbegäran"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<uncertainty_expressed nullFlavor="NA"/>
+						<items xsi:type="ELEMENT">
+							<meaning code="vbe-vbe-fst" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Frågeställning"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<value xsi:type="ST" value="Diagnos, fråga: Skov av ulcerös kolit?&#xA;Anamnes, status: Patient som fått blodiga diarreer efter pencillinkur. Har Ulcerös kolit som varit lugn flera år&#xA;"/>
+						</items>
+					</content>
+				</all_compositions>
+        
+                <!-- und:SE2321000081-NPOINF_7071197_3_1_1 -> vbe:SE2321000081-7071197 -->
+        
+				<all_compositions>
+					<meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+						<displayName value="Informationsmängd Undersökningsresultat"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-NPOINF_7071197_3_1_1"/>
+					<synthesised nullFlavor="NA"/>
+					<other_participations>
+						<function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+							<displayName value="Informationsägare"/>
+						</function>
+						<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000081-L001"/>
+						<performer root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575"/>
+					</other_participations>
+					<committal>
+						<committer nullFlavor="NA"/>
+						<ehr_system nullFlavor="NA"/>
+						<time_committed value="20150703114200"/>
+					</committal>
+					<content xsi:type="ENTRY">
+						<meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Konsultation"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<links>
+							<follow_link value="true"/>
+							<nature code="LINK-A0"/>
+							<target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1"/>
+							<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-7071197"/>
+						</links>
+						<uncertainty_expressed nullFlavor="NA"/>
+						<items xsi:type="CLUSTER">
+							<meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Undersökningsresultat"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<structure_type nullFlavor="NA"/>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstyp"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="DEF"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstidpunkt"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="TS" value="20150703114200"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utlåtande"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Svarsdatum: 150703&#xA;Svar: Koloskopi visar inflammation i nedre rectum. &#xA;"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Undersökningstyp"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Allmän Remiss Medicinmottagningen Karlshamn"/>
+							</parts>
+							<parts xsi:type="CLUSTER">
+								<meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utförd åtgärd"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<structure_type nullFlavor="NA"/>
+								<parts xsi:type="ELEMENT">
+									<meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+										<displayName value="Åtgärdskod text"/>
+									</meaning>
+									<name nullFlavor="NA"/>
+									<rc_id nullFlavor="NA"/>
+									<synthesised nullFlavor="NA"/>
+									<obs_time lowClosed="true" highClosed="true">
+										<low value="20150703114200"/>
+										<high value="20150703114200"/>
+									</obs_time>
+									<value xsi:type="ST" value="Diagnos, fråga: Skov av ulcerös kolit?"/>
+								</parts>
+							</parts>
+						</items>
+					</content>
+				</all_compositions>
+
+                <!-- und:SE2321000081-NPOINF_7071197_4_1_1 -> vbe:SE2321000081-7071197 -->
+
+				<all_compositions>
+					<meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+						<displayName value="Informationsmängd Undersökningsresultat"/>
+					</meaning>
+					<name nullFlavor="NA"/>
+					<rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-NPOINF_7071197_4_1_1"/>
+					<synthesised nullFlavor="NA"/>
+					<other_participations>
+						<function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+							<displayName value="Informationsägare"/>
+						</function>
+						<healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000081-L001"/>
+						<performer root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575"/>
+					</other_participations>
+					<committal>
+						<committer nullFlavor="NA"/>
+						<ehr_system nullFlavor="NA"/>
+						<time_committed value="20150703114400"/>
+					</committal>
+					<content xsi:type="ENTRY">
+						<meaning code="und-kon-ure" codeSystem="1.2.752.129.2.2.2.1">
+							<displayName value="Konsultation"/>
+						</meaning>
+						<name nullFlavor="NA"/>
+						<rc_id nullFlavor="NA"/>
+						<synthesised nullFlavor="NA"/>
+						<links>
+							<follow_link value="true"/>
+							<nature code="LINK-A0"/>
+							<target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1"/>
+							<target_id root="1.2.752.129.2.1.2.1" extension="SE2321000081-7071197"/>
+						</links>
+						<uncertainty_expressed nullFlavor="NA"/>
+						<items xsi:type="CLUSTER">
+							<meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+								<displayName value="Undersökningsresultat"/>
+							</meaning>
+							<name nullFlavor="NA"/>
+							<rc_id nullFlavor="NA"/>
+							<synthesised nullFlavor="NA"/>
+							<structure_type nullFlavor="NA"/>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstyp"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="TILL"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Svarstidpunkt"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="TS" value="20150703114400"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utlåtande"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Svar: Eftergranskning visar att inflammation även finns i nedre delen av tunntarmen. &#xA;"/>
+							</parts>
+							<parts xsi:type="ELEMENT">
+								<meaning code="und-kon-ure-kty" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Undersökningstyp"/>
+								</meaning>
+								<name value="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<value xsi:type="ST" value="Allmän Remiss Medicinmottagningen Karlshamn"/>
+							</parts>
+							<parts xsi:type="CLUSTER">
+								<meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+									<displayName value="Utförd åtgärd"/>
+								</meaning>
+								<name nullFlavor="NA"/>
+								<rc_id nullFlavor="NA"/>
+								<synthesised nullFlavor="NA"/>
+								<structure_type nullFlavor="NA"/>
+								<parts xsi:type="ELEMENT">
+									<meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+										<displayName value="Åtgärdskod text"/>
+									</meaning>
+									<name nullFlavor="NA"/>
+									<rc_id nullFlavor="NA"/>
+									<synthesised nullFlavor="NA"/>
+									<obs_time lowClosed="true" highClosed="true">
+										<low value="20150703114400"/>
+										<high value="20150703114400"/>
+									</obs_time>
+									<value xsi:type="ST" value="Diagnos, fråga: Skov av ulcerös kolit?"/>
+								</parts>
+							</parts>
+						</items>
+					</content>
+				</all_compositions>
+        
+                <!-- demographic_extract -->
+        
+				<demographic_extract xsi:type="ORGANISATION">
+					<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575_20047"/>
+					<id root="1.2.752.129.2.1.4.1" extension="SE2321000081-b575_20047"/>
+					<telecom xsi:type="TEL.PHONE" value="0455-731067"/>
+					<code nullFlavor="NA"/>
+					<desc nullFlavor="NA"/>
+					<name value="Infektionsklinik"/>
+					<addr>
+						<part type="AL">Blekingesjukhuset,37185,Karlskrona</part>
+					</addr>
+					<addr>
+						<part type="CEN">Karlskrona</part>
+					</addr>
+				</demographic_extract>
+
+                <!-- demographic_extract -->
+
+				<demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+					<extract_id root="1.2.752.129.2.1.2.1" extension="MO0775"/>
+					<id root="1.2.752.129.2.1.4.1" extension="MO0775"/>
+					<name>
+						<part value="Monica Burman"/>
+					</name>
+					<role>
+						<profession code="systemförvaltare" codeSystem="1.2.752.129.2.2.1.4">
+							<displayName value="systemförvaltare"/>
+						</profession>
+					</role>
+				</demographic_extract>
+			</ehr_extract>
