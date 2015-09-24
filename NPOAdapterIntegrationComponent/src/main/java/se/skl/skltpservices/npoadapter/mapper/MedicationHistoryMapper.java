@@ -19,6 +19,10 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +30,14 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 import javax.xml.stream.XMLStreamReader;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
-import riv.clinicalprocess.activityprescription.actoutcome._2.AdministrationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
@@ -165,6 +170,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
       = new JaxbUtil(GetMedicationHistoryType.class, GetMedicationHistoryResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
+    
+    private static final DateFormat dateformatTS = new SimpleDateFormat("yyyyMMddHHmmss");
+    
     
     public MedicationHistoryMapper() {
         schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-MEDICATIONHISTORY"));
@@ -453,33 +461,35 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 								final ELEMENT dosageElm = (ELEMENT) dosageStepItem;
                 								if(dosageElm.getMeaning() != null && dosageElm.getMeaning().getCode() != null) {
                 									switch (dosageElm.getMeaning().getCode()) {
-                									case DOSERINGSSTEG_BEHANDLINGSTID:
+                									
+                									case DOSERINGSSTEG_BEHANDLINGSTID: // lkm-dst-bet
                 										if(dosageElm.getValue() != null) {
-                											if(dosage.getLengthOfTreatment() == null) {
-                												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
-                											}
                 											if(dosageElm.getValue() instanceof IVLTS) {
+                                                                
                 												final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
-                												final PQIntervalType interval = new PQIntervalType();
-                												interval.setHigh(EHRUtil.tsToDouble(dosageIvlts.getHigh()));
-                												interval.setLow(EHRUtil.tsToDouble(dosageIvlts.getLow()));
-                												if(dosageIvlts.getWidth() != null && dosageIvlts.getWidth() instanceof PQTIME) {
-                													final PQTIME pqTime = (PQTIME) dosageIvlts.getWidth();
-                													interval.setUnit(pqTime.getUnit());
+                												PQIntervalType treatmentInterval = getTreatmentInterval(dosageIvlts);
+                												if (treatmentInterval == null) {
+                												    dosage.setLengthOfTreatment(null);
+                												} else {
+                                                                    if (dosage.getLengthOfTreatment() == null) {
+                                                                        dosage.setLengthOfTreatment(new LengthOfTreatmentType());
+                                                                    }
+                    												dosage.getLengthOfTreatment().setTreatmentInterval(treatmentInterval);
                 												}
                 												
-                												dosage.getLengthOfTreatment().setTreatmentInterval(interval);
-                											
-                												//Set prescriptionStartOfThreatment
-                												if(dosageIvlts.getLow() != null) {
-                													prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
-                												} 
-                												if(dosageIvlts.getHigh() != null) {
-                													prescription.setEndOfTreatment(dosageIvlts.getHigh().getValue());
-                												}
+                                                                //Set prescriptionStartOfThreatment
+                                                                if(dosageIvlts.getLow()  != null && StringUtils.isNotBlank(dosageIvlts.getLow().getValue())) {
+                                                                    prescription.setStartOfTreatment(dosageIvlts.getLow().getValue());
+                                                                } 
+                                                                if(dosageIvlts.getHigh() != null && StringUtils.isNotBlank(dosageIvlts.getLow().getValue())) {
+                                                                    prescription.setEndOfTreatment(dosageIvlts.getHigh().getValue());
+                                                                }
+                											} else {
+                											    log.error("lkm-dst-bet: expecting IVL_TS, received " + dosageElm.getValue().getClass().getName());
                 											}
                 										}
                 										break;
+                										
                 									case DOSERINGSSTEG_MAXTID:
                 										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof BL) {
                 											boolean m = ((BL) dosageElm.getValue()).isValue();
@@ -676,7 +686,78 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         return responseType;
     }
     
-    
+
+    // see SERVICE-334
+    protected PQIntervalType getTreatmentInterval(IVLTS dosageIvlts) {
+        
+        PQIntervalType treatmentInterval = null;
+        
+        // if width is supplied, use it
+        if (dosageIvlts.getWidth() != null) {
+            QTY width = dosageIvlts.getWidth();
+            if (width instanceof PQTIME) {
+                PQTIME pqtimeWidth = (PQTIME)width;
+                Double widthValue = pqtimeWidth.getValue();
+                if (widthValue != null) {
+                    if (widthValue >= 0) {
+                        if (StringUtils.isNotBlank(pqtimeWidth.getUnit())) {
+                            treatmentInterval = new PQIntervalType();
+                            treatmentInterval.setLow(widthValue);
+                            treatmentInterval.setHigh(widthValue);
+                            treatmentInterval.setUnit(pqtimeWidth.getUnit());
+                        } else {
+                            log.error("lkm-dst-bet value/width/unit missing");
+                        }
+                    } else {
+                        log.error("lkm-dst-bet value/width/value is negative " + widthValue);
+                    }
+                } else {
+                    log.error("lkm-dst-bet value/width/value null");
+                }
+            } else {
+                log.error("lkm-dst-bet value/width - expecting PQTIME, received " + width.getClass().getName());
+            }
+        } else if (   dosageIvlts.getLow() != null 
+                   && dosageIvlts.getHigh() != null 
+                   && StringUtils.isNotBlank(dosageIvlts.getLow().getValue())
+                   && StringUtils.isNotBlank(dosageIvlts.getHigh().getValue())) {
+
+            // there is no width, but there are low and high
+            
+            String lowString  = dosageIvlts.getLow().getValue();
+            String highString = dosageIvlts.getHigh().getValue();
+            try {
+                Date lowDate = dateformatTS.parse(lowString);
+                try {
+                    Date highDate = dateformatTS.parse(highString);
+                    if (!lowDate.after(highDate)) {
+                        // let joda time do the hard work
+                        int days = Days.daysBetween(new DateTime(lowDate), new DateTime(highDate)).getDays();
+                        treatmentInterval = new PQIntervalType();
+                        treatmentInterval.setLow(new Double(days));
+                        treatmentInterval.setHigh(treatmentInterval.getLow());
+                        treatmentInterval.setUnit("d");
+                    } else {
+                        log.error("lkm-dst-bet low (" + lowString + ") is after high (" + highString + ")");
+                    }
+                } catch (ParseException p) {
+                    log.error("lkm-dst-bet value/high invalid timestamp:" + lowString);
+                }
+            } catch (ParseException p) {
+                log.error("lkm-dst-bet value/low invalid timestamp:" + lowString);
+            }
+        } else {
+            // the message does not follow the contract
+            // this is the case for data in qa
+            log.error("lkm-dst-bet width is null and both low and high are not present - low:" + 
+                       (dosageIvlts.getLow()  == null ? "null" : dosageIvlts.getLow().getValue()) + 
+                       ", high:" +        
+                       (dosageIvlts.getHigh() == null ? "null" : dosageIvlts.getHigh().getValue()));
+        }
+        return treatmentInterval;
+    }
+
+
     protected void sortCompositions(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
     	for(COMPOSITION c : comps) {
     		if(c.getMeaning() != null && c.getMeaning().getCode() != null 

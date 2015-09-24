@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Result;
@@ -74,6 +75,7 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -463,7 +465,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
             fail();
         }
     }
-    
     
     
     // ---
