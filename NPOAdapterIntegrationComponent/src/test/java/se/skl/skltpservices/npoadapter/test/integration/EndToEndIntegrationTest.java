@@ -29,10 +29,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.xml.XMLConstants;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -75,7 +73,6 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
-import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -117,6 +114,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                                      GetReferralOutcomeResponseType.class);
 
     
+    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory alertInformationObjectFactory
     = new riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory();
     
@@ -129,6 +127,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     private riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory diagnosisObjectFactory
     = new riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory();
     
+    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory imagingOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory();
     

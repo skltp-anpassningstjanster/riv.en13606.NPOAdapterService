@@ -55,7 +55,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DispensationAuthorizationType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DosageType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.DrugArticleType;
