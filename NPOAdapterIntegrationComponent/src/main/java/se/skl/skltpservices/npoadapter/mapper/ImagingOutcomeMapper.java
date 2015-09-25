@@ -62,7 +62,6 @@ import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.ITEM;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
-import se.rivta.en13606.ehrextract.v11.LINK;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.rivta.en13606.ehrextract.v11.ST;
 import se.rivta.en13606.ehrextract.v11.TS;
@@ -179,10 +178,13 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
     				final COMPOSITION vbe = EHRUtil.findCompositionByLink(ehrExtract.getAllCompositions(), EHRUtil.firstItem(und.getContent()).getLinks(), VARDBEGARAN);
     				final ImagingOutcomeType type = new ImagingOutcomeType();
     
+    				// header
     				type.setImagingOutcomeHeader(EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, UND_SVARSTIDPUNKT, PatientSummaryHeaderType.class, false, true, true));
+    				
     				Map<String,String> ehr13606values = getEhr13606values(und,vbe);
+                    type.getImagingOutcomeHeader().setDocumentTime(ehr13606values.get("und-und-uat-txt-low"));
     				
-    				
+    				// body
     		        type.setImagingOutcomeBody(mapBody(ehr13606values, und));
     		        
     		        //Map VBE healthcarepro

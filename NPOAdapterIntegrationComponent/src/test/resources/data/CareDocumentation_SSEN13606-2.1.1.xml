@@ -162,6 +162,68 @@
 			</items>
 		</content>
 	</all_compositions>
+  
+  
+    <all_compositions>
+        <meaning code="zzz" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="This should not appear"/>
+        </meaning>
+        <name value="Omvårdnadsepikris"/>
+        <rc_id root="1.2.752.129.2.1.2.1" extension="SE2321000164-1006Dok19381221704420090512082720709473000-3"/>
+        <synthesised nullFlavor="NA"/>
+        <attestations>
+            <reason_for_attestation nullFlavor="NA"/>
+            <time value="20090130132000"/>
+            <target_rc_id nullFlavor="NA"/>
+            <attester>
+                <performer nullFlavor="NA"/>
+            </attester>
+        </attestations>
+        <other_participations>
+            <function codeSystem="1.2.752.129.2.2.2.22" code="iag">
+                <displayName value="Informationsägare"/>
+            </function>
+            <healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-ab12"/>
+            <performer root="1.2.752.129.2.1.4.1" extension="SE2321000164-12ab"/>
+        </other_participations>
+        <committal>
+            <committer nullFlavor="NA"/>
+            <ehr_system nullFlavor="NA"/>
+            <time_committed value="20090102000000"/>
+        </committal>
+        <composer>
+            <healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
+            <performer root="1.2.752.129.2.1.2.1" extension="SE2321000164-7381037590003hhr001"/>
+        </composer>
+        <content xsi:type="ENTRY">
+            <meaning code="voo-voo" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Vård-och omsorgsdokument ostrukturerat"/>
+            </meaning>
+            <name nullFlavor="NA"/>
+            <rc_id nullFlavor="NA"/>
+            <synthesised nullFlavor="NA"/>
+            <uncertainty_expressed nullFlavor="NA"/>
+            <items xsi:type="ELEMENT">
+                <meaning code="voo-voo-txt" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Innehåll text"/>
+                </meaning>
+                <name nullFlavor="NA"/>
+                <rc_id nullFlavor="NA"/>
+                <synthesised nullFlavor="NA"/>
+                <value xsi:type="ST" value="zzz"/>
+            </items>
+            <items xsi:type="ELEMENT">
+                <meaning code="voo-voo-tid" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Tid"/>
+                </meaning>
+                <name nullFlavor="NA"/>
+                <rc_id nullFlavor="NA"/>
+                <synthesised nullFlavor="NA"/>
+                <value xsi:type="TS" value="20140101" />
+            </items>
+        </content>
+    </all_compositions>
+  
 	<demographic_extract xsi:type="ORGANISATION">
 		<extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>
 		<id root="1.2.752.129.2.1.4.1" extension="SE2321000164-7381037591079"/>

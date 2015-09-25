@@ -239,13 +239,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                     switch (meaning) {
                     case KONST_DATUM:
                         if (item instanceof ELEMENT) {
-                            type.setAscertainedDate(EHRUtil.getElementTimeValue((ELEMENT) item));
-                            if (StringUtils.isNotBlank(type.getAscertainedDate())) {
-                                // SERVICE-323
-                                if (type.getAscertainedDate().length() > "yyyyMMdd".length()) {
-                                    type.setAscertainedDate(type.getAscertainedDate().substring(0, "yyyyMMdd".length()));
-                                }
-                            }
+                            setAscertainedDate(type, EHRUtil.getElementTimeValue((ELEMENT) item));
                         }
                         break;
                     case VERIFIERAD_TIDPUNKT:
@@ -258,6 +252,9 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                             final ELEMENT elm = (ELEMENT) item;
                             if (elm.getValue() instanceof IVLTS) {
                                 type.setValidityTimePeriod(EHRUtil.timePeriod((IVLTS) elm.getValue(), TimePeriodType.class));
+                                if (StringUtils.isBlank(type.getAscertainedDate())) {
+                                    setAscertainedDate(type, type.getValidityTimePeriod().getStart()); // default
+                                }
                             }
                         }
                         break;
@@ -313,6 +310,17 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
         }
         return type;
     }
+
+    private void setAscertainedDate(AlertInformationBodyType type, String date) {
+        type.setAscertainedDate(date);
+        if (StringUtils.isNotBlank(type.getAscertainedDate())) {
+            // SERVICE-323
+            if (type.getAscertainedDate().length() > "yyyyMMdd".length()) {
+                type.setAscertainedDate(type.getAscertainedDate().substring(0, "yyyyMMdd".length()));
+            }
+        }
+    }
+
 
     protected void addReleatedAlertInformation(final COMPOSITION comp, final AlertInformationBodyType body) {
         for (LINK link : comp.getLinks()) {

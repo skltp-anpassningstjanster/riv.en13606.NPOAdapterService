@@ -124,7 +124,7 @@ public class LaboratoryOrderOutcomeMapperTest {
             assertTrue(responseXml.contains("laboratoryOrderOutcomeHeader"));
             assertTrue(responseXml.contains("laboratoryOrderOutcomeHeader><ns2:documentId>SE2321000164-1002Kem09042908060036603115<"));
             assertTrue(responseXml.contains("documentId><ns2:sourceSystemHSAId>SE2321000164-1002<"));
-            //assertTrue(responseXml.contains("sourceSystemHSAId><ns2:patientId><ns2:id>192712069550<"));
+            assertTrue(responseXml.contains("<ns2:documentTime>20080512131000</ns2:documentTime>"));
             assertTrue(responseXml.contains("id><ns2:type>1.2.752.129.2.1.3.1<"));
             assertTrue(responseXml.contains("type></ns2:patientId><ns2:accountableHealthcareProfessional><ns2:authorTime>20090429132009<"));
             assertTrue(responseXml.contains("authorTime><ns2:healthcareProfessionalHSAId>"));
