@@ -879,6 +879,9 @@
                   </info_provider>
                </content>
             </all_compositions>
+            
+            <!--  -->
+            
             <all_compositions>
                <meaning code="lko" codeSystem="1.2.752.129.2.2.2.1">
                   <displayName value="Informationsmängd Läkemedel Läkemedelsordination"/>
@@ -1139,6 +1142,9 @@
                   </items>
                </content>
             </all_compositions>
+            
+            <!--  -->
+            
             <all_compositions>
                <meaning code="lkf" codeSystem="1.2.752.129.2.2.2.1">
                   <displayName value="Informationsmängd Läkemedel Förskrivning"/>
@@ -1207,6 +1213,230 @@
                   </info_provider>
                </content>
             </all_compositions>
+            
+            
+            <!--  -->
+            
+            <all_compositions>
+               <meaning code="lko" codeSystem="1.2.752.129.2.2.2.1">
+                  <displayName value="Informationsmängd Läkemedel Läkemedelsordination"/>
+               </meaning>
+               <name nullFlavor="NA"/>
+               <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ordination114"/>
+               <synthesised nullFlavor="NA"/>
+               <other_participations>
+                  <function code="utv" codeSystem="1.2.752.129.2.2.2.22">
+                     <displayName value="Utvärderas av"/>
+                  </function>
+                  <healthcare_facility root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"/>
+                  <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-1005"/>
+               </other_participations>
+               <other_participations>
+                  <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+                     <displayName value="Informationsägare"/>
+                  </function>
+                  <healthcare_facility root="1.2.752.129.2.1.4.1" extension="SE2321000230-1016"/>
+                  <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-1019"/>
+               </other_participations>
+               <committal>
+                  <committer nullFlavor="NA"/>
+                  <ehr_system nullFlavor="NA"/>
+                  <time_committed value="20150818000000"/>
+               </committal>
+               <composer>
+                  <healthcare_facility root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"/>
+                  <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-1005"/>
+               </composer>
+               <content xsi:type="ENTRY">
+                  <meaning code="lkm-ord" codeSystem="1.2.752.129.2.2.2.1">
+                     <displayName value="Läkemedelsordination"/>
+                  </meaning>
+                  <name nullFlavor="NA"/>
+                  <rc_id nullFlavor="NA"/>
+                  <synthesised nullFlavor="NA"/>
+                  <links>
+                     <follow_link value="true"/>
+                     <nature code="LINK-A0"/>
+                     <target_type code="lkf" codeSystem="1.2.752.129.2.2.2.1.1"/>
+                     <target_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297recept1131"/>
+                  </links>
+                  <uncertainty_expressed nullFlavor="NA"/>
+                  <items xsi:type="ELEMENT">
+                     <meaning code="lkm-ord-tid" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Ordinationstidpunkt"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <value xsi:type="TS" value="20150818000000"/>
+                  </items>
+                  <items xsi:type="ELEMENT">
+                     <meaning code="lkm-ord-not" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Notat"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <value xsi:type="ST" value="s"/>
+                  </items>
+                  <items xsi:type="ELEMENT">
+                     <meaning code="lkm-ord-utv" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Utvärderingstidpunkt"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <value xsi:type="TS" value="19800101000000"/>
+                  </items>
+                  <items xsi:type="ELEMENT">
+                     <meaning code="lkm-ord-oki" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Ordinationskedja-id"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <value xsi:type="II" root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ordination113"/>
+                  </items>
+                  <items xsi:type="CLUSTER">
+                     <meaning code="lkm-dos" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Dosering"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <structure_type/>
+                     <parts xsi:type="CLUSTER">
+                        <meaning code="lkm-dst" codeSystem="1.2.752.129.2.2.2.1">
+                           <displayName value="Doseringssteg"/>
+                        </meaning>
+                        <name nullFlavor="NA"/>
+                        <rc_id nullFlavor="NA"/>
+                        <synthesised nullFlavor="NA"/>
+                        <structure_type nullFlavor="NA"/>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-dst-bet" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Behandlingstid"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="IVL_TS" lowClosed="true" highClosed="false">
+                              <low value="20150818000000"/>
+                              <high nullFlavor="NI"/>
+                           </value>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-dst-max" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Maxtid"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="BL" value="true"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-dst-dan" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Doseringsanvisning"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="ST" value="s"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-dst-kno" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Kortnotation"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="ST" value="1+1+1+1"/>
+                        </parts>
+                     </parts>
+                  </items>
+                  
+                  <!-- DrugArticle -->
+                  
+                  <items xsi:type="CLUSTER">
+                     <meaning code="lkm-lva" codeSystem="1.2.752.129.2.2.2.1">
+                        <displayName value="Läkemedelsval"/>
+                     </meaning>
+                     <name nullFlavor="NA"/>
+                     <rc_id nullFlavor="NA"/>
+                     <synthesised nullFlavor="NA"/>
+                     <structure_type nullFlavor="NA"/>
+                     <parts xsi:type="ELEMENT">
+                        <meaning code="lkm-lva-typ" codeSystem="1.2.752.129.2.2.2.1">
+                           <displayName value="Typ av läkemedelsval"/>
+                        </meaning>
+                        <name nullFlavor="NA"/>
+                        <rc_id nullFlavor="NA"/>
+                        <synthesised nullFlavor="NA"/>
+                        <value xsi:type="CD" code="lmv" codeSystem="1.2.752.129.2.2.3.1.2">
+                           <displayName value="Läkemedelsvara"/>
+                        </value>
+                     </parts>
+                     <parts xsi:type="CLUSTER">
+                        <meaning code="lkm-lkm-lva" codeSystem="1.2.752.129.2.2.2.1">
+                           <displayName value="Läkemedelsvara"/>
+                        </meaning>
+                        <name nullFlavor="NA"/>
+                        <rc_id nullFlavor="NA"/>
+                        <synthesised nullFlavor="NA"/>
+                        <structure_type code="STRC01"/>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-lkm-lva-prm" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Produktmängd"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="PQ" value="5" unit="MG"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-lkm-lva-fbe" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Förpackningsbeskrivning"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="ST" value="Blister, 14 x 1 tabletter"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-lkm-lva-vnr" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Varunummer"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="II" root="1.2.752.129.2.2.3.1.1" extension="016624"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-lkm-lva-npl" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="NPL pack-id"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="II" root="1.2.752.129.2.1.5.2" extension="20040604101295"/>
+                        </parts>
+                        <parts xsi:type="ELEMENT">
+                           <meaning code="lkm-lkm-lva-fst" codeSystem="1.2.752.129.2.2.2.1">
+                              <displayName value="Förpackningsstorlek"/>
+                           </meaning>
+                           <name nullFlavor="NA"/>
+                           <rc_id nullFlavor="NA"/>
+                           <synthesised nullFlavor="NA"/>
+                           <value xsi:type="PQ" value="14" unit="X1 styck"/>
+                        </parts>
+                     </parts>
+                  </items>
+               </content>
+            </all_compositions>
+            
+            <!--  -->
+            
+            
             <demographic_extract xsi:type="ORGANISATION">
                <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"/>
                <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"/>

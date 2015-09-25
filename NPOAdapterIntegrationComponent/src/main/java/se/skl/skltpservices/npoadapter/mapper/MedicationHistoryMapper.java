@@ -775,25 +775,30 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     }
     
     /**
-     * According to TKB only on of drugArticle, drug, merchandise, generics, unstructuredDrugInformation is allowed
+     * According to TKB only one of drug, merchandise, generics, unstructuredDrugInformation, drugArticle is allowed
      * 13606 contains more data.
      * @param drug
      */
+    // order defined in SERVICE-329
     protected void applyAdapterSpecificRules(final DrugChoiceType drug) {
-    	if(drug.getDrugArticle() != null) {
-    		drug.setDrug(null);
+    	       if(drug.getDrug() != null) {
     		drug.setMerchandise(null);
     		drug.setGenerics(null);
     		drug.setUnstructuredDrugInformation(null);
-    	} else if(drug.getDrug() != null) {
-    		drug.setMerchandise(null);
-    		drug.setGenerics(null);
-    		drug.setUnstructuredDrugInformation(null);
+            drug.setDrugArticle(null);
     	} else if(drug.getMerchandise() != null) {
     		drug.setGenerics(null);
     		drug.setUnstructuredDrugInformation(null);
+            drug.setDrugArticle(null);
     	} else if(drug.getGenerics() != null) {
     		drug.setUnstructuredDrugInformation(null);
+            drug.setDrugArticle(null);
+        } else if(drug.getUnstructuredDrugInformation() != null) {
+            drug.setDrugArticle(null);
+        } else if(drug.getUnstructuredDrugInformation() != null) {
+            // nothing to do
+    	} else {
+    	    log.debug("all components null");
     	}
     }
 }

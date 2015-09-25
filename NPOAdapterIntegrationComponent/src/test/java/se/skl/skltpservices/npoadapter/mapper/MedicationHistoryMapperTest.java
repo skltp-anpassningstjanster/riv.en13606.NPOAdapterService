@@ -90,6 +90,7 @@ public class MedicationHistoryMapperTest {
     private static final String DOC_ID_2 = "SE1623210002198208149297ordination109";
     private static final String DOC_ID_3 = "SE1623210002198208149297ordination111";
     private static final String DOC_ID_4 = "SE1623210002198208149297ordination113";
+    private static final String DOC_ID_5 = "SE1623210002198208149297ordination114";
     
     private static MedicationHistoryMapper mapper;
     
@@ -115,6 +116,7 @@ public class MedicationHistoryMapperTest {
         assertTrue(records.containsKey(DOC_ID_2));
         assertTrue(records.containsKey(DOC_ID_3));
         assertTrue(records.containsKey(DOC_ID_4));
+        assertTrue(records.containsKey(DOC_ID_5));
     }
 
     // Make it easy to dump the resulting response after createTS
@@ -192,10 +194,16 @@ public class MedicationHistoryMapperTest {
     }
     
     @Test
-    public void testArticleDrug() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
+    public void testDrugArticle() {
+    	final MedicationMedicalRecordType rec = records.get(DOC_ID_5);
+    	
+    	assertNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrug());
+        assertNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getGenerics());
+        assertNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getMerchandise());
+        assertNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getUnstructuredDrugInformation());
+    	
     	final DrugArticleType dat = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug().getDrugArticle();
-    	assertEquals("19861001100155", dat.getNplPackId().getOriginalText());
+    	assertEquals("20040604101295", dat.getNplPackId().getOriginalText());
     	assertNull(dat.getNplPackId().getCode());
     	assertNull(dat.getNplPackId().getCodeSystem());
     	assertNull(dat.getNplPackId().getDisplayName());
@@ -248,15 +256,15 @@ public class MedicationHistoryMapperTest {
 		final GenericsType generics = new GenericsType();
 		final UnstructuredDrugInformationType unstructuredDrugInfo = new UnstructuredDrugInformationType();
 		
-		//All populated, only drugArticle should remain
+		//All populated, only drug should remain
 		testObject.setDrug(drug);
 		testObject.setDrugArticle(drugArticle);
 		testObject.setGenerics(generics);
 		testObject.setMerchandise(merchandise);
 		testObject.setUnstructuredDrugInformation(unstructuredDrugInfo);
 		mapper.applyAdapterSpecificRules(testObject);
-		assertNotNull(testObject.getDrugArticle());
-		assertNull(testObject.getDrug());
+		assertNull(testObject.getDrugArticle());
+		assertNotNull(testObject.getDrug());
 		assertNull(testObject.getMerchandise());
 		assertNull(testObject.getGenerics());
 		assertNull(testObject.getUnstructuredDrugInformation());
@@ -290,7 +298,6 @@ public class MedicationHistoryMapperTest {
 		assertNull(testObject.getMerchandise());
 		assertNull(testObject.getGenerics());
 		assertNull(testObject.getUnstructuredDrugInformation());
-		
 	}
 
 	
