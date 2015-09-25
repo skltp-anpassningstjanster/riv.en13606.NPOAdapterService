@@ -173,6 +173,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         if (txt != null) {
             clinicalDocumentNote.setClinicalDocumentNoteText(EHRUtil.getElementTextValue(txt));
             if (txt.getMeaning() != null && txt.getMeaning().getDisplayName() != null) {
+                // voo-voo-txt
                 clinicalDocumentNote.setClinicalDocumentNoteTitle(txt.getMeaning().getDisplayName().getValue());
             }
         }

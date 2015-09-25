@@ -36,6 +36,8 @@ import javax.xml.stream.XMLStreamReader;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.test.Util;
@@ -45,6 +47,9 @@ import se.skl.skltpservices.npoadapter.test.Util;
  */
 public class CareDocumentationMapperTest {
 
+    
+    protected static final Logger log = LoggerFactory.getLogger(CareDocumentationMapper.class);
+    
 	private CareDocumentationMapper getCareDocumentationMapper() {
 		CareDocumentationMapper mapper = (CareDocumentationMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_CAREDOCUMENTATION_2);
 		return mapper;
@@ -87,10 +92,14 @@ public class CareDocumentationMapperTest {
             // verifications & assertions
             verify(mockMuleMessage).setPayload(argumentCaptor.capture());
             String responseXml = (String)argumentCaptor.getValue();
+            
+            log.debug(responseXml);
+            
             assertTrue(responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
             assertTrue(responseXml.contains("<GetCareDocumentationResponse"));
             assertTrue(responseXml.contains("documentId>SE2321000164-1006Dok19381221704420090512082720692684000-1</"));
             assertTrue(responseXml.contains("Allmänmedicinska mottagningen vårdcentralen Forshaga"));
+            assertTrue(responseXml.contains("<ns2:clinicalDocumentNoteTitle>Innehåll text</ns2:clinicalDocumentNoteTitle>"));
 
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());
