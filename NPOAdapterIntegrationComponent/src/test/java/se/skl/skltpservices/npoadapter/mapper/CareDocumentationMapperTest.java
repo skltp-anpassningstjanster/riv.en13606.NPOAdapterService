@@ -19,6 +19,7 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -95,11 +96,12 @@ public class CareDocumentationMapperTest {
             
             log.debug(responseXml);
             
-            assertTrue(responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
-            assertTrue(responseXml.contains("<GetCareDocumentationResponse"));
-            assertTrue(responseXml.contains("documentId>SE2321000164-1006Dok19381221704420090512082720692684000-1</"));
-            assertTrue(responseXml.contains("Allmänmedicinska mottagningen vårdcentralen Forshaga"));
-            assertTrue(responseXml.contains("<ns2:clinicalDocumentNoteTitle>Innehåll text</ns2:clinicalDocumentNoteTitle>"));
+            assertTrue (responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
+            assertTrue (responseXml.contains("<GetCareDocumentationResponse"));
+            assertTrue (responseXml.contains("documentId>SE2321000164-1006Dok19381221704420090512082720692684000-1</"));
+            assertTrue (responseXml.contains("Allmänmedicinska mottagningen vårdcentralen Forshaga"));
+            assertTrue (responseXml.contains("<ns2:clinicalDocumentNoteTitle>Epikris</ns2:clinicalDocumentNoteTitle>"));
+            assertFalse(responseXml.contains("This should not appear"));
 
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());

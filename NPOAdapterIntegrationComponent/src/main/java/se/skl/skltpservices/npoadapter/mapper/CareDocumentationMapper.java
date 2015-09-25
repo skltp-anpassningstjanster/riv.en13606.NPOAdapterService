@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,7 +165,15 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
             } else if (isClinicalDocumentTypeCode(code)) {
                 clinicalDocumentNote.setClinicalDocumentTypeCode(ClinicalDocumentTypeCodeEnum.fromValue(code));
             } else {
-                log.warn("Not able to map documentcode of value: " + code);
+                log.warn("Not able to map documentcode:{}", code);
+            }
+            
+            if (StringUtils.isNotBlank(code)) {
+                if (isClinicalDocumentTypeCode(code) || "spe".equals(code)) {
+                    if (composition.getName() != null) {
+                        clinicalDocumentNote.setClinicalDocumentNoteTitle(composition.getName().getValue());
+                    }
+                }
             }
         }
 
@@ -172,10 +181,6 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         final ELEMENT txt = EHRUtil.findEntryElement(composition.getContent(), TEXT_ELEMENT);
         if (txt != null) {
             clinicalDocumentNote.setClinicalDocumentNoteText(EHRUtil.getElementTextValue(txt));
-            if (txt.getMeaning() != null && txt.getMeaning().getDisplayName() != null) {
-                // voo-voo-txt
-                clinicalDocumentNote.setClinicalDocumentNoteTitle(txt.getMeaning().getDisplayName().getValue());
-            }
         }
         return body;
     }
