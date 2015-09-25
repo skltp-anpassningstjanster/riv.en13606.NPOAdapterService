@@ -108,6 +108,7 @@ public class ImagingOutcomeMapperTest {
 	@Test
 	public void testHeader() {
 		assertEquals("OREBMKT3_9500619_3_1", record1.getImagingOutcomeHeader().getDocumentId());
+        assertEquals("20090928082247", record1.getImagingOutcomeHeader().getDocumentTime());
 	}
     
     @Test
