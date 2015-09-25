@@ -133,7 +133,7 @@ public class AlertInformationMapperTest {
     	final GetAlertInformationResponseType response = mapper.mapResponse(ehrResp, mockMessage);
     	
     	final AlertInformationBodyType body = response.getAlertInformation().get(0).getAlertInformationBody();
-    	assertEquals("20080103153000", body.getAscertainedDate());
+    	assertEquals("20080103", body.getAscertainedDate());
     	assertEquals("20080104153000", body.getVerifiedTime());
     	
     }
@@ -368,10 +368,11 @@ public class AlertInformationMapperTest {
 		comp.getContent().add(content);
 		
 		AlertInformationBodyType testObj = mapper.mapBodyType(comp);
-		assertEquals(TEST_DATA_1, testObj.getAscertainedDate());
+		assertEquals(TEST_DATA_1.substring(0, "yyyyMMdd".length()), testObj.getAscertainedDate());
 		assertEquals(TEST_DATA_2, testObj.getVerifiedTime());
 		assertEquals(TEST_DATA_1, testObj.getValidityTimePeriod().getEnd());
 		assertEquals(TEST_DATA_2, testObj.getValidityTimePeriod().getStart());
 		assertEquals(TEST_DATA_3, testObj.getAlertInformationComment());
 	}
+
 }
