@@ -81,7 +81,7 @@ public class XMLBeanMapperTest {
 
     @Test
     public void testEhrExtractMapping_Laboratory() throws JAXBException {
-        testEhrExtractMapping(Util.loadEhrTestData(Util.LAB_TEST_FILE));
+        testEhrExtractMapping(Util.loadEhrTestData(Util.LAB_TEST_FILE_1));
     }
 
 

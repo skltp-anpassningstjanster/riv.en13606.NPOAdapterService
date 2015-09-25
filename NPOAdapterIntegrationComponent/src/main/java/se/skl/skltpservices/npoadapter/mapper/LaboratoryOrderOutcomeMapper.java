@@ -135,10 +135,14 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                         //Legal authenticator 
                         if(und.getComposer() != null && und.getComposer().getPerformer() != null) {
                         	if(!und.getAttestations().isEmpty() && und.getAttestations().get(0).getTime() != null) {
+                        	    
+                                if(laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator() == null) {
+                                    laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setLegalAuthenticator(new LegalAuthenticatorType());
+                                }
+                                laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
+                                .getLegalAuthenticator().setSignatureTime(und.getAttestations().get(0).getTime().getValue());
+
                         		if(sharedHeaderExtract.healthcareProfessionals().containsKey(und.getComposer().getPerformer().getExtension())) {
-                        			if(laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().getLegalAuthenticator() == null) {
-                        				laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setLegalAuthenticator(new LegalAuthenticatorType());
-                        			}
                         			final IDENTIFIEDHEALTHCAREPROFESSIONAL legal = 
                         					sharedHeaderExtract.healthcareProfessionals().get(und.getComposer().getPerformer().getExtension());
                         			laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
@@ -148,9 +152,6 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                         				laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
                         					.getLegalAuthenticator().setLegalAuthenticatorName(legal.getName().get(0).getPart().get(0).getValue());
                         			}
-                        				
-                        			laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader()
-                        				.getLegalAuthenticator().setSignatureTime(und.getAttestations().get(0).getTime().getValue());
                         		}
                         	}
                         }

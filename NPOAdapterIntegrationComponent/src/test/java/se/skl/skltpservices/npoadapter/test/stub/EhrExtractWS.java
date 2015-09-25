@@ -168,7 +168,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         	break;
         case UND_KKM_KLI:
         	log.info("Received UND-KKM-KLI Request");
-        	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE));
+        	responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE_1));
         	break;
         case UPP:
         	log.info("Received UPP Request");
