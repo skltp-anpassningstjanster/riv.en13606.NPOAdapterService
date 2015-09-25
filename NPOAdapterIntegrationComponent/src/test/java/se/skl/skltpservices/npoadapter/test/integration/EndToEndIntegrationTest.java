@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -115,6 +114,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                                      GetReferralOutcomeResponseType.class);
 
     
+    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory alertInformationObjectFactory
     = new riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory();
     
@@ -127,6 +127,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     private riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory diagnosisObjectFactory
     = new riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory();
     
+    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory imagingOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory();
     
@@ -463,7 +464,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
             fail();
         }
     }
-    
     
     
     // ---

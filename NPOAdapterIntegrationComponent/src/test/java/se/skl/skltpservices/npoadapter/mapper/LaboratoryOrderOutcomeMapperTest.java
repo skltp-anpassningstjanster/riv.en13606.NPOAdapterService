@@ -57,7 +57,7 @@ public class LaboratoryOrderOutcomeMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
-        ehrExtract = Util.loadEhrTestData(Util.LAB_TEST_FILE);
+        ehrExtract = Util.loadEhrTestData(Util.LAB_TEST_FILE_1);
         ehrResp.getEhrExtract().add(ehrExtract);
         mapper = Mockito.spy(getLaboratoryOrderOutcomeMapper());
     }
@@ -77,14 +77,14 @@ public class LaboratoryOrderOutcomeMapperTest {
     }
 
     @Test
-    public void mapResponse() {
+    public void mapResponse1() {
 
         LaboratoryOrderOutcomeMapper objectUnderTest = getLaboratoryOrderOutcomeMapper();
 
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();
         try (@SuppressWarnings("resource")
-        Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.LAB_TEST_FILE), "UTF-8").useDelimiter("\\z")) {
+        Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.LAB_TEST_FILE_1), "UTF-8").useDelimiter("\\z")) {
             while (inputStringScanner.hasNext()) {
                 xml13606Response.append(inputStringScanner.next());
             }
@@ -188,4 +188,56 @@ public class LaboratoryOrderOutcomeMapperTest {
             fail(e.getLocalizedMessage());
         }
     }
+
+    @Test
+    public void mapResponse2() {
+
+        LaboratoryOrderOutcomeMapper objectUnderTest = getLaboratoryOrderOutcomeMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource")
+        Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.LAB_TEST_FILE_2), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/> 
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(), "<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
+
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String) argumentCaptor.getValue();
+            
+            log.debug(responseXml);
+
+            // header
+            
+            assertTrue(responseXml.contains("signatureTime"));
+            
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+    
 }

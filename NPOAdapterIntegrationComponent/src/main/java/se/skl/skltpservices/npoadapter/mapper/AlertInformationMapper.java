@@ -240,6 +240,12 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                     case KONST_DATUM:
                         if (item instanceof ELEMENT) {
                             type.setAscertainedDate(EHRUtil.getElementTimeValue((ELEMENT) item));
+                            if (StringUtils.isNotBlank(type.getAscertainedDate())) {
+                                // SERVICE-323
+                                if (type.getAscertainedDate().length() > "yyyyMMdd".length()) {
+                                    type.setAscertainedDate(type.getAscertainedDate().substring(0, "yyyyMMdd".length()));
+                                }
+                            }
                         }
                         break;
                     case VERIFIERAD_TIDPUNKT:
