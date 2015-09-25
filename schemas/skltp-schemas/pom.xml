@@ -3,7 +3,7 @@
     <parent>
         <artifactId>schemas</artifactId>
         <groupId>se.skltp.adapterservices.npoadapter</groupId>
-        <version>1.0.0-RC24-SNAPSHOT</version>
+        <version>1.0.0-RC25-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
