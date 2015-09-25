@@ -132,6 +132,9 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                             laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setDocumentId(und.getRcId().getExtension());
                         }
                         
+                        
+                        
+                        
                         //Legal authenticator 
                         if(und.getComposer() != null && und.getComposer().getPerformer() != null) {
                         	if(!und.getAttestations().isEmpty() && und.getAttestations().get(0).getTime() != null) {
@@ -160,6 +163,10 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                         laboratoryOrderOutcome.setLaboratoryOrderOutcomeBody(mapBodyType(und, vbe, sharedHeaderExtract.healthcareProfessionals(),
                                 sharedHeaderExtract.organisations()));
 
+                        // header document time und-und-ure-stp
+                        laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setDocumentTime(
+                            laboratoryOrderOutcome.getLaboratoryOrderOutcomeBody().getAccountableHealthcareProfessional().getAuthorTime());
+                        
                         responseRivta.getLaboratoryOrderOutcome().add(laboratoryOrderOutcome);
                     }
                 }
