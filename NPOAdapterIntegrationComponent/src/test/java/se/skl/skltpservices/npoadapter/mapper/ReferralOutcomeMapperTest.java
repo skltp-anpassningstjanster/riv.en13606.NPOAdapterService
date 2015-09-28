@@ -300,6 +300,8 @@ public class ReferralOutcomeMapperTest {
             
             assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
             assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
+            assertTrue(responseXml.contains("<ns2:referralAuthor><ns2:authorTime>20150703114100</ns2:authorTime><ns2:healthcareProfessionalHSAId>MO0775</ns2:healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Monica Burman"));
+            assertFalse(responseXml.contains("</ns2:healthcareProfessionalCareGiverHSAId></ns2:referralAuthor>"));
             
         } catch (XMLStreamException e) {
             fail(e.getLocalizedMessage());

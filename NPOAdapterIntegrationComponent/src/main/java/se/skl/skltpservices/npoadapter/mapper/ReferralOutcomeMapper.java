@@ -194,8 +194,8 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             if (EHRUtil.retain(und, careUnitHsaIds, log)) {
                 final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
                 COMPOSITION vbe = getLinkedVbeFromUnd(und, vbes);
-                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(und, vbe, sharedHeaderExtract));
-                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(und, vbe, referralOutcomeRecordType.getReferralOutcomeHeader().getAccountableHealthcareProfessional()));
+                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
+                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
                 responseType.getReferralOutcome().add(referralOutcomeRecordType);
             }
         }
@@ -278,19 +278,12 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      *            the extract.
      * @return the target header information.
      */
-    private PatientSummaryHeaderType mapHeader(COMPOSITION und, COMPOSITION vbe, SharedHeaderExtract sharedHeaderExtract) {
+    private PatientSummaryHeaderType mapHeader(COMPOSITION und, SharedHeaderExtract sharedHeaderExtract) {
 
         log.debug("populating header using und composition");
+        // the accountableHealthcareProfessional in the header is the person who created the information in the document
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType) EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, "und-und-ure-stp",
                 PatientSummaryHeaderType.class, false, false, true);
-
-        log.debug("populating healthcareProfessional within header using vbe composition");
-        // overwrite the healthcareProfessional created in the previous step
-        // a bit of a mess, but we aim for code reuse from all the different contracts
-        HealthcareProfessional h = EHRUtil.healthcareProfessionalType(vbe.getComposer(), sharedHeaderExtract.organisations(),
-                sharedHeaderExtract.healthcareProfessionals(), vbe.getCommittal());
-        HealthcareProfessionalType o = XMLBeanMapper.getInstance().map(h, HealthcareProfessionalType.class);
-        patient.setAccountableHealthcareProfessional(o);
 
         // 'Tidpunkt då dokument skapades' - TKB clinicalprocess healthcond actoutcome
         if (StringUtils.isBlank(patient.getDocumentTime())) {
@@ -305,7 +298,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      *
      * @return a new ReferralOutcomeBodyTypeRecord
      */
-    private ReferralOutcomeBodyType mapBody(COMPOSITION und, COMPOSITION vbe, HealthcareProfessionalType healthcareProfessional) {
+    private ReferralOutcomeBodyType mapBody(COMPOSITION und, COMPOSITION vbe, SharedHeaderExtract sharedHeaderExtract) {
 
         Map<String, String> ehr13606values = new LinkedHashMap<String, String>();
 
@@ -322,7 +315,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         }
 
         // use the ehr values to build a referral outcome body
-        return buildBody(ehr13606values, healthcareProfessional);
+        return buildBody(ehr13606values, vbe, sharedHeaderExtract);
     }
 
     /*
@@ -331,7 +324,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * 
      * Attempt to avoid empty elements in the outgoing message (this is why we check for data before creating outgoing objects).
      */
-    private ReferralOutcomeBodyType buildBody(Map<String, String> ehr13606values, HealthcareProfessionalType headerHealthcareProfessional) {
+    private ReferralOutcomeBodyType buildBody(Map<String, String> ehr13606values, COMPOSITION vbe, SharedHeaderExtract sharedHeaderExtract) {
 
         final ReferralOutcomeBodyType bodyType = new ReferralOutcomeBodyType();
 
@@ -390,21 +383,18 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
         rt.setReferralTime(ehr13606values.get("vbe-committal-timecommitted"));
 
-        // populate healthcareProfessional using data from the header
-        // use a shallow copy rather than the original object
+        // populate healthcareProfessional using vbe composition
+        HealthcareProfessional h = EHRUtil.healthcareProfessionalType(vbe.getComposer(), 
+                                                                      sharedHeaderExtract.organisations(),
+                                                                      sharedHeaderExtract.healthcareProfessionals(), 
+                                                                      vbe.getCommittal());
+        HealthcareProfessionalType o = XMLBeanMapper.getInstance().map(h, HealthcareProfessionalType.class);
+        rt.setReferralAuthor(o);
         
-        rt.setReferralAuthor(new HealthcareProfessionalType());
-        
-        rt.getReferralAuthor().setAuthorTime(headerHealthcareProfessional.getAuthorTime());
-        rt.getReferralAuthor().setHealthcareProfessionalHSAId(headerHealthcareProfessional.getHealthcareProfessionalHSAId());
-        rt.getReferralAuthor().setHealthcareProfessionalName(headerHealthcareProfessional.getHealthcareProfessionalName());
-        rt.getReferralAuthor().setHealthcareProfessionalRoleCode(headerHealthcareProfessional.getHealthcareProfessionalRoleCode());
-        rt.getReferralAuthor().setHealthcareProfessionalOrgUnit(headerHealthcareProfessional.getHealthcareProfessionalOrgUnit());
-        
-        // TKB - 'Skall ej anges'
-        // rt.getReferralAuthor().setHealthcareProfessionalCareGiverHSAId
-        // TKB - 'Skall ej anges'
-        // rt.getReferralAuthor().setHealthcareProfessionalCareUnitHSAId
+        // tkb - 'Skall ej anges'
+        rt.getReferralAuthor().setHealthcareProfessionalCareGiverHSAId(null);
+        // tkb - 'Skall ej anges'
+        rt.getReferralAuthor().setHealthcareProfessionalCareUnitHSAId(null);
         
         rt.getReferralAuthor().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
         if (StringUtils.isBlank(rt.getReferralAuthor().getAuthorTime())) {
