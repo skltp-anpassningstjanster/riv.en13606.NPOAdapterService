@@ -453,6 +453,7 @@
             <synthesised nullFlavor="NA" />
             <value xsi:type="PQ" value="100" unit="styck" />
           </parts>
+          
           <parts xsi:type="CLUSTER">
             <meaning code="lkm-lkm-lpr" codeSystem="1.2.752.129.2.2.2.1">
               <displayName value="Läkemedelsprodukt" />

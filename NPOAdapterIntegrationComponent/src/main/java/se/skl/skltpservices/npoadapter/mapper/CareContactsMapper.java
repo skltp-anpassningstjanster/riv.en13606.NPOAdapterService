@@ -113,11 +113,14 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             
             final EHREXTRACT ehrExtract = ehrExtractList.get(0);
             for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
+                log.debug("processing {} of {}",i+1, ehrExtract.getAllCompositions().size());
                 if (EHRUtil.retain(ehrExtract.getAllCompositions().get(i), careUnitHsaIds, log)) {
                     final CareContactType contactType = new CareContactType();
                     contactType.setCareContactHeader(mapHeader(ehrExtract, i));
                     contactType.setCareContactBody(mapBody(ehrExtract, i));
                     responseType.getCareContact().add(contactType);
+                } else {
+                    log.debug("Not retaining composition {}", ehrExtract.getRmId());
                 }
             }
         }
@@ -193,7 +196,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
                         break;
                 }
 
-                // Executing unit
+                // care contact org unit - retrieve data from demographic_extract for the hsaId for "utförande enhet"
                 for (final FUNCTIONALROLE role : composition.getOtherParticipations()) {
                     if ("ute".equals(EHRUtil.getCDCode(role.getFunction()))) {
                         final String hsaId = role.getPerformer().getExtension();

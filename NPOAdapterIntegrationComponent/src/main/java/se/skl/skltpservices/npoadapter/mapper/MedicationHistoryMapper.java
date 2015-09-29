@@ -135,12 +135,14 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final String LAKEMEDELSVARA = "lkm-lkm-lva";
     private static final String LAKEMEDELSVARA_NPL_PACKID = "lkm-lkm-lva-npl";
     
-    private static final String LAKEMEDELSPRODUKT = "lkm-lkm-lpr";
-    private static final String LAKEMEDELSPRODUKT_NPLID = "lkm-lkm-lpr-npl";
-    private static final String LAKEMEDELSPRODUKT_ATC = "lkm-lkm-lpr-atc";
-    private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM = "lkm-lkm-lpr-ber";
-    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA = "lkm-lkm-lpr-prs";
+    private static final String LAKEMEDELSPRODUKT                      = "lkm-lkm-lpr";
+    private static final String LAKEMEDELSPRODUKT_NPLID                = "lkm-lkm-lpr-npl";
+    private static final String LAKEMEDELSPRODUKT_ATC                  = "lkm-lkm-lpr-atc";
+    private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM       = "lkm-lkm-lpr-ber";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA       = "lkm-lkm-lpr-prs";
     private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET = "lkm-lkm-lpr-pre";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_PNA          = "lkm-lkm-lpr-pna";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_PRN          = "lkm-lkm-lpr-prn";
     
     private static final String UTBYTESGRUPP = "lkm-lva-ubg";
     private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN = "lkm-lva-ubg-sty";
@@ -453,6 +455,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 						&& StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
                 					//NPO Specc, En Lakemedelsordination innehaller en och endast en Dosering
                 					final DosageType dosage = new DosageType();
+                					// prescription/drug/dosage
                 					prescription.getDrug().getDosage().add(dosage);
                 					for(ITEM dosageItem : cluster.getParts()) {
                 						if(dosageItem instanceof CLUSTER) {
@@ -557,12 +560,24 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 										final CLUSTER prodCluster = (CLUSTER) innerClusterItem;
                 										if(prodCluster.getMeaning() != null 
                 												&& StringUtils.equals(prodCluster.getMeaning().getCode(), LAKEMEDELSPRODUKT)) {
+                										    // prescription/drug/drug
                 											prescription.getDrug().setDrug(new DrugType());
+                											
+                											// for each part in the cluster
                 											for(ITEM prodItem : prodCluster.getParts()) {
                 												if(prodItem instanceof ELEMENT) {
                 													final ELEMENT prodElm = (ELEMENT) prodItem;
                 													if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
                 														switch (prodElm.getMeaning().getCode()) {
+                														    // default NplId
+                                                                            case LAKEMEDELSPRODUKT_PRODUKT_PNA:
+                                                                            case LAKEMEDELSPRODUKT_PRODUKT_PRN:
+                                                                                if (prescription.getDrug().getDrug().getNplId() == null) {
+                                                                                    prescription.getDrug().getDrug().setNplId(new CVType());
+                                                                                    prescription.getDrug().getDrug().getNplId().setOriginalText(EHRUtil.getSTValue(prodElm.getValue()));
+                                                                                }
+                                                                            break;
+                                                                            // standard NplId
                 															case LAKEMEDELSPRODUKT_NPLID:
                 															if(prodElm.getValue() instanceof II) {
                 																final CVType drugProdCV = new CVType();
@@ -598,6 +613,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 													}
                 												}
                 											}
+                											// finish lkm-lkm-lpr
+                											
                 										} else if (prodCluster.getMeaning() != null && StringUtils.equals(prodCluster.getMeaning().getCode(), UTBYTESGRUPP)) {
                 											prescription.getDrug().setGenerics(new GenericsType());
                 											for(ITEM utbItem : prodCluster.getParts()) {

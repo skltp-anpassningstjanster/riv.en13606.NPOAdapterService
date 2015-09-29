@@ -68,7 +68,8 @@ public class Util {
     public static EHREXTRACT loadDynamicTestData(final Path file) throws JAXBException {
     	final JAXBContext ctx = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
     	final Unmarshaller unmarshaller = ctx.createUnmarshaller();
-    	final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(file.toFile());
+    	@SuppressWarnings("unchecked")
+        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(file.toFile());
     	final EHREXTRACT ehr = root.getValue();
     	ehr.setRmId("EN 13606");
     	return ehr;

@@ -66,7 +66,7 @@ public class XMLBeanMapperTest {
 
     @Test
     public void testEhrExtractMapping_CareCareContacts() throws JAXBException {
-        testEhrExtractMapping(Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE));
+        testEhrExtractMapping(Util.loadEhrTestData(Util.CARECONTACTS_TEST_FILE_1));
     }
 
     @Test

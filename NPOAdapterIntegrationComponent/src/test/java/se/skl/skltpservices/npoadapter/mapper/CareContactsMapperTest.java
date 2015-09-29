@@ -19,25 +19,38 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mule.api.MuleMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
 import riv.clinicalprocess.logistics.logistics._2.CareContactType;
@@ -46,6 +59,7 @@ import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
 import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.test.Util;
 
 /**
@@ -53,6 +67,7 @@ import se.skl.skltpservices.npoadapter.test.Util;
  */
 public class CareContactsMapperTest {
 
+    private static final Logger log = LoggerFactory.getLogger(CareContactsMapperTest.class);
 
     private static SimpleDateFormat timeStampFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
     static {
@@ -63,7 +78,7 @@ public class CareContactsMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
-        ehrextract = Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
+        ehrextract = Util.loadEhrTestData(Util.CARECONTACTS_TEST_FILE_1);
     }
 
     // Make it easy to dump the resulting response after createTS (for dev purposes only)
@@ -164,4 +179,118 @@ public class CareContactsMapperTest {
             }
         }
     }
+    
+    
+    @Test
+    public void mapResponseJämtland() {
+
+        CareContactsMapper objectUnderTest = getCareContactsMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.CARECONTACTS_TEST_FILE_2), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+        
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
+            
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String)argumentCaptor.getValue();
+            log.debug(responseXml);
+            log.debug("");
+            
+            int occurrences = 0;
+            Pattern p = Pattern.compile("careContactBody");
+            Matcher m = p.matcher(responseXml);
+            while (m.find()) {
+                occurrences++;
+            }
+            assertEquals(22,occurrences);
+            
+            assertTrue(responseXml.contains("<GetCareContactsResponse"));
+            
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+    
+    @Test
+    public void mapResponseNorrbotten() {
+
+        CareContactsMapper objectUnderTest = getCareContactsMapper();
+
+        // load xml from test file - this contains an <ehr_extract/>
+        StringBuilder xml13606Response = new StringBuilder();
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.CARECONTACTS_TEST_FILE_3), "UTF-8").useDelimiter("\\z")) {
+            while (inputStringScanner.hasNext()) {
+                xml13606Response.append(inputStringScanner.next());
+            }
+        }
+
+        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
+        // opening tag
+        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+        // closing tag
+        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
+        
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        Reader xmlReader = new StringReader(xml13606Response.toString());
+        XMLStreamReader xmlStreamReader;
+        try {
+            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
+
+            MuleMessage mockMuleMessage = mock(MuleMessage.class);
+            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
+            // argumentCaptor will capture the converted xml
+            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
+
+            // method being exercised
+            objectUnderTest.mapResponse(mockMuleMessage);
+            
+            // verifications & assertions
+            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
+            String responseXml = (String)argumentCaptor.getValue();
+            log.debug(responseXml);
+            log.debug("");
+            
+            int occurrences = 0;
+            Pattern p = Pattern.compile("careContactBody");
+            Matcher m = p.matcher(responseXml);
+            while (m.find()) {
+                occurrences++;
+            }
+            assertEquals(38,occurrences);
+            
+            assertTrue(responseXml.contains("<GetCareContactsResponse"));
+            
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        } catch (MapperException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+    
 }

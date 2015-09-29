@@ -187,12 +187,20 @@ public class MedicationHistoryMapperTest {
     }
     
     @Test
-    public void testDrug() {
+    public void testDrugUnstructuredInformation() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
     	final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
     	assertEquals("EXTEMPORE E-FÖRSKRIVNING", drug.getUnstructuredDrugInformation().getUnstructuredInformation());
+    	assertNull(drug.getDrug());
     }
     
+    @Test
+    public void testDrugNplId() {
+        final MedicationMedicalRecordType rec = records.get(DOC_ID_3);
+        final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
+        assertEquals("19770615000037", drug.getDrug().getNplId().getOriginalText());
+    }
+
     @Test
     public void testDrugArticle() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_5);

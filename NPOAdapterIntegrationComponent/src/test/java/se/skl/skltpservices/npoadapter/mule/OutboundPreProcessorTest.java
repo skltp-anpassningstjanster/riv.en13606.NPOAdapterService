@@ -26,13 +26,12 @@ import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
-import org.mule.tck.junit4.AbstractMuleTestCase;
-import org.mule.tck.junit4.FunctionalTestCase;
 
 
 public class OutboundPreProcessorTest {
 	
-	private static OutboundPreProcessor pre;
+	@SuppressWarnings("unused")
+    private static OutboundPreProcessor pre;
 	private static MuleEvent event;
 	private static MuleMessage message;
 	
