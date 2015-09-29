@@ -372,7 +372,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertFalse(resp.getMedicationMedicalRecord().isEmpty());
     }
     
-    @SuppressWarnings("unused")
     @Test
     public void GetMedicationHistoryRIVSuccessTest() {
         GetMedicationHistoryResponseType response = getMedicationHistoryResponderInterface.getMedicationHistory(
@@ -401,12 +400,16 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         }
         
         JAXBElement<GetMedicationHistoryResponseType> element = medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response);
-        
-        if (false) {
-        validateXmlAgainstSchema(element,
+
+        try {
+            validateXmlAgainstSchema(element,
                 "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
                 "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
+            fail("xml validation exception expected");
+        } catch (AssertionError ae) {
+            // TODO - GetMedicationHistory - treatmentTime
+            assertTrue(ae.getMessage().startsWith("Validation error: cvc-complex-type.2.4.a: Invalid content was found starting with element 'ns12:isMaximumTreatmentTime'. One of '{\"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":treatmentInterval}' is expected"));
         }
     }
     
