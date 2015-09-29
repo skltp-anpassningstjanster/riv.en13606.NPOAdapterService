@@ -10,7 +10,7 @@
   <parent>
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
-    <version>1.0.0-RC26-SNAPSHOT</version>
+    <version>1.0.0-RC26</version>
   </parent>
 
   <dependencies>
