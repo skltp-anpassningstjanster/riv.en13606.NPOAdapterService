@@ -97,7 +97,7 @@ public class AlertInformationMapperNonAtcCommentTest {
 		assertEquals(TEST_DATA_2, testObj.getAtcSubstance().getCodeSystem());
 		assertEquals(TEST_DATA_3, testObj.getAtcSubstance().getDisplayName());
 		assertEquals(TEST_DATA_1, testObj.getNonATCSubstance());
-		assertEquals("comment not provided by care system", testObj.getNonATCSubstanceComment());
+		assertEquals(" ", testObj.getNonATCSubstanceComment());
 		assertFalse(testObj.getPharmaceuticalProductId().isEmpty());
 		assertEquals(TEST_DATA_1, testObj.getPharmaceuticalProductId().get(0).getCode());
 		assertEquals(TEST_DATA_2, testObj.getPharmaceuticalProductId().get(0).getCodeSystem());

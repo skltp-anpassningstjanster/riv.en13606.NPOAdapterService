@@ -166,18 +166,19 @@ public class ReferralOutcomeMapperTest {
             log.debug(responseXml);
             
             assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
+            assertTrue(responseXml.contains("sourceSystemHSAId><ns2:documentTime>20100503165801</ns2:documentTime><ns2:patientId>"));
             assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
             assertTrue(responseXml.contains("referralOutcomeTitle>Allmän Remiss Vårdcentralen Strängnäs EDI"));
             assertTrue(responseXml.contains("referralOutcomeText>Svar: test Svarsdatum: 100503 Dikterande"));
             assertTrue(responseXml.contains("act><ns2:actCode><ns2:code>620<"));
             assertTrue(responseXml.contains("<ns2:codeSystem>1.2.752.129.2.2.2.1<"));
             assertTrue(responseXml.contains("<ns2:actText>Önskad undersökning: test"));
-            assertTrue(responseXml.contains("actText><ns2:actTime>20100504110000<"));
+            assertTrue(responseXml.contains("actText><ns2:actTime>20100503165804<"));
             assertFalse(responseXml.contains("actResult"));
             assertTrue(responseXml.contains("referral><ns2:referralId>9871961"));
             assertTrue(responseXml.contains("referralId><ns2:referralReason>Önskad undersökning  test Anamnes, status: test"));
-            assertTrue(responseXml.contains("referralReason><ns2:referralTime>20100503165800<"));
-            assertTrue(responseXml.contains("referralAuthor><ns2:authorTime>20100503165800<"));
+            assertTrue(responseXml.contains("referralReason><ns2:referralTime>20100503165805<"));
+            assertTrue(responseXml.contains("</ns2:patientId><ns2:accountableHealthcareProfessional><ns2:authorTime>20100503165801</ns2:authorTime>")); //20100503165801
             assertTrue(responseXml.contains("healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Jarl Sternum<"));
             // 
         } catch (XMLStreamException e) {
@@ -300,7 +301,7 @@ public class ReferralOutcomeMapperTest {
             
             assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
             assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
-            assertTrue(responseXml.contains("<ns2:referralAuthor><ns2:authorTime>20150703114100</ns2:authorTime><ns2:healthcareProfessionalHSAId>MO0775</ns2:healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Monica Burman"));
+            assertTrue(responseXml.contains("<ns2:referralAuthor><ns2:authorTime>20150703114102</ns2:authorTime><ns2:healthcareProfessionalHSAId>MO0775</ns2:healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Monica Burman"));
             assertFalse(responseXml.contains("</ns2:healthcareProfessionalCareGiverHSAId></ns2:referralAuthor>"));
             
         } catch (XMLStreamException e) {

@@ -141,8 +141,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM       = "lkm-lkm-lpr-ber";
     private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA       = "lkm-lkm-lpr-prs";
     private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET = "lkm-lkm-lpr-pre";
-    private static final String LAKEMEDELSPRODUKT_PRODUKT_PNA          = "lkm-lkm-lpr-pna";
-    private static final String LAKEMEDELSPRODUKT_PRODUKT_PRN          = "lkm-lkm-lpr-prn";
+    private static final String LAKEMEDELSPRODUKT_PRODUKTNAMN         = "lkm-lkm-lpr-pna";
     
     private static final String UTBYTESGRUPP = "lkm-lva-ubg";
     private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN = "lkm-lva-ubg-sty";
@@ -570,8 +569,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 													if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
                 														switch (prodElm.getMeaning().getCode()) {
                 														    // default NplId
-                                                                            case LAKEMEDELSPRODUKT_PRODUKT_PNA:
-                                                                            case LAKEMEDELSPRODUKT_PRODUKT_PRN:
+                                                                            case LAKEMEDELSPRODUKT_PRODUKTNAMN:
                                                                                 if (prescription.getDrug().getDrug().getNplId() == null) {
                                                                                     prescription.getDrug().getDrug().setNplId(new CVType());
                                                                                     prescription.getDrug().getDrug().getNplId().setOriginalText(EHRUtil.getSTValue(prodElm.getValue()));
