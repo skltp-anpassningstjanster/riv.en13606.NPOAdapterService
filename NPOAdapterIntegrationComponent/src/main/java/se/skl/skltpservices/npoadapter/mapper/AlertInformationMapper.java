@@ -511,6 +511,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
      */
     protected PharmaceuticalHypersensitivityType mapPharmaceuticalHypersensitivity(final CLUSTER cluster) {
         final PharmaceuticalHypersensitivityType type = new PharmaceuticalHypersensitivityType();
+        type.setNonATCSubstanceComment(" "); // default
         for (ITEM innerItem : cluster.getParts()) {
             if (innerItem instanceof ELEMENT) {
                 final ELEMENT elm = (ELEMENT) innerItem;
@@ -522,10 +523,8 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                         }
                         break;
                     case SUBSTANS_EJ_ATC:
-                        type.setNonATCSubstance(EHRUtil.getElementTextValue(elm));
-                        if (StringUtils.isBlank(type.getNonATCSubstanceComment())) {
-                            // default - if EJ_ATC_KOM is missing
-                            type.setNonATCSubstanceComment("comment not provided by care system");
+                        if (StringUtils.isNotBlank(EHRUtil.getElementTextValue(elm))) {
+                            type.setNonATCSubstance(EHRUtil.getElementTextValue(elm));
                         }
                         break;
                     case EJ_ATC_KOM:

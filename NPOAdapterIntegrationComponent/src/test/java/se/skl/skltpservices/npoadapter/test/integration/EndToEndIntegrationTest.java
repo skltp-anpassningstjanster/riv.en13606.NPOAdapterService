@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBElement;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -53,6 +54,9 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcome._1.rivtabp21.GetImagingOutcomeResponderInterface;
@@ -114,7 +118,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                                      GetReferralOutcomeResponseType.class);
 
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory alertInformationObjectFactory
     = new riv.clinicalprocess.healthcond.description.getalertinformationresponder._2.ObjectFactory();
     
@@ -127,14 +130,12 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     private riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory diagnosisObjectFactory
     = new riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory imagingOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getimagingoutcomeresponder._1.ObjectFactory();
     
     private riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory laboratoryOrderOutcomeObjectFactory
     = new riv.clinicalprocess.healthcond.actoutcome.getlaboratoryorderoutcomeresponder._3.ObjectFactory();
     
-    @SuppressWarnings("unused")
     private riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory medicationHistoryObjectFactory
     = new riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.ObjectFactory();
     
@@ -215,12 +216,10 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetAlertInformationResponseType response = getAlertInformationResponderInterface.getAlertInformation(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createAlertInformationType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(response.getAlertInformation().isEmpty());
-        /** Testdata contains invalid DateType format according to TK
         validateXmlAgainstSchema(alertInformationObjectFactory.createGetAlertInformationResponse(response),
                                 "/core_components/clinicalprocess_healthcond_description_enum_2.1.xsd", 
                                 "/core_components/clinicalprocess_healthcond_description_2.1.xsd",
                                 "/interactions/GetAlertInformationInteraction/GetAlertInformationResponder_2.0.xsd");
-                                **/
       
     }
 
@@ -333,14 +332,11 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetImagingOutcomeType giot = IntegrationTestDataUtil.createImagingOutcomeType(IntegrationTestDataUtil.NO_TRIGGER);
         GetImagingOutcomeResponseType response = getImagingOutcomeResponderInterface.getImagingOutcome(LOGICAL_ADDRESS_VS_2, giot);
         assertFalse(response.getImagingOutcome().isEmpty());
-        
-        /**
         validateXmlAgainstSchema(imagingOutcomeObjectFactory.createGetImagingOutcomeResponse(response),
                 "/core_components/clinicalprocess_healthcond_actoutcome_enum_3.1.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1_ext.xsd",
                 "/core_components/clinicalprocess_healthcond_actoutcome_3.1.xsd",
                 "/interactions/GetImagingOutcomeInteraction/GetImagingOutcomeResponder_1.0.xsd");
-                **/
     }
 
     
@@ -376,17 +372,42 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         assertFalse(resp.getMedicationMedicalRecord().isEmpty());
     }
     
+    @SuppressWarnings("unused")
     @Test
     public void GetMedicationHistoryRIVSuccessTest() {
         GetMedicationHistoryResponseType response = getMedicationHistoryResponderInterface.getMedicationHistory(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(response.getMedicationMedicalRecord().isEmpty());
-        /** Ignore validation for now.
-        validateXmlAgainstSchema(medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response),
+        
+        logger.debug("responses:" + response.getMedicationMedicalRecord().size());
+        
+        for (int i = 0; i < response.getMedicationMedicalRecord().size() ; i++) {
+            DrugChoiceType dct = response.getMedicationMedicalRecord().get(i).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
+            if (dct == null) {
+                logger.debug("dct (" + i + ") is null");
+            } else {
+                DrugType dt = dct.getDrug();
+                if (dt == null) {
+                    logger.debug("dt (" + i + ") is null");
+                } else {
+                    CVType nplId = dt.getNplId();
+                    if (nplId == null) {
+                        logger.debug("nplId (" + i + ") is null");
+                    } else {
+                        logger.debug("nplId:" + nplId.getOriginalText());
+                    }
+                }
+            }
+        }
+        
+        JAXBElement<GetMedicationHistoryResponseType> element = medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response);
+        
+        if (false) {
+        validateXmlAgainstSchema(element,
                 "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
                 "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
-                **/
+        }
     }
     
 
@@ -425,7 +446,6 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     
     // ---
     
-    // response type has no XmlRootElement, so we need to pass in a root element to help jaxb with its marshalling
     private void validateXmlAgainstSchema(Object element, String ... xsds) {
         
         String xml = jaxbUtil.marshal(element);
