@@ -156,7 +156,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         switch(request.getMeanings().get(0).getCode()) {
         case VKO:
         	log.info("Received VKO Request");
-        	responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
+        	responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE_1));
         	break;
         case VOO:
         	log.info("Received VOO Request");
