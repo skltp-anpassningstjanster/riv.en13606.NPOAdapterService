@@ -192,11 +192,16 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
 
         for (COMPOSITION und : unds.values()) {
             if (EHRUtil.retain(und, careUnitHsaIds, log)) {
-                final ReferralOutcomeType referralOutcomeRecordType = new ReferralOutcomeType();
+                final ReferralOutcomeType referralOutcome = new ReferralOutcomeType();
                 COMPOSITION vbe = getLinkedVbeFromUnd(und, vbes);
-                referralOutcomeRecordType.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
-                referralOutcomeRecordType.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
-                responseType.getReferralOutcome().add(referralOutcomeRecordType);
+                referralOutcome.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
+                
+//              referralOutcome.getReferralOutcomeHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId()
+                
+                
+                
+                referralOutcome.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
+                responseType.getReferralOutcome().add(referralOutcome);
             }
         }
         return responseType;
@@ -284,10 +289,16 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         // the accountableHealthcareProfessional in the header is the person who created the information in the document
         PatientSummaryHeaderType patient = (PatientSummaryHeaderType) EHRUtil.patientSummaryHeader(und, sharedHeaderExtract, "und-und-ure-stp",
                 PatientSummaryHeaderType.class, false, false, true);
-
+        
         // 'Tidpunkt då dokument skapades' - TKB clinicalprocess healthcond actoutcome
         if (StringUtils.isBlank(patient.getDocumentTime())) {
-            patient.setDocumentTime(sharedHeaderExtract.timeCreated());
+            if (und.getCommittal() != null) {
+                if (und.getCommittal().getTimeCommitted() != null) {
+                    if (StringUtils.isNotBlank(und.getCommittal().getTimeCommitted().getValue())) {
+                        patient.setDocumentTime(und.getCommittal().getTimeCommitted().getValue());
+                    }
+                }
+            }
         }
         return patient;
     }
