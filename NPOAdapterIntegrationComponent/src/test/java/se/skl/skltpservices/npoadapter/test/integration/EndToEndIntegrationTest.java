@@ -54,9 +54,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import riv.clinicalprocess.activityprescription.actoutcome._2.CVType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.DrugChoiceType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.DrugType;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistory._2.rivtabp21.GetMedicationHistoryResponderInterface;
 import riv.clinicalprocess.activityprescription.actoutcome.getmedicationhistoryresponder._2.GetMedicationHistoryResponseType;
 import riv.clinicalprocess.healthcond.actoutcome.getimagingoutcome._1.rivtabp21.GetImagingOutcomeResponderInterface;
@@ -377,30 +374,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
         GetMedicationHistoryResponseType response = getMedicationHistoryResponderInterface.getMedicationHistory(
                 LOGICAL_ADDRESS_VS_2, IntegrationTestDataUtil.createMedicationHistoryType(IntegrationTestDataUtil.NO_TRIGGER));
         assertFalse(response.getMedicationMedicalRecord().isEmpty());
-        
-        logger.debug("responses:" + response.getMedicationMedicalRecord().size());
-        
-        for (int i = 0; i < response.getMedicationMedicalRecord().size() ; i++) {
-            DrugChoiceType dct = response.getMedicationMedicalRecord().get(i).getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
-            if (dct == null) {
-                logger.debug("dct (" + i + ") is null");
-            } else {
-                DrugType dt = dct.getDrug();
-                if (dt == null) {
-                    logger.debug("dt (" + i + ") is null");
-                } else {
-                    CVType nplId = dt.getNplId();
-                    if (nplId == null) {
-                        logger.debug("nplId (" + i + ") is null");
-                    } else {
-                        logger.debug("nplId:" + nplId.getOriginalText());
-                    }
-                }
-            }
-        }
-        
         JAXBElement<GetMedicationHistoryResponseType> element = medicationHistoryObjectFactory.createGetMedicationHistoryResponse(response);
-
         try {
             validateXmlAgainstSchema(element,
                 "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
@@ -408,7 +382,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
             fail("xml validation exception expected");
         } catch (AssertionError ae) {
-            // TODO - GetMedicationHistory - treatmentTime
+            // TODO - GetMedicationHistory - treatmentInterval
             assertTrue(ae.getMessage().startsWith("Validation error: cvc-complex-type.2.4.a: Invalid content was found starting with element 'ns12:isMaximumTreatmentTime'. One of '{\"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":treatmentInterval}' is expected"));
         }
     }
