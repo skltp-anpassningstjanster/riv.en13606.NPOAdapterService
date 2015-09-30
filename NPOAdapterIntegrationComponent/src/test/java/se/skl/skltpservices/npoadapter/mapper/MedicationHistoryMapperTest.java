@@ -139,32 +139,27 @@ public class MedicationHistoryMapperTest {
     
     @Test
     public void testHeader() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
+    	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
     	assertNotNull(rec);
     	assertNotNull(rec.getMedicationMedicalRecordHeader());
     	
-    	assertEquals(DOC_ID_1, rec.getMedicationMedicalRecordHeader().getDocumentId());
-    	assertEquals("SE162321000230-0011",rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
-    	assertEquals("198208149297", rec.getMedicationMedicalRecordHeader().getPatientId().getId());
-    	assertEquals("20150305000000", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
-    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
-    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
-    	final riv.clinicalprocess.activityprescription.actoutcome._2.CVType role = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode();
-    	assertNull(role);
-    	final OrgUnitType org = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit();
-    	assertNull(org);
-    	
-    	assertEquals("SE2321000230-1016", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
-    	assertEquals("SE2321000230-1019", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
-    
-    	
+    	assertEquals(DOC_ID_4             , rec.getMedicationMedicalRecordHeader().getDocumentId());
+    	assertEquals("SE162321000230-0011", rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
+    	assertEquals("198208149297"       , rec.getMedicationMedicalRecordHeader().getPatientId().getId());
+    	assertEquals("20150818103101"     , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
+        assertEquals("SE2321000230-1016"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("SE2321000230-1019"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+
+    	assertEquals("SE2321000230-1005"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+    	assertEquals("Kerstin Pascal Joha", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName().substring(0, "Kerstin Pascal Joha".length()));
+    	assertEquals("Läkare"             , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode().getDisplayName());
+    	assertEquals("Kirurgkliniken S-by", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit().getOrgUnitName().substring(0,"Kirurgkliniken S-by".length()));
     }
     
     @Test
     public void testPrescription() {
     	final MedicationMedicalRecordType rec1 = records.get(DOC_ID_1);
     	final MedicationMedicalRecordType rec2 = records.get(DOC_ID_2);
-    	
     	
     	final MedicationPrescriptionType mpt1 = rec1.getMedicationMedicalRecordBody().getMedicationPrescription();
     	final MedicationPrescriptionType mpt2 = rec2.getMedicationMedicalRecordBody().getMedicationPrescription();
@@ -180,10 +175,10 @@ public class MedicationHistoryMapperTest {
     
     @Test
     public void testPrescriber() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
+    	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
-    	assertEquals("20150305000001", hp.getAuthorTime());
-    	assertEquals("SE2321000230-102X", hp.getHealthcareProfessionalHSAId());
+    	assertEquals("20150818103102"   , hp.getAuthorTime());
+    	assertEquals("SE2321000230-1005", hp.getHealthcareProfessionalHSAId());
     }
     
     @Test

@@ -250,12 +250,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if(!ehrExtractList.isEmpty()) {
         	final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-        	final Map<String, COMPOSITION> lkfs = new HashMap<String, COMPOSITION>();
-        	final Map<String, COMPOSITION> lkos = new HashMap<String, COMPOSITION>();
         	
-        	//Sort all compositions in maps so that they easly can be obtained by rc_id
-        	sortCompositions(ehrExtract.getAllCompositions(), lkos, lkfs);
+        	// Sort all compositions into maps indexed by rc_id (hsaId)
+            final Map<String, COMPOSITION> lkfs = new HashMap<String, COMPOSITION>();
+            final Map<String, COMPOSITION> lkos = new HashMap<String, COMPOSITION>();
+        	sortCompositionsIntoMaps(ehrExtract.getAllCompositions(), lkos, lkfs);
         	
+        	// process this message, one lko at a time
         	for(COMPOSITION lko : lkos.values()) {
         		final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
         		
@@ -267,14 +268,17 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
                 patientSummaryHeader.setAccountableHealthcareProfessional(new HealthcareProfessionalType());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
-                patientSummaryHeader.getAccountableHealthcareProfessional().
-                		setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
-                patientSummaryHeader.getAccountableHealthcareProfessional().
-                		setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
+                
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalHSAId(prescriber.getHealthcareProfessionalHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalName(prescriber.getHealthcareProfessionalName());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
                 
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 
-                //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
+                //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
                 
                 //Map body, Content 1..1
                 final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
@@ -695,6 +699,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 record.setMedicationMedicalRecordHeader(patientSummaryHeader);
                 responseType.getMedicationMedicalRecord().add(record);
         	}
+        	// end of for loop - for each lko composition
         	
         }
     	
@@ -773,7 +778,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     }
 
 
-    protected void sortCompositions(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
+    protected void sortCompositionsIntoMaps(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
     	for(COMPOSITION c : comps) {
     		if(c.getMeaning() != null && c.getMeaning().getCode() != null 
     				&& c.getRcId() != null && c.getRcId().getExtension() != null) {
