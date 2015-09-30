@@ -259,6 +259,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         	// process this message, one lko at a time
         	for(COMPOSITION lko : lkos.values()) {
         		final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
+
+        		// --- header
         		
         		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
                 final PatientSummaryHeaderType patientSummaryHeader = 
@@ -280,9 +282,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 patientSummaryHeader.setLegalAuthenticator(null); 
                 //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
                 
+                // --- header - end
+
+                
+                // --- body
+                
                 //Map body, Content 1..1
                 final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
-                
                 
                 //Map utv
                 HealthcareProfessional utvProfessional = null;
@@ -303,12 +309,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		for(LINK link : content.getLinks()) {
                 			if(link.getTargetType() != null && link.getTargetType().getCode() != null) {
                 				switch (link.getTargetType().getCode()) {
-                				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING:
+                				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING: // lkf
                 					if(!link.getTargetId().isEmpty()) {
-                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class);
+                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class); // get first
                 					}
                 					break;
-                				case INFORMATIONSMANGD_VARDKONTAKT:
+                				case INFORMATIONSMANGD_VARDKONTAKT:            // vko
                 					if(!link.getTargetId().isEmpty()) {
                 						final II careContactId = link.getTargetId().get(0);
                 						patientSummaryHeader.setCareContactId(careContactId.getExtension());
@@ -320,23 +326,33 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		//Continue build body
                 		//Forskrivning // Ordination
                 		final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
+
                 		
-                		if(lko.getRcId() != null) {
-                			final IIType lkoIIType = new IIType();
-                			lkoIIType.setExtension(lko.getRcId().getExtension());
-                			lkoIIType.setRoot(lko.getRcId().getRoot());
-                			prescription.setPrescriptionId(lkoIIType);
-                		}
+                        if(lko.getRcId() != null) {
+                            // default prescriptionId
+                            // override later using lkf.rc_id if available
+                            final IIType lkoIIType = new IIType();
+                            lkoIIType.setExtension(lko.getRcId().getExtension());
+                            lkoIIType.setRoot(lko.getRcId().getRoot());
+                            prescription.setPrescriptionId(lkoIIType);
+                        }
                 		
                 		//Forskrivning
                 		if(lkfId != null) {
-                			final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
+                            
+                		    final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
                 			prescription.setDispensationAuthorization(dispensationAuth);
                 			dispensationAuth.setDispensationAuthorizationId(lkfId);
                 			
                 			if(lkfs.containsKey(lkfId.getExtension())) {
                 				final COMPOSITION lkf = lkfs.get(lkfId.getExtension());
-                                               				
+
+                				// override prescriptionId
+                                final IIType lkfIIType = new IIType();
+                                lkfIIType.setExtension(lkf.getRcId().getExtension());
+                                lkfIIType.setRoot(lkf.getRcId().getRoot());
+                                prescription.setPrescriptionId(lkfIIType);
+                				
                 				//Map lkf 
                 				for(CONTENT lkfContent : lkf.getContent()) {
                 					if(lkfContent.getMeaning() != null && StringUtils.equals(lkfContent.getMeaning().getCode(), FORSKRIVNING)) {
