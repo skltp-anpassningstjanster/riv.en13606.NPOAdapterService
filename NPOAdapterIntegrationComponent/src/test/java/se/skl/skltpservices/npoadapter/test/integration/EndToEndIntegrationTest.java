@@ -380,10 +380,9 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 "/core_components/clinicalprocess_activityprescription_actoutcome_enum_2.0.xsd",
                 "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
-            fail("xml validation exception expected");
         } catch (AssertionError ae) {
             // TODO - GetMedicationHistory - treatmentInterval
-            assertTrue(ae.getMessage().startsWith("Validation error: cvc-complex-type.2.4.a: Invalid content was found starting with element 'ns12:isMaximumTreatmentTime'. One of '{\"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":treatmentInterval}' is expected"));
+            assertTrue(ae.getMessage().startsWith("Validation error: cvc-complex-type.2.4.b: The content of element 'ns12:dispensationAuthorization' is not complete. One of '{\"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":dispensationAuthorizerComment, \"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":firstDispensationBefore, \"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":prescriptionSignatura}' is expected."));
         }
     }
     

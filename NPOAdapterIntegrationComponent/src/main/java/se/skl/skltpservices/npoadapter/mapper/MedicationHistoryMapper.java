@@ -454,12 +454,17 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 					prescription.setDrug(new DrugChoiceType());
                 				}
                 				final CLUSTER cluster = (CLUSTER) item;
-                				if(cluster.getMeaning() != null 
-                						&& StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
+                				
+                				// --- lkm-dos
+                				
+                				if(cluster.getMeaning() != null && StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
                 					//NPO Specc, En Lakemedelsordination innehaller en och endast en Dosering
                 					final DosageType dosage = new DosageType();
                 					// prescription/drug/dosage
                 					prescription.getDrug().getDosage().add(dosage);
+
+                					Boolean maxtid = null; // lkm-dst-max - needed for lengthOfTreatment
+                					
                 					for(ITEM dosageItem : cluster.getParts()) {
                 						if(dosageItem instanceof CLUSTER) {
                 							final CLUSTER dosageStep = (CLUSTER) dosageItem;
@@ -471,7 +476,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 									case DOSERINGSSTEG_BEHANDLINGSTID: // lkm-dst-bet
                 										if(dosageElm.getValue() != null) {
                 											if(dosageElm.getValue() instanceof IVLTS) {
-                                                                
                 												final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
                 												PQIntervalType treatmentInterval = getTreatmentInterval(dosageIvlts);
                 												if (treatmentInterval == null) {
@@ -481,6 +485,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                                                         dosage.setLengthOfTreatment(new LengthOfTreatmentType());
                                                                     }
                     												dosage.getLengthOfTreatment().setTreatmentInterval(treatmentInterval);
+                    												if (maxtid != null) {
+                    												    // lkm-dst-max has already been processed
+                    												    dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(maxtid);
+                    												}
                 												}
                 												
                                                                 //Set prescriptionStartOfThreatment
@@ -497,12 +505,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 										break;
                 										
                 									case DOSERINGSSTEG_MAXTID:
+                									    // lkm-dst-max
                 										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof BL) {
-                											boolean m = ((BL) dosageElm.getValue()).isValue();
-                											if(dosage.getLengthOfTreatment() == null) {
-                												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
+                											maxtid = new Boolean(((BL) dosageElm.getValue()).isValue());
+                											if (dosage.getLengthOfTreatment() != null) {
+                											    // lkm-dst-bet has been processed
+                                                                dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(maxtid);
                 											}
-                											dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(m);
                 										}
                 										break;
                 									case DOSERINGSSTEG_DOSERINGSANVISNING:
@@ -520,6 +529,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 							}
                 						}
                 					}	
+                					
+                				// --- end of lkm-dos	
+                					
                 				} else if(cluster.getMeaning() != null 
                 						&& StringUtils.equals(LAKEMDELSVAL, cluster.getMeaning().getCode())) {
                 					for(ITEM clusterItem : cluster.getParts()) {
@@ -769,10 +781,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         } else {
             // the message does not follow the contract
             // this is the case for data in qa
-            log.error("lkm-dst-bet width is null and both low and high are not present - low:" + 
-                       (dosageIvlts.getLow()  == null ? "null" : dosageIvlts.getLow().getValue()) + 
-                       ", high:" +        
-                       (dosageIvlts.getHigh() == null ? "null" : dosageIvlts.getHigh().getValue()));
+            log.debug("lkm-dst-bet width is null and both low and high are not present - low:" + 
+                      (dosageIvlts.getLow()  == null ? "null" : dosageIvlts.getLow().getValue()) + 
+                      ", high:" +        
+                      (dosageIvlts.getHigh() == null ? "null" : dosageIvlts.getHigh().getValue()));
         }
         return treatmentInterval;
     }

@@ -214,17 +214,33 @@ public class MedicationHistoryMapperTest {
     
     
     @Test
-    public void testDosage() {
+    public void testDosageWithoutLengthOfTreatment() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
     	assertNotNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug());
     	final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
     	assertEquals(1, drug.getDosage().size());
     	final DosageType dos = drug.getDosage().get(0);
-    	assertNull(dos.getLengthOfTreatment().getTreatmentInterval());
-    	assertTrue(dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
+    	assertNull(dos.getLengthOfTreatment());
     	assertEquals("Putar med magen", dos.getDosageInstruction());
     	assertEquals("eo", dos.getShortNotation());
     }
+
+    
+    @Test
+    public void testDosageWithLengthOfTreatment() {
+        final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
+        assertNotNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug());
+        final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
+        assertEquals(1, drug.getDosage().size());
+        final DosageType dos = drug.getDosage().get(0);
+        assertEquals(Boolean.TRUE, dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
+        assertEquals("d", dos.getLengthOfTreatment().getTreatmentInterval().getUnit());
+        assertEquals("potta", dos.getDosageInstruction());
+        assertEquals("2+2+2+2", dos.getShortNotation());
+    }
+
     
     @Test
     public void testDispensationAuth() {
@@ -243,11 +259,11 @@ public class MedicationHistoryMapperTest {
     /**
      * Rule "only one is allowed"
      * Priority
-     * 1. drugArticle
-     * 2. drug
-     * 3. merchandise
-     * 4. generics
-     * 5. unstructuredDrugInformation
+     * 1. drug
+     * 2. merchandise
+     * 3. generics
+     * 4. unstructuredDrugInformation
+     * 5. drugArticle
      */
 	@Test
 	public void testApplyAdapterSpecificRules() throws Exception {
