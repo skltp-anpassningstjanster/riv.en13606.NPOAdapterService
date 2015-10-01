@@ -246,6 +246,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     }
     
     
+    @SuppressWarnings("unused")
     protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
         final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if(!ehrExtractList.isEmpty()) {
@@ -273,11 +274,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
                 
+                if (false) {
+                // SERVICE-340 - these fields should be blank    
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalHSAId(prescriber.getHealthcareProfessionalHSAId());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalName(prescriber.getHealthcareProfessionalName());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
-                
+                }
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 
                 //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
@@ -311,7 +314,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 				switch (link.getTargetType().getCode()) {
                 				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING: // lkf
                 					if(!link.getTargetId().isEmpty()) {
-                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class); // get first
+                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class); // TODO - process each lkf, not just the first one
                 					}
                 					break;
                 				case INFORMATIONSMANGD_VARDKONTAKT:            // vko
@@ -339,6 +342,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		
                 		//Forskrivning
                 		if(lkfId != null) {
+                		    
+                		    // each lkf leads to a new DispensationAuthorization
                             
                 		    final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
                 			prescription.setDispensationAuthorization(dispensationAuth);
