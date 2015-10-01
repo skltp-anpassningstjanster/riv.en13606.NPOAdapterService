@@ -127,7 +127,7 @@ public class DiagnosisMapperTest {
                                     && 
                                    body.isChronicDiagnosis().booleanValue() 
                                     && 
-                                   body.getTypeOfDiagnosis().equals(DiagnosisTypeEnum.HUVUDDIAGNOS)));
+                                   body.getTypeOfDiagnosis().equals(DiagnosisTypeEnum.BIDIAGNOS)));
                         typeTouch = true;
                         break;
                     }
@@ -180,7 +180,7 @@ public class DiagnosisMapperTest {
             log.debug(responseXml);
 
             assertTrue(responseXml.contains("GetDiagnosisResponse>"));
-            assertTrue(responseXml.contains("typeOfDiagnosis>Huvuddiagnos"));
+            assertTrue(responseXml.contains("typeOfDiagnosis>Bidiagnos"));
             assertTrue(responseXml.contains("chronicDiagnosis>true"));
             assertTrue(responseXml.contains("documentId>SE2321000164-1004Dia19381221704420090512083134940624000-1</"));
             assertTrue(responseXml.contains("healthcareProfessionalCareUnitHSAId>SE2321000164-12ab"));
