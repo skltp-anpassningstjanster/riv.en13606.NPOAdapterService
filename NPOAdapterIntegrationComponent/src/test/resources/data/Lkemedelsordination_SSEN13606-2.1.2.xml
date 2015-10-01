@@ -336,8 +336,14 @@
                            <rc_id nullFlavor="NA"/>
                            <synthesised nullFlavor="NA"/>
                            <value xsi:type="IVL_TS" lowClosed="true" highClosed="false">
-                              <low value="20150305000000"/>
-                              <high nullFlavor="NI"/>
+                              <low  value="20150305000000"/>
+                              <high value="20150315000000"/>
+                              <!-- 
+                              <width xsi:type="PQ_TIME">
+                                  <value>1</value>
+                                  <unit>d</unit>
+                              </width>
+                              -->
                            </value>
                         </parts>
                         <parts xsi:type="ELEMENT">
@@ -915,7 +921,7 @@
                <committal>
                   <committer nullFlavor="NA"/>
                   <ehr_system nullFlavor="NA"/>
-                  <time_committed value="20150818000000"/>
+                  <time_committed value="20150818103101"/>
                </committal>
                <composer>
                   <healthcare_facility root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"/>
@@ -942,7 +948,7 @@
                      <name nullFlavor="NA"/>
                      <rc_id nullFlavor="NA"/>
                      <synthesised nullFlavor="NA"/>
-                     <value xsi:type="TS" value="20150818000000"/>
+                     <value xsi:type="TS" value="20150818103102"/>
                   </items>
                   <items xsi:type="ELEMENT">
                      <meaning code="lkm-ord-not" codeSystem="1.2.752.129.2.2.2.1">
@@ -960,7 +966,7 @@
                      <name nullFlavor="NA"/>
                      <rc_id nullFlavor="NA"/>
                      <synthesised nullFlavor="NA"/>
-                     <value xsi:type="TS" value="19800101000000"/>
+                     <value xsi:type="TS" value="20150818103103"/>
                   </items>
                   <items xsi:type="ELEMENT">
                      <meaning code="lkm-ord-oki" codeSystem="1.2.752.129.2.2.2.1">
@@ -995,7 +1001,7 @@
                            <rc_id nullFlavor="NA"/>
                            <synthesised nullFlavor="NA"/>
                            <value xsi:type="IVL_TS" lowClosed="true" highClosed="false">
-                              <low value="20150818000000"/>
+                              <low value="20150818103104"/>
                               <high nullFlavor="NI"/>
                            </value>
                         </parts>
@@ -1089,7 +1095,7 @@
                            <name nullFlavor="NA"/>
                            <rc_id nullFlavor="NA"/>
                            <synthesised nullFlavor="NA"/>
-                           <value xsi:type="II" root="1.2.752.129.2.1.5.2" extension="20040604101295"/>
+                           <value xsi:type="II" root="1.2.752.129.2.1.5.2" extension="20150818103105"/>
                         </parts>
                         <parts xsi:type="ELEMENT">
                            <meaning code="lkm-lkm-lva-fst" codeSystem="1.2.752.129.2.2.2.1">

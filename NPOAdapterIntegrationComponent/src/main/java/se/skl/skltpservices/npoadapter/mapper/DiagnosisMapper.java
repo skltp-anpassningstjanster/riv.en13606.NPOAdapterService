@@ -224,7 +224,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
                                 if (elm.getValue() instanceof ST) {
                                     final ST simpleText = (ST) elm.getValue();
                                     if (StringUtils.equalsIgnoreCase(simpleText.getValue(), CHRONIC_DIAGNOSIS)) {
-                                        type.setTypeOfDiagnosis(DiagnosisTypeEnum.HUVUDDIAGNOS);
+                                        type.setTypeOfDiagnosis(DiagnosisTypeEnum.BIDIAGNOS);
                                         type.setChronicDiagnosis(true);
                                     } else {
                                         type.setTypeOfDiagnosis(interpret(simpleText.getValue()));

@@ -246,18 +246,22 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     }
     
     
+    @SuppressWarnings("unused")
     protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
         final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if(!ehrExtractList.isEmpty()) {
         	final EHREXTRACT ehrExtract = ehrExtractList.get(0);
-        	final Map<String, COMPOSITION> lkfs = new HashMap<String, COMPOSITION>();
-        	final Map<String, COMPOSITION> lkos = new HashMap<String, COMPOSITION>();
         	
-        	//Sort all compositions in maps so that they easly can be obtained by rc_id
-        	sortCompositions(ehrExtract.getAllCompositions(), lkos, lkfs);
+        	// Sort all compositions into maps indexed by rc_id (hsaId)
+            final Map<String, COMPOSITION> lkfs = new HashMap<String, COMPOSITION>();
+            final Map<String, COMPOSITION> lkos = new HashMap<String, COMPOSITION>();
+        	sortCompositionsIntoMaps(ehrExtract.getAllCompositions(), lkos, lkfs);
         	
+        	// process this message, one lko at a time
         	for(COMPOSITION lko : lkos.values()) {
         		final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
+
+        		// --- header
         		
         		final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
                 final PatientSummaryHeaderType patientSummaryHeader = 
@@ -267,18 +271,27 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
                 patientSummaryHeader.setAccountableHealthcareProfessional(new HealthcareProfessionalType());
                 patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
-                patientSummaryHeader.getAccountableHealthcareProfessional().
-                		setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
-                patientSummaryHeader.getAccountableHealthcareProfessional().
-                		setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
                 
+                if (false) {
+                // SERVICE-340 - these fields should be blank    
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalHSAId(prescriber.getHealthcareProfessionalHSAId());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalName(prescriber.getHealthcareProfessionalName());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
+                patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
+                }
                 //Apply specific rules to header for this TK
                 patientSummaryHeader.setLegalAuthenticator(null); 
-                //careContent found in lkm-ord -> links, to keep itterations down set this value when mapping body
+                //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
+                
+                // --- header - end
+
+                
+                // --- body
                 
                 //Map body, Content 1..1
                 final MedicationMedicalRecordBodyType body = new MedicationMedicalRecordBodyType();
-                
                 
                 //Map utv
                 HealthcareProfessional utvProfessional = null;
@@ -299,12 +312,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		for(LINK link : content.getLinks()) {
                 			if(link.getTargetType() != null && link.getTargetType().getCode() != null) {
                 				switch (link.getTargetType().getCode()) {
-                				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING:
+                				case INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING: // lkf
                 					if(!link.getTargetId().isEmpty()) {
-                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class);
+                						lkfId = EHRUtil.iiType(link.getTargetId().get(0), IIType.class); // TODO - process each lkf, not just the first one
                 					}
                 					break;
-                				case INFORMATIONSMANGD_VARDKONTAKT:
+                				case INFORMATIONSMANGD_VARDKONTAKT:            // vko
                 					if(!link.getTargetId().isEmpty()) {
                 						final II careContactId = link.getTargetId().get(0);
                 						patientSummaryHeader.setCareContactId(careContactId.getExtension());
@@ -316,23 +329,35 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 		//Continue build body
                 		//Forskrivning // Ordination
                 		final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
+
                 		
-                		if(lko.getRcId() != null) {
-                			final IIType lkoIIType = new IIType();
-                			lkoIIType.setExtension(lko.getRcId().getExtension());
-                			lkoIIType.setRoot(lko.getRcId().getRoot());
-                			prescription.setPrescriptionId(lkoIIType);
-                		}
+                        if(lko.getRcId() != null) {
+                            // default prescriptionId
+                            // override later using lkf.rc_id if available
+                            final IIType lkoIIType = new IIType();
+                            lkoIIType.setExtension(lko.getRcId().getExtension());
+                            lkoIIType.setRoot(lko.getRcId().getRoot());
+                            prescription.setPrescriptionId(lkoIIType);
+                        }
                 		
                 		//Forskrivning
                 		if(lkfId != null) {
-                			final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
+                		    
+                		    // each lkf leads to a new DispensationAuthorization
+                            
+                		    final DispensationAuthorizationType dispensationAuth = new DispensationAuthorizationType();
                 			prescription.setDispensationAuthorization(dispensationAuth);
                 			dispensationAuth.setDispensationAuthorizationId(lkfId);
                 			
                 			if(lkfs.containsKey(lkfId.getExtension())) {
                 				final COMPOSITION lkf = lkfs.get(lkfId.getExtension());
-                                               				
+
+                				// override prescriptionId
+                                final IIType lkfIIType = new IIType();
+                                lkfIIType.setExtension(lkf.getRcId().getExtension());
+                                lkfIIType.setRoot(lkf.getRcId().getRoot());
+                                prescription.setPrescriptionId(lkfIIType);
+                				
                 				//Map lkf 
                 				for(CONTENT lkfContent : lkf.getContent()) {
                 					if(lkfContent.getMeaning() != null && StringUtils.equals(lkfContent.getMeaning().getCode(), FORSKRIVNING)) {
@@ -450,12 +475,17 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 					prescription.setDrug(new DrugChoiceType());
                 				}
                 				final CLUSTER cluster = (CLUSTER) item;
-                				if(cluster.getMeaning() != null 
-                						&& StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
+                				
+                				// --- lkm-dos
+                				
+                				if(cluster.getMeaning() != null && StringUtils.equals(cluster.getMeaning().getCode(), LAKEMEDELDOSERING)) {
                 					//NPO Specc, En Lakemedelsordination innehaller en och endast en Dosering
                 					final DosageType dosage = new DosageType();
                 					// prescription/drug/dosage
                 					prescription.getDrug().getDosage().add(dosage);
+
+                					Boolean maxtid = null; // lkm-dst-max - needed for lengthOfTreatment
+                					
                 					for(ITEM dosageItem : cluster.getParts()) {
                 						if(dosageItem instanceof CLUSTER) {
                 							final CLUSTER dosageStep = (CLUSTER) dosageItem;
@@ -467,7 +497,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 									case DOSERINGSSTEG_BEHANDLINGSTID: // lkm-dst-bet
                 										if(dosageElm.getValue() != null) {
                 											if(dosageElm.getValue() instanceof IVLTS) {
-                                                                
                 												final IVLTS dosageIvlts = (IVLTS) dosageElm.getValue();
                 												PQIntervalType treatmentInterval = getTreatmentInterval(dosageIvlts);
                 												if (treatmentInterval == null) {
@@ -477,6 +506,10 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                                                         dosage.setLengthOfTreatment(new LengthOfTreatmentType());
                                                                     }
                     												dosage.getLengthOfTreatment().setTreatmentInterval(treatmentInterval);
+                    												if (maxtid != null) {
+                    												    // lkm-dst-max has already been processed
+                    												    dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(maxtid);
+                    												}
                 												}
                 												
                                                                 //Set prescriptionStartOfThreatment
@@ -493,12 +526,13 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 										break;
                 										
                 									case DOSERINGSSTEG_MAXTID:
+                									    // lkm-dst-max
                 										if(dosageElm.getValue() != null && dosageElm.getValue() instanceof BL) {
-                											boolean m = ((BL) dosageElm.getValue()).isValue();
-                											if(dosage.getLengthOfTreatment() == null) {
-                												dosage.setLengthOfTreatment(new LengthOfTreatmentType());
+                											maxtid = new Boolean(((BL) dosageElm.getValue()).isValue());
+                											if (dosage.getLengthOfTreatment() != null) {
+                											    // lkm-dst-bet has been processed
+                                                                dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(maxtid);
                 											}
-                											dosage.getLengthOfTreatment().setIsMaximumTreatmentTime(m);
                 										}
                 										break;
                 									case DOSERINGSSTEG_DOSERINGSANVISNING:
@@ -516,6 +550,9 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 							}
                 						}
                 					}	
+                					
+                				// --- end of lkm-dos	
+                					
                 				} else if(cluster.getMeaning() != null 
                 						&& StringUtils.equals(LAKEMDELSVAL, cluster.getMeaning().getCode())) {
                 					for(ITEM clusterItem : cluster.getParts()) {
@@ -695,6 +732,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 record.setMedicationMedicalRecordHeader(patientSummaryHeader);
                 responseType.getMedicationMedicalRecord().add(record);
         	}
+        	// end of for loop - for each lko composition
         	
         }
     	
@@ -764,16 +802,16 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         } else {
             // the message does not follow the contract
             // this is the case for data in qa
-            log.error("lkm-dst-bet width is null and both low and high are not present - low:" + 
-                       (dosageIvlts.getLow()  == null ? "null" : dosageIvlts.getLow().getValue()) + 
-                       ", high:" +        
-                       (dosageIvlts.getHigh() == null ? "null" : dosageIvlts.getHigh().getValue()));
+            log.debug("lkm-dst-bet width is null and both low and high are not present - low:" + 
+                      (dosageIvlts.getLow()  == null ? "null" : dosageIvlts.getLow().getValue()) + 
+                      ", high:" +        
+                      (dosageIvlts.getHigh() == null ? "null" : dosageIvlts.getHigh().getValue()));
         }
         return treatmentInterval;
     }
 
 
-    protected void sortCompositions(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
+    protected void sortCompositionsIntoMaps(final List<COMPOSITION> comps, final Map<String, COMPOSITION> lko, final Map<String, COMPOSITION> lkf) {
     	for(COMPOSITION c : comps) {
     		if(c.getMeaning() != null && c.getMeaning().getCode() != null 
     				&& c.getRcId() != null && c.getRcId().getExtension() != null) {

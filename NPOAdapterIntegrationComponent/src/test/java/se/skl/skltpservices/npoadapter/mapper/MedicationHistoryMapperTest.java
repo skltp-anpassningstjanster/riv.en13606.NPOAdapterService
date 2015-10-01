@@ -65,7 +65,6 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.HealthcareProfessi
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalRecordType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MerchandiseType;
-import riv.clinicalprocess.activityprescription.actoutcome._2.OrgUnitType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
@@ -137,27 +136,32 @@ public class MedicationHistoryMapperTest {
         }
     }
     
+    @SuppressWarnings("unused")
     @Test
     public void testHeader() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
+    	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
     	assertNotNull(rec);
     	assertNotNull(rec.getMedicationMedicalRecordHeader());
     	
-    	assertEquals(DOC_ID_1, rec.getMedicationMedicalRecordHeader().getDocumentId());
-    	assertEquals("SE162321000230-0011",rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
-    	assertEquals("198208149297", rec.getMedicationMedicalRecordHeader().getPatientId().getId());
-    	assertEquals("20150305000000", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
-    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
-    	assertNull(rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
-    	final riv.clinicalprocess.activityprescription.actoutcome._2.CVType role = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode();
-    	assertNull(role);
-    	final OrgUnitType org = rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit();
-    	assertNull(org);
-    	
-    	assertEquals("SE2321000230-1016", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
-    	assertEquals("SE2321000230-1019", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
-    
-    	
+    	assertEquals(DOC_ID_4             , rec.getMedicationMedicalRecordHeader().getDocumentId());
+    	assertEquals("SE162321000230-0011", rec.getMedicationMedicalRecordHeader().getSourceSystemHSAId());
+    	assertEquals("198208149297"       , rec.getMedicationMedicalRecordHeader().getPatientId().getId());
+    	assertEquals("20150818103101"     , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
+        assertEquals("SE2321000230-1016"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("SE2321000230-1019"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+
+        // these fields need to be blank according to SERVICE-340
+        if (true) {
+            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
+            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode());
+            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit());
+        } else {
+        	assertEquals("SE2321000230-1005"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+        	assertEquals("Kerstin Pascal Joha", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName().substring(0, "Kerstin Pascal Joha".length()));
+        	assertEquals("Läkare"             , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode().getDisplayName());
+        	assertEquals("Kirurgkliniken S-by", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit().getOrgUnitName().substring(0,"Kirurgkliniken S-by".length()));
+        }
     }
     
     @Test
@@ -165,10 +169,9 @@ public class MedicationHistoryMapperTest {
     	final MedicationMedicalRecordType rec1 = records.get(DOC_ID_1);
     	final MedicationMedicalRecordType rec2 = records.get(DOC_ID_2);
     	
-    	
     	final MedicationPrescriptionType mpt1 = rec1.getMedicationMedicalRecordBody().getMedicationPrescription();
     	final MedicationPrescriptionType mpt2 = rec2.getMedicationMedicalRecordBody().getMedicationPrescription();
-    	assertEquals("SE1623210002198208149297ordination106", mpt1.getPrescriptionId().getExtension());
+    	assertEquals("SE1623210002198208149297recept1061", mpt1.getPrescriptionId().getExtension());
     	assertEquals("notat", mpt2.getPrescriptionNote());
     	assertEquals("19800101000000", mpt2.getEvaluationTime());
     	assertEquals("SE1623210002198208149297ordination109", mpt2.getPrescriptionChainId().getExtension());
@@ -180,10 +183,10 @@ public class MedicationHistoryMapperTest {
     
     @Test
     public void testPrescriber() {
-    	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
+    	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
-    	assertEquals("20150305000001", hp.getAuthorTime());
-    	assertEquals("SE2321000230-102X", hp.getHealthcareProfessionalHSAId());
+    	assertEquals("20150818103102"   , hp.getAuthorTime());
+    	assertEquals("SE2321000230-1005", hp.getHealthcareProfessionalHSAId());
     }
     
     @Test
@@ -219,17 +222,33 @@ public class MedicationHistoryMapperTest {
     
     
     @Test
-    public void testDosage() {
+    public void testDosageWithoutLengthOfTreatment() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_1);
     	assertNotNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug());
     	final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
     	assertEquals(1, drug.getDosage().size());
     	final DosageType dos = drug.getDosage().get(0);
-    	assertNull(dos.getLengthOfTreatment().getTreatmentInterval());
-    	assertTrue(dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
+    	assertNull(dos.getLengthOfTreatment());
     	assertEquals("Putar med magen", dos.getDosageInstruction());
     	assertEquals("eo", dos.getShortNotation());
     }
+
+    
+    @Test
+    public void testDosageWithLengthOfTreatment() {
+        final MedicationMedicalRecordType rec = records.get(DOC_ID_2);
+        assertNotNull(rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug());
+        final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
+        assertEquals(1, drug.getDosage().size());
+        final DosageType dos = drug.getDosage().get(0);
+        assertEquals(Boolean.TRUE, dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
+        assertEquals("d", dos.getLengthOfTreatment().getTreatmentInterval().getUnit());
+        assertEquals("potta", dos.getDosageInstruction());
+        assertEquals("2+2+2+2", dos.getShortNotation());
+    }
+
     
     @Test
     public void testDispensationAuth() {
@@ -248,11 +267,11 @@ public class MedicationHistoryMapperTest {
     /**
      * Rule "only one is allowed"
      * Priority
-     * 1. drugArticle
-     * 2. drug
-     * 3. merchandise
-     * 4. generics
-     * 5. unstructuredDrugInformation
+     * 1. drug
+     * 2. merchandise
+     * 3. generics
+     * 4. unstructuredDrugInformation
+     * 5. drugArticle
      */
 	@Test
 	public void testApplyAdapterSpecificRules() throws Exception {
