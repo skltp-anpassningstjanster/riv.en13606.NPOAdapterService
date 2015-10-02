@@ -180,7 +180,9 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
         // Only txt is supported.
         final ELEMENT txt = EHRUtil.findEntryElement(composition.getContent(), TEXT_ELEMENT);
         if (txt != null) {
-            clinicalDocumentNote.setClinicalDocumentNoteText(EHRUtil.getElementTextValue(txt));
+            String textWithDollarSigns = EHRUtil.getElementTextValue(txt);
+            // SERVICE-371 - 13606 new line characters
+            clinicalDocumentNote.setClinicalDocumentNoteText(textWithDollarSigns.replace("$$NL$$", "\r\n"));
         }
         return body;
     }
