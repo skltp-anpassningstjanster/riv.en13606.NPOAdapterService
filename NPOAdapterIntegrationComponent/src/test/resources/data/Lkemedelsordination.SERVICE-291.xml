@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <ehr_extract xmlns:s01="urn:riv13606:v1.1">
   <ehr_id root="1.2.752.129.2.1.2.1" extension="SE162321000230-0011198208149297" />
   <ehr_system root="1.2.752.129.2.1.4.1" extension="SE162321000230-0011" />
