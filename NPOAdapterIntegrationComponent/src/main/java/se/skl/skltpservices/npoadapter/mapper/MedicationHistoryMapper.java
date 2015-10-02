@@ -624,20 +624,31 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                                             final ELEMENT prodElm = (ELEMENT) prodItem;
                                                             if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
                                                                 switch (prodElm.getMeaning().getCode()) {
-                                                                    // default NplId
                                                                     case LAKEMEDELSPRODUKT_PRODUKTNAMN:
                                                                         if (prescription.getDrug().getDrug().getNplId() == null) {
                                                                             prescription.getDrug().getDrug().setNplId(new CVType());
-                                                                            prescription.getDrug().getDrug().getNplId().setOriginalText(EHRUtil.getSTValue(prodElm.getValue()));
+                                                                        }
+                                                                        prescription.getDrug().getDrug().getNplId().setDisplayName(EHRUtil.getSTValue(prodElm.getValue()));
+                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCodeSystem())) {
+                                                                            // default codeSystem using produktnamn
+                                                                            prescription.getDrug().getDrug().getNplId().setCodeSystem(prodElm.getMeaning().getCodeSystem());
+                                                                        }
+                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCode())) {
+                                                                            // default code using produktnamn
+                                                                            prescription.getDrug().getDrug().getNplId().setCode(EHRUtil.getSTValue(prodElm.getValue()));
                                                                         }
                                                                     break;
-                                                                    // standard NplId
                                                                     case LAKEMEDELSPRODUKT_NPLID:
                                                                     if(prodElm.getValue() instanceof II) {
-                                                                        final CVType drugProdCV = new CVType();
-                                                                        final II drugProdII = (II) prodElm.getValue();
-                                                                        drugProdCV.setOriginalText(drugProdII.getExtension());
-                                                                        prescription.getDrug().getDrug().setNplId(drugProdCV);
+                                                                        if (prescription.getDrug().getDrug().getNplId() == null) {
+                                                                            prescription.getDrug().getDrug().setNplId(new CVType());
+                                                                        }
+                                                                        prescription.getDrug().getDrug().getNplId().setCode( ((II)prodElm.getValue()).getExtension() );
+                                                                        prescription.getDrug().getDrug().getNplId().setCodeSystem(((II)prodElm.getValue()).getRoot());
+                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getDisplayName())) {
+                                                                            // default displayName using code
+                                                                            prescription.getDrug().getDrug().getNplId().setDisplayName(prescription.getDrug().getDrug().getNplId().getCode());
+                                                                        }
                                                                     }
                                                                     break;
                                                                     case LAKEMEDELSPRODUKT_ATC:

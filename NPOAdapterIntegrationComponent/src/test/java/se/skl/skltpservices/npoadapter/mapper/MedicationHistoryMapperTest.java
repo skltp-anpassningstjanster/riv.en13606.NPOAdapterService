@@ -201,10 +201,21 @@ public class MedicationHistoryMapperTest extends MapperTest {
     }
     
     @Test
-    public void testDrugNplId() {
+    public void testDrugNplIdCode() {
         final MedicationMedicalRecordType rec = records.get(DOC_ID_3);
         final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
-        assertEquals("19770615000037", drug.getDrug().getNplId().getOriginalText());
+        assertEquals("19770615000037"     , drug.getDrug().getNplId().getCode());
+        assertEquals("1.2.752.129.2.1.5.1", drug.getDrug().getNplId().getCodeSystem());
+        assertEquals("CRESTOR"            , drug.getDrug().getNplId().getDisplayName());
+    }
+
+    @Test
+    public void testDrugNplIdDisplayNameMissing() {
+        final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
+        final DrugChoiceType drug = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getDrug();
+        assertEquals("ABILIFY"            , drug.getDrug().getNplId().getCode());
+        assertEquals("1.2.752.129.2.2.2.1", drug.getDrug().getNplId().getCodeSystem());
+        assertEquals("ABILIFY"            , drug.getDrug().getNplId().getDisplayName());
     }
 
     @Test
