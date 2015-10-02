@@ -190,6 +190,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
     	assertEquals("20150818103102"   , hp.getAuthorTime());
     	assertEquals("SE2321000230-1005", hp.getHealthcareProfessionalHSAId());
+    	assertNull(hp.getHealthcareProfessionalCareGiverHSAId());
+    	assertNull(hp.getHealthcareProfessionalCareUnitHSAId());
     }
     
     @Test

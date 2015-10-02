@@ -307,6 +307,11 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
         }
+
+        // SERVICE-368
+        prescriber.setHealthcareProfessionalCareGiverHSAId(null);
+        prescriber.setHealthcareProfessionalCareUnitHSAId(null);
+        
         //Apply specific rules to header for this TK
         patientSummaryHeader.setLegalAuthenticator(null); 
         //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
@@ -354,7 +359,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 //Continue build body
                 //Forskrivning // Ordination
                 final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
-
+                prescription.setPrescriber(prescriber);
                 
                 if(lko.getRcId() != null) {
                     // default prescriptionId
@@ -713,7 +718,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 }
                 
                 
-                prescription.setPrescriber(prescriber);
                 //Set lkm-ord-tid
                 prescription.getPrescriber().setAuthorTime(authorTime);
                 
