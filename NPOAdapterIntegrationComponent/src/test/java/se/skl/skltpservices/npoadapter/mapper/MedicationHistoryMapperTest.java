@@ -20,6 +20,7 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +35,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
@@ -79,7 +82,7 @@ import se.skl.skltpservices.npoadapter.test.Util;
 /**
  * @author Martin Flower
  */
-public class MedicationHistoryMapperTest {
+public class MedicationHistoryMapperTest extends MapperTest {
 
     private static EHREXTRACT ehrextract;
     
@@ -100,7 +103,7 @@ public class MedicationHistoryMapperTest {
 
     @BeforeClass
     public static void init() throws JAXBException {
-        ehrextract = Util.loadEhrTestData(Util.MEDICALHISTORY_TEST_FILE_1);
+        ehrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_1);
         
         MuleMessage mockMessage = mock(MuleMessage.class);
         when(mockMessage.getUniqueId()).thenReturn("1234");
@@ -465,6 +468,84 @@ public class MedicationHistoryMapperTest {
     }
     
     
+    
+    @Test
+    public void checkXml() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_1);
+        assertTrue(responseXml.contains("<GetMedicationHistoryResponse"));
+    }
+
+    
+    // SERVICE-369 - remove if decision to process all lkf
+    @Test
+    public void checkLkoWithTwoLkfOnlyProcessOneLkf() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
+        assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331364_20020308000315"));
+        
+        // lko
+        int occurrences = 0;
+        Pattern p = Pattern.compile("SE2321000081-10331364_20020308000315");
+        Matcher m = p.matcher(responseXml);
+        while (m.find()) {
+            occurrences++;
+        }
+        assertEquals(1,occurrences);
+
+        // lkf
+        occurrences = 0;
+        p = Pattern.compile("<ns2:prescriptionId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>10331364_20020308000315_1_20020308100695_19808");
+        m = p.matcher(responseXml);
+        while (m.find()) {
+            occurrences++;
+        }
+        assertEquals(1,occurrences);
+    }
+    
+    
+    @Ignore // SERVICE-369 - activate if decision is to process all lkf
+    @Test
+    public void checkLkoWithTwoLkf() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
+        assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331364_20020308000315"));
+        
+        // lko
+        int occurrences = 0;
+        Pattern p = Pattern.compile("SE2321000081-10331364_20020308000315");
+        Matcher m = p.matcher(responseXml);
+        while (m.find()) {
+            occurrences++;
+        }
+        assertEquals(2,occurrences);
+
+        // lkf
+        occurrences = 0;
+        p = Pattern.compile("<ns2:prescriptionId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>10331364_20020308000315_1_20020308100640_19808");
+        m = p.matcher(responseXml);
+        while (m.find()) {
+            occurrences++;
+        }
+        assertEquals(1,occurrences);
+    }
+    
+    @Test
+    public void checkLkoWithoutLkf() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
+        assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331367_19640101000028"));
+        assertTrue(responseXml.contains("<ns2:prescriptionId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>SE2321000081-10331367_19640101000028"));
+        
+        // lko
+        int occurrences = 0;
+        Pattern p = Pattern.compile("SE2321000081-10331367_19640101000028");
+        Matcher m = p.matcher(responseXml);
+        while (m.find()) {
+            occurrences++;
+        }
+        assertEquals(2,occurrences); // documentId, prescriptionId
+        
+        //  // no lkf -> no dispensationAuthorization
+        assertFalse(responseXml.contains("<ns2:dispensationAuthorization><ns2:dispensationAuthorizationId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>SE2321000081-10331367_19640101000028"));
+    }
+    
     @Test
     @Ignore 
     // FIXME - fails to load schemas (before attempting to validate the xml) - exception is
@@ -473,7 +554,7 @@ public class MedicationHistoryMapperTest {
         
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();
-        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.MEDICALHISTORY_TEST_FILE_2), "UTF-8").useDelimiter("\\z")) {
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.MEDICATIONHISTORY_TEST_FILE_2), "UTF-8").useDelimiter("\\z")) {
             while (inputStringScanner.hasNext()) {
                 xml13606Response.append(inputStringScanner.next());
             }
