@@ -235,7 +235,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
                             // dia-dia-kod    
                             case CODE_ELEMENT:
                                 if (elm.getValue() instanceof CD) {
-                                    type.setDiagnosisCode(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
+                                    type.setDiagnosisCode(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                                 }
                                 break;
                             }
