@@ -195,11 +195,6 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                 final ReferralOutcomeType referralOutcome = new ReferralOutcomeType();
                 COMPOSITION vbe = getLinkedVbeFromUnd(und, vbes);
                 referralOutcome.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
-                
-//              referralOutcome.getReferralOutcomeHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId()
-                
-                
-                
                 referralOutcome.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
                 responseType.getReferralOutcome().add(referralOutcome);
             }
@@ -359,6 +354,24 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         //
 
         bodyType.getAct().add(new ActType());
+        
+        /*
+            <parts xsi:type="ELEMENT">
+              <meaning code="und-und-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Åtgärdskod"/>
+              </meaning>
+              <value value="620" xsi:type="ST" />
+            </parts>
+            
+            ->
+            
+            <actCode>
+              <code>620</code>
+              <codeSystem>1.2.752.129.2.2.2.1</codeSystem>
+              <!-- optional -->
+              <displayName>Åtgärdskod</displayName> 
+            </actCode>
+         */
         if (ehr13606values.containsKey("und-und-uat-kod")) {
             bodyType.getAct().get(0).setActCode(new ActCodeType());
             bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
