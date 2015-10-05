@@ -221,7 +221,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             professionalType.setHealthcareProfessionalName(EHRUtil.getPartValue(professional.getName()));
             final HEALTHCAREPROFESSIONALROLE role = EHRUtil.firstItem(professional.getRole());
             if (role != null) {
-                final CVType cvType = EHRUtil.cvType(role.getProfession(), CVType.class);
+                final CVType cvType = EHRUtil.cvTypeFromCD(role.getProfession(), CVType.class);
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
             }
         }
