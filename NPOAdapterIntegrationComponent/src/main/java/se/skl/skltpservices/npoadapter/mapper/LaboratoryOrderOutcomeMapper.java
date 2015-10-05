@@ -132,9 +132,6 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                             laboratoryOrderOutcome.getLaboratoryOrderOutcomeHeader().setDocumentId(und.getRcId().getExtension());
                         }
                         
-                        
-                        
-                        
                         //Legal authenticator 
                         if(und.getComposer() != null && und.getComposer().getPerformer() != null) {
                         	if(!und.getAttestations().isEmpty() && und.getAttestations().get(0).getTime() != null) {
@@ -187,10 +184,8 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
             final Map<String, IDENTIFIEDHEALTHCAREPROFESSIONAL> hps, final Map<String, ORGANISATION> orgs) {
         final LaboratoryOrderOutcomeBodyType type = new LaboratoryOrderOutcomeBodyType();
         
-        
         //Static values
         type.setDiscipline(KLINISK_KEMI);
-        
 
         // Undersokningsresultat.har ansvarig
         if (und.getComposer() != null) {
@@ -342,7 +337,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                         if (uatElm.getObsTime() != null) {
                             type.setAnalysisTime(EHRUtil.datePeriod(uatElm.getObsTime(), TimePeriodType.class));
                             if (uatElm.getValue() instanceof CD) {
-                                type.setAnalysisCode(EHRUtil.cvType((CD) uatElm.getValue(), CVType.class));
+                                type.setAnalysisCode(EHRUtil.cvTypeFromCD((CD) uatElm.getValue(), CVType.class));
                             }
                         }
                         break;
