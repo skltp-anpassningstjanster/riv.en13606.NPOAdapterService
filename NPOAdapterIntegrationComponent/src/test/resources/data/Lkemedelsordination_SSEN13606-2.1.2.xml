@@ -775,6 +775,15 @@
                            <synthesised nullFlavor="NA"/>
                            <structure_type nullFlavor="NA"/>
                            <parts xsi:type="ELEMENT">
+                              <meaning code="lkm-lkm-lpr-npl" codeSystem="1.2.752.129.2.2.2.1">
+                                  <displayName value="NPL-id"></displayName>
+                              </meaning>
+                              <name nullFlavor="NA"></name>
+                              <rc_id nullFlavor="NA"></rc_id>
+                              <synthesised nullFlavor="NA"></synthesised>
+                              <value xsi:type="II" root="1.2.752.129.2.1.5.1" extension="19770615000037"></value>
+                           </parts>
+                           <parts xsi:type="ELEMENT">
                               <meaning code="lkm-lkm-lpr-pna" codeSystem="1.2.752.129.2.2.2.1">
                                  <displayName value="Produktnamn"/>
                               </meaning>
@@ -811,15 +820,6 @@
                               <rc_id nullFlavor="NA"/>
                               <synthesised nullFlavor="NA"/>
                               <value xsi:type="PQ" value="5" unit="MG"/>
-                           </parts>
-                           <parts xsi:type="ELEMENT">
-                              <meaning code="lkm-lkm-lpr-npl" codeSystem="1.2.752.129.2.2.2.1">
-                                  <displayName value="NPL-id"></displayName>
-                              </meaning>
-                              <name nullFlavor="NA"></name>
-                              <rc_id nullFlavor="NA"></rc_id>
-                              <synthesised nullFlavor="NA"></synthesised>
-                              <value xsi:type="II" root="1.2.752.129.2.1.5.1" extension="19770615000037"></value>
                            </parts>
                         </parts>
                      </parts>
@@ -895,7 +895,7 @@
                </content>
             </all_compositions>
             
-            <!--  -->
+            <!-- lko -->
             
             <all_compositions>
                <meaning code="lko" codeSystem="1.2.752.129.2.2.2.1">
@@ -1158,7 +1158,7 @@
                </content>
             </all_compositions>
             
-            <!--  -->
+            <!-- lkf -->
             
             <all_compositions>
                <meaning code="lkf" codeSystem="1.2.752.129.2.2.2.1">
