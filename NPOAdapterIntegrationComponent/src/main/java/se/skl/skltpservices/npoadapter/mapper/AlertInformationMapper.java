@@ -233,7 +233,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
         for (CONTENT content : comp.getContent()) {
             if (content instanceof ENTRY) {
                 final ENTRY entry = (ENTRY) content;
-                type.setTypeOfAlertInformation(EHRUtil.cvType(entry.getMeaning(), CVType.class));
+                type.setTypeOfAlertInformation(EHRUtil.cvTypeFromCD(entry.getMeaning(), CVType.class));
                 for (ITEM item : entry.getItems()) {
                     final String meaning = EHRUtil.getCDCode(item.getMeaning());
                     switch (meaning) {
@@ -325,7 +325,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
     protected void addReleatedAlertInformation(final COMPOSITION comp, final AlertInformationBodyType body) {
         for (LINK link : comp.getLinks()) {
             final RelatedAlertInformationType type = new RelatedAlertInformationType();
-            type.setTypeOfAlertInformationRelationship(EHRUtil.cvType(link.getRole(), CVType.class));
+            type.setTypeOfAlertInformationRelationship(EHRUtil.cvTypeFromCD(link.getRole(), CVType.class));
             for (II id : link.getTargetId()) {
                 type.getDocumentId().add(id.getExtension());
             }
@@ -393,10 +393,10 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                     final ELEMENT elm = (ELEMENT) innerItem;
                     switch (innerItem.getMeaning().getCode()) {
                     case SMITTSAM_SJUKDOM:
-                        bodyType.getCommunicableDisease().setCommunicableDiseaseCode(EHRUtil.cvTypeToSTValue(elm, CVType.class));
+                        bodyType.getCommunicableDisease().setCommunicableDiseaseCode(EHRUtil.cvTypeFromElementWithValueST(elm, CVType.class));
                         break;
                     case SMITTVAG:
-                        bodyType.getCommunicableDisease().setRouteOfTransmission(EHRUtil.cvTypeToSTValue(elm, CVType.class));
+                        bodyType.getCommunicableDisease().setRouteOfTransmission(EHRUtil.cvTypeFromElementWithValueST(elm, CVType.class));
                         break;
                     }
                 }
@@ -426,11 +426,11 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
             case LAKEMDELSBEHANDLIG:
                 final ELEMENT elm = (ELEMENT) item;
                 if (elm.getValue() != null && elm.getValue() instanceof CD) {
-                    bodyType.getTreatment().setPharmaceuticalTreatment(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
+                    bodyType.getTreatment().setPharmaceuticalTreatment(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                 }
                 break;
             case BEHANDLINGSKOD:
-                bodyType.getTreatment().setTreatmentCode(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
+                bodyType.getTreatment().setTreatmentCode(EHRUtil.cvTypeFromElementWithValueST((ELEMENT) item, CVType.class));
                 break;
             }
         }
@@ -453,7 +453,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
         switch (meaning) {
         case SJUKDOM:
             if (item instanceof ELEMENT) {
-                bodyType.getSeriousDisease().setDisease(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
+                bodyType.getSeriousDisease().setDisease(EHRUtil.cvTypeFromElementWithValueST((ELEMENT) item, CVType.class));
             }
             break;
         }
@@ -476,17 +476,17 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
         switch (meaning) {
         case TYP_AV_OVERKANSLIGHET:
             if (item instanceof ELEMENT) {
-                bodyType.getHypersensitivity().setTypeOfHypersensitivity(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
+                bodyType.getHypersensitivity().setTypeOfHypersensitivity(EHRUtil.cvTypeFromElementWithValueST((ELEMENT) item, CVType.class));
             }
             break;
         case ALLVARLIGHETSGRAD:
             if (item instanceof ELEMENT) {
-                bodyType.getHypersensitivity().setDegreeOfSeverity(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
+                bodyType.getHypersensitivity().setDegreeOfSeverity(EHRUtil.cvTypeFromElementWithValueST((ELEMENT) item, CVType.class));
             }
             break;
         case VISSHETSGRAD:
             if (item instanceof ELEMENT) {
-                bodyType.getHypersensitivity().setDegreeOfCertainty(EHRUtil.cvTypeToSTValue((ELEMENT) item, CVType.class));
+                bodyType.getHypersensitivity().setDegreeOfCertainty(EHRUtil.cvTypeFromElementWithValueST((ELEMENT) item, CVType.class));
             }
             break;
         case LAKEMEDEL_OVERKANSLIGHET:
@@ -519,7 +519,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                     switch (elm.getMeaning().getCode()) {
                     case SUBSTANS:
                         if (elm.getValue() instanceof CD) {
-                            type.setAtcSubstance(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
+                            type.setAtcSubstance(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                         }
                         break;
                     case SUBSTANS_EJ_ATC:
@@ -531,7 +531,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                         type.setNonATCSubstanceComment(EHRUtil.getElementTextValue(elm));
                         break;
                     case LAKEMDELELPRODUKT:
-                        type.getPharmaceuticalProductId().add(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
+                        type.getPharmaceuticalProductId().add(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                         break;
                     }
                 }
@@ -558,7 +558,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
                         type.setHypersensitivityAgent(EHRUtil.getElementTextValue(elm));
                         break;
                     case AGENS_OVERKANSLIGHET_KOD:
-                        type.setHypersensitivityAgentCode(EHRUtil.cvTypeToSTValue(elm, CVType.class));
+                        type.setHypersensitivityAgentCode(EHRUtil.cvTypeFromElementWithValueST(elm, CVType.class));
                         break;
                     }
                 }
