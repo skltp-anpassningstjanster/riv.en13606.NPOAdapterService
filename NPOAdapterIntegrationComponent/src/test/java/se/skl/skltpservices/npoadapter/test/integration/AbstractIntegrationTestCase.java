@@ -37,9 +37,6 @@ public abstract class AbstractIntegrationTestCase extends AbstractTestCase {
                 + ",NPOAdapter-config.xml"
                 + ",teststub-services/ehrextract-teststub-service.xml"
                 + ",teststub-services/getehrextract-teststub-service.xml"
-                + ",teststub-services/getcarecontacts-teststub-service.xml"
-                + ",teststub-services/takvagval-teststub-service.xml"
-                + ",teststub-services/ei-update-teststub-service.xml"
-                + ",teststub-services/caresystem-teststub-service.xml";
+                + ",teststub-services/takvagval-teststub-service.xml";
     }
 }
