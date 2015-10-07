@@ -163,7 +163,7 @@ public class ReferralOutcomeMapperTest extends MapperTest {
         while (m.find()) {
             occurrences++;
         }
-        assertEquals(6,occurrences);
+        assertEquals(4,occurrences);
         
         assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
         assertTrue(responseXml.contains("referralOutcomeTypeCode>SS"));
@@ -171,6 +171,22 @@ public class ReferralOutcomeMapperTest extends MapperTest {
         assertFalse(responseXml.contains("</ns2:healthcareProfessionalCareGiverHSAId></ns2:referralAuthor>"));
     }
     
+
+    @Test
+    public void mapSvarsTypePREL() {
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_4);
+        assertFalse(responseXml.contains("referralOutcomeBody"));
+        assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
+    }
+
+
+    @Test
+    public void mapSvarsTypeINVALID() {
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_5);
+        assertFalse(responseXml.contains("referralOutcomeBody"));
+        assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
+    }
+
 }
 
 

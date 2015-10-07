@@ -92,8 +92,9 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
-    private static final String EHR13606_DEF = "DEF";
+    private static final String EHR13606_DEF  = "DEF";
     private static final String EHR13606_TILL = "TILL";
+    private static final String EHR13606_PREL = "PREL";
     private static final String SAKNAS = "saknas";
 
     public ReferralOutcomeMapper() {
@@ -195,7 +196,11 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                 COMPOSITION vbe = getLinkedVbeFromUnd(und, vbes);
                 referralOutcome.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
                 referralOutcome.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
-                responseType.getReferralOutcome().add(referralOutcome);
+                if (referralOutcome.getReferralOutcomeBody() == null) {
+                    // do not process this result
+                } else {
+                    responseType.getReferralOutcome().add(referralOutcome);
+                }
             }
         }
         return responseType;
@@ -319,8 +324,15 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
 
-        // use the ehr values to build a referral outcome body
-        return buildBody(ehr13606values, vbe, sharedHeaderExtract);
+        if (EHR13606_PREL.equals(ehr13606values.get("und-und-ure-typ"))) {
+            log.error("undersöknings resultat svarstype (und-und-ure-typ) PREL is not permitted - not processing result");
+        } else if (interpretOutcomeType(ehr13606values.get("und-und-ure-typ")) == null) {
+            log.error("missing or unrecognised undersöknings resultat svarstype (und-und-ure-typ) {} - not processing result", ehr13606values.get("und-und-ure-typ"));
+        } else {
+            // use the ehr values to build a referral outcome body
+            return buildBody(ehr13606values, vbe, sharedHeaderExtract);
+        }
+        return null; // will be ignored
     }
 
     /*
