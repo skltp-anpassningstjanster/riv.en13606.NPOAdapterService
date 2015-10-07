@@ -191,6 +191,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
      * @return a alertinformation response.
      */
     protected GetAlertInformationResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
         final GetAlertInformationResponseType response = new GetAlertInformationResponseType();
 
         response.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));

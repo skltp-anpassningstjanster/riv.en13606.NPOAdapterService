@@ -481,10 +481,9 @@ public class MedicationHistoryMapperTest extends MapperTest {
     }
     
     
-    
     @Test
     public void checkXml() {
-        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_1);
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_1, true);
         assertTrue(responseXml.contains("<GetMedicationHistoryResponse"));
     }
 

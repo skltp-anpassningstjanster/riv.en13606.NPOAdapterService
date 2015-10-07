@@ -144,9 +144,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
         try {
             final RIV13606REQUESTEHREXTRACTResponseType ehrResponse = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-
             GetReferralOutcomeResponseType rivtaResponse = mapResponse(ehrResponse, message);
-
             message.setPayload(marshal(rivtaResponse));
             return message;
         } catch (Exception err) {
@@ -160,6 +158,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * @return GetReferralOutcomeResponseType response type
      */
     protected GetReferralOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, MuleMessage message) {
+        checkContinuation(log, ehrResponse);
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList, message);
         responseType.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResponse.getResponseDetail(), ResultType.class));

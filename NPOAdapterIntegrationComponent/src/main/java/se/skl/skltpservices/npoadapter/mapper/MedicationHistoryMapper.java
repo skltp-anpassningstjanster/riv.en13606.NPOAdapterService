@@ -221,9 +221,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     	try {
     		final RIV13606REQUESTEHREXTRACTResponseType ehrResponse 
     		   = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-    		
     		GetMedicationHistoryResponseType rivtaResponse = mapResponse(ehrResponse, message);
-    		
             message.setPayload(marshal(rivtaResponse));
             return message;
     	} catch (Exception err) {
@@ -239,6 +237,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
      * @return GetMedicationHistoryResponseType response type
      */
     protected GetMedicationHistoryResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, MuleMessage message) {
+        checkContinuation(log, ehrResponse);
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         log.debug("list of EHREXTRACT - " + ehrExtractList.size());
         GetMedicationHistoryResponseType responseType = mapEhrExtract(ehrExtractList, message);

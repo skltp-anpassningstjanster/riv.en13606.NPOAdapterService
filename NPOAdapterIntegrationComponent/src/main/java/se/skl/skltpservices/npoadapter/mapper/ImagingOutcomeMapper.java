@@ -157,6 +157,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	}
 	
 	public GetImagingOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
 		final GetImagingOutcomeResponseType resp = new GetImagingOutcomeResponseType();
 		resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
 		

@@ -37,35 +37,31 @@ import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
  */
 public class RIVCareContactsMapper extends CareContactsMapper {
 
-	@Override
-    public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
-    	try {
-    		final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(payloadAsXMLStreamReader(message));
-    		// map to baseline model
-    		final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrExtractResponseType);
-    		message.setPayload(marshal(mapResponse(riv13606REQUESTEHREXTRACTResponseType.getEhrExtract(), message)));
-    		return message;
-    	} catch (Exception err) {
-    		throw new MapperException("Error when transforming response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
-    	}
+    @Override
+    public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
+        try {
+            final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
+            // map to baseline model
+            final RIV13606REQUESTEHREXTRACTRequestType ehrRequest 
+               = EHRUtil.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
+            final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
+            message.setPayload(ehrExtractType(ehrExtractType));
+            return message;
+        } catch (Exception err) {
+            throw new MapperException("Error when transforming request", err, Ehr13606AdapterError.MAPRIVREQUEST);
+        }
     }
 
-	@Override
-	public MuleMessage mapRequest(final MuleMessage message) throws MapperException {
-		try {
-		final GetCareContactsType request = unmarshal(payloadAsXMLStreamReader(message));
-
-		// map to baseline model
-		final RIV13606REQUESTEHREXTRACTRequestType ehrRequest = EHRUtil
-				.requestType(request, MEANING_VKO, message.getUniqueId(), message.getInvocationProperty("route-logical-address"));
-
-		final GetEhrExtractType ehrExtractType = XMLBeanMapper.map(ehrRequest);
-
-		message.setPayload(ehrExtractType(ehrExtractType));
-
-		return message;
-		} catch (Exception err) {
-			throw new MapperException("Error when transforming request", err, Ehr13606AdapterError.MAPRIVREQUEST);
-		}
-	}
+    @Override
+    public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
+        try {
+            final GetEhrExtractResponseType ehrExtractResponseType = ehrExtractResponseType(payloadAsXMLStreamReader(message));
+            // map to baseline model
+            final RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACTResponseType = XMLBeanMapper.map(ehrExtractResponseType);
+            message.setPayload(marshal(mapResponse(riv13606REQUESTEHREXTRACTResponseType, message)));
+            return message;
+        } catch (Exception err) {
+            throw new MapperException("Error when transforming response", err, Ehr13606AdapterError.MAPRIVRESPONSE);
+        }
+    }
 }

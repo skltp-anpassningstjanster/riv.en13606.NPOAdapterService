@@ -111,11 +111,10 @@ public class ReferralOutcomeMapperTest extends MapperTest {
 	}
 
 
-	
     @Test
     public void mapOneResponse() {
 
-        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_1);
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_1, true);
 
         assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
         assertTrue(responseXml.contains("sourceSystemHSAId><ns2:documentTime>20100503165801</ns2:documentTime><ns2:patientId>"));
@@ -132,9 +131,7 @@ public class ReferralOutcomeMapperTest extends MapperTest {
         assertTrue(responseXml.contains("referralReason><ns2:referralTime>20100503165805<"));
         assertTrue(responseXml.contains("</ns2:patientId><ns2:accountableHealthcareProfessional><ns2:authorTime>20100503165801</ns2:authorTime>")); //20100503165801
         assertTrue(responseXml.contains("healthcareProfessionalHSAId><ns2:healthcareProfessionalName>Jarl Sternum<"));
-        // 
     }
-    
     
     
     @Test

@@ -65,7 +65,7 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-public class AlertInformationMapperTest {
+public class AlertInformationMapperTest extends MapperTest {
 	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
 	private static EHREXTRACT ehrExtract;
 	
@@ -394,50 +394,9 @@ public class AlertInformationMapperTest {
 	
     @Test
     public void defaultAscertainedDate() {
-
-        // load xml from test file - this contains an <ehr_extract/>
-        StringBuilder xml13606Response = new StringBuilder();
-        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.ALERT_TEST_FILE), "UTF-8").useDelimiter("\\z")) {
-            while (inputStringScanner.hasNext()) {
-                xml13606Response.append(inputStringScanner.next());
-            }
-        }
-
-        // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
-        // opening tag
-        xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
-        // closing tag
-        xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
-        
-        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-        Reader xmlReader = new StringReader(xml13606Response.toString());
-        XMLStreamReader xmlStreamReader;
-        try {
-            xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlReader);
-
-            MuleMessage mockMuleMessage = mock(MuleMessage.class);
-            when(mockMuleMessage.getPayload()).thenReturn(xmlStreamReader);
-            // argumentCaptor will capture the converted xml
-            ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
-
-            // method being exercised
-            mapper.mapResponse(mockMuleMessage);
-
-            // verifications & assertions
-            verify(mockMuleMessage).setPayload(argumentCaptor.capture());
-            String responseXml = (String)argumentCaptor.getValue();
-            
-            log.debug(responseXml);
-            
-            assertTrue (responseXml.contains("<ns2:ascertainedDate>20150302</ns2:ascertainedDate"));
-            assertTrue (responseXml.contains("<ns2:validityTimePeriod><ns2:start>20150302011259</ns2:"));
-
-
-        } catch (XMLStreamException e) {
-            fail(e.getLocalizedMessage());
-        } catch (MapperException e) {
-            fail(e.getLocalizedMessage());
-        }
+        String responseXml = getRivtaXml(mapper, Util.ALERT_TEST_FILE, true);
+        assertTrue (responseXml.contains("<ns2:ascertainedDate>20150302</ns2:ascertainedDate"));
+        assertTrue (responseXml.contains("<ns2:validityTimePeriod><ns2:start>20150302011259</ns2:"));
     }
 	
 }

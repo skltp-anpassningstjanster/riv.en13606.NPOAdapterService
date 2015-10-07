@@ -53,6 +53,7 @@ import se.rivta.en13606.ehrextract.v11.ORGANISATION;
 import se.rivta.en13606.ehrextract.v11.ObjectFactory;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTRequestType;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ST;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.mapper.util.SharedHeaderExtract;
 
@@ -282,4 +283,23 @@ public abstract class AbstractMapper {
             }
         }
     }
+
+    // Does the response contain a non-blank continuation token?
+    // We have no test data to see what a continuation token looks like - meanwhile this is the default implementation.
+    protected boolean continuation(RIV13606REQUESTEHREXTRACTResponseType response13606) {
+        ST continuation = response13606.getContinuationToken();
+        if (continuation != null) {
+            if (StringUtils.isNotBlank(continuation.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    protected void checkContinuation(Logger log, RIV13606REQUESTEHREXTRACTResponseType response13606) {
+        if (continuation(response13606)) {
+            log.warn("Continuation token detected - response is not complete, continuation will be ignored");
+        }
+    }
+    
 }

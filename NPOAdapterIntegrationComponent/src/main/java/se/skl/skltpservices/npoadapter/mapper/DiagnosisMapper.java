@@ -128,6 +128,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
      * @return a diagnosis response.
      */
     protected GetDiagnosisResponseType mapResponse(RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
         final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
         resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
         if (ehrResp.getEhrExtract().isEmpty()) {

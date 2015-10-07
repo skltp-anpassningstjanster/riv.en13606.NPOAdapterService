@@ -100,6 +100,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     }
 
     protected GetLaboratoryOrderOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType response13606, MuleMessage message) {
+        checkContinuation(log, response13606);
         final GetLaboratoryOrderOutcomeResponseType responseRivta = new GetLaboratoryOrderOutcomeResponseType();
         responseRivta.setResult(EHRUtil.resultType(message.getUniqueId(), response13606.getResponseDetail(), ResultType.class));
         if (response13606.getEhrExtract().isEmpty()) {
