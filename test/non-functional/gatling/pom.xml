@@ -4,7 +4,6 @@
 
 <!--
 
-
 default:localhost:33001 (http)
 
 # PingForConfiguration (default profile)
@@ -64,7 +63,7 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseUrl=http://ine-tit-app03.sth.ba
 
   <groupId>se.skl.skltpservices.npoadapter</groupId>
   <artifactId>test-non-functional</artifactId>
-  <version>1.0.0-RC5-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <properties>
     <gatling.version>2.1.6</gatling.version>

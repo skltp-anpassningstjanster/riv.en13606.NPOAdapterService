@@ -38,6 +38,7 @@
         <module>schemas</module>
         <module>NPOAdapterIntegrationComponent</module>
         <module>NPOAdapter13606Stub</module>
+        <module>test/non-functional/gatling</module>
     </modules>
 
     <dependencyManagement>
