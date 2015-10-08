@@ -42,9 +42,16 @@ import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 public abstract class MapperTest {
 
     private static final Logger log = LoggerFactory.getLogger(MapperTest.class);
+
+    
     
     // Use the mapper to convert the 13606 test file xml into rivta xml
     protected String getRivtaXml(Mapper mapper, String xml13606TestFile) {
+        return getRivtaXml(mapper, xml13606TestFile, false);
+    }
+    
+    // Use the mapper to convert the 13606 test file xml into rivta xml
+    protected String getRivtaXml(Mapper mapper, String xml13606TestFile, boolean continuation) {
         
         String responseXml = "";
         
@@ -59,6 +66,13 @@ public abstract class MapperTest {
         // wrap the <ehr_extract/> in a <RIV13606REQUEST_EHR_EXTRACT_response/>
         // opening tag
         xml13606Response.insert("<?xml version=\"1.0\" encoding=\"UTF-8\"?>".length(),"<RIV13606REQUEST_EHR_EXTRACT_response xmlns=\"urn:riv13606:v1.1\">");
+
+        if (continuation) {
+            // presence of continuation token means that more information is available, and requires further call(s)
+            // this processing is not implemented by NPÖ Adapter - instead we log a warning
+            xml13606Response.append("<continuation_token value=\"abc\"></continuation_token>\n");
+        }
+        
         // closing tag
         xml13606Response.append("</RIV13606REQUEST_EHR_EXTRACT_response>\n");
         

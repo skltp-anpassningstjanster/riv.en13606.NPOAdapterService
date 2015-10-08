@@ -35,6 +35,7 @@ import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 
+import riv.clinicalprocess.healthcond.description._2.CVType;
 import se.rivta.en13606.ehrextract.v11.AD;
 import se.rivta.en13606.ehrextract.v11.ADXP;
 import se.rivta.en13606.ehrextract.v11.ANY;
@@ -359,26 +360,48 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(cv, type);
     }
 
-    public static <T> T cvType(final CD cd, Class<T> type) {
+    /**
+     * Convert code object from 13606 to rivta.
+     * Automatically handle different package names.
+     * @param cd 13606 object of type CD
+     * @param type CVType.class for the appropriate package
+     * @return new object of type CVType - default to null
+     */
+    public static <T> T cvTypeFromCD(final CD cd, Class<T> type) {
         if (cd == null) {
             return null;
         }
         final CV cv = new CV();
         cv.setCode(cd.getCode());
-        ;
         cv.setCodeSystem(cd.getCodeSystem());
         cv.setCodeSystemName(cd.getCodeSystemName());
         cv.setCodeSystemVersion(cd.getCodeSystemVersion());
         if (cd.getDisplayName() != null) {
             cv.setDisplayName(cd.getDisplayName().getValue());
         }
-        if (cd.getOriginalText() != null) {
+        if (StringUtils.isBlank(cd.getCode()) && cd.getOriginalText() != null) {
             cv.setOriginalText(cd.getOriginalText().getValue());
+            cv.setCode(null);
+            cv.setCodeSystem(null);
+            cv.setCodeSystemName(null);
+            cv.setCodeSystemVersion(null);
+            cv.setDisplayName(null);
         }
         return XMLBeanMapper.getInstance().map(cv, type);
     }
 
-    public static <T> T cvTypeToSTValue(final ELEMENT elm, Class<T> type) {
+    /**
+     * Convert 13606 element with value attribute to rivta CVType.
+     * Automatically handle different package names. 
+     * 
+     * <items xsi:type="urn:ELEMENT">
+     *   <value value="Detta är komm.. .." xsi:type="urn:ST"/>
+     * 
+     * @param elm 13606 object containing an element 'value' with attribute 'value of type 'ST'.
+     * @param type CVType with the appropriate package.
+     * @return new object of type CVType - default to null
+     */
+    public static <T> T cvTypeFromElementWithValueST(final ELEMENT elm, Class<T> type) {
         if (elm == null || elm.getMeaning() == null) {
             return null;
         }
@@ -514,7 +537,7 @@ public final class EHRUtil {
 
             final HEALTHCAREPROFESSIONALROLE role = firstItem(careUnitProfessional.getRole());
             if (role != null) {
-                resultProfessional.setHealthcareProfessionalRoleCode(cvType(role.getProfession(), CV.class));
+                resultProfessional.setHealthcareProfessionalRoleCode(cvTypeFromCD(role.getProfession(), CV.class));
             }
         }
 

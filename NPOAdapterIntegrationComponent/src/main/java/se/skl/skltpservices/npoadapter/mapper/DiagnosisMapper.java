@@ -128,6 +128,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
      * @return a diagnosis response.
      */
     protected GetDiagnosisResponseType mapResponse(RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
         final GetDiagnosisResponseType resp = new GetDiagnosisResponseType();
         resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
         if (ehrResp.getEhrExtract().isEmpty()) {
@@ -235,7 +236,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
                             // dia-dia-kod    
                             case CODE_ELEMENT:
                                 if (elm.getValue() instanceof CD) {
-                                    type.setDiagnosisCode(EHRUtil.cvType((CD) elm.getValue(), CVType.class));
+                                    type.setDiagnosisCode(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                                 }
                                 break;
                             }

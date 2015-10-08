@@ -65,6 +65,25 @@ public class PingForConfigurationWS implements PingForConfigurationResponderInte
 
         final PingForConfigurationResponseType response = new PingForConfigurationResponseType();
 
+        // report PingForConfigurationResponse.version
+        // extract implementation version from META-INF/MANIFEST.MF inside riv-schemas-x.y.z.jar
+        // this requires following settings in parent pom riv.en.13606.NPOAdapterService/pom.xml
+        // <profiles>
+        //        <profile>
+        //            <id>license</id>
+        //            <activation>
+        //                <activeByDefault>true</activeByDefault>
+        //            </activation>
+        //            <build>
+        //                <plugins>
+        //                    <plugin>
+        //                        <artifactId>maven-jar-plugin</artifactId>
+        //                        <configuration>
+        //                            <archive>
+        //                                <manifest>
+        //                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+        //                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                    
         response.setVersion(EHREXTRACT.class.getPackage().getImplementationVersion());
         response.setPingDateTime(EHRUtil.formatTimestamp(new Date()));
 

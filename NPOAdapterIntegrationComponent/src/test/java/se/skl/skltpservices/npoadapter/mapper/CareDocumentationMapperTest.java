@@ -44,7 +44,7 @@ public class CareDocumentationMapperTest extends MapperTest {
     @Test
     public void mapResponse() {
 
-        String responseXml = getRivtaXml(getCareDocumentationMapper(), Util.CAREDOCUMENTATION_TEST_FILE);
+        String responseXml = getRivtaXml(getCareDocumentationMapper(), Util.CAREDOCUMENTATION_TEST_FILE, true);
         
         assertTrue (responseXml.contains("sourceSystemHSAid>SE2321000164-1006</"));
         assertTrue (responseXml.contains("<GetCareDocumentationResponse"));

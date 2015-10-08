@@ -157,6 +157,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	}
 	
 	public GetImagingOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
 		final GetImagingOutcomeResponseType resp = new GetImagingOutcomeResponseType();
 		resp.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), ResultType.class));
 		
@@ -258,6 +259,14 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         body.getImageRecording().get(0).getRecordingId().setExtension(und.getRcId().getExtension());
         body.getImageRecording().get(0).getRecordingId().setRoot(und.getRcId().getRoot());
         
+        /*
+            <parts xsi:type="ELEMENT">
+                <meaning code="und-und-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
+                    <displayName value="Åtgärdskod"/>
+                </meaning>
+                <value value="Manuellt inmatad" xsi:type="ST"/>
+            </parts>
+         */
         body.getImageRecording().get(0).setExaminationActivity(new CVType());
         body.getImageRecording().get(0).getExaminationActivity().setOriginalText(ehr13606values.get("und-und-uat-kod"));
 

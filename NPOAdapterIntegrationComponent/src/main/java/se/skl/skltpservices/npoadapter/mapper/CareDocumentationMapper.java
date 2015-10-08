@@ -122,6 +122,7 @@ public class CareDocumentationMapper extends AbstractMapper implements Mapper {
      * @return GetCareDocumentationType for marshaling.
      */
     protected GetCareDocumentationResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResp, MuleMessage message) {
+        checkContinuation(log, ehrResp);
         log.debug("Populating GetCareDocumentationResponse using ehrResp (" + ehrResp.getClass().getName() + ")");
         final GetCareDocumentationResponseType getCareDocumentationResponse = new GetCareDocumentationResponseType();
         getCareDocumentationResponse.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResp.getResponseDetail(), Result.class));

@@ -89,7 +89,8 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
     	try {
     		final RIV13606REQUESTEHREXTRACTResponseType response = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-            message.setPayload(marshal(mapResponse(response.getEhrExtract(), message)));
+            checkContinuation(log, response);
+            message.setPayload(marshal(mapResponse(response, message)));
             return message;
     	} catch (Exception err) {
     		throw new MapperException("Error when mapping response", err, Ehr13606AdapterError.MAPRESPONSE);
@@ -100,18 +101,19 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     /**
      * Maps from EHR_EXTRACT (vko) to GetCareContactsResponseType.
      *
-     * @param ehrExtractList the EHR_EXTRACT XML Java bean.
+     * @param response the EHR_EXTRACT XML Java bean.
      * @return the corresponding riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType response type
      */
-    protected GetCareContactsResponseType mapResponse(final List<EHREXTRACT> ehrExtractList, MuleMessage message) {
+    protected GetCareContactsResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType response, MuleMessage message) {
+        checkContinuation(log, response);
 
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
-        if (!ehrExtractList.isEmpty()) {
+        if (!response.getEhrExtract().isEmpty()) {
             
             List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
             
-            final EHREXTRACT ehrExtract = ehrExtractList.get(0);
+            final EHREXTRACT ehrExtract = response.getEhrExtract().get(0);
             for (int i = 0; i < ehrExtract.getAllCompositions().size(); i++) {
                 log.debug("processing {} of {}",i+1, ehrExtract.getAllCompositions().size());
                 if (EHRUtil.retain(ehrExtract.getAllCompositions().get(i), careUnitHsaIds, log)) {
@@ -221,7 +223,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
             professionalType.setHealthcareProfessionalName(EHRUtil.getPartValue(professional.getName()));
             final HEALTHCAREPROFESSIONALROLE role = EHRUtil.firstItem(professional.getRole());
             if (role != null) {
-                final CVType cvType = EHRUtil.cvType(role.getProfession(), CVType.class);
+                final CVType cvType = EHRUtil.cvTypeFromCD(role.getProfession(), CVType.class);
                 professionalType.setHealthcareProfessionalRoleCode(cvType);
             }
         }

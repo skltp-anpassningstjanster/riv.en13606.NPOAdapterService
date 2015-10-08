@@ -20,7 +20,11 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.ST;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -50,4 +54,24 @@ public class AbstractMapperTest {
     }
 
 
+    @Test
+    public void continuation() {
+        AbstractMapper am = Mockito.mock(AbstractMapper.class, Mockito.CALLS_REAL_METHODS);
+        
+        RIV13606REQUESTEHREXTRACTResponseType response13606 = new RIV13606REQUESTEHREXTRACTResponseType();
+        response13606.setContinuationToken(new ST());
+        response13606.getContinuationToken().setValue("something");
+        assertTrue(am.continuation(response13606));
+    }
+    
+    @Test
+    public void noContinuation() {
+        AbstractMapper am = Mockito.mock(AbstractMapper.class, Mockito.CALLS_REAL_METHODS);
+        
+        RIV13606REQUESTEHREXTRACTResponseType response13606 = new RIV13606REQUESTEHREXTRACTResponseType();
+        response13606.setContinuationToken(new ST());
+        response13606.getContinuationToken().setValue("");
+        assertFalse(am.continuation(response13606));
+    }
+    
 }

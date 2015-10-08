@@ -92,8 +92,9 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb = new JaxbUtil(GetReferralOutcomeType.class, GetReferralOutcomeResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
 
-    private static final String EHR13606_DEF = "DEF";
+    private static final String EHR13606_DEF  = "DEF";
     private static final String EHR13606_TILL = "TILL";
+    private static final String EHR13606_PREL = "PREL";
     private static final String SAKNAS = "saknas";
 
     public ReferralOutcomeMapper() {
@@ -144,9 +145,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     public MuleMessage mapResponse(final MuleMessage message) throws MapperException {
         try {
             final RIV13606REQUESTEHREXTRACTResponseType ehrResponse = riv13606REQUESTEHREXTRACTResponseType(payloadAsXMLStreamReader(message));
-
             GetReferralOutcomeResponseType rivtaResponse = mapResponse(ehrResponse, message);
-
             message.setPayload(marshal(rivtaResponse));
             return message;
         } catch (Exception err) {
@@ -160,6 +159,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
      * @return GetReferralOutcomeResponseType response type
      */
     protected GetReferralOutcomeResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType ehrResponse, MuleMessage message) {
+        checkContinuation(log, ehrResponse);
         final List<EHREXTRACT> ehrExtractList = ehrResponse.getEhrExtract();
         GetReferralOutcomeResponseType responseType = mapEhrExtract(ehrExtractList, message);
         responseType.setResult(EHRUtil.resultType(message.getUniqueId(), ehrResponse.getResponseDetail(), ResultType.class));
@@ -195,13 +195,12 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                 final ReferralOutcomeType referralOutcome = new ReferralOutcomeType();
                 COMPOSITION vbe = getLinkedVbeFromUnd(und, vbes);
                 referralOutcome.setReferralOutcomeHeader(mapHeader(und, sharedHeaderExtract));
-                
-//              referralOutcome.getReferralOutcomeHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId()
-                
-                
-                
                 referralOutcome.setReferralOutcomeBody(mapBody(und, vbe, sharedHeaderExtract));
-                responseType.getReferralOutcome().add(referralOutcome);
+                if (referralOutcome.getReferralOutcomeBody() == null) {
+                    // do not process this result
+                } else {
+                    responseType.getReferralOutcome().add(referralOutcome);
+                }
             }
         }
         return responseType;
@@ -325,8 +324,15 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
 
-        // use the ehr values to build a referral outcome body
-        return buildBody(ehr13606values, vbe, sharedHeaderExtract);
+        if (EHR13606_PREL.equals(ehr13606values.get("und-und-ure-typ"))) {
+            log.error("undersöknings resultat svarstype (und-und-ure-typ) PREL is not permitted - not processing result");
+        } else if (interpretOutcomeType(ehr13606values.get("und-und-ure-typ")) == null) {
+            log.error("missing or unrecognised undersöknings resultat svarstype (und-und-ure-typ) {} - not processing result", ehr13606values.get("und-und-ure-typ"));
+        } else {
+            // use the ehr values to build a referral outcome body
+            return buildBody(ehr13606values, vbe, sharedHeaderExtract);
+        }
+        return null; // will be ignored
     }
 
     /*
@@ -359,6 +365,24 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
         //
 
         bodyType.getAct().add(new ActType());
+        
+        /*
+            <parts xsi:type="ELEMENT">
+              <meaning code="und-und-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
+                <displayName value="Åtgärdskod"/>
+              </meaning>
+              <value value="620" xsi:type="ST" />
+            </parts>
+            
+            ->
+            
+            <actCode>
+              <code>620</code>
+              <codeSystem>1.2.752.129.2.2.2.1</codeSystem>
+              <!-- optional -->
+              <displayName>Åtgärdskod</displayName> 
+            </actCode>
+         */
         if (ehr13606values.containsKey("und-und-uat-kod")) {
             bodyType.getAct().get(0).setActCode(new ActCodeType());
             bodyType.getAct().get(0).getActCode().setCode(ehr13606values.get("und-und-uat-kod"));
