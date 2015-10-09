@@ -327,6 +327,12 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
         for (LINK link : comp.getLinks()) {
             final RelatedAlertInformationType type = new RelatedAlertInformationType();
             type.setTypeOfAlertInformationRelationship(EHRUtil.cvTypeFromCD(link.getRole(), CVType.class));
+            switch (type.getTypeOfAlertInformationRelationship().getCode()) {
+            case "ers" : type.getTypeOfAlertInformationRelationship().setDisplayName("Ersätter"); break;
+            case "uto" : type.getTypeOfAlertInformationRelationship().setDisplayName("Utökar"); break;
+            default : log.error("Unrecognised role code {} - unable to set displayName", 
+                    type.getTypeOfAlertInformationRelationship().getCode()); break;            
+            }
             for (II id : link.getTargetId()) {
                 type.getDocumentId().add(id.getExtension());
             }
