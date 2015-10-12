@@ -187,6 +187,13 @@ public class ReferralOutcomeMapperTest extends MapperTest {
         assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
     }
 
+    @Test
+    public void mapSvarsTypeUnrecognised() {
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_6);
+        assertFalse(responseXml.contains("referralOutcomeBody"));
+        assertTrue(responseXml.contains("<GetReferralOutcomeResponse"));
+    }
+
 }
 
 
