@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -195,7 +194,12 @@ public class CareContactsMapperTest extends MapperTest {
             occurrences++;
         }
         assertEquals(38,occurrences);
-        
+        assertTrue(responseXml.contains("<GetCareContactsResponse"));
+    }
+    
+    @Test
+    public void continuation() {
+        String responseXml = getRivtaXml(getCareContactsMapper(), Util.CARECONTACTS_TEST_FILE_3, true);
         assertTrue(responseXml.contains("<GetCareContactsResponse"));
     }
     
