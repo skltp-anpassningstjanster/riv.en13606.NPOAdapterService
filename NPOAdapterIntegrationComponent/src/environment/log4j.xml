@@ -104,9 +104,9 @@
     <level value="INFO" />
   </logger>
 
-     <logger name="se.skl.skltpservices.npoadapter">
-        <level value="ERROR"/>
-    </logger>
+  <logger name="se.skl.skltpservices.npoadapter">
+    <level value="WARN"/>
+  </logger>
 
     <!-- Level DEBUG: Log http headers transfered during a request/response -->
     <!--

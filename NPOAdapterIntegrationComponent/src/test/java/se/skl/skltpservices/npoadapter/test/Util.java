@@ -54,6 +54,7 @@ public class Util {
     public static final String REFERRALOUTCOME_TEST_FILE_3   = "/data/Underskning_SSEN13606-2.1.1-SERVICE-332.xml";
     public static final String REFERRALOUTCOME_TEST_FILE_4   = "/data/Underskning_PREL.xml";
     public static final String REFERRALOUTCOME_TEST_FILE_5   = "/data/Underskning_INVALID.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_6   = "/data/Underskning_unrecognised_type.xml";
     
     //
     public static EHREXTRACT loadEhrTestData(final String fileName) throws JAXBException {

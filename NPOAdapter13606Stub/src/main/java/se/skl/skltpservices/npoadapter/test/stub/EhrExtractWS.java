@@ -207,8 +207,10 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         		responseType.getEhrExtract().add(responseCache.get(vkoKey));
         		log.info("Loaded dyanmictest data: " + vkoKey);
         	} else {
-        		responseType.getEhrExtract().add(getTestData(Util.CARECONTACS_TEST_FILE));
+        		responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE));
         	}
+            responseType.setContinuationToken(new ST());
+            responseType.getContinuationToken().setValue("stub");
         	break;
         case VOO:
         	log.info("Received voo request");
@@ -356,21 +358,27 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
     }
         
     protected void resetCache() throws Exception {
+        log.info("reset testdata cache");
+        responseCache.clear();
+        
     	final String path = SpringPropertiesUtil.getProperty("EHR_TESTDATA_PATH");
-    	log.info("Reset testdata cache, load from: " + path);
-    	responseCache.clear();
-    	Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				try {
-					responseCache.put(file.getFileName().toString(), Util.loadDynamicTestData(file));
-					log.info("Cached file: " + file.getFileName().toString());
-				} catch (JAXBException err) {
-					log.error("File: " + file.toString(), err);
-				}
-				return super.visitFile(file, attrs);
-			}
-		});
+    	if (StringUtils.isBlank(path)) {
+    	    log.warn("No value for property EHR_TESTDATA_PATH");
+    	} else {
+        	Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
+    			@Override
+    			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    				try {
+    					responseCache.put(file.getFileName().toString(), Util.loadDynamicTestData(file));
+    					log.info("Cached file: " + file.getFileName().toString());
+    				} catch (JAXBException err) {
+    					log.error("File: " + file.toString(), err);
+    				}
+    				return super.visitFile(file, attrs);
+    			}
+    		});
+            log.info("Finished loading testdata cache from: " + path);
+    	}
     }
 
     //

@@ -62,7 +62,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
         switch (infoType) {
             case "vko":
                 log.info("Received vko request");
-                return Util.loadEhrTestData(Util.CARECONTACS_TEST_FILE);
+                return Util.loadEhrTestData(Util.CARECONTACTS_TEST_FILE);
             case "voo":
                 log.info("Received voo request");
                 return Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE);

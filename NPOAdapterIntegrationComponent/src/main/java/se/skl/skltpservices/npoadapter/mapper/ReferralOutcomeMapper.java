@@ -324,10 +324,13 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
             }
         }
 
+        
         if (EHR13606_PREL.equals(ehr13606values.get("und-und-ure-typ"))) {
-            log.error("undersöknings resultat svarstype (und-und-ure-typ) PREL is not permitted - not processing result");
+            log.error("undersöknings resultat svarstype (und-und-ure-typ) PREL is not permitted - ignoring 13606 response");
+        } else if (ehr13606values.get("und-und-ure-typ") == null) {    
+            log.error("missing undersöknings resultat svarstype (und-und-ure-typ) - ignoring 13606 response");
         } else if (interpretOutcomeType(ehr13606values.get("und-und-ure-typ")) == null) {
-            log.error("missing or unrecognised undersöknings resultat svarstype (und-und-ure-typ) {} - not processing result", ehr13606values.get("und-und-ure-typ"));
+            log.error("unrecognised undersöknings resultat svarstype (und-und-ure-typ) {} - ignoring 13606 response", ehr13606values.get("und-und-ure-typ"));
         } else {
             // use the ehr values to build a referral outcome body
             return buildBody(ehr13606values, vbe, sharedHeaderExtract);
@@ -526,7 +529,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
                         } else if (value instanceof TS) {
                             text = ((TS) value).getValue();
                         } else {
-                            log.error("Code " + code + " has unexpected value type " + value.getClass().getCanonicalName());
+                            log.error("Code " + code + " - expected value type ST or TS, found value type " + value.getClass().getCanonicalName());
                         }
 
                         if (StringUtils.isNotBlank(text)) {

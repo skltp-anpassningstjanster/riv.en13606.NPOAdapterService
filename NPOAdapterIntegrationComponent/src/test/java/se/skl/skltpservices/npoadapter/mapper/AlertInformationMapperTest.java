@@ -24,26 +24,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +52,6 @@ import se.rivta.en13606.ehrextract.v11.ELEMENT;
 import se.rivta.en13606.ehrextract.v11.ENTRY;
 import se.rivta.en13606.ehrextract.v11.IVLTS;
 import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
-import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.test.Util;
 
@@ -137,8 +127,12 @@ public class AlertInformationMapperTest extends MapperTest {
         assertFalse(response.getAlertInformation().isEmpty());
         assertNotNull(response.getAlertInformation().get(0).getAlertInformationBody());
         assertNotNull(response.getAlertInformation().get(0).getAlertInformationHeader());
-        assertEquals("Givare", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
-        assertEquals("Enhet", response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+        assertEquals("Givare"  , response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
+        assertEquals("Enhet"   , response.getAlertInformation().get(0).getAlertInformationHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
+        assertEquals("uto"     , response.getAlertInformation().get(7).getAlertInformationBody().getRelatedAlertInformation().get(0).getTypeOfAlertInformationRelationship().getCode());
+        assertEquals("Utökar"  , response.getAlertInformation().get(7).getAlertInformationBody().getRelatedAlertInformation().get(0).getTypeOfAlertInformationRelationship().getDisplayName());
+        assertEquals("ers"     , response.getAlertInformation().get(9).getAlertInformationBody().getRelatedAlertInformation().get(0).getTypeOfAlertInformationRelationship().getCode());
+        assertEquals("Ersätter", response.getAlertInformation().get(9).getAlertInformationBody().getRelatedAlertInformation().get(0).getTypeOfAlertInformationRelationship().getDisplayName());
     }
     
     @Test
