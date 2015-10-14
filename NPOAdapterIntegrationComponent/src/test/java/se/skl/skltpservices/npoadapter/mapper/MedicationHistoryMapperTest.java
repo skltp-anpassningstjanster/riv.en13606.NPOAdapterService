@@ -488,33 +488,6 @@ public class MedicationHistoryMapperTest extends MapperTest {
     }
 
     
-    // SERVICE-369 - remove if decision to process all lkf
-    @Test
-    public void checkLkoWithTwoLkfOnlyProcessOneLkf() {
-        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
-        assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331364_20020308000315"));
-        
-        // lko
-        int occurrences = 0;
-        Pattern p = Pattern.compile("SE2321000081-10331364_20020308000315");
-        Matcher m = p.matcher(responseXml);
-        while (m.find()) {
-            occurrences++;
-        }
-        assertEquals(1,occurrences);
-
-        // lkf
-        occurrences = 0;
-        p = Pattern.compile("<ns2:prescriptionId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>10331364_20020308000315_1_20020308100695_19808");
-        m = p.matcher(responseXml);
-        while (m.find()) {
-            occurrences++;
-        }
-        assertEquals(1,occurrences);
-    }
-    
-    
-    @Ignore // SERVICE-369 - activate if decision is to process all lkf
     @Test
     public void checkLkoWithTwoLkf() {
         String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);

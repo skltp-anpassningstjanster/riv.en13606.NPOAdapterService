@@ -245,7 +245,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         return responseType;
     }
     
-    @SuppressWarnings("unused")
     protected GetMedicationHistoryResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
         final GetMedicationHistoryResponseType responseType = new GetMedicationHistoryResponseType();
         if (!ehrExtractList.isEmpty()) {
@@ -264,15 +263,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 if (lkfsForThisLko.isEmpty()) {
                     responseType.getMedicationMedicalRecord().add(getMedicationMedicalRecord(lko, null,  ehrExtract));
                 } else {
-                    // SERVICE-369
-                    // Preserve current processing - only the first lkf is processed
-                    // Once the decision is made to process all, reinstate the for loop and delete the first-only processing                    
-                    if (true) {
-                        responseType.getMedicationMedicalRecord().add(getMedicationMedicalRecord(lko, lkfsForThisLko.get(0), ehrExtract));
-                    } else {
-                        for (COMPOSITION lkf : lkfsForThisLko) {
-                            responseType.getMedicationMedicalRecord().add(getMedicationMedicalRecord(lko, lkf, ehrExtract));
-                        }
+                    for (COMPOSITION lkf : lkfsForThisLko) {
+                        responseType.getMedicationMedicalRecord().add(getMedicationMedicalRecord(lko, lkf, ehrExtract));
                     }
                 }
         	}
