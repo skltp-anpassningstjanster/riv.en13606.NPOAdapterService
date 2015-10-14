@@ -705,14 +705,18 @@ public final class EHRUtil {
                 log.debug("There no care unit hsa ids in composition");
                 return false;
             } else {
-                if (log.isDebugEnabled()) {
-                    String id = "";
+                log.debug("compositionCareUnitHsaId:{}", compositionCareUnitHsaId);
+                if (careUnitHsaIds.contains(compositionCareUnitHsaId)) { // uppercase
                     if (composition13606.getRcId() != null) {
-                        id = composition13606.getRcId().getExtension();
+                        log.debug("composition with id {} is contained in the incoming list of careUnitHsaId", composition13606.getRcId().getExtension());
                     }
-                    log.debug("composition {} contains care unit {}", id, compositionCareUnitHsaId );
+                    return true;
+                } else {
+                    if (composition13606.getRcId() != null) {
+                        log.debug("composition with id {} is not contained in the incoming list of careUnitHsaId", composition13606.getRcId().getExtension());
+                    }
+                    return false;
                 }
-                return careUnitHsaIds.contains(compositionCareUnitHsaId); // uppercase
             }
         }
     }
