@@ -376,15 +376,15 @@ public class MedicationHistoryMapperTest extends MapperTest {
         TS lowTS = new TS();
         lowTS.setValue("20150901123059");
         TS highTS = new TS();
-        highTS.setValue("20151001123059");
+        highTS.setValue("20150914123059");
         
         dosageIvlts.setLow(lowTS);
         dosageIvlts.setHigh(highTS);
         
         PQIntervalType treatmentInterval = mapper.getTreatmentInterval(dosageIvlts);
         
-        assertEquals(30, treatmentInterval.getLow().doubleValue(), 0);
-        assertEquals(30, treatmentInterval.getHigh().doubleValue(), 0);
+        assertEquals(14, treatmentInterval.getLow().doubleValue(), 0);
+        assertEquals(14, treatmentInterval.getHigh().doubleValue(), 0);
         assertTrue(treatmentInterval.getUnit().equals("d"));
     }
 
