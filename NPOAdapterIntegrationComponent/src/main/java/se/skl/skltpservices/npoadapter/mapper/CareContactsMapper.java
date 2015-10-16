@@ -105,8 +105,6 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      * @return the corresponding riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType response type
      */
     protected GetCareContactsResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType response, MuleMessage message) {
-        checkContinuation(log, response);
-
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
 
         if (!response.getEhrExtract().isEmpty()) {

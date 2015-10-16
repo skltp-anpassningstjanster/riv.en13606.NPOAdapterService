@@ -834,6 +834,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                     if (!lowDate.after(highDate)) {
                         // let joda time do the hard work
                         int days = Days.daysBetween(new DateTime(lowDate), new DateTime(highDate)).getDays();
+                        days = days + 1; // SERVICE-334
                         treatmentInterval = new PQIntervalType();
                         treatmentInterval.setLow(new Double(days));
                         treatmentInterval.setHigh(treatmentInterval.getLow());

@@ -258,8 +258,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
         assertEquals(1, drug.getDosage().size());
         final DosageType dos = drug.getDosage().get(0);
         assertEquals(Boolean.TRUE, dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
-        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
-        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
+        assertEquals((Double)11d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
+        assertEquals((Double)11d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
         assertEquals("d", dos.getLengthOfTreatment().getTreatmentInterval().getUnit());
         assertEquals("potta", dos.getDosageInstruction());
         assertEquals("2+2+2+2", dos.getShortNotation());
@@ -376,15 +376,15 @@ public class MedicationHistoryMapperTest extends MapperTest {
         TS lowTS = new TS();
         lowTS.setValue("20150901123059");
         TS highTS = new TS();
-        highTS.setValue("20151001123059");
+        highTS.setValue("20150914123059");
         
         dosageIvlts.setLow(lowTS);
         dosageIvlts.setHigh(highTS);
         
         PQIntervalType treatmentInterval = mapper.getTreatmentInterval(dosageIvlts);
         
-        assertEquals(30, treatmentInterval.getLow().doubleValue(), 0);
-        assertEquals(30, treatmentInterval.getHigh().doubleValue(), 0);
+        assertEquals(14, treatmentInterval.getLow().doubleValue(), 0);
+        assertEquals(14, treatmentInterval.getHigh().doubleValue(), 0);
         assertTrue(treatmentInterval.getUnit().equals("d"));
     }
 
@@ -403,8 +403,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
         
         PQIntervalType treatmentInterval = mapper.getTreatmentInterval(dosageIvlts);
         
-        assertEquals(0, treatmentInterval.getLow() .doubleValue(), 0);
-        assertEquals(0, treatmentInterval.getHigh().doubleValue(), 0);
+        assertEquals(1, treatmentInterval.getLow() .doubleValue(), 0);
+        assertEquals(1, treatmentInterval.getHigh().doubleValue(), 0);
         assertTrue(treatmentInterval.getUnit().equals("d"));
     }
 
