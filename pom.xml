@@ -13,7 +13,7 @@
 
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
-    <version>1.0.0-RC31-SNAPSHOT</version>
+    <version>1.0.0-RC32-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
