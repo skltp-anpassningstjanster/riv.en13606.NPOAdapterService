@@ -284,20 +284,12 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         final PatientSummaryHeaderType patientSummaryHeader = 
                 (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, false, false, false);
         
-        //JIRA: SERVICE-340
         final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
-        patientSummaryHeader.setAccountableHealthcareProfessional(new HealthcareProfessionalType());
         patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareGiverHSAId(prescriber.getHealthcareProfessionalCareGiverHSAId());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalCareUnitHSAId(prescriber.getHealthcareProfessionalCareUnitHSAId());
-        
-        if (false) {
-        // SERVICE-340 - these fields should be blank    
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalHSAId(prescriber.getHealthcareProfessionalHSAId());
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalName(prescriber.getHealthcareProfessionalName());
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
         patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
-        }
 
         // SERVICE-368
         prescriber.setHealthcareProfessionalCareGiverHSAId(null);
