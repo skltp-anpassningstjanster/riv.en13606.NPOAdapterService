@@ -20,26 +20,50 @@
 package se.skl.skltpservices.npoadapter.mapper;
 
 
+import java.util.List;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.stream.XMLStreamReader;
+
 import org.mule.api.MuleMessage;
 import org.mule.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
-import riv.clinicalprocess.logistics.logistics._2.*;
+import riv.clinicalprocess.logistics.logistics._2.CVType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactBodyType;
+import riv.clinicalprocess.logistics.logistics._2.CareContactType;
+import riv.clinicalprocess.logistics.logistics._2.HealthcareProfessionalType;
+import riv.clinicalprocess.logistics.logistics._2.OrgUnitType;
+import riv.clinicalprocess.logistics.logistics._2.PatientSummaryHeaderType;
+import riv.clinicalprocess.logistics.logistics._2.PersonIdType;
+import riv.clinicalprocess.logistics.logistics._2.TimePeriodType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.ObjectFactory;
-import se.rivta.en13606.ehrextract.v11.*;
+import se.rivta.en13606.ehrextract.v11.AD;
+import se.rivta.en13606.ehrextract.v11.ADXP;
+import se.rivta.en13606.ehrextract.v11.CD;
+import se.rivta.en13606.ehrextract.v11.COMPOSITION;
+import se.rivta.en13606.ehrextract.v11.CONTENT;
+import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
+import se.rivta.en13606.ehrextract.v11.ELEMENT;
+import se.rivta.en13606.ehrextract.v11.ENTRY;
+import se.rivta.en13606.ehrextract.v11.FUNCTIONALROLE;
+import se.rivta.en13606.ehrextract.v11.HEALTHCAREPROFESSIONALROLE;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDENTITY;
+import se.rivta.en13606.ehrextract.v11.IDENTIFIEDHEALTHCAREPROFESSIONAL;
+import se.rivta.en13606.ehrextract.v11.ITEM;
+import se.rivta.en13606.ehrextract.v11.ORGANISATION;
+import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
+import se.rivta.en13606.ehrextract.v11.TEL;
+import se.rivta.en13606.ehrextract.v11.TELEMAIL;
+import se.rivta.en13606.ehrextract.v11.TELPHONE;
 import se.skl.skltpservices.npoadapter.mapper.error.Ehr13606AdapterError;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.mapper.util.EHRUtil;
 import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.stream.XMLStreamReader;
-
-import java.util.List;
 
 /**
  * Maps from EHR_EXTRACT (vko v1.1) to RIV GetCareContactsResponseType v2.0. <p>
@@ -106,6 +130,27 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
      */
     protected GetCareContactsResponseType mapResponse(final RIV13606REQUESTEHREXTRACTResponseType response, MuleMessage message) {
         final GetCareContactsResponseType responseType = new GetCareContactsResponseType();
+
+        // Contracts have a result type for showing errors.
+        // But not GetCareContacts.
+        if (response.getResponseDetail() != null) {
+            if (!response.getResponseDetail().isEmpty()) {
+                if (response.getResponseDetail().get(0).getTypeCode() != null) {
+                    if ("E".equals(response.getResponseDetail().get(0).getTypeCode().value())) {
+                        String errormessage = "Error received from source system (producer)";
+                        if (response.getResponseDetail().get(0).getText() != null) {
+                            errormessage = response.getResponseDetail().get(0).getText().getValue();
+                        }
+                        throw new RuntimeException(errormessage);
+                    } else if ("W".equals(response.getResponseDetail().get(0).getTypeCode().value())) {
+                        log.warn("Warning received from source system (producer");
+                        if (response.getResponseDetail().get(0).getText() != null) {
+                            log.warn(response.getResponseDetail().get(0).getText().getValue());
+                        }
+                    }
+                }
+            }
+        }
 
         if (!response.getEhrExtract().isEmpty()) {
             

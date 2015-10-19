@@ -169,15 +169,18 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     protected GetReferralOutcomeResponseType mapEhrExtract(List<EHREXTRACT> ehrExtractList, MuleMessage message) {
 
         GetReferralOutcomeResponseType responseType = new GetReferralOutcomeResponseType();
-        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
-
+        
         if (ehrExtractList == null || ehrExtractList.isEmpty()) {
-            throw new RuntimeException("ehrExtractList is null or empty - malformed 13606 message");
+            return responseType;
         }
-        if (ehrExtractList.size() != 1) {
+        
+        if (ehrExtractList.size() > 1) {
             log.warn("ehrExtractList size {} - first EHREXTRACT will be processed, others will be ignored - is this a malformed 13606 message?",
                     ehrExtractList.size());
         }
+        
+        List<String> careUnitHsaIds = EHRUtil.retrieveCareUnitHsaIdsInvocationProperties(message, log);
+
 
         EHREXTRACT ehrExtract = ehrExtractList.get(0);
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);

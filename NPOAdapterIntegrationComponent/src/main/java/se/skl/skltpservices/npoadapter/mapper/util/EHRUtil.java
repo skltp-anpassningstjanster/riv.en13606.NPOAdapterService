@@ -35,7 +35,6 @@ import org.apache.commons.lang.StringUtils;
 import org.mule.api.MuleMessage;
 import org.slf4j.Logger;
 
-import riv.clinicalprocess.healthcond.description._2.CVType;
 import se.rivta.en13606.ehrextract.v11.AD;
 import se.rivta.en13606.ehrextract.v11.ADXP;
 import se.rivta.en13606.ehrextract.v11.ANY;
@@ -255,7 +254,10 @@ public final class EHRUtil {
         return XMLBeanMapper.getInstance().map(ii, type);
     }
 
-    //
+    /**
+     * @param datePeriod containing start and end dates as strings - no validation is performed on these parameters.
+     * @return new IVLTS
+     */
     protected static IVLTS IVLTSType(final DatePeriod datePeriod) {
         if (datePeriod == null) {
             return null;

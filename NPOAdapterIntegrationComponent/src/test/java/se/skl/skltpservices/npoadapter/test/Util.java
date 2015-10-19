@@ -21,6 +21,7 @@ package se.skl.skltpservices.npoadapter.test;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Path;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -73,6 +74,15 @@ public class Util {
         return ehrextract;
     }
 
+    public static EHREXTRACT loadDynamicTestData(final Path file) throws JAXBException {
+        final JAXBContext ctx = JAXBContext.newInstance("se.rivta.en13606.ehrextract.v11");
+        final Unmarshaller unmarshaller = ctx.createUnmarshaller();
+        @SuppressWarnings("unchecked")
+        final JAXBElement<EHREXTRACT> root = (JAXBElement<EHREXTRACT>) unmarshaller.unmarshal(file.toFile());
+        final EHREXTRACT ehr = root.getValue();
+        ehr.setRmId("EN 13606");
+        return ehr;
+    }
 
     public static <T> void dump(final T jaxbObject) throws JAXBException {
         dump(jaxbObject, new OutputStreamWriter(System.out));
