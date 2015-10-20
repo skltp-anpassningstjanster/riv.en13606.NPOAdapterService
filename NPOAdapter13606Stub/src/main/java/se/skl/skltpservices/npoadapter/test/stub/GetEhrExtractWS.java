@@ -62,7 +62,7 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
         switch (infoType) {
             case "vko":
                 log.info("Received vko request");
-                return Util.loadEhrTestData(Util.CARECONTACTS_TEST_FILE);
+                return Util.loadEhrTestData(Util.CARECONTACTS_TEST_FILE_1);
             case "voo":
                 log.info("Received voo request");
                 return Util.loadEhrTestData(Util.CAREDOCUMENTATION_TEST_FILE);
@@ -71,16 +71,16 @@ public class GetEhrExtractWS implements GetEhrExtractResponderInterface {
             	return Util.loadEhrTestData(Util.DIAGNOSIS_TEST_FILE);
             case "und-kkm-kli":
             	log.info("Received und-kkm-kli request");
-            	return Util.loadEhrTestData(Util.LAB_TEST_FILE);
+            	return Util.loadEhrTestData(Util.LAB_TEST_FILE_1);
             case "upp":
             	log.info("Received upp request");
             	return Util.loadEhrTestData(Util.ALERT_TEST_FILE);
             case "lkm-ord":
                 log.info("Received lkm request");
-                return Util.loadEhrTestData(Util.MEDICALHISTORY_TEST_FILE);
+                return Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_1);
             case "und-kon":
                 log.info("Received und-kon request");
-                return Util.loadEhrTestData(Util.REFERRALOUTCOME_TEST_FILE);
+                return Util.loadEhrTestData(Util.REFERRALOUTCOME_TEST_FILE_1);
             case "und-bdi":
                 log.info("Received und-bdi request");
                 return Util.loadEhrTestData(Util.IMAGINGOUTCOME_TEST_FILE);

@@ -56,31 +56,34 @@ import se.skl.skltpservices.npoadapter.util.SpringPropertiesUtil;
 
 /*
  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
- <soap:Body>
- <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
- <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
- <meanings codeSystem="1.2.752.129.2.2.2.1" code="dia"/>
- <parameters>
- <name value="hsa_id"/>
- <value value="something"/>
- </parameters>
- <parameters>
- <name value="transaction_id"/>
- <value value="something else"/>
- </parameters>
- <parameters>
- <name value="version"/>
- <value value="1.1"/>
- </parameters>
- </RIV13606REQUEST_EHR_EXTRACT_request>
- </soap:Body>
+  <soap:Body>
+   <RIV13606REQUEST_EHR_EXTRACT_request xmlns="urn:riv13606:v1.1">
+    <subject_of_care_id extension="191212121212" root="1.2.752.129.2.1.3"/>
+    <meanings codeSystem="1.2.752.129.2.2.2.1" code="dia"/>
+    <parameters>
+     <name value="hsa_id"/>
+     <value value="something"/>
+    </parameters>
+    <parameters>
+     <name value="transaction_id"/>
+     <value value="something else"/>
+    </parameters>
+    <parameters>
+     <name value="version"/>
+     <value value="1.1"/>
+    </parameters>
+   </RIV13606REQUEST_EHR_EXTRACT_request>
+  </soap:Body>
  </soap:Envelope>"
  */
 
 /**
  * Test stub returns fixed responses for given parameters.
  */
-@WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service", endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType", portName = "RIV13606REQUEST_EHR_EXTRACT_Port", targetNamespace = "urn:riv13606:v1.1")
+@WebService(serviceName = "RIV13606REQUEST_EHR_EXTRACT_Service", 
+      endpointInterface = "se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTPortType", 
+               portName = "RIV13606REQUEST_EHR_EXTRACT_Port", 
+        targetNamespace = "urn:riv13606:v1.1")
 public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
     private static final Logger log = LoggerFactory.getLogger(EhrExtractWS.class);
@@ -224,47 +227,104 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
 
 
             final RIV13606REQUESTEHREXTRACTResponseType responseType = new RIV13606REQUESTEHREXTRACTResponseType();
-            switch (request.getMeanings().get(0).getCode()) {
+            switch(request.getMeanings().get(0).getCode()) {
             case VKO:
-                log.info("Received VKO Request");
-                responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE_1));
+                log.info("Received vko request");
+                final String vkoKey = cacheKey(request, VKO);
+                log.info("Query cache for: " + vkoKey);
+                if(responseCache.containsKey(vkoKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(vkoKey));
+                    log.info("Loaded dyanmictest data: " + vkoKey);
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE_1));
+                }
                 responseType.setContinuationToken(new ST());
-                responseType.getContinuationToken().setValue("integration");
+                responseType.getContinuationToken().setValue("stub");
                 break;
             case VOO:
-                log.info("Received VOO Request");
-                responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
-                break;
-            case DIA:
-                log.info("Received DIA Request");
-                responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
-                break;
-            case UND_KKM_KLI:
-                log.info("Received UND-KKM-KLI Request");
-                responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE_1));
-                break;
-            case UPP:
-                log.info("Received UPP Request");
-                responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));
-                break;
-            case LKM:
-                log.info("Received LKM Request");
-                responseType.getEhrExtract().add(getTestData(Util.MEDICATIONHISTORY_TEST_FILE_1));
-                break;
-            case UND_KON:
-                log.info("Received UND-KON Request");
-                responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE_1));
-                break;
-            case UND_BDI:
-                if (PATIENT_ID_EXTRA_LARGE.equals(subjectOfCareId)) {
-                    // 1MB response - performance test case TP2
-                    log.info("Received UND-BDI Request extra large");
-                    responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+                log.info("Received voo request");
+                final String vooKey = cacheKey(request, VOO);
+                log.info("Query cache for: " + vooKey);
+                if(responseCache.containsKey(vooKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(vooKey));
+                    log.info("Loaded dynamictest data: " + vooKey);
                 } else {
-                    log.info("Received UND-BDI Request");
-                    responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+                    responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
                 }
                 break;
+            case DIA:
+                log.info("Received dia request");
+                final String diaKey = cacheKey(request, DIA);
+                log.info("Query cache for: " + diaKey);
+                if(responseCache.containsKey(diaKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(diaKey));
+                    log.info("Loaded dynamictest data: " + diaKey);
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
+                }
+                break;
+            case UND_KKM_KLI:
+                log.info("Received und-kkm-kli request");
+                final String undKkmKey = cacheKey(request, UND_KKM_KLI);
+                log.info("Query cache for: " + undKkmKey);
+                if(responseCache.containsKey(undKkmKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(undKkmKey));
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE_1));
+                }
+                break;
+            case UPP:
+                log.info("Received upp request");
+                final String uppKey = cacheKey(request, UPP);
+                log.info("Query cache for: " + uppKey);
+                if(responseCache.containsKey(uppKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(uppKey));
+                    log.info("Loaded dynamictest data: " + uppKey);
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));                
+                }
+                break;
+            case LKM:
+                log.info("Received lkm request");
+                final String lkmKey = cacheKey(request, LKM);
+                log.info("Query cache for: " + lkmKey);
+                if(responseCache.containsKey(lkmKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(lkmKey));
+                    log.info("Loaded dynamictest data: " + lkmKey);
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.MEDICATIONHISTORY_TEST_FILE_1));
+                }
+                break;
+            case UND_KON:
+                log.info("Received und-kon request");
+                final String undKonKey = cacheKey(request, UND_KON);
+                log.info("Query cache for: " + undKonKey);
+                if(responseCache.containsKey(undKonKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(undKonKey));
+                    log.info("Loaded dynamictest data: " + undKonKey);
+                } else {
+                    responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE_1));
+                }
+                break;
+            case UND_BDI:
+                log.info("Received und-bdi request");
+                final String undBdiKey = cacheKey(request, UND_BDI);
+                log.info("Query cache for: " + undBdiKey);
+                if(responseCache.containsKey(undBdiKey)) {
+                    responseType.getEhrExtract().add(responseCache.get(undBdiKey));
+                    log.info("Loaded dynamictest data: " + undBdiKey);
+                } else {
+                    if (PATIENT_ID_EXTRA_LARGE.equals(subjectOfCareId)) {
+                        // 1MB response - performance test case TP2
+                        log.info("Received UND-BDI Request extra large");
+                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+                    } else {
+                        log.info("Received UND-BDI Request");
+                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+                    }
+                }
+                break;
+                
             default:
                 log.error("Received unexpected request " + request.getMeanings().get(0).getCode());
                 return createResponseWithCodeAndMessage(ResponseDetailTypeCodes.E, NOT_IMPLEMENTED_YET_TEXT);
