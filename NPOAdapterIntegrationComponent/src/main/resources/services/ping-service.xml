@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mule
+        xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+    <!-- used by mule probe - return http 200 OK -->
+
+    <flow name="ping">
+        <inbound-endpoint address="${IN_ENDPOINT_PING}" connector-ref="soitoolkit-http-connector"
+                          exchange-pattern="request-response"
+                          transformer-refs="objToStr logReqIn"
+                          responseTransformer-refs="objToStr logRespOut" />
+        <logger level="INFO" message="ping, HTTP Request" />
+        <expression-transformer>
+            <return-argument evaluator="string"
+                             expression="OK" />
+        </expression-transformer>
+    </flow>
+</mule>

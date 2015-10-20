@@ -139,7 +139,6 @@ public class MedicationHistoryMapperTest extends MapperTest {
         }
     }
     
-    @SuppressWarnings("unused")
     @Test
     public void testHeader() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
@@ -152,19 +151,10 @@ public class MedicationHistoryMapperTest extends MapperTest {
     	assertEquals("20150818103101"     , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getAuthorTime());
         assertEquals("SE2321000230-1016"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareGiverHSAId());
         assertEquals("SE2321000230-1019"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalCareUnitHSAId());
-
-        // these fields need to be blank according to SERVICE-340
-        if (true) {
-            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
-            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName());
-            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode());
-            assertNull(                         rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit());
-        } else {
-        	assertEquals("SE2321000230-1005"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
-        	assertEquals("Kerstin Pascal Joha", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName().substring(0, "Kerstin Pascal Joha".length()));
-        	assertEquals("Läkare"             , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode().getDisplayName());
-        	assertEquals("Kirurgkliniken S-by", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit().getOrgUnitName().substring(0,"Kirurgkliniken S-by".length()));
-        }
+    	assertEquals("SE2321000230-1005"  , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+    	assertEquals("Kerstin Pascal Joha", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalName().substring(0, "Kerstin Pascal Joha".length()));
+    	assertEquals("Läkare"             , rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode().getDisplayName());
+    	assertEquals("Kirurgkliniken S-by", rec.getMedicationMedicalRecordHeader().getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit().getOrgUnitName().substring(0,"Kirurgkliniken S-by".length()));
     }
     
     @Test
@@ -185,7 +175,7 @@ public class MedicationHistoryMapperTest extends MapperTest {
     }
     
     @Test
-    public void testPrescriber() {
+    public void testPrescriberInBody() {
     	final MedicationMedicalRecordType rec = records.get(DOC_ID_4);
     	final HealthcareProfessionalType hp = rec.getMedicationMedicalRecordBody().getMedicationPrescription().getPrescriber();
     	assertEquals("20150818103102"   , hp.getAuthorTime());

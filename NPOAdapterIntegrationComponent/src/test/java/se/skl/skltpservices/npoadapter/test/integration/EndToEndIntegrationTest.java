@@ -74,6 +74,7 @@ import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDi
 import riv.clinicalprocess.logistics.logistics.getcarecontacts._2.rivtabp21.GetCareContactsResponderInterface;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsResponseType;
 import riv.clinicalprocess.logistics.logistics.getcarecontactsresponder._2.GetCareContactsType;
+import se.skl.skltpservices.npoadapter.test.stub.EhrExtractWS;
 
 /**
  * Created by Peter on 2014-08-14.
@@ -232,7 +233,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
     @Test
     public void GetCareContactsNotFoundTest() {
         GetCareContactsType req = IntegrationTestDataUtil.createGetCareContactsType(IntegrationTestDataUtil.NO_TRIGGER);
-        req.getPatientId().setId("200112121212");
+        req.getPatientId().setId(EhrExtractWS.PATIENT_ID_NOT_FOUND);
         GetCareContactsResponseType resp = getCareContactsServices.getCareContacts(LOGICAL_ADDRESS_VS_1, req);
         assertTrue(resp.getCareContact().isEmpty());
     }
