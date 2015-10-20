@@ -273,7 +273,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         return responseType;
     }
         
-    @SuppressWarnings("unused")
     private MedicationMedicalRecordType getMedicationMedicalRecord(COMPOSITION lko, COMPOSITION lkf, EHREXTRACT ehrExtract) {
 
         final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
@@ -283,22 +282,11 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         final SharedHeaderExtract sharedHeaderExtract = extractInformation(ehrExtract);
         final PatientSummaryHeaderType patientSummaryHeader = 
                 (PatientSummaryHeaderType)EHRUtil.patientSummaryHeader(lko, sharedHeaderExtract, "not used", PatientSummaryHeaderType.class, false, false, false);
-        
-        final HealthcareProfessionalType prescriber = patientSummaryHeader.getAccountableHealthcareProfessional();
-        patientSummaryHeader.getAccountableHealthcareProfessional().setAuthorTime(prescriber.getAuthorTime());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalHSAId(prescriber.getHealthcareProfessionalHSAId());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalName(prescriber.getHealthcareProfessionalName());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalRoleCode(prescriber.getHealthcareProfessionalRoleCode());
-        patientSummaryHeader.getAccountableHealthcareProfessional().setHealthcareProfessionalOrgUnit(prescriber.getHealthcareProfessionalOrgUnit());
 
-        // SERVICE-368
-        prescriber.setHealthcareProfessionalCareGiverHSAId(null);
-        prescriber.setHealthcareProfessionalCareUnitHSAId(null);
         
         //Apply specific rules to header for this TK
         patientSummaryHeader.setLegalAuthenticator(null); 
-        //careContent found in lkm-ord -> links, to keep iterations down set this value when mapping body
-        
+
         // --- header - end
 
         
@@ -342,6 +330,18 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                 //Continue build body
                 //Forskrivning // Ordination
                 final MedicationPrescriptionType prescription = new MedicationPrescriptionType();
+                // prescriber is part of the body
+                final HealthcareProfessionalType prescriber = new HealthcareProfessionalType();
+                prescriber.setAuthorTime(patientSummaryHeader.getAccountableHealthcareProfessional().getAuthorTime());
+                prescriber.setHealthcareProfessionalHSAId(patientSummaryHeader.getAccountableHealthcareProfessional().getHealthcareProfessionalHSAId());
+                prescriber.setHealthcareProfessionalName(patientSummaryHeader.getAccountableHealthcareProfessional().getHealthcareProfessionalName());
+                prescriber.setHealthcareProfessionalRoleCode(patientSummaryHeader.getAccountableHealthcareProfessional().getHealthcareProfessionalRoleCode());
+                prescriber.setHealthcareProfessionalOrgUnit(patientSummaryHeader.getAccountableHealthcareProfessional().getHealthcareProfessionalOrgUnit());
+                
+                // SERVICE-368
+                // prescriber.setHealthcareProfessionalCareGiverHSAId(null);
+                // prescriber.setHealthcareProfessionalCareUnitHSAId(null);
+                
                 prescription.setPrescriber(prescriber);
                 
                 if(lko.getRcId() != null) {
