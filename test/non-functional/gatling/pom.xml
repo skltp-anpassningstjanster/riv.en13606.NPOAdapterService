@@ -8,54 +8,54 @@ default:localhost:33001 (http)
 
 # PingForConfiguration (default profile)
 mvn gatling:execute
-mvn gatling:execute -DbaseURL=http://localhost:33001/npoadapter/pfc
-mvn gatling:execute -DbaseURL=http://ine-dit-app03.sth.basefarm.net:11006/npoadapter/pfc
-mvn gatling:execute -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/pfc
-mvn gatling:execute -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/pfc
+mvn gatling:execute -DbaseURL=http://localhost:33001/npoadapter/
+mvn gatling:execute -DbaseURL=http://ine-dit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP01Simultaneous200Users
 mvn gatling:execute -PTP01Simultaneous200Users
-mvn gatling:execute -PTP01Simultaneous200Users -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP01Simultaneous200Users -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP02ExtraLargeResponse
 mvn gatling:execute -PTP02ExtraLargeResponse
-mvn gatling:execute -PTP02ExtraLargeResponse -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP02ExtraLargeResponse -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP03MaxTimePerMegabyte
 mvn gatling:execute -PTP03MaxTimePerMegabyte
-mvn gatling:execute -PTP03MaxTimePerMegabyte -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP03MaxTimePerMegabyte -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP04NonBlockingOnDelay
 mvn gatling:execute -PTP04NonBlockingOnDelay
-mvn gatling:execute -PTP04NonBlockingOnDelay -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP04NonBlockingOnDelay -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP05AdapterTimeout
 mvn gatling:execute -PTP05AdapterTimeout
-mvn gatling:execute -PTP05AdapterTimeout -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP05AdapterTimeout -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP06Soak
 mvn gatling:execute -PTP06Soak
-mvn gatling:execute -PTP06Soak -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP06Soak -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP07SendSimpleIndex
 mvn gatling:execute -PTP07SendSimpleIndex
-mvn gatling:execute -PTP07SendSimpleIndex -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP07SendSimpleIndex -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP08Sequential
 mvn gatling:execute -PTP08Sequential
-mvn gatling:execute -PTP08Sequential -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP08Sequential -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP09Parallel200Users
 mvn gatling:execute -PTP09Parallel200Users
-mvn gatling:execute -PTP09Parallel200Users -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP09Parallel200Users -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP10Requests40PerSecond
 mvn gatling:execute -PTP10Requests40PerSecond
-mvn gatling:execute -PTP10Requests40PerSecond -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP10Requests40PerSecond -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP11SlowSourceSystem
 mvn gatling:execute -PTP11SlowSourceSystem
-mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-tit-app03.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 -->
 
