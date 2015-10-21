@@ -20,7 +20,7 @@ class TP10Requests40PerSecond extends Simulation with HasBaseURL {
   val rampSeconds:Int           = 10
   val maxDuration:Int           = 360
     
-  val getParallel = scenario("Get parallel")
+  val getParallel = scenario("TP10Requests40PerSecond. Each contract - get parallel")
                     .forever {
                       uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),

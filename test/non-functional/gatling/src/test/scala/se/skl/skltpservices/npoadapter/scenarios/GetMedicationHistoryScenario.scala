@@ -6,8 +6,8 @@ object GetMedicationHistoryScenario extends {
   val urn             = "urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:1:GetMedicationHistory"
   val relativeUrl     = "getmedicationhistory/v2"
   val requestFileName = "GetMedicationHistoryRequest.xml"
-  val regex1          = "id>192712079550"
+  val regex1          = "<ns2:documentId>SE1623210002198208149297ordination111"
   val regex2          = "Body><GetMedicationHistoryResponse"
-  val length          = 12631
+  val minLength       = 12631
   
 } with AbstractGetRequest

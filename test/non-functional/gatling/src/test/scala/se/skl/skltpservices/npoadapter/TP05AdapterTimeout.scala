@@ -12,9 +12,9 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP05Timeout extends Simulation with HasBaseURL {
+class TP05AdapterTimeout extends Simulation with HasBaseURL {
 
-  // The minimum request wait is greater than the Adapter timeout
+  // The stub will delay for longer than the Adapter timeout - provoking the Adapter to timeout the call
 
   // NPOAdapter-config.properties
   //   # Ange i millesekunder hur länge en ändpunkt skall vänta innan ett synkront anrop avbryts
@@ -22,21 +22,21 @@ class TP05Timeout extends Simulation with HasBaseURL {
   
   val times:Int         = 1
   val simultaneousUsers = 1
-  val adapterTimeout    = 20000 milliseconds
+  val adapterTimeout    = 30 seconds
   
-  val getSequential = scenario("Get " + times + " times sequentially")
+  val getSequential = scenario("TP05AdapterTimeout. Each contract - get " + times + " times sequentially")
                      .exec((session) => session.set("adapterTimeoutInMilliseconds", adapterTimeout))
-                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
+/*                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
                      .repeat(times){exec(GetCareContactsScenario.requestTimesout)}
                      .repeat(times){exec(GetCareDocumentationScenario.requestTimesout)}
                      .repeat(times){exec(GetDiagnosisScenario.requestTimesout)}
                      .repeat(times){exec(GetImagingOutcomeScenario.requestTimesout)}
                      .repeat(times){exec(GetLaboratoryOrderOutcomeScenario.requestTimesout)}
                      .repeat(times){exec(GetMedicationHistoryScenario.requestTimesout)}
-                     .repeat(times){exec(GetReferralOutcomeScenario.requestTimesout)}
+*/                     .repeat(times){exec(GetReferralOutcomeScenario.requestTimesout)}
                      
   setUp (getSequential
          .inject(atOnceUsers(simultaneousUsers))
          .protocols(http.baseURL(baseURL)))
-         .assertions(global.responseTime.max.greaterThan(adapterTimeout.toMillis.toInt), global.successfulRequests.count.lessThan(1))
+         .assertions(global.responseTime.min.greaterThan(adapterTimeout.toMillis.toInt), global.failedRequests.count.lessThan(1))
 }

@@ -6,8 +6,8 @@ object GetReferralOutcomeScenario extends {
   val urn             = "urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:3:GetReferralOutcome"
   val requestFileName = "GetReferralOutcomeRequest.xml"
   val relativeUrl     = "getreferraloutcome/v3"
-  val regex1          = "id>192712089550"
+  val regex1          = "<ns2:documentId>OREBMKT3_9871961_3_1"
   val regex2          = "Body><GetReferralOutcomeResponse"
-  val length          = 3271
+  val minLength       = 3271
   
 } with AbstractGetRequest

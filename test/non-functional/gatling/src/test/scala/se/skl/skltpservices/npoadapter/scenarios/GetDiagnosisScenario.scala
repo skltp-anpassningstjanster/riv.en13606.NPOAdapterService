@@ -6,13 +6,8 @@ object GetDiagnosisScenario extends {
   val urn             = "urn:riv:clinicalprocess:healthcond:description:GetDiagnosisResponder:2:GetDiagnosis"
   val relativeUrl     = "getdiagnosis/v2"
   val requestFileName = "GetDiagnosisRequest.xml"
-  val regex1          = "id>192712049550"
+  val regex1          = "<ns2:healthcareProfessionalHSAId>SE2321000164-aen014"
   val regex2          = "Body><GetDiagnosisResponse"
-  val length          = 4713
-  val baseUrl         = if (System.getProperty("baseUrl") != null && !System.getProperty("baseUrl").isEmpty()) {
-                            System.getProperty("baseUrl")
-                        } else {
-                            "http://localhost:33001/npoadapter/getdiagnosis/v2"
-                        }
+  val minLength       = 4713
 
 } with AbstractGetRequest

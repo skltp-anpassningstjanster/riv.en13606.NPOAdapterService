@@ -15,12 +15,12 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP08Sequential extends Simulation with HasBaseURL {
 
-  val times:Int      = 50   // 1000
-  val pause:Int      = 2
+  val times:Int    = 10   // 1000
+  val pause        =  2 seconds
   
   val httpProtocol = http.baseURL(baseURL)
     
-  val getSequentialTimes = scenario("Get " + times + " times sequentially")
+  val getSequentialTimes = scenario("TP08Sequential. Each contract - get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.request)}
                      .pause(pause)
                      .repeat(times){exec(GetCareContactsScenario.request)}
