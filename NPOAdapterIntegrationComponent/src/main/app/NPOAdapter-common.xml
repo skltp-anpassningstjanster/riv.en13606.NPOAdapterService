@@ -84,13 +84,15 @@
         <spring:property name="jaxbContext" ref="jaxbContext"/>
         <spring:property name="extraInfo">
             <spring:map>
-                <spring:entry key="adapter" value="adapter-type-1" />
-                <spring:entry key="route_logical_address" value="#[groovy:message.getInvocationProperty('route-logical-address', '')]" />
+<!-- 
+                <spring:entry key="adapter"                   value="adapter-type-1" />
+  -->
+                <spring:entry key="route_logical_address"     value="#[groovy:message.getInvocationProperty('route-logical-address'    , '')]" />
                 <spring:entry key="route_service_soap_action" value="#[groovy:message.getInvocationProperty('route-service-soap-action', '')]" />
-                <spring:entry key="route_endpoint_url" value="#[groovy:message.getInvocationProperty('route-endpoint-url', '')]" />
-                <spring:entry key="npo_transaction_id" value="#[groovy:message.getOutboundProperty('npo_param_transaction_id', '')]" />
-                <spring:entry key="npo_hsa_id" value="#[groovy:message.getOutboundProperty('npo_param_hsa_id', '')]" />
-                <spring:entry key="npo_version" value="#[groovy:message.getOutboundProperty('npo_param_version', '')]" />
+                <spring:entry key="route_endpoint_url"        value="#[groovy:message.getInvocationProperty('route-endpoint-url'       , '')]" />
+                <spring:entry key="npo_transaction_id"        value="#[groovy:message.getOutboundProperty  ('npo_param_transaction_id' , '')]" />
+                <spring:entry key="npo_hsa_id"                value="#[groovy:message.getOutboundProperty  ('npo_param_hsa_id'         , '')]" />
+                <spring:entry key="npo_version"               value="#[groovy:message.getOutboundProperty  ('npo_param_version'        , '')]" />
             </spring:map>
         </spring:property>
     </custom-transformer>
