@@ -1,9 +1,7 @@
 package se.skl.skltpservices.npoadapter;
 
-import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import se.skl.skltpservices.npoadapter.scenarios.GetImagingOutcomeScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetImagingOutcomeExtraLargeScenario 
 

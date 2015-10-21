@@ -14,7 +14,7 @@ trait AbstractGetRequest {
   def requestFileName         : String
   def regex1                  : String
   def regex2                  : String
-  def length                  : Int
+  def minLength               : Int
   
   val httpOK                  = 200
   val httpInternalServerError = 500
@@ -33,9 +33,9 @@ trait AbstractGetRequest {
   
   // requestOK
   val request = exec((session) => {
-                      session("careUnitHSAId").asOption[String] match {
+                      session("patientId").asOption[String] match {
                         case None => {
-                          session.set("careUnitHSAId", "");
+                          session.set("patientId", "191212121212"); // default patientId
                         }
                         case _ => {session}
                       }
@@ -49,7 +49,7 @@ trait AbstractGetRequest {
                      .check(bodyString.exists)
                   // .check(bodyString.saveAs("responseBodyString"))
                      .check(bodyString.transform(w => w.length).saveAs("responseBodyStringLength"))
-                     .check(bodyString.transform(s => s.length).is(length))
+                     .check(bodyString.transform(s => s.length).greaterThan(minLength))
                      .check(regex(regex1).exists) // TODO - can we pass in a variable length list instead of two elements?
                      .check(regex(regex2).exists)
                      .check(responseTimeInMillis.saveAs("responseTimeInMillis"))
@@ -67,7 +67,7 @@ trait AbstractGetRequest {
  
                        // Return maximum allowed milliseconds for this response
 
-                        session("assertTimeResponseSize").asOption[Int] match {
+                        session("assertTimeResponseSize").asOption[Boolean] match {
                           case None => {
                             // If we are not testing for this condition, then return max int.
                             // This way, the comparison will always return true.
@@ -96,27 +96,27 @@ trait AbstractGetRequest {
                   )
 
                   
-  // verify time response proportion
+  // TP03 - verify time response proportion
   val assertTimeResponseSize = exec((session) => {
-                        session.set("assertTimeResponseSize", "true")
+                        session.set("assertTimeResponseSize", true)
                     })
                     .exec(request)
                     
   // source system responds before adapter timeout
   val delayedRequestWithoutTimeout = exec((session) => {
-                        session.set("careUnitHSAId", "delayWithoutTimeout")
+                        session.set("patientId", "191212120002")
                     })
                     .exec(request)
                     
   // response will be delayed by 10 - 20 seconds
   val slowRequest = exec((session) => {
-                        session.set("careUnitHSAId", "slow")
+                        session.set("patientId", "191212120001")
                     })
                     .exec(request)
   
   // adapter timesout before source system responds
   val requestTimesout = exec((session) => {
-                        session.set("careUnitHSAId", "respondAfterAdapterTimeout")
+                        session.set("patientId", "191212120003")
                        })
                       .exec( http(requestName) 
                         .post(relativeUrl)

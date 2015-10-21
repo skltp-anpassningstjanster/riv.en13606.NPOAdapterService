@@ -14,11 +14,12 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP01Simultaneous200Users extends Simulation with HasBaseURL {
 
-  val totalUsers:Int            = 100
+  val totalUsers:Int            = 200
   val rampDuration              = 2 seconds
   val maxDuration               = 1 minutes
   
-  val simultaneousRequest = scenario("Simultaneous") // .exec(GetReferralOutcomeScenario.request)
+  val simultaneousRequest = scenario("Simultaneous") 
+//                      .roundRobinSwitch(
                       .uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),
                         exec(GetCareContactsScenario.request),
@@ -26,7 +27,7 @@ class TP01Simultaneous200Users extends Simulation with HasBaseURL {
                         exec(GetDiagnosisScenario.request),
                         exec(GetImagingOutcomeScenario.request),
                         exec(GetLaboratoryOrderOutcomeScenario.request),
-                        exec(GetMedicationHistoryScenario.request)
+                        exec(GetMedicationHistoryScenario.request),
                         exec(GetReferralOutcomeScenario.request)
                      )
 

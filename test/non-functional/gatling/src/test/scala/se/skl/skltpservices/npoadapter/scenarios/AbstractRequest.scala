@@ -1,10 +1,7 @@
 package se.skl.skltpservices.npoadapter.scenarios
 
-import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
-import io.gatling.http.config.HttpProtocolBuilder.toHttpProtocol
 
 trait AbstractRequest {
 
@@ -14,7 +11,7 @@ trait AbstractRequest {
   def requestFileName:String
   def regex1:String
   def regex2:String
-  def length:Int
+  def minLength:Int
   
   val headers = Map("SOAPAction" -> urn)
   

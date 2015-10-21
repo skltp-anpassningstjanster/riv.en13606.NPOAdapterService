@@ -188,10 +188,13 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
         //Static values
         type.setDiscipline(KLINISK_KEMI);
 
+        
+        final HealthcareProfessionalType healthcareProfessional = new HealthcareProfessionalType();
+        type.setAccountableHealthcareProfessional(healthcareProfessional);
+        
         // Undersokningsresultat.har ansvarig
         if (und.getComposer() != null) {
             final EHRUtil.HealthcareProfessional hp = EHRUtil.healthcareProfessionalType(und.getComposer(), orgs, hps, und.getCommittal());
-            final HealthcareProfessionalType healthcareProfessional = new HealthcareProfessionalType();
 
             // Vard- och omsorgspersonal.personal-id
             healthcareProfessional.setHealthcareProfessionalHSAId(hp.getHealthcareProfessionalHSAId());
@@ -231,8 +234,6 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
                     }
                 }
             }
-
-            type.setAccountableHealthcareProfessional(healthcareProfessional);
         }
 
         if (und.getCommittal() != null) {
@@ -415,7 +416,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     protected String marshal(final GetLaboratoryOrderOutcomeResponseType response) {
         final JAXBElement<GetLaboratoryOrderOutcomeResponseType> el = objFactory.createGetLaboratoryOrderOutcomeResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 

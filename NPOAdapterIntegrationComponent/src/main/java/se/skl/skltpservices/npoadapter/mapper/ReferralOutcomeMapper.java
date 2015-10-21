@@ -124,7 +124,7 @@ public class ReferralOutcomeMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetReferralOutcomeResponseType response) {
         final JAXBElement<GetReferralOutcomeResponseType> el = objectFactory.createGetReferralOutcomeResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 

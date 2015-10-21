@@ -20,7 +20,7 @@ class TP03MaxTimePerMegabyte extends Simulation with HasBaseURL {
   
   val httpProtocol = http.baseURL(baseURL)
     
-  val getSequential = scenario("Get " + times + " times sequentially")
+  val getSequential = scenario("TP03MaxTimePerMegabyte. Each contract - get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.assertTimeResponseSize)}
                      .pause(pause)
                      .repeat(times){exec(GetCareContactsScenario.assertTimeResponseSize)}

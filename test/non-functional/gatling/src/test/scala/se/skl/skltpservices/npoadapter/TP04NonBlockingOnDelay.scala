@@ -25,9 +25,9 @@ class TP04NonBlockingOnDelay extends Simulation with HasBaseURL {
   
   val times:Int         = 2
   val pause:Int         = 0
-  val simultaneousUsers = 100
+  val simultaneousUsers = 1
   
-  val getSequential = scenario("Get " + times + " times sequentially")
+  val getSequential = scenario("TP04NonBlockingOnDelay. Each contract - get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.delayedRequestWithoutTimeout)}
                      .pause(pause)
                      .repeat(times){exec(GetCareContactsScenario.delayedRequestWithoutTimeout)}

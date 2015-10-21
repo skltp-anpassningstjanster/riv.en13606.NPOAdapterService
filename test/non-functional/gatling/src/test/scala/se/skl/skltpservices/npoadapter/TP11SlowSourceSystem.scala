@@ -19,7 +19,7 @@ class TP11SlowSourceSystem extends Simulation with HasBaseURL {
   val rampSeconds:Int           = 10
   val maxDuration:Int           = 360
 
-  val getParallel = scenario("Get parallel slow")
+  val getParallel = scenario("TP11SlowSourceSystem. Each contract - Get parallel slow")
                     .repeat(30) {
                       uniformRandomSwitch(
                         exec(GetAlertInformationScenario.slowRequest),

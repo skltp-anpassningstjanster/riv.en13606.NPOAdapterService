@@ -6,8 +6,8 @@ object GetCareDocumentationScenario extends {
   val urn             =  "urn:riv:clinicalprocess:healthcond:description:GetCareDocumentationResponder:2:GetCareDocumentation"
   val requestFileName = "GetCareDocumentationRequest.xml"
   val relativeUrl     = "getcaredocumentation/v2"
-  val regex1          = "id>192712039550"
+  val regex1          = "<ns2:healthcareProfessionalHSAId>SE2321000164-7381037590003ollvgiv-1"
   val regex2          = "Body><GetCareDocumentationResponse"
-  val length          = 13174
+  val minLength       = 10000
   
 } with AbstractGetRequest

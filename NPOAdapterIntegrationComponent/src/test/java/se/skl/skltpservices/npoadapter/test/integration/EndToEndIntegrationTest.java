@@ -382,7 +382,7 @@ public class EndToEndIntegrationTest extends AbstractIntegrationTestCase {
                 "/core_components/clinicalprocess_activityprescription_actoutcome_2.0.xsd",
                 "/interactions/GetMedicationHistoryInteraction/GetMedicationHistoryResponder_2.0.xsd");
         } catch (AssertionError ae) {
-            // TODO - GetMedicationHistory - treatmentInterval
+            // TODO - GetMedicationHistory - does not validate against schema
             assertTrue(ae.getMessage().startsWith("Validation error: cvc-complex-type.2.4.b: The content of element 'ns12:dispensationAuthorization' is not complete. One of '{\"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":dispensationAuthorizerComment, \"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":firstDispensationBefore, \"urn:riv:clinicalprocess:activityprescription:actoutcome:2\":prescriptionSignatura}' is expected."));
         }
     }

@@ -186,7 +186,7 @@ public class CareContactsMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetCareContactsResponseType response) {
         final JAXBElement<GetCareContactsResponseType> el = objectFactory.createGetCareContactsResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 
