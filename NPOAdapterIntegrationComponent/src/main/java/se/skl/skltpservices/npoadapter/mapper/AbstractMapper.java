@@ -104,7 +104,7 @@ public abstract class AbstractMapper {
 
     protected boolean schemaValidationActivated = false;
     
-    protected Validator schemaValidator = null;
+    private Schema schema; // each implementation instance will have its own schema
     
     // mapper implementation hash map with RIV service contract operation names (from WSDL) as a key
     private static final HashMap<String, Mapper> map = new HashMap<String, Mapper>();
@@ -255,10 +255,12 @@ public abstract class AbstractMapper {
         for (String xsd : xsds) {
             schemaFiles.add(new StreamSource(getClass().getResourceAsStream(xsd)));
         }
+        
+        // Note - SchemaFactory is not threadsafe
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
-            Schema schema = factory.newSchema(schemaFiles.toArray(new StreamSource[schemaFiles.size()]));
-            schemaValidator = schema.newValidator();
+            // Note - Schema is threadsafe
+            schema = factory.newSchema(schemaFiles.toArray(new StreamSource[schemaFiles.size()]));
         } catch (SAXException s) {
             throw new RuntimeException(new InstantiationException("Failed to instantiate schema: " + s.getMessage()));
         }
@@ -266,12 +268,14 @@ public abstract class AbstractMapper {
     }
 
     
-    protected void validateXmlAgainstSchema(String xml, Validator validator, Logger log) {
+    protected void validateXmlAgainstSchema(String xml, Logger log) {
         if (schemaValidationActivated) {
             if (StringUtils.isBlank(xml)) {
                 log.error("Attempted to validate empty string");
             } else {
                 try {
+                    // Validator is not threadsafe - create new one for each invocation
+                    Validator validator = schema.newValidator();
                     validator.validate(new StreamSource(new StringReader(xml)));
                     log.debug("response passed schema validation");
                 } catch (SAXException e) {
@@ -279,6 +283,8 @@ public abstract class AbstractMapper {
                     log.debug(xml);
                 } catch (IOException e) {
                     throw new RuntimeException("Unexpected exception whilst validating xml against schema", e);
+                } catch (Exception e) {
+                    log.error("response failed schema validation - unexpected error " + e.getMessage(),e);
                 }
             }
         }

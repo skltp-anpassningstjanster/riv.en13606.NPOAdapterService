@@ -416,7 +416,7 @@ public class LaboratoryOrderOutcomeMapper extends AbstractMapper implements Mapp
     protected String marshal(final GetLaboratoryOrderOutcomeResponseType response) {
         final JAXBElement<GetLaboratoryOrderOutcomeResponseType> el = objFactory.createGetLaboratoryOrderOutcomeResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 

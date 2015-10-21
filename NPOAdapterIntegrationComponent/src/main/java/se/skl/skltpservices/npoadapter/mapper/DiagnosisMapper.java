@@ -105,7 +105,7 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetDiagnosisResponseType response) {
         final JAXBElement<GetDiagnosisResponseType> el = objFactory.createGetDiagnosisResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 

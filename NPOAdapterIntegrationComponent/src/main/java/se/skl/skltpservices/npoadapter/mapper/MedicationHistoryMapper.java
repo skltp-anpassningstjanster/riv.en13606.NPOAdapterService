@@ -198,7 +198,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetMedicationHistoryResponseType response) {
         final JAXBElement<GetMedicationHistoryResponseType> el = objectFactory.createGetMedicationHistoryResponse(response);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
     

@@ -109,7 +109,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	protected String marshal(final GetImagingOutcomeResponseType resp) {
 		final JAXBElement<GetImagingOutcomeResponseType> el = objFactory.createGetImagingOutcomeResponse(resp);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
 	}
 

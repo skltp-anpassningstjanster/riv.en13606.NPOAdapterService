@@ -169,7 +169,7 @@ public class AlertInformationMapper extends AbstractMapper implements Mapper {
     protected String marshal(final GetAlertInformationResponseType resp) {
         final JAXBElement<GetAlertInformationResponseType> el = objFactory.createGetAlertInformationResponse(resp);
         String xml = jaxb.marshal(el);
-        validateXmlAgainstSchema(xml, schemaValidator, log);
+        validateXmlAgainstSchema(xml, log);
         return xml;
     }
 
