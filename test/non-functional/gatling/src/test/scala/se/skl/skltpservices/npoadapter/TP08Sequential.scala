@@ -15,8 +15,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP08Sequential extends Simulation with HasBaseURL {
 
-  val times:Int    = 10   // 1000
-  val pause        =  2 seconds
+  val times:Int    = 1000   // 1000
+  val pause        =    2 seconds
   
   val httpProtocol = http.baseURL(baseURL)
     

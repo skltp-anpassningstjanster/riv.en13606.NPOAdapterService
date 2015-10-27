@@ -15,8 +15,7 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP09Parallel200Users extends Simulation with HasBaseURL {
 
-  val totalUsers:Int            =  50   // 200
-  val maxRequestsPerSecond:Int  =  20   //  40
+  val totalUsers:Int            = 200
   val testDuration              =   2 minutes
   val maxDuration               =   2 minutes
     
@@ -35,8 +34,7 @@ class TP09Parallel200Users extends Simulation with HasBaseURL {
                      .pause(1 second)
                     }
     
-  setUp(getParallel.inject(rampUsers(totalUsers) over (10 seconds))
+  setUp(getParallel.inject(rampUsers(totalUsers) over (4 seconds))
                     .protocols(http.baseURL(baseURL)))
-//      .throttle(reachRps(maxRequestsPerSecond) in (testDuration))
       .maxDuration(maxDuration)
 }

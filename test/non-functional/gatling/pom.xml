@@ -31,15 +31,11 @@ mvn gatling:execute -PTP04NonBlockingOnDelay -DbaseURL=http://ine-sit-app09.sth.
 
 # TP05AdapterTimeout
 mvn gatling:execute -PTP05AdapterTimeout
-mvn gatling:execute -PTP05AdapterTimeout -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
+mvn gatling:execute -PTP05AdapterTimeout -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/ -Dgatling.http.ahc.readTimeout=70000 -Dgatling.http.ahc.connectTimeout=70000 -Dgatling.http.ahc.pooledConnectionIdleTimeout=70000 -Dgatling.http.ahc.requestTimeout=70000
 
 # TP06Soak
 mvn gatling:execute -PTP06Soak
 mvn gatling:execute -PTP06Soak -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
-
-# TP07SendSimpleIndex
-mvn gatling:execute -PTP07SendSimpleIndex
-mvn gatling:execute -PTP07SendSimpleIndex -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 # TP08Sequential
 mvn gatling:execute -PTP08Sequential
@@ -102,7 +98,6 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.ba
         <activeByDefault>true</activeByDefault>
       </activation>    
       <properties>
-<!--    <simulationClass>se.skl.skltpservices.npoadapter.TP00PingForConfiguration</simulationClass> -->
         <simulationClass>se.skl.skltpservices.npoadapter.TP00PingForConfiguration</simulationClass>
       </properties>
     </profile>
@@ -150,13 +145,6 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.ba
     </profile>
     
     <profile>
-      <id>TP07SendSimpleIndex</id>
-      <properties>
-       <simulationClass>se.skl.skltpservices.npoadapter.TP07SendSimpleIndex</simulationClass>
-      </properties>
-    </profile>
-    
-    <profile>
       <id>TP08Sequential</id>
       <properties>
        <simulationClass>se.skl.skltpservices.npoadapter.TP08Sequential</simulationClass>
@@ -171,7 +159,7 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.ba
     </profile>
     
     <profile>
-      <id>TP10Requests40OPerSecond</id>
+      <id>TP10Requests40PerSecond</id>
       <properties>
        <simulationClass>se.skl.skltpservices.npoadapter.TP10Requests40PerSecond</simulationClass>
       </properties>

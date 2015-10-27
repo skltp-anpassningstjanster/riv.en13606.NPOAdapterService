@@ -14,28 +14,17 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP11SlowSourceSystem extends Simulation with HasBaseURL {
 
-  val totalUsers:Int            = 10
-  val maxRequestsPerSecond:Int  = 40
-  val rampSeconds:Int           = 10
-  val maxDuration:Int           = 360
+  val totalUsers:Int = 10
 
-  val getParallel = scenario("TP11SlowSourceSystem. Each contract - Get parallel slow")
-                    .repeat(30) {
-                      uniformRandomSwitch(
-                        exec(GetAlertInformationScenario.slowRequest),
-                        exec(GetCareContactsScenario.slowRequest),
-                        exec(GetCareDocumentationScenario.slowRequest),
-                        exec(GetDiagnosisScenario.slowRequest),
-                        exec(GetImagingOutcomeScenario.slowRequest),
-                        exec(GetLaboratoryOrderOutcomeScenario.slowRequest),
-                        exec(GetMedicationHistoryScenario.slowRequest),
+  val getParallel = scenario("TP11SlowSourceSystem. Each contract - slow, no timeout").
+                        exec(GetAlertInformationScenario.slowRequest).
+                        exec(GetCareContactsScenario.slowRequest).
+                        exec(GetCareDocumentationScenario.slowRequest).
+                        exec(GetDiagnosisScenario.slowRequest).
+                        exec(GetImagingOutcomeScenario.slowRequest).
+                        exec(GetLaboratoryOrderOutcomeScenario.slowRequest).
+                        exec(GetMedicationHistoryScenario.slowRequest).
                         exec(GetReferralOutcomeScenario.slowRequest)
-                     )
-                    }
     
-  setUp(getParallel.inject(rampUsers(totalUsers) over (rampSeconds seconds))
-                    .protocols(http.baseURL(baseURL))
-       )
-      .throttle(reachRps(maxRequestsPerSecond) in (rampSeconds seconds))
-      .maxDuration(maxDuration seconds)
+  setUp(getParallel.inject(atOnceUsers(totalUsers)).protocols(http.baseURL(baseURL)))
 }

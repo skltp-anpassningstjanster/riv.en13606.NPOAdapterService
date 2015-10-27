@@ -15,13 +15,10 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP10Requests40PerSecond extends Simulation with HasBaseURL {
 
-  val totalUsers:Int            = 100
-  val maxRequestsPerSecond:Int  = 40
-  val rampSeconds:Int           = 10
-  val maxDuration:Int           = 360
+  val usersPerSecond:Int = 40
+  val testDuration       =  4 minutes
     
-  val getParallel = scenario("TP10Requests40PerSecond. Each contract - get parallel")
-                    .forever {
+  val getParallel = scenario("TP10Requests40PerSecond. Each contract - get parallel").
                       uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),
                         exec(GetCareContactsScenario.request),
@@ -32,10 +29,7 @@ class TP10Requests40PerSecond extends Simulation with HasBaseURL {
                         exec(GetMedicationHistoryScenario.request),
                         exec(GetReferralOutcomeScenario.request)
                      )
-                    }
     
-  setUp(getParallel.inject(rampUsers(totalUsers) over (rampSeconds seconds))
+  setUp(getParallel.inject(constantUsersPerSec(usersPerSecond) during (testDuration))
                     .protocols(http.baseURL(baseURL)))
-      .throttle(reachRps(maxRequestsPerSecond) in (rampSeconds seconds))
-      .maxDuration(maxDuration seconds)
 }

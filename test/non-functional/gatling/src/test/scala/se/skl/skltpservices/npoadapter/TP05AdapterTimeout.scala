@@ -22,18 +22,18 @@ class TP05AdapterTimeout extends Simulation with HasBaseURL {
   
   val times:Int         = 1
   val simultaneousUsers = 1
-  val adapterTimeout    = 30 seconds
+  val adapterTimeout    = 60000 milliseconds
   
   val getSequential = scenario("TP05AdapterTimeout. Each contract - get " + times + " times sequentially")
                      .exec((session) => session.set("adapterTimeoutInMilliseconds", adapterTimeout))
-/*                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
+                     .repeat(times){exec(GetAlertInformationScenario.requestTimesout)}
                      .repeat(times){exec(GetCareContactsScenario.requestTimesout)}
                      .repeat(times){exec(GetCareDocumentationScenario.requestTimesout)}
                      .repeat(times){exec(GetDiagnosisScenario.requestTimesout)}
                      .repeat(times){exec(GetImagingOutcomeScenario.requestTimesout)}
                      .repeat(times){exec(GetLaboratoryOrderOutcomeScenario.requestTimesout)}
                      .repeat(times){exec(GetMedicationHistoryScenario.requestTimesout)}
-*/                     .repeat(times){exec(GetReferralOutcomeScenario.requestTimesout)}
+                     .repeat(times){exec(GetReferralOutcomeScenario.requestTimesout)}
                      
   setUp (getSequential
          .inject(atOnceUsers(simultaneousUsers))

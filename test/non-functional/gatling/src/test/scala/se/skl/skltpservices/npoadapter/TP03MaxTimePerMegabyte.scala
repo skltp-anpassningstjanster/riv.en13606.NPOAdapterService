@@ -15,8 +15,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 class TP03MaxTimePerMegabyte extends Simulation with HasBaseURL {
 
-  val times:Int      = 3
-  val pause:Int      = 1
+  val times:Int    = 5
+  val pause        = 1 second
   
   val httpProtocol = http.baseURL(baseURL)
     
@@ -37,5 +37,5 @@ class TP03MaxTimePerMegabyte extends Simulation with HasBaseURL {
                      .pause(pause)
                      .repeat(times){exec(GetReferralOutcomeScenario.assertTimeResponseSize)}
     
-  setUp (getSequential.inject(atOnceUsers(1)).protocols(httpProtocol))
+  setUp (getSequential.inject(atOnceUsers(10)).protocols(httpProtocol))
 }
