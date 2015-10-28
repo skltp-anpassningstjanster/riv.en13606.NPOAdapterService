@@ -142,7 +142,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM       = "lkm-lkm-lpr-ber";
     private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA       = "lkm-lkm-lpr-prs";
     private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET = "lkm-lkm-lpr-pre";
-    private static final String LAKEMEDELSPRODUKT_PRODUKTNAMN         = "lkm-lkm-lpr-pna";
+    private static final String LAKEMEDELSPRODUKT_PRODUKTNAMN          = "lkm-lkm-lpr-pna";
     
     private static final String UTBYTESGRUPP = "lkm-lva-ubg";
     private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN = "lkm-lva-ubg-sty";
@@ -162,6 +162,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final String FORSKRIVNING_FORPACKNINGSENHET = "lkm-for-fpe";
     private static final String FORSKRIVNING_DISTRIBUTIONSMETOD = "lkm-for-dbs";
     private static final String FORSKRIVNING_FORSKRIVNINGSTIDPUNKT = "lkm-for-tid";
+
+    private static final String TIMESTAMPFORMAT = "yyyyMMddHHmmss";
     
     static {
         MEANING_LKM_ORD.setCodeSystem("1.2.752.129.2.2.2.1");
@@ -171,10 +173,6 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     private static final JaxbUtil jaxb 
       = new JaxbUtil(GetMedicationHistoryType.class, GetMedicationHistoryResponseType.class);
     private static final ObjectFactory objectFactory = new ObjectFactory();
-
-    
-    private static final DateFormat dateformatTS = new SimpleDateFormat("yyyyMMddHHmmss");
-    
     
     public MedicationHistoryMapper() {
         schemaValidationActivated = new Boolean(SpringPropertiesUtil.getProperty("SCHEMAVALIDATION-MEDICATIONHISTORY"));
@@ -820,6 +818,7 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
             String lowString  = dosageIvlts.getLow().getValue();
             String highString = dosageIvlts.getHigh().getValue();
             try {
+                DateFormat dateformatTS = new SimpleDateFormat(TIMESTAMPFORMAT);
                 Date lowDate = dateformatTS.parse(lowString);
                 try {
                     Date highDate = dateformatTS.parse(highString);
