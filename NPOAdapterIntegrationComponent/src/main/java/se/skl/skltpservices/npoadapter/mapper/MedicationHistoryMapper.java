@@ -116,53 +116,54 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     /**
      * TODO: OOIDER
      */
-    private static final String INFORMATIONSMANGD_LAKEMEDEL_ORDINATION = "lko";
-    private static final String INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING = "lkf";
-    private static final String INFORMATIONSMANGD_VARDKONTAKT = "vko";
+    private static final String INFORMATIONSMANGD_LAKEMEDEL_ORDINATION     = "lko";
+    private static final String INFORMATIONSMANGD_LAKEMEDEL_FORSKRIVNING   = "lkf";
+    private static final String INFORMATIONSMANGD_VARDKONTAKT              = "vko";
     
-    private static final String DELTAGARE_UTVARDERAS_AV = "utv";
+    private static final String DELTAGARE_UTVARDERAS_AV                    = "utv";
     
-    private static final String LAKEMEDELS_ORDINATION = "lkm-ord";
-    private static final String LAKEMEDELS_ORDINATION_NOT = "lkm-ord-not";
+    private static final String LAKEMEDELS_ORDINATION                      = "lkm-ord";
+    private static final String LAKEMEDELS_ORDINATION_NOT                  = "lkm-ord-not";
     private static final String LAKEMEDELS_ORDINATION_UTVARDERINGSTIDPUNKT = "lkm-ord-utv";
-    private static final String LAKEMEDELS_ORDINATION_ANDAMAL = "lkm-ord-and";
-    private static final String LAKEMEDELS_ORDINATION_ORDINATIONS_KEDJA = "lkm-ord-oki";
-    private static final String LAKEMEDELS_ORDINATION_TIDPUNKT = "lkm-ord-tid";
+    private static final String LAKEMEDELS_ORDINATION_ANDAMAL              = "lkm-ord-and";
+    private static final String LAKEMEDELS_ORDINATION_ORDINATIONS_KEDJA    = "lkm-ord-oki";
+    private static final String LAKEMEDELS_ORDINATION_TIDPUNKT             = "lkm-ord-tid";
     
-    private static final String LAKEMDELSVAL = "lkm-lva";
-    private static final String LAKEMDELSVAL_KOMMENTAR = "lkm-lva-kom";
-    private static final String EXTEMPORERINGSBEREDNING = "lkm-lva-ext";
+    private static final String LAKEMDELSVAL                               = "lkm-lva";
+    private static final String LAKEMDELSVAL_KOMMENTAR                     = "lkm-lva-kom";
+    private static final String EXTEMPORERINGSBEREDNING                    = "lkm-lva-ext";
     
-    private static final String LAKEMEDELSVARA = "lkm-lkm-lva";
-    private static final String LAKEMEDELSVARA_NPL_PACKID = "lkm-lkm-lva-npl";
+    private static final String LAKEMEDELSVARA                             = "lkm-lkm-lva";
+    private static final String LAKEMEDELSVARA_NPL_PACKID                  = "lkm-lkm-lva-npl";
     
-    private static final String LAKEMEDELSPRODUKT                      = "lkm-lkm-lpr";
-    private static final String LAKEMEDELSPRODUKT_NPLID                = "lkm-lkm-lpr-npl";
-    private static final String LAKEMEDELSPRODUKT_ATC                  = "lkm-lkm-lpr-atc";
-    private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM       = "lkm-lkm-lpr-ber";
-    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA       = "lkm-lkm-lpr-prs";
-    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET = "lkm-lkm-lpr-pre";
-    private static final String LAKEMEDELSPRODUKT_PRODUKTNAMN          = "lkm-lkm-lpr-pna";
+    private static final String LAKEMEDELSPRODUKT                          = "lkm-lkm-lpr";
+    private static final String LAKEMEDELSPRODUKT_NPLID                    = "lkm-lkm-lpr-npl";
+    private static final String LAKEMEDELSPRODUKT_ATC                      = "lkm-lkm-lpr-atc";
+    private static final String LAKEMEDELSPRODUKT_BEREDNINGSFORM           = "lkm-lkm-lpr-ber";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA           = "lkm-lkm-lpr-prs";
+    private static final String LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET     = "lkm-lkm-lpr-pre";
+    private static final String LAKEMEDELSPRODUKT_PRODUKTNAMN              = "lkm-lkm-lpr-pna";
     
-    private static final String UTBYTESGRUPP = "lkm-lva-ubg";
-    private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN = "lkm-lva-ubg-sty";
-    private static final String UTBYTESGRUPP_SUBSTANSGRUPPNAMN = "lkm-lva-ubg-sub";
-    private static final String UTBYTESGRUPP_LAKMEDELSFORMNAMN = "lkm-lva-ubg-lfn";
+    private static final String UTBYTESGRUPP                               = "lkm-lva-ubg";
+    private static final String UTBYTESGRUPP_STYRKEGRUPPNAMN               = "lkm-lva-ubg-sty";
+    private static final String UTBYTESGRUPP_SUBSTANSGRUPPNAMN             = "lkm-lva-ubg-sub";
+    private static final String UTBYTESGRUPP_LAKMEDELSFORMNAMN             = "lkm-lva-ubg-lfn";
     
-    private static final String LAKEMEDELDOSERING = "lkm-dos";
-    private static final String DOSERINGSSTEG_BEHANDLINGSTID = "lkm-dst-bet";
-    private static final String DOSERINGSSTEG_MAXTID = "lkm-dst-max";
-    private static final String DOSERINGSSTEG_DOSERINGSANVISNING = "lkm-dst-dan";
-    private static final String DOSERINGSSTEG_DOSERINGSENHET = "lkm-dst-den";
-    private static final String DOSERINGSSTEG_KORTNOTATION = "lkm-dst-kno";
+    private static final String LAKEMEDELDOSERING                          = "lkm-dos";
+    private static final String DOSERINGSSTEG_BEHANDLINGSTID               = "lkm-dst-bet";
+    private static final String DOSERINGSSTEG_MAXTID                       = "lkm-dst-max";
+    private static final String DOSERINGSSTEG_DOSERINGSANVISNING           = "lkm-dst-dan";
+    private static final String DOSERINGSSTEG_DOSERINGSENHET               = "lkm-dst-den";
+    private static final String DOSERINGSSTEG_KORTNOTATION                 = "lkm-dst-kno";
     
-    private static final String FORSKRIVNING = "lkm-for";
-    private static final String FORSKRIVNING_UTLAMMNIGS_INTERVAL = "lkm-for-uiv";
-    private static final String FORSKRIVNING_TOTALMAGNG = "lkm-for-tot";
-    private static final String FORSKRIVNING_FORPACKNINGSENHET = "lkm-for-fpe";
-    private static final String FORSKRIVNING_DISTRIBUTIONSMETOD = "lkm-for-dbs";
-    private static final String FORSKRIVNING_FORSKRIVNINGSTIDPUNKT = "lkm-for-tid";
+    private static final String FORSKRIVNING                               = "lkm-for";
+    private static final String FORSKRIVNING_UTLAMMNIGS_INTERVAL           = "lkm-for-uiv";
+    private static final String FORSKRIVNING_TOTALMAGNG                    = "lkm-for-tot";
+    private static final String FORSKRIVNING_FORPACKNINGSENHET             = "lkm-for-fpe";
+    private static final String FORSKRIVNING_DISTRIBUTIONSMETOD            = "lkm-for-dbs";
+    private static final String FORSKRIVNING_FORSKRIVNINGSTIDPUNKT         = "lkm-for-tid";
 
+    
     private static final String TIMESTAMPFORMAT = "yyyyMMddHHmmss";
     
     static {
