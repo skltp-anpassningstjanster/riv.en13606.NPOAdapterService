@@ -53,6 +53,10 @@ mvn gatling:execute -PTP10Requests40PerSecond -DbaseURL=http://ine-sit-app09.sth
 mvn gatling:execute -PTP11SlowSourceSystem
 mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
+# TP99Step
+mvn gatling:execute -PTP99Step
+mvn gatling:execute -PTP99Step
+
 -->
 
   <modelVersion>4.0.0</modelVersion>
@@ -169,6 +173,13 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.ba
       <id>TP11SlowSourceSystem</id>
       <properties>
        <simulationClass>se.skl.skltpservices.npoadapter.TP11SlowSourceSystem</simulationClass>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>TP99Step</id>
+      <properties>
+       <simulationClass>se.skl.skltpservices.npoadapter.TP99Step</simulationClass>
       </properties>
     </profile>
     
