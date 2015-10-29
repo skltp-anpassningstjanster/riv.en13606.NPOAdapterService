@@ -55,7 +55,7 @@ mvn gatling:execute -PTP11SlowSourceSystem -DbaseURL=http://ine-sit-app09.sth.ba
 
 # TP99Step
 mvn gatling:execute -PTP99Step
-mvn gatling:execute -PTP99Step
+mvn gatling:execute -PTP99Step -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/
 
 -->
 
