@@ -13,9 +13,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
 /**
- * Exercise the Adapter at 50% CPU for a week.
- * Test for memory leaks in the Adapter JVM.
- * Test for degraded performance over time.
+ * Change the number of new users per second, step by step to see 
+ * effect on CPU Usage %.
  */
 class TP99Step extends Simulation with HasBaseURL {
 
