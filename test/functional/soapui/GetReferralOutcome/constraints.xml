@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<iso:schema
+        xmlns="http://purl.oclc.org/dsdl/schematron"
+        xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+        queryBinding='xslt2'
+        schemaVersion='ISO19757-3'>
+
+    <iso:title>Validation for GetReferralOutcome</iso:title>
+    <iso:ns prefix='urn' uri='urn:riv:clinicalprocess:healthcond:actoutcome:GetReferralOutcomeResponder:2' />
+    <iso:ns prefix='urn1' uri='urn:riv:clinicalprocess:healthcond:actoutcome:2' />
+
+    <iso:pattern abstract="true" id="pattern.CvType">
+        <iso:rule context="$path">
+            <iso:assert test="count(urn1:code) + count(urn1:originalText) = 1">
+                In $path, ONE of code or originalText must be given.</iso:assert>
+        </iso:rule>
+
+        <iso:rule context="$path/urn1:code">
+            <iso:assert test="count(../urn1:codeSystem) + count(../urn1:displayName) = 2">
+                In $path if <iso:name/> is given, codeSystem and displayName must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:codeSystem">
+            <iso:assert test="count(../urn1:code) + count(../urn1:displayName) = 2">
+                In $path if <iso:name/> is given, code and displayName must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:displayName">
+            <iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) = 2">
+                In $path if <iso:name/> is given, code and codeSystem must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:originalText">
+            <iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) + count(../urn1:displayName) = 0">
+                In $path if <iso:name/> is given, code, codeSystem and displayName must not be given.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+
+    <!-- Rules for Response -->
+    <iso:pattern id="Verify healthcareProfessionalRoleCode" is-a="pattern.CvType">
+        <iso:param name="path" value="urn1:healthcareProfessionalRoleCode" />
+    </iso:pattern>
+
+    <iso:pattern name="Verify act">
+        <iso:rule context="urn1:actResult">
+            <iso:assert test="count(urn1:value) + count(urn1:reference) = 1">
+                Either one of value or reference must be given for <iso:name />.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+
+</iso:schema>

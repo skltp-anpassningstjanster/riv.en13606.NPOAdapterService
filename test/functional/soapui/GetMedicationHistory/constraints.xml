@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<iso:schema
+        xmlns="http://purl.oclc.org/dsdl/schematron"
+        xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+        queryBinding='xslt2'
+        schemaVersion='ISO19757-3'>
+
+    <iso:title>Validation for GetMedicationHistory</iso:title>
+    <iso:ns prefix='urn' uri='urn:riv:clinicalprocess:activityprescription:actoutcome:GetMedicationHistoryResponder:2' />
+    <iso:ns prefix='urn1' uri='urn:riv:clinicalprocess:activityprescription:actoutcome:2' />
+
+	<iso:pattern abstract="true" id="pattern.CvTypeStrict">		
+		<iso:rule context="$path/urn1:code">
+			<iso:assert test="count(../urn1:code) = 1">
+				In $path code must be given.</iso:assert>
+			<iso:assert test="count(../urn1:codeSystem) = 1">
+				In $path codeSystem must be given.</iso:assert>
+			<iso:assert test="count(../urn1:displayName) = 1">
+				In $path displayName must be given.</iso:assert>
+			<iso:assert test="count(../urn1:originalText)= 0">
+				In $path in originalText must not be given.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<iso:pattern abstract="true" id="pattern.IITypeStrict">		
+		<iso:rule context="$path/urn1:code">
+			<iso:assert test="count(../urn1:extension) = 1">
+				In $path extension must be given.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<iso:pattern abstract="true" id="pattern.CvType">
+		<iso:rule context="$path">
+			<iso:assert test="count(urn1:code) + count(urn1:originalText) = 1">
+				In $path, either code or origialText must be given.</iso:assert>
+		</iso:rule>
+
+		<iso:rule context="$path/urn1:code">
+			<iso:assert test="count(../urn1:codeSystem) + count(../urn1:displayName) = 2">
+				In $path if <iso:name/> is given, codeSystem and displayName must be given.</iso:assert>
+			<iso:assert test="count(../urn1:originalText)= 0">
+				In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+		</iso:rule>
+		<iso:rule context="$path/urn1:codeSystem">
+			<iso:assert test="count(../urn1:code) + count(../urn1:displayName) = 2">
+				In $path if <iso:name/> is given, code and displayName must be given.</iso:assert>
+			<iso:assert test="count(../urn1:originalText)= 0">
+				In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+		</iso:rule>
+		<iso:rule context="$path/urn1:displayName">
+			<iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) = 2">
+				In $path if <iso:name/> is given, code and codeSystem must be given.</iso:assert>
+			<iso:assert test="count(../urn1:originalText)= 0">
+				In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+		</iso:rule>
+		<iso:rule context="$path/urn1:originalText">
+			<iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) + count(../urn1:displayName) = 0">
+				In $path if <iso:name/> is given, code, codeSystem and displayName must not be given.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	<iso:pattern abstract="true" id="pattern.AccountableHealthcareProfessional">
+		<iso:rule context="$path/urn1:healthcareProfessionalCareUnitHSAId">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in $path</iso:assert>
+		</iso:rule>
+		<iso:rule context="$path/urn1:healthcareProfessionalCareGiverHSAId">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in $path</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+    <!-- Rules for Request -->
+
+    <!-- Rules for for stricter cardinality in Response -->
+	<iso:pattern id="Verify_principalPrescriptionReason.reason" is-a="pattern.CvTypeStrict">
+		<iso:param name="path" value="urn1:principalPrescriptionReason/urn1:reason"/>
+	</iso:pattern>
+	<iso:pattern id="Verify_additionalPrescriptionReason.reason" is-a="pattern.CvTypeStrict">
+		<iso:param name="path" value="urn1:additionalPrescriptionReason/urn1:reason"/>
+	</iso:pattern>
+	<iso:pattern id="Verify_drug.nplId" is-a="pattern.CvTypeStrict">
+		<iso:param name="path" value="urn1:drug/urn1:nplId"/>
+	</iso:pattern>
+	<iso:pattern id="Verify_drug.atcCode" is-a="pattern.CvTypeStrict">
+		<iso:param name="path" value="urn1:drug/urn1:atcCode"/>
+	</iso:pattern>
+	<iso:pattern id="Verify_receivingPharmacy.extension" is-a="pattern.IITypeStrict">
+		<iso:param name="path" value="urn1:receivingPharmacy" />
+	</iso:pattern>
+
+	<!-- Rules for Response, fields that MUST NOT exist in the response -->
+	<iso:pattern id="No_documentTime">
+		<iso:rule context="urn1:documentTime">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:medicationMedicalRecordHeader</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<iso:pattern id="No_nullified">
+		<iso:rule context="urn1:nullified">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:medicationMedicalRecordHeader</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<iso:pattern id="No_nullifiedReason">
+		<iso:rule context="urn1:nullifiedReason">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:medicationMedicalRecordHeader</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<iso:pattern id="No_lengthOfTreatment">
+		<iso:rule context="urn1:administration/urn1:drug/urn1:dosage/urn1:lengthOfTreatment">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:administration/urn1:drug/urn1:dosage</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<iso:pattern id="No_isMaximumTreatmentTime">
+		<iso:rule context="urn1:administration/urn1:drug/urn1:dosage/urn1:isMaximumTreatmentTime">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:administration/urn1:drug/urn1:dosage</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<iso:pattern id="No_dosageInstruction">
+		<iso:rule context="urn1:administration/urn1:drug/urn1:dosage/urn1:dosageInstruction">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:administration/urn1:drug/urn1:dosage</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<iso:pattern id="Illegal_dosage">
+		<iso:rule context="urn1:dispensationAuthorization/urn1:drug/urn1:dosage">
+			<iso:assert test="not(exists(.))"><iso:name/> MUST NOT exist in urn1:dispensationAuthorization/urn1:drug</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<iso:pattern id="Verify_medicationPrescription.prescriber" is-a="pattern.AccountableHealthcareProfessional">
+		<iso:param name="path" value="urn1:medicationPrescription/urn1:prescriber" />
+	</iso:pattern>
+	
+	<iso:pattern id="Verify_dispensationAuthorizer" is-a="pattern.AccountableHealthcareProfessional">
+		<iso:param name="path" value="urn1:dispensationAuthorizer" />
+	</iso:pattern>
+
+	<iso:pattern id="Verify_medicationPrescription.evaluator" is-a="pattern.AccountableHealthcareProfessional">
+		<iso:param name="path" value="urn1:medicationPrescription/urn1:evaluator" />
+	</iso:pattern>
+
+	<iso:pattern id="Verify_administeringHealthcareProfessional" is-a="pattern.AccountableHealthcareProfessional">
+		<iso:param name="path" value="urn1:administeringHealthcareProfessional" />
+	</iso:pattern>
+
+	<!-- If totalAmount is set then packageAmount must also be set -->
+	<iso:pattern id="packageUnit_and_totalAmount">
+		<iso:rule context="urn1:dispensationAuthorization">
+			<iso:assert test="((count(urn1:packageUnit) + count(urn1:totalAmount) = 2)) or (not(exists(urn1:totalAmount)) and not(exists(urn1:packageUnit)))"><iso:name/> Both packageUnit and totalAmount must be set if either is set.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<!-- Choice rules for Response, fields that MUST exist given some precondition -->
+	<iso:pattern id="prescriber_check">
+		<iso:rule context="urn1:medicationPrescription">
+			<iso:assert test="(urn1:selfMedication='false' and count(urn1:prescriber)=1) or urn1:selfMedication='true'"><iso:name/> If selfMedication is true, prescriber must be set.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<!-- Rule for startOfTreatment, if typeOfPrescription == 'Insättning' the field startOfTreatment MUST exist -->
+	<iso:pattern id="startOfTreatment">
+		<iso:rule context="urn1:medicationPrescription">
+			<iso:assert test="(urn1:typeOfPrescription/text()='I' and exists(urn1:startOfTreatment)) or (urn1:typeOfPrescription/text()='U')"><iso:name/> If typeOfPrescription is 'I', startOfTreatment must be set.</iso:assert>			
+		</iso:rule>
+	</iso:pattern>
+	
+	<!-- Choice for drug, if typeOfPrescription == 'Utsättning' drug MUST NOT exist. -->
+	<iso:pattern id="drug">
+		<iso:rule context="urn1:medicationPrescription">
+			<iso:assert test="(urn1:typeOfPrescription/text()='U' and not(exists(urn1:drug))) or (urn1:typeOfPrescription/text()='I')"><iso:name/> If typeOfPrescription is 'U', drug MUST NOT exist.</iso:assert>			
+		</iso:rule>
+	</iso:pattern>
+	
+	<!-- Choice for drug, only one of unstructuredDrugInformation/merchandise/drugArticle/drug/generics -->
+	<iso:pattern id="drugChoiceType">
+		<iso:rule context="urn1:medicationPrescription/urn1:drug">
+			<iso:assert test="count(urn1:unstructuredDrugInformation) + count(urn1:merchandise) + count(urn1:drugArticle) + count(urn1:drug) + count(urn1:generics) = 1">
+				In urn1:medicationPrescription/urn1:drug ONLY ONE of unstructuredDrugInformation/merchandise/drugArticle/drug/generics MUST exist.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+
+	<iso:pattern id="drugChoiceType_uniqueness">
+		<iso:rule context="urn1:administration/urn1:drug">
+			<iso:assert test="count(urn1:unstructuredDrugInformation) + count(urn1:merchandise) + count(urn1:drugArticle) + count(urn1:drug) + count(urn1:generics) = 1">
+				In urn1:administration/urn1:drug ONLY ONE of unstructuredDrugInformation/merchandise/drugArticle/drug/generics MUST exist.</iso:assert>
+		</iso:rule>
+	</iso:pattern>
+	
+	<!-- Rules for administration dosage -->
+	<iso:pattern id="drugChoiceType_dosage">
+		<iso:rule context="urn1:administration/urn1:drug/urn1:dosage">
+			<iso:assert test="count(urn1:setDosage) + count(urn1:maximumDosage) + count(urn1:conditionalDosage) >= 1">
+				In urn1:administration/urn1:drug/urn1:dosage at least ONE of setDosage/maximumDosage/conditionalDosage MUST exist.</iso:assert>
+			<iso:assert test="count(urn1:setDosage) or count(urn1:conditionalDosage)">
+				In urn1:administration/urn1:drug/urn1:dosage at least ONE of setDosage or conditionalDosage MUST exist.</iso:assert>			
+		</iso:rule>
+	</iso:pattern>
+	
+	
+
+</iso:schema>
