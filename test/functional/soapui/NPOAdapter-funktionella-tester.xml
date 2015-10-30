@@ -10759,7 +10759,7 @@ source.load("SourceSystemHSAIdAndLogicalAddress")</script></con:config></con:tes
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetImagingOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Basic Testcase")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetImagingOutcome with patientId" id="4c46ff73-b44c-4503-b2b9-1f866491a1ae"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetImagingOutcomeResponderBinding</con:interface><con:operation>GetImagingOutcome</con:operation><con:request name="WHEN calling GetImagingOutcome with patientId" id="63e0195e-effb-4be0-aa9d-c1479784fcde"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10828,7 +10828,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetImagingOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitHSAId Filter")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetImagingOutcome with careUnitHSAId" id="24bbb6f3-f8e5-4e23-a821-c00c9e4c0b41"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetImagingOutcomeResponderBinding</con:interface><con:operation>GetImagingOutcome</con:operation><con:request name="WHEN calling GetImagingOutcome with careUnitHSAId" id="ea0873b3-9c0a-4569-b8fb-9e33bc3554e5"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10902,7 +10902,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetImagingOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExistent PatientId")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetImagingOutcome with nonexistent patientId" id="e88e4fe4-eaf6-48b8-bf86-3182a27d1696"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetImagingOutcomeResponderBinding</con:interface><con:operation>GetImagingOutcome</con:operation><con:request name="WHEN calling GetImagingOutcome with nonexistent patientId" id="2e154fa9-eb81-42de-8ed3-d5f090d5958a"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10932,7 +10932,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetImagingOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHSAId and LogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetImagingOutcome and sourceSystemHSAId differs from logicalAddress" id="f16c6984-49f0-4d8b-bb2e-29f6eb69246c"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetImagingOutcomeResponderBinding</con:interface><con:operation>GetImagingOutcome</con:operation><con:request name="WHEN calling GetImagingOutcome and sourceSystemHSAId differs from logicalAddress" id="420636cf-1544-4960-a52a-e13ce2c2343d"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10959,7 +10959,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetLaboratoryOrderOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("BasicTestcase")
@@ -11025,7 +11025,7 @@ assert (failures.isEmpty())</scriptText></con:configuration></con:assertion><con
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetLaboratoryOrderOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitIdFilter")
@@ -11097,7 +11097,7 @@ if(!offending.isEmpty()) {
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetLaboratoryOrderOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExistentPatientId")
@@ -11144,7 +11144,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetLaboratoryOrderOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExistentCareContactId")
@@ -11188,7 +11188,7 @@ count(//urn:GetLaboratoryOrderOutcomeResponse/laboratoryOrderOutcome) = 0</path>
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetLaboratoryOrderOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHSAIdAndLogicalAddress")
@@ -11218,7 +11218,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:actoutcome:3';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Basic Testcase")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetMedicationHistory" id="5d36c2e2-0776-473d-bb8c-3f878212943b"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="WHEN calling GetMedicationHistory" id="91fb9a2a-fde9-488f-994e-0b468eeccee8"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11317,7 +11317,7 @@ records.each {c ->
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitHsaId Filter")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetMedicationHistory" id="1dfff18a-29a0-45b7-a6c7-cb998968b30a"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="WHEN calling GetMedicationHistory" id="d35092b7-20ac-491b-b9b3-e13e0d9e2261"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11419,7 +11419,7 @@ declare namespace urn1='${#TestSuite#urn1}';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Only PatientId")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetMedicationHistory" id="bbef152c-be60-4b09-bc9f-6da614fe8e7a"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="WHEN calling GetMedicationHistory" id="659d2fb0-c221-4312-a1ad-cd994095b334"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11520,7 +11520,7 @@ declare namespace urn1='${#TestSuite#urn1}';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExisting PatientId")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetMedicationHistory" id="a31eb66f-60d8-4428-bd9e-a969707249b7"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="WHEN calling GetMedicationHistory" id="bd881d90-a392-46bd-bd2d-3ce1dd79802a"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11569,7 +11569,7 @@ if (records.length != 0) {
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Active Medication")</script></con:config></con:testStep><con:testStep type="request" name="WHEN calling GetMedicationHistory" id="54056d86-fac4-4fb4-8afd-406d7f3e42a6"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="WHEN calling GetMedicationHistory" id="cb45e0bb-df90-4d4a-bc52-3f96c48b3b31"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11643,7 +11643,7 @@ declare namespace urn1='${#TestSuite#urn1}';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetMedicationHistory/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="Call GetMedicationHistory" id="fb4599a3-7b94-4f18-96a2-6620e126af80"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetMedicationHistoryResponderBinding</con:interface><con:operation>GetMedicationHistory</con:operation><con:request name="Call GetMedicationHistory" id="db53f642-7443-408e-8ded-2d9256978e81"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11673,7 +11673,7 @@ declare namespace urn1='urn:riv:clinicalprocess:activityprescription:actoutcome:
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetReferralOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitHsaId Filter")</script></con:config></con:testStep><con:testStep type="request" name="Call GetReferralOutcome" id="b01cca11-512d-40af-84fc-9f8ae45ae6a6"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="Call GetReferralOutcome" id="04a8e068-891f-4983-b828-449da140e256"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11701,7 +11701,7 @@ def contextHelper = new ContextHelper(context)
 def validator = new SchematronValidator()
 
 def failures = validator.validateMessage(messageExchange.response.responseContent,
-	new File(utils.projectPath + "/constraints.xml"))
+	new File(utils.projectPath + "/GetReferralOutcome/constraints.xml"))
 
 failures.each { failure -> contextHelper.fail(failure.text) }</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert CareUnitHSAid" id="cdcd4221-659f-4e2f-8f50-bd1af7b749ae"><con:configuration><scriptText>import com.eviware.soapui.support.XmlHolder
 import se.skl.rivta.testsupport.soapui.ContextHelper
@@ -11762,7 +11762,7 @@ expectedDocumentIds.each {id ->
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetReferralOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Only PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetReferralOutcome" id="3f7c5c2d-e5be-411c-a6cf-e7972acafd01"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="Call GetReferralOutcome" id="66fccd81-a6eb-4bf4-ba63-33f0d1b0a286"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11789,7 +11789,7 @@ def contextHelper = new ContextHelper(context)
 def validator = new SchematronValidator()
 
 def failures = validator.validateMessage(messageExchange.response.responseContent,
-	new File(utils.projectPath + "/constraints.xml"))
+	new File(utils.projectPath + "/GetReferralOutcome/constraints.xml"))
 
 failures.each { failure -> contextHelper.fail(failure.text) }</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert PatientId" id="2257fb54-2281-4e2d-88ff-7ef289467951"><con:configuration><scriptText>import com.eviware.soapui.support.XmlHolder
 import se.skl.rivta.testsupport.soapui.ContextHelper
@@ -11852,7 +11852,7 @@ expectedDocumentIds.each {id ->
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetReferralOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExisting PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetReferralOutcome" id="89845ae9-4de3-400e-a3b6-23c9b8060182"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="Call GetReferralOutcome" id="df9478df-557f-4a47-bfbc-1dceffe493db"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -11891,7 +11891,7 @@ if (documents.length > 0) {
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetReferralOutcome/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="Call GetReferralOutcome" id="27c9db9b-b826-4151-9531-6cd51c7fe614"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetReferralOutcomeResponderBinding</con:interface><con:operation>GetReferralOutcome</con:operation><con:request name="Call GetReferralOutcome" id="de593e02-5cf4-4382-a262-cc6e540366c1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
