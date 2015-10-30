@@ -10129,7 +10129,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:description:2';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareContacts/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Only PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareContacts" id="e8fc9875-a8ae-4bf7-8539-53575ba773fd"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareContactsResponderBinding</con:interface><con:operation>GetCareContacts</con:operation><con:request name="Call GetCareContacts" id="b0e9be11-8c73-4361-889e-6c163c294dba"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10159,7 +10159,7 @@ def contextHelper = new ContextHelper(context)
 def validator = new SchematronValidator()
 
 def failures = validator.validateMessage(messageExchange.response.getResponseContent(),
-	new File(utils.projectPath + "/constraints.xml"))
+	new File(utils.projectPath + "/GetCareContacts/constraints.xml"))
 
 failures.each { failure -> contextHelper.fail(failure.text) }</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert PatientId" id="8864f901-c009-42f0-9d3d-924b0da047f0"><con:configuration><scriptText>import com.eviware.soapui.support.XmlHolder
 import se.skl.rivta.testsupport.soapui.ContextHelper
@@ -10215,11 +10215,11 @@ expectedDocumentIds.each {id ->
 	if (!documentIds.contains(id)) {
 		contextHelper.fail('Response does not contain a expected CareContact. DocumentId: ' + id)
 	}
-}</scriptText></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/><con:breakPoints><con:testStepId>74fd6c8e-e3f8-4fb1-b45f-90a4ad24c35b</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareContacts - NonExisting PatientId" searchProperties="true" id="d63a665d-2211-4185-a636-966588246e7e" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="230b1913-0a97-4bfd-9d0a-6a79bd1db67b"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+}</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/><con:breakPoints><con:testStepId>74fd6c8e-e3f8-4fb1-b45f-90a4ad24c35b</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareContacts - NonExisting PatientId" searchProperties="true" id="d63a665d-2211-4185-a636-966588246e7e" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="230b1913-0a97-4bfd-9d0a-6a79bd1db67b"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareContacts/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExisting PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareContacts" id="d8a7f43c-6644-46c3-96d3-e1227c14ea97"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareContactsResponderBinding</con:interface><con:operation>GetCareContacts</con:operation><con:request name="Call GetCareContacts" id="011a4a7a-36e9-4b2d-ad39-e661774576dd"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10249,7 +10249,7 @@ def contextHelper = new ContextHelper(context)
 def validator = new SchematronValidator()
 
 def failures = validator.validateMessage(messageExchange.response.getResponseContent(),
-	new File(utils.projectPath + "/constraints.xml"))
+	new File(utils.projectPath + "/GetCareContacts/constraints.xml"))
 
 failures.each { failure -> contextHelper.fail(failure.text) }</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert Empty result" id="b80404fd-4b85-4116-93d7-3e0cd6bbb3e7"><con:configuration><scriptText>import com.eviware.soapui.support.XmlHolder
 import se.skl.rivta.testsupport.soapui.ContextHelper
@@ -10267,11 +10267,11 @@ def careContacts = holder.getDomNodes('/soapenv:Envelope/soapenv:Body/urn:GetCar
 
 if (careContacts.length != 0) {
 	contextHelper.fail("Response should be empty for PatientId: ${context.patientId} PatientIdType: ${context.patientIdType}")
-}</scriptText></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/><con:breakPoints><con:testStepId>74fd6c8e-e3f8-4fb1-b45f-90a4ad24c35b</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareContacts - Verify SourceSystemHSAid and LogicalAddress" searchProperties="true" id="6c3233a7-0c08-4f36-a698-b0688063abf7" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="ac82271d-1c89-4ebb-932a-edceab06e8ab"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+}</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/><con:breakPoints><con:testStepId>74fd6c8e-e3f8-4fb1-b45f-90a4ad24c35b</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareContacts - Verify SourceSystemHSAid and LogicalAddress" searchProperties="true" id="6c3233a7-0c08-4f36-a698-b0688063abf7" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="ac82271d-1c89-4ebb-932a-edceab06e8ab"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareContacts/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareContacts" id="93991d4b-21f0-4059-af4d-434c49ffaee6"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareContactsResponderBinding</con:interface><con:operation>GetCareContacts</con:operation><con:request name="Call GetCareContacts" id="9e26e38a-bb15-4977-a86f-13568bf85c99"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10291,11 +10291,11 @@ source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:t
          <urn1:careContactId>${careContactId}</urn1:careContactId>
       </urn1:GetCareContacts>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="Response SLA Assertion" name="Response SLA" id="a04abc85-73d8-44e1-a46a-e29abfb080d8"><con:configuration><SLA>15000</SLA></con:configuration></con:assertion><con:assertion type="Schema Compliance" name="Schema Compliance" id="93af28c4-f1e7-4a7f-bdd0-14589b964e51"><con:configuration><definition/></con:configuration></con:assertion><con:assertion type="SOAP Response" name="SOAP Response" id="df978a12-e410-40d1-b9c8-79fc664c0504"/><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="1afb590b-c27b-48ce-b2e6-0705cb22c449"/><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - CareUnitHSAid Filter" searchProperties="true" id="33d2a768-43a6-4d46-ac00-4de3242fab87" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="ee069bb7-b760-45d6-9add-ad52d947d2fe"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+</soapenv:Envelope>]]></con:request><con:assertion type="Response SLA Assertion" name="Response SLA" id="a04abc85-73d8-44e1-a46a-e29abfb080d8"><con:configuration><SLA>15000</SLA></con:configuration></con:assertion><con:assertion type="Schema Compliance" name="Schema Compliance" id="93af28c4-f1e7-4a7f-bdd0-14589b964e51"><con:configuration><definition/></con:configuration></con:assertion><con:assertion type="SOAP Response" name="SOAP Response" id="df978a12-e410-40d1-b9c8-79fc664c0504"/><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="1afb590b-c27b-48ce-b2e6-0705cb22c449"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - CareUnitHSAid Filter" searchProperties="true" id="33d2a768-43a6-4d46-ac00-4de3242fab87" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="ee069bb7-b760-45d6-9add-ad52d947d2fe"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareDocumentation/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitHsaId Filter")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareDocumentation" id="7939bc97-898e-44d3-b748-516d1a81507e"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="Call GetCareDocumentation" id="c02c1704-2bd9-4fe4-beb4-ae54cc4d260a"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10385,7 +10385,7 @@ expectedDocumentIds.each {id ->
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareDocumentation/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("Only PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareDocumentation" id="7f5448ad-cab3-4a5c-828d-19dcd34830a1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="Call GetCareDocumentation" id="0c65b242-79f1-4159-8727-1289baca316d"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10471,11 +10471,11 @@ expectedDocumentIds.each {id ->
 	if (!documentIds.contains(id)) {
 		contextHelper.fail("Response does not contain a expected record. DocumentId: $id")
 	}
-}</scriptText></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - NonExisting PatientId" searchProperties="true" id="ef504ddb-07e6-4ce1-9ea3-2a7f904092e1" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="39b60388-bfbc-4147-b0a6-82374a3108e7"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+}</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - NonExisting PatientId" searchProperties="true" id="ef504ddb-07e6-4ce1-9ea3-2a7f904092e1" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="39b60388-bfbc-4147-b0a6-82374a3108e7"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareDocumentation/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExisting PatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareDocumentation" id="fd4d586b-5683-4dda-bccb-fc3090ef31da"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="Call GetCareDocumentation" id="b8887af9-5dc7-4448-80a6-36e8a43040f3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10509,11 +10509,11 @@ def documents = holder.getNodeValues('/soapenv:Envelope/soapenv:Body/urn:GetCare
 
 if (documents.length != 0) {
 	contextHelper.fail("Response should be empty for PatientId: ${context.patientId} PatientIdType: ${context.patientIdType}")
-}</scriptText></con:configuration></con:assertion><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - Verify SourceSystemHSAid and LogicalAddress" searchProperties="true" id="340ad353-585f-4dce-b2a8-4b40b83b578a" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="1886781a-0746-46dd-b786-7e463d441517"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+}</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetCareDocumentation - Verify SourceSystemHSAid and LogicalAddress" searchProperties="true" id="340ad353-585f-4dce-b2a8-4b40b83b578a" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="1886781a-0746-46dd-b786-7e463d441517"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetCareDocumentation/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="Call GetCareDocumentation" id="10d44a54-3310-4830-ab9c-791d3582addb"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetCareDocumentationResponderBinding</con:interface><con:operation>GetCareDocumentation</con:operation><con:request name="Call GetCareDocumentation" id="11287879-e1ee-4484-8945-a22cb7f6827c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10533,11 +10533,11 @@ source.load("SourceSystemHsaId and LogicalAddress")</script></con:config></con:t
          <urn1:careContactId>${careContactId}</urn1:careContactId>
       </urn1:GetCareDocumentation>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="Response SLA Assertion" name="Response SLA" id="bebc487a-5264-4442-87f9-f4ff32b4bc71"><con:configuration><SLA>15000</SLA></con:configuration></con:assertion><con:assertion type="Schema Compliance" name="Schema Compliance" id="c9fe74d9-c668-4e60-977f-39437a895b67"><con:configuration><definition/></con:configuration></con:assertion><con:assertion type="SOAP Response" name="SOAP Response" id="f9368b76-7884-47c0-a4b4-3bfcea6d5c0d"/><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="d2961dff-3815-4851-b817-75ecc509e5a3"/><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - BasicTestcase" searchProperties="true" id="ccf37788-eedc-4356-82a5-5eb9eadcd3ef" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="7033588e-1370-4bab-bfae-ca584a98b24a"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+</soapenv:Envelope>]]></con:request><con:assertion type="Response SLA Assertion" name="Response SLA" id="bebc487a-5264-4442-87f9-f4ff32b4bc71"><con:configuration><SLA>15000</SLA></con:configuration></con:assertion><con:assertion type="Schema Compliance" name="Schema Compliance" id="c9fe74d9-c668-4e60-977f-39437a895b67"><con:configuration><definition/></con:configuration></con:assertion><con:assertion type="SOAP Response" name="SOAP Response" id="f9368b76-7884-47c0-a4b4-3bfcea6d5c0d"/><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="d2961dff-3815-4851-b817-75ecc509e5a3"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="urn:riv:ehr:patientsummary:GetCareContactsResponder:2:GetCareContacts" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - BasicTestcase" searchProperties="true" id="ccf37788-eedc-4356-82a5-5eb9eadcd3ef" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="7033588e-1370-4bab-bfae-ca584a98b24a"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetDiagnosis/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("BasicTestcase")</script></con:config></con:testStep><con:testStep type="request" name="Call GetDiagnosis" id="6a575116-f0c8-455d-abe6-59a2cda7aa66"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="Call GetDiagnosis" id="9ba38dc7-187c-42cb-afd3-421ad86a2005"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10563,10 +10563,8 @@ def utils = new GroovyUtils(context)
 def contextHelper = new ContextHelper(context)
 def validator = new SchematronValidator()
 
-def constraintsPath = messageExchange.modelItem.testStep.testCase.testSuite.project.getPropertyValue( "constraintsPath" )
-
 def failures = validator.validateMessage(messageExchange.response.responseContent,
-	new File(utils.projectPath + constraintsPath + "constraints.xml"))
+	new File(utils.projectPath + "/GetDiagnosis/constraints.xml"))
 
 failures.each { failure ->
     log.error ("Failure $failure.text")
@@ -10599,32 +10597,11 @@ diagnosis.each {l ->
     assert patientId == context.patientId
     assert patientIdType == context.patientIdType
 }
-</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert SchematronNPO" id="799e4b35-2a35-4c11-8d0d-890219e7263f"><con:configuration><scriptText>import se.skl.rivta.testsupport.soapui.validation.SchematronValidator
-import se.skl.rivta.testsupport.soapui.ContextHelper
+</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - CareUnitIdFilter" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" id="d72e69c7-3732-4942-a8d3-87be4fb57223" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="b3f27f9f-e707-4e3b-8f6d-e4a687ec5251"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def validator = new SchematronValidator()
-
-if(context.validateNPO != "true") {
-	log.info("Not validating NPO-rules, validateNPO is false")
-	return
-}
-
-def constraintsPath = messageExchange.modelItem.testStep.testCase.testSuite.project.getPropertyValue( "constraintsPath" )
-
-def failures = validator.validateMessage(messageExchange.response.responseContent,
-	new File(utils.projectPath + constraintsPath + "constraintsNPO.xml"))
-
-failures.each { failure ->
-    log.error ("Failure $failure.text")
-}
-
-assert (failures.isEmpty())</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - CareUnitIdFilter" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" id="d72e69c7-3732-4942-a8d3-87be4fb57223" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="b3f27f9f-e707-4e3b-8f6d-e4a687ec5251"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
-import com.eviware.soapui.support.GroovyUtils
-
-def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetDiagnosis/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("CareUnitIdFilter")</script></con:config></con:testStep><con:testStep type="request" name="Call GetDiagnosis" id="ca853eb6-5346-46ae-abca-9d6bf85d34c9"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="Call GetDiagnosis" id="4135302b-90ef-4b41-b307-060d40ac1a79"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10725,32 +10702,11 @@ diagnoses.each { diagnosis ->
 if(!offending.isEmpty()) {
     log.error("Response contains diagnoses with unexpected CareUnitHSAId: ${offending}")
     assert(false)
-}</scriptText></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" name="Assert SchematronNPO" id="fa0981ac-cade-4f7c-8333-b1b1b553abeb"><con:configuration><scriptText>import se.skl.rivta.testsupport.soapui.validation.SchematronValidator
-import se.skl.rivta.testsupport.soapui.ContextHelper
+}</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - NonExistentPatientId" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" id="31fff07a-d465-46c3-8d43-dd19fec34021" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="abfc6568-69cd-4655-a3e4-1aac4e6bff81"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def validator = new SchematronValidator()
-
-if(context.validateNPO != "true") {
-	log.info("Not validating NPO-rules, validateNPO is false")
-	return
-}
-
-def constraintsPath = messageExchange.modelItem.testStep.testCase.testSuite.project.getPropertyValue( "constraintsPath" )
-
-def failures = validator.validateMessage(messageExchange.response.responseContent,
-	new File(utils.projectPath + constraintsPath + "constraintsNPO.xml"))
-
-failures.each { failure ->
-    log.error ("Failure $failure.text")
-}
-
-assert (failures.isEmpty())</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="false" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetDiagnosis - NonExistentPatientId" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword="" id="31fff07a-d465-46c3-8d43-dd19fec34021" disabled="true"><con:settings/><con:testStep type="groovy" name="Read data" id="abfc6568-69cd-4655-a3e4-1aac4e6bff81"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
-import com.eviware.soapui.support.GroovyUtils
-
-def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetDiagnosis/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("NonExistentPatientId")</script></con:config></con:testStep><con:testStep type="request" name="Call GetDiagnosis" id="7f4d36ff-dadf-4ce6-8438-f3e19abf9fa4"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="Call GetDiagnosis" id="7134adac-6a65-4ab6-bf07-50bfd119c7f4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10780,7 +10736,7 @@ declare namespace urn1='urn:riv:clinicalprocess:healthcond:description:2';
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
-def dataFile = new File(utils.projectPath + "/data.xml")
+def dataFile = new File(utils.projectPath + "/GetDiagnosis/data.xml")
 def source = new XmlDataReader(context, dataFile)
 
 source.load("SourceSystemHSAIdAndLogicalAddress")</script></con:config></con:testStep><con:testStep type="request" name="Call GetDiagnosis" id="c3d5721d-a31b-4cc4-b8e4-1460518cb5e6"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetDiagnosisResponderBinding</con:interface><con:operation>GetDiagnosis</con:operation><con:request name="Call GetDiagnosis" id="20c0388c-bef4-42da-9a4a-2218ae793fe7"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
@@ -10799,7 +10755,7 @@ source.load("SourceSystemHSAIdAndLogicalAddress")</script></con:config></con:tes
          <urn1:sourceSystemHSAId>${sourceSystemHSAId}</urn1:sourceSystemHSAId>
       </urn1:GetDiagnosis>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="bfcf39ae-73a8-408f-8610-2d4112f81411"/><con:assertion type="Schema Compliance" id="83a8e3a2-5b77-4b7d-bca3-b6ec1db060ca"><con:configuration/></con:assertion><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="b522c94e-537b-4959-b659-310cfb92903c"/><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetImagingOutcome - Basic Testcase" searchProperties="true" id="76b06627-b573-4d2b-acd4-ed8afea0e6ad" disabled="true"><con:settings/><con:testStep type="groovy" name="GIVEN Basic Testcase data" id="ff3fb2a4-bb59-4095-94b9-1359915a9b19"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="bfcf39ae-73a8-408f-8610-2d4112f81411"/><con:assertion type="Schema Compliance" id="83a8e3a2-5b77-4b7d-bca3-b6ec1db060ca"><con:configuration/></con:assertion><con:assertion type="Not SOAP Fault Assertion" name="SOAP Fault" id="b522c94e-537b-4959-b659-310cfb92903c"/><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TS - GetImagingOutcome - Basic Testcase" searchProperties="true" id="76b06627-b573-4d2b-acd4-ed8afea0e6ad" disabled="true"><con:settings/><con:testStep type="groovy" name="GIVEN Basic Testcase data" id="ff3fb2a4-bb59-4095-94b9-1359915a9b19"><con:settings/><con:config><script>import se.skl.rivta.testsupport.soapui.datasource.XmlDataReader
 import com.eviware.soapui.support.GroovyUtils
 
 def utils = new GroovyUtils(context)
