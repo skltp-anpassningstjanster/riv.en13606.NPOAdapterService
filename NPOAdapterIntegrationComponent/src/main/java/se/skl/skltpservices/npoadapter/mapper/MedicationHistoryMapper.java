@@ -559,9 +559,14 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                             
                         // --- end of lkm-dos   
                             
+                            
+                        // --- lkm-lva - Läkemedelsval    
+                            
                         } else if(cluster.getMeaning() != null 
                                 && StringUtils.equals(LAKEMDELSVAL, cluster.getMeaning().getCode())) {
                             for(ITEM clusterItem : cluster.getParts()) {
+                                
+                                // element
                                 if(clusterItem instanceof ELEMENT) {
                                     final ELEMENT clusterElm = (ELEMENT) clusterItem;
                                     if(clusterElm.getMeaning() != null && clusterElm.getMeaning().getCode() != null) {
@@ -576,14 +581,25 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                             break;
                                         }
                                     }
+                                    
+                                // cluster    
                                 } else if (clusterItem instanceof CLUSTER) {
                                     final CLUSTER innerCluster = (CLUSTER) clusterItem;
-                                    //Lakemedelsvara (lkm-lkm-lva)  
+
+                                    
                                     if(innerCluster.getMeaning() != null 
+                                            && StringUtils.equals(LAKEMEDELSPRODUKT, innerCluster.getMeaning().getCode())) {
+                                        
+                                        processLkmLkmLpr(prescription, innerCluster);
+
+                                    } else if(innerCluster.getMeaning() != null 
                                             && StringUtils.equals(LAKEMEDELSVARA, innerCluster.getMeaning().getCode())) {
+                                        // Lakemedelsvara (lkm-lkm-lva)  
                                         final DrugArticleType drugArticle = new DrugArticleType();
                                         for(ITEM innerClusterItem : innerCluster.getParts()) {
+
                                             if(innerClusterItem instanceof ELEMENT) {
+                                                // child element of cluster lkm-lkm-lva
                                                 final ELEMENT lakemedelsElm = (ELEMENT) innerClusterItem;
                                                 if(lakemedelsElm.getMeaning() != null && lakemedelsElm.getMeaning().getCode() != null) {
                                                     switch(lakemedelsElm.getMeaning().getCode()) {
@@ -597,79 +613,18 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                                         break;
                                                     }
                                                 }
-                                                //Lakemdelsprodukt
                                             } else if (innerClusterItem instanceof CLUSTER) {
-                                                final CLUSTER prodCluster = (CLUSTER) innerClusterItem;
-                                                if(prodCluster.getMeaning() != null 
-                                                        && StringUtils.equals(prodCluster.getMeaning().getCode(), LAKEMEDELSPRODUKT)) {
-                                                    // prescription/drug/drug
-                                                    prescription.getDrug().setDrug(new DrugType());
+                                                // child cluster of cluster lkm-lkm-lva
+                                                final CLUSTER childClusterOfLkmLkmLva = (CLUSTER) innerClusterItem;
+                                                if(childClusterOfLkmLkmLva.getMeaning() != null 
+                                                        && StringUtils.equals(childClusterOfLkmLkmLva.getMeaning().getCode(), LAKEMEDELSPRODUKT)) {
                                                     
-                                                    // for each part in the cluster
-                                                    for(ITEM prodItem : prodCluster.getParts()) {
-                                                        if(prodItem instanceof ELEMENT) {
-                                                            final ELEMENT prodElm = (ELEMENT) prodItem;
-                                                            if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
-                                                                switch (prodElm.getMeaning().getCode()) {
-                                                                    case LAKEMEDELSPRODUKT_PRODUKTNAMN:
-                                                                        if (prescription.getDrug().getDrug().getNplId() == null) {
-                                                                            prescription.getDrug().getDrug().setNplId(new CVType());
-                                                                        }
-                                                                        prescription.getDrug().getDrug().getNplId().setDisplayName(EHRUtil.getSTValue(prodElm.getValue()));
-                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCodeSystem())) {
-                                                                            // default codeSystem using produktnamn
-                                                                            prescription.getDrug().getDrug().getNplId().setCodeSystem(prodElm.getMeaning().getCodeSystem());
-                                                                        }
-                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCode())) {
-                                                                            // default code using produktnamn
-                                                                            prescription.getDrug().getDrug().getNplId().setCode(EHRUtil.getSTValue(prodElm.getValue()));
-                                                                        }
-                                                                    break;
-                                                                    case LAKEMEDELSPRODUKT_NPLID:
-                                                                    if(prodElm.getValue() instanceof II) {
-                                                                        if (prescription.getDrug().getDrug().getNplId() == null) {
-                                                                            prescription.getDrug().getDrug().setNplId(new CVType());
-                                                                        }
-                                                                        prescription.getDrug().getDrug().getNplId().setCode( ((II)prodElm.getValue()).getExtension() );
-                                                                        prescription.getDrug().getDrug().getNplId().setCodeSystem(((II)prodElm.getValue()).getRoot());
-                                                                        if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getDisplayName())) {
-                                                                            // default displayName using code
-                                                                            prescription.getDrug().getDrug().getNplId().setDisplayName(prescription.getDrug().getDrug().getNplId().getCode());
-                                                                        }
-                                                                    }
-                                                                    break;
-                                                                    case LAKEMEDELSPRODUKT_ATC:
-                                                                    if(prodElm.getValue() instanceof CD) {
-                                                                        final CVType drugAtcCv = new CVType();
-                                                                        final CD drugAtcCd = (CD) prodElm.getValue();
-                                                                        drugAtcCv.setCode(drugAtcCd.getCode());
-                                                                        drugAtcCv.setCodeSystem(drugAtcCd.getCodeSystem());
-                                                                        drugAtcCv.setDisplayName(EHRUtil.getSTValue(drugAtcCd.getDisplayName()));
-                                                                        prescription.getDrug().getDrug().setAtcCode(drugAtcCv);
-                                                                    }
-                                                                    break;
-                                                                    case LAKEMEDELSPRODUKT_BEREDNINGSFORM:
-                                                                        prescription.getDrug().getDrug().setPharmaceuticalForm(EHRUtil.getSTValue(prodElm.getValue()));
-                                                                    break;
-                                                                    case LAKEMEDELSPRODUKT_PRODUKT_STYRKA:
-                                                                        if(prodElm.getValue() instanceof PQ) {
-                                                                            final PQ styrka = (PQ) prodElm.getValue();
-                                                                            prescription.getDrug().getDrug().setStrength(styrka.getValue());
-                                                                            prescription.getDrug().getDrug().setStrengthUnit(styrka.getUnit());
-                                                                        }
-                                                                    break;
-                                                                    case LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET:
-                                                                        prescription.getDrug().getDrug().setStrengthUnit(EHRUtil.getSTValue(prodElm.getValue()));
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    // finish lkm-lkm-lpr
+                                                    processLkmLkmLpr(prescription, childClusterOfLkmLkmLva);
                                                     
-                                                } else if (prodCluster.getMeaning() != null && StringUtils.equals(prodCluster.getMeaning().getCode(), UTBYTESGRUPP)) {
+                                                } else if (childClusterOfLkmLkmLva.getMeaning() != null 
+                                                        && StringUtils.equals(childClusterOfLkmLkmLva.getMeaning().getCode(), UTBYTESGRUPP)) {
                                                     prescription.getDrug().setGenerics(new GenericsType());
-                                                    for(ITEM utbItem : prodCluster.getParts()) {
+                                                    for(ITEM utbItem : childClusterOfLkmLkmLva.getParts()) {
                                                         if(utbItem instanceof ELEMENT) {
                                                             final ELEMENT utbElm = (ELEMENT) utbItem;
                                                             if(utbElm.getMeaning() != null && utbElm.getMeaning().getCode() != null) {
@@ -750,7 +705,75 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
     }
         
     
+    // process cluster lkm-lkm-lpr (Läkemedelsprodukt)
+    private void processLkmLkmLpr(MedicationPrescriptionType prescription, CLUSTER lkmLkmLpr) {
         
+        // prescription/drug/drug
+        prescription.getDrug().setDrug(new DrugType());
+        
+        // for each part in the cluster
+        for(ITEM produktItem : lkmLkmLpr.getParts()) {
+            if(produktItem instanceof ELEMENT) {
+                final ELEMENT prodElm = (ELEMENT) produktItem;
+                if(prodElm.getMeaning() != null && prodElm.getMeaning().getCode() != null) {
+                    switch (prodElm.getMeaning().getCode()) {
+                        case LAKEMEDELSPRODUKT_PRODUKTNAMN:
+                            if (prescription.getDrug().getDrug().getNplId() == null) {
+                                prescription.getDrug().getDrug().setNplId(new CVType());
+                            }
+                            prescription.getDrug().getDrug().getNplId().setDisplayName(EHRUtil.getSTValue(prodElm.getValue()));
+                            if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCodeSystem())) {
+                                // default codeSystem using produktnamn
+                                prescription.getDrug().getDrug().getNplId().setCodeSystem(prodElm.getMeaning().getCodeSystem());
+                            }
+                            if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getCode())) {
+                                // default code using produktnamn
+                                prescription.getDrug().getDrug().getNplId().setCode(EHRUtil.getSTValue(prodElm.getValue()));
+                            }
+                        break;
+                        case LAKEMEDELSPRODUKT_NPLID:
+                        if(prodElm.getValue() instanceof II) {
+                            if (prescription.getDrug().getDrug().getNplId() == null) {
+                                prescription.getDrug().getDrug().setNplId(new CVType());
+                            }
+                            prescription.getDrug().getDrug().getNplId().setCode( ((II)prodElm.getValue()).getExtension() );
+                            prescription.getDrug().getDrug().getNplId().setCodeSystem(((II)prodElm.getValue()).getRoot());
+                            if (StringUtils.isBlank(prescription.getDrug().getDrug().getNplId().getDisplayName())) {
+                                // default displayName using code
+                                prescription.getDrug().getDrug().getNplId().setDisplayName(prescription.getDrug().getDrug().getNplId().getCode());
+                            }
+                        }
+                        break;
+                        case LAKEMEDELSPRODUKT_ATC:
+                        if(prodElm.getValue() instanceof CD) {
+                            final CVType drugAtcCv = new CVType();
+                            final CD drugAtcCd = (CD) prodElm.getValue();
+                            drugAtcCv.setCode(drugAtcCd.getCode());
+                            drugAtcCv.setCodeSystem(drugAtcCd.getCodeSystem());
+                            drugAtcCv.setDisplayName(EHRUtil.getSTValue(drugAtcCd.getDisplayName()));
+                            prescription.getDrug().getDrug().setAtcCode(drugAtcCv);
+                        }
+                        break;
+                        case LAKEMEDELSPRODUKT_BEREDNINGSFORM:
+                            prescription.getDrug().getDrug().setPharmaceuticalForm(EHRUtil.getSTValue(prodElm.getValue()));
+                        break;
+                        case LAKEMEDELSPRODUKT_PRODUKT_STYRKA:
+                            if(prodElm.getValue() instanceof PQ) {
+                                final PQ styrka = (PQ) prodElm.getValue();
+                                prescription.getDrug().getDrug().setStrength(styrka.getValue());
+                                prescription.getDrug().getDrug().setStrengthUnit(styrka.getUnit());
+                            }
+                        break;
+                        case LAKEMEDELSPRODUKT_PRODUKT_STYRKA_ENHET:
+                            prescription.getDrug().getDrug().setStrengthUnit(EHRUtil.getSTValue(prodElm.getValue()));
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+
 
     // For this lko, return all the lkfs which it links to
     // Can be an empty list
