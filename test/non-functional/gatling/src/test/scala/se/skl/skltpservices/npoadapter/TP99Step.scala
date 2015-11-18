@@ -3,7 +3,6 @@ package se.skl.skltpservices.npoadapter;
 import scala.concurrent.duration._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
 import se.skl.skltpservices.npoadapter.scenarios.GetAlertInformationScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetCareContactsScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetCareDocumentationScenario
@@ -13,12 +12,18 @@ import se.skl.skltpservices.npoadapter.scenarios.GetLaboratoryOrderOutcomeScenar
 import se.skl.skltpservices.npoadapter.scenarios.GetMedicationHistoryScenario
 import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 
-class TP09Parallel200Users extends Simulation with HasBaseURL {
+/**
+ * Change the number of new users per second, step by step to see 
+ * effect on CPU Usage %.
+ */
+class TP99Step extends Simulation with HasBaseURL {
 
-  val totalUsers:Int = 100
+  // Relationship between requests per second and CPU 
+  
+  val newUsersPerSecond:Int     = 90
+  val testDuration              =  1 minutes
     
-  val getParallel = scenario("TP09Parallel200Users. Each contract - get parallel")
-                    .repeat(60) {
+  val getParallel = scenario("TP99Step").
                       uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),
                         exec(GetCareContactsScenario.request),
@@ -29,9 +34,6 @@ class TP09Parallel200Users extends Simulation with HasBaseURL {
                         exec(GetMedicationHistoryScenario.request),
                         exec(GetReferralOutcomeScenario.request)
                      )
-                     .pause(1 second)
-                    }
-    
-  setUp(getParallel.inject(rampUsers(totalUsers) over (4 seconds))
-                    .protocols(http.baseURL(baseURL)))
+  setUp(getParallel.inject(constantUsersPerSec(newUsersPerSecond) during(testDuration)) 
+                   .protocols(http.baseURL(baseURL)))
 }

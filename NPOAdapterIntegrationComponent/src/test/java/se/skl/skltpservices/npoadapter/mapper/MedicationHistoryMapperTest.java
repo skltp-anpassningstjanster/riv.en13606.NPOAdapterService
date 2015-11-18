@@ -521,6 +521,21 @@ public class MedicationHistoryMapperTest extends MapperTest {
         assertFalse(responseXml.contains("<ns2:dispensationAuthorization><ns2:dispensationAuthorizationId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>SE2321000081-10331367_19640101000028"));
     }
     
+    
+    @Test
+    public void checkLkmLkmLpr() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_1, true);
+        assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19770615000037</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>CRESTOR</ns2:displayName>"));
+        
+        // Kalmar
+        responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_4, true);
+        assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19690529000018</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>Tavegyl®</ns2:displayName>"));
+        assertTrue(responseXml.contains("<ns2:dosage><ns2:lengthOfTreatment><ns2:treatmentInterval><ns2:low>6.0</ns2:low>"));
+    }
+    
+    
+    // --- ------------------------
+    
     @Test
     @Ignore 
     // FIXME - fails to load schemas (before attempting to validate the xml) - exception is

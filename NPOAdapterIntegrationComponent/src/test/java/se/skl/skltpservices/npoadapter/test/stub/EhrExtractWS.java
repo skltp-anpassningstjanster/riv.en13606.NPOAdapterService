@@ -130,12 +130,18 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         return null;
     }
 
-    // Adapter response timeout - defined in NPOAdapter-config.properties
+ 
+    // --- ---
+    // Adapter response timeout - defined in NPOAdapter-config.properties - SERVICE_TIMEOUT_MS=30000
+
+    // default
     private long responseTimeout = 31000;
 
+    // can be overriden in -config-override.properties
     public void setResponseTimeout(int responseTimeout) {
         this.responseTimeout = responseTimeout;
     }
+    
 
     @Override
     public RIV13606REQUESTEHREXTRACTResponseType riv13606REQUESTEHREXTRACT(RIV13606REQUESTEHREXTRACTRequestType request) {
@@ -236,7 +242,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(vkoKey));
                     log.info("Loaded dyanmictest data: " + vkoKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE_1));
+                    responseType.getEhrExtract().add(getTestData(Util.CARECONTACTS_TEST_FILE_1, subjectOfCareId));
                 }
                 responseType.setContinuationToken(new ST());
                 responseType.getContinuationToken().setValue("stub");
@@ -249,7 +255,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(vooKey));
                     log.info("Loaded dynamictest data: " + vooKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE));
+                    responseType.getEhrExtract().add(getTestData(Util.CAREDOCUMENTATION_TEST_FILE, subjectOfCareId));
                 }
                 break;
             case DIA:
@@ -260,7 +266,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(diaKey));
                     log.info("Loaded dynamictest data: " + diaKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE));
+                    responseType.getEhrExtract().add(getTestData(Util.DIAGNOSIS_TEST_FILE, subjectOfCareId));
                 }
                 break;
             case UND_KKM_KLI:
@@ -270,7 +276,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                 if(responseCache.containsKey(undKkmKey)) {
                     responseType.getEhrExtract().add(responseCache.get(undKkmKey));
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE_1));
+                    responseType.getEhrExtract().add(getTestData(Util.LAB_TEST_FILE_1, subjectOfCareId));
                 }
                 break;
             case UPP:
@@ -281,7 +287,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(uppKey));
                     log.info("Loaded dynamictest data: " + uppKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE));                
+                    responseType.getEhrExtract().add(getTestData(Util.ALERT_TEST_FILE, subjectOfCareId));                
                 }
                 break;
             case LKM:
@@ -292,7 +298,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(lkmKey));
                     log.info("Loaded dynamictest data: " + lkmKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.MEDICATIONHISTORY_TEST_FILE_1));
+                    responseType.getEhrExtract().add(getTestData(Util.MEDICATIONHISTORY_TEST_FILE_1, subjectOfCareId));
                 }
                 break;
             case UND_KON:
@@ -303,7 +309,7 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     responseType.getEhrExtract().add(responseCache.get(undKonKey));
                     log.info("Loaded dynamictest data: " + undKonKey);
                 } else {
-                    responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE_1));
+                    responseType.getEhrExtract().add(getTestData(Util.REFERRALOUTCOME_TEST_FILE_1, subjectOfCareId));
                 }
                 break;
             case UND_BDI:
@@ -317,10 +323,10 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
                     if (PATIENT_ID_EXTRA_LARGE.equals(subjectOfCareId)) {
                         // 1MB response - performance test case TP2
                         log.info("Received UND-BDI Request extra large");
-                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE));
+                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME1MB_TEST_FILE, subjectOfCareId));
                     } else {
                         log.info("Received UND-BDI Request");
-                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE));
+                        responseType.getEhrExtract().add(getTestData(Util.IMAGINGOUTCOME_TEST_FILE, subjectOfCareId));
                     }
                 }
                 break;
@@ -371,16 +377,26 @@ public class EhrExtractWS implements RIV13606REQUESTEHREXTRACTPortType {
         return request.getSubjectOfCareId().getExtension();
     }
 
+
     //
-    protected EHREXTRACT getTestData(final String path) throws JAXBException {
-        EHREXTRACT ehrextract = responseCache.get(path);
-        if (ehrextract == null) {
-            ehrextract = Util.loadEhrTestData(path);
-            responseCache.put(path, ehrextract);
+    private EHREXTRACT getTestData(final String path, final String subjectOfCareId) throws JAXBException {
+        EHREXTRACT ehrExtract = responseCache.get(path);
+        if (ehrExtract == null) {
+            ehrExtract = Util.loadEhrTestData(path);
+            responseCache.put(path, ehrExtract);
         }
-        return ehrextract;
-    }
         
+        if (StringUtils.isNotBlank(subjectOfCareId)) {
+            if (ehrExtract != null) {
+                if (ehrExtract.getSubjectOfCare() != null) {
+                    ehrExtract.getSubjectOfCare().setExtension(subjectOfCareId);
+                }
+            }
+        }
+        return ehrExtract;
+    }
+
+    //
     protected void resetCache() throws Exception {
         log.info("reset testdata cache");
         responseCache.clear();

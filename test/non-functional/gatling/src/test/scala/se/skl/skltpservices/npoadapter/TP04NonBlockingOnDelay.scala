@@ -23,9 +23,9 @@ class TP04NonBlockingOnDelay extends Simulation with HasBaseURL {
   //   # Ange i millesekunder hur länge en ändpunkt skall vänta innan ett synkront anrop avbryts
   //   SERVICE_TIMEOUT_MS=20000
   
-  val times:Int         = 2
-  val pause:Int         = 0
-  val simultaneousUsers = 1
+  val times:Int         =  3
+  val pause:Int         =  0
+  val simultaneousUsers = 10
   
   val getSequential = scenario("TP04NonBlockingOnDelay. Each contract - get " + times + " times sequentially")
                      .repeat(times){exec(GetAlertInformationScenario.delayedRequestWithoutTimeout)}
@@ -48,6 +48,8 @@ class TP04NonBlockingOnDelay extends Simulation with HasBaseURL {
    
 // We don't want Gatling to timeout during the tests    
 // Gatling timeout is set in GATLING_HOME/conf/gatling.conf
+// or from the command line
+// mvn gatling:execute -PTP04NonBlockingOnDelay -DbaseURL=http://ine-sit-app09.sth.basefarm.net:11006/npoadapter/ -Dgatling.http.ahc.readTimeout=70000 -Dgatling.http.ahc.connectTimeout=70000 -Dgatling.http.ahc.pooledConnectionIdleTimeout=70000 -Dgatling.http.ahc.requestTimeout=70000
 //
 // Unfortunately it is not possible to set timeout programmatically once the test has started.
 //    

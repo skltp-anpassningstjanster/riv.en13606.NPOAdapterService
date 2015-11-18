@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<iso:schema
+        xmlns="http://purl.oclc.org/dsdl/schematron"
+        xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+        queryBinding='xslt2'
+        schemaVersion='ISO19757-3'>
+
+    <iso:title>Validation for GetImagingOutcome</iso:title>
+    <iso:ns prefix='urn' uri='urn:riv:clinicalprocess:healthcond:actoutcome:GetImagingOutcomeResponder:2' />
+    <iso:ns prefix='urn1' uri='urn:riv:clinicalprocess:healthcond:actoutcome:2' />
+
+    <iso:pattern abstract="true" id="pattern.CvType">
+        <iso:rule context="$path">
+            <iso:assert test="count(urn1:code) + count(urn1:originalText) = 1">
+                In $path, ONE of code or originalText must be given.</iso:assert>
+        </iso:rule>
+
+        <iso:rule context="$path/urn1:code">
+            <iso:assert test="count(../urn1:codeSystem) + count(../urn1:displayName) = 2">
+                In $path if <iso:name/> is given, codeSystem and displayName must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:codeSystem">
+            <iso:assert test="count(../urn1:code) + count(../urn1:displayName) = 2">
+                In $path if <iso:name/> is given, code and displayName must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:displayName">
+            <iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) = 2">
+                In $path if <iso:name/> is given, code and codeSystem must be given.</iso:assert>
+            <iso:assert test="count(../urn1:originalText)= 0">
+                In $path if <iso:name/> is given, originalText must not be given.</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:originalText">
+            <iso:assert test="count(../urn1:code) + count(../urn1:codeSystem) + count(../urn1:displayName) = 0">
+                In $path if <iso:name/> is given, code, codeSystem and displayName must not be given.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <iso:pattern abstract="true" id="pattern.LegalAuthenticatorType">
+        <iso:rule context="$path/urn1:legalAuthenticatorRoleCode">
+            <iso:assert test="not(exists(.))"><iso:name/> MUST not exist in $path</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <iso:pattern abstract="true" id="pattern.AccountableHealthcareProfessional">
+        <iso:rule context="$path/urn1:healthcareProfessionalCareUnitHSAId">
+            <iso:assert test="not(exists(.))"><iso:name/> MUST not exist in $path</iso:assert>
+        </iso:rule>
+        <iso:rule context="$path/urn1:healthcareProfessionalCareGiverHSAId">
+            <iso:assert test="not(exists(.))"><iso:name/> MUST not exist in $path</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <iso:pattern abstract="true" id="pattern.OrgUnitType">
+        <iso:rule context="$path">
+            <iso:assert test="exists(urn1:orgUnitName)">orgUnitName MUST exist in $path</iso:assert>
+            <iso:assert test="exists(urn1:orgUnitHSAId)">orgUnitHSAId MUST exist in $path</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+
+    <!-- Check for CVType -->
+    <iso:pattern id="Verify healthcareProfessionalRoleCode" is-a="pattern.CvType">
+        <iso:param name="path" value="urn1:healthcareProfessionalRoleCode" />
+    </iso:pattern>
+
+    <iso:pattern id="Verify examinationSpeciality" is-a="pattern.CvType">
+        <iso:param name="path" value="urn1:examinationSpeciality" />
+    </iso:pattern>
+    
+    <iso:pattern id="Verify examinationActivity" is-a="pattern.CvType">
+        <iso:param name="path" value="urn1:examinationActivity" />
+    </iso:pattern>
+    
+    <iso:pattern id="Verify examinationStatus" is-a="pattern.CvType">
+        <iso:param name="path" value="urn1:examinationStatus" />
+    </iso:pattern>
+    
+    <!-- Verify LegalAuthenticatorType -->
+    <iso:pattern id="Verify attested" is-a="pattern.LegalAuthenticatorType">
+        <iso:param name="path" value="urn1:attested" />
+    </iso:pattern>
+    <iso:pattern id="Verify legalAuthenticatorType" is-a="pattern.LegalAuthenticatorType">
+        <iso:param name="path" value="urn1:legalAuthenticator" />
+    </iso:pattern>
+    
+    <!-- Rule for PatientData -->
+    <iso:pattern id="Verify patientData">
+        <iso:rule context="urn1:patientWeight/urn1:unit">
+            <iso:assert test="normalize-space(.) = 'kg'">patientWeight.unit MUST be kg.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <iso:pattern id="Verify patientData">
+        <iso:rule context="urn1:patientLength/urn1:unit">
+            <iso:assert test="normalize-space(.) = 'cm'">patientLength.unit MUST be cm.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+        
+    <!-- Rule for QT -->
+    <iso:pattern id="Verify QT">
+        <iso:rule context="urn1:qt/urn1:unit">
+            <iso:assert test="normalize-space(.) = 's'">qt.unit MUST be s.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <!-- Rule for PR -->
+    <iso:pattern id="Verify PR">
+        <iso:rule context="urn1:pr/urn1:unit">
+            <iso:assert test="normalize-space(.) = 's'">pr.unit MUST be s.</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <!-- Elements that MUST NOT exist and differ from common types -->
+    <iso:pattern id="Verify imagingOutcomeBody.imageRecording.accountableHealthcareProfessional" is-a="pattern.AccountableHealthcareProfessional">
+        <iso:param name="path" value="urn1:imagingOutcomeBody/urn1:imageRecording/urn1:accountableHealthcareProfessional" />
+    </iso:pattern>
+
+    <iso:pattern id="Verify imagingOutcomeBody.attested.accountableHealthcareProfessional" is-a="pattern.AccountableHealthcareProfessional">
+        <iso:param name="path" value="urn1:imagingOutcomeBody/urn1:referral/urn1:accountableHealthcareProfessional" />
+    </iso:pattern>
+      
+    <iso:pattern id="Verify modalityData.lineFilter">
+        <iso:rule context="urn1:modalityData/urn1:lineFilter">
+            <iso:assert test="not(exists(.))"><iso:name/> MUST not exist in modalityData</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+    <!-- Elements that MUST exist and differ from common types -->
+    <iso:pattern id="Verify referral.accountableHealthcareProfessional.OrgUnitType" is-a="pattern.OrgUnitType">
+        <iso:param name="path" value="urn1:referral/urn1:accountableHealthcareProfessional/urn1:healthcareProfessionalOrgUnit" />
+    </iso:pattern>
+
+    <iso:pattern id="Verify referral.accountableHealthcareProfessional">
+        <iso:param name="path" value="urn1:referral/urn1:accountableHealthcareProfessional" />
+        <iso:rule context="urn1:referral/urn1:accountableHealthcareProfessional">
+            <iso:assert test="exists(urn1:healthcareProfessionalHSAId)">healthcareProfessionalHSAId MUST exist in urn1:referral/urn1:accountableHealthcareProfessional</iso:assert>
+            <iso:assert test="exists(urn1:healthcareProfessionalName)">healthcareProfessionalName MUST exist in urn1:referral/urn1:accountableHealthcareProfessional</iso:assert>
+        </iso:rule>
+    </iso:pattern>
+    
+</iso:schema>

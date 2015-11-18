@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<testsuite>
+    <id>GetDiagnosis</id>
+    <description><p>This testsuite is used to verify the implementation of GetDiagnosis prior to integration with the national platform.</p><br/>
+        <ul>
+            <li>For testing NPÖ-compliant systems, set &lt;validateNPO&gt; to true, else false.</li>
+            <li>If a testcase, e.g. the HTTPHeader-filtering testcase, is deemed not applicable for a certain producer, note it as N/A with an explanatory comment.</li>
+        </ul>
+    </description>
+    <globaldata>
+        <webServiceUrl>https://qa.esb.ntjp.se:443/vp/clinicalprocess/healthcond/description/GetDiagnosis/2/rivtabp21</webServiceUrl>
+        <validateNPO>false</validateNPO>
+    </globaldata>
+    <testcase id="BasicTestcase">
+        <description>Verifies that the response is schema- and schematron- valid and contains data for the requested patient only.<br/>
+            The only requirement on test data is that there is some data for the given patientId.
+            It might be a good idea to start by executing this testcase for a patient with a very simple response and when that works switch to a patient with more complex data.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>197609272393</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+        </data>
+    </testcase>
+    <testcase id="DateBoundaries">
+        <description>Verifies that the result only contains information within the date boundaries for the given patient.
+            The rule is <br/><br/><i>"Begränsning av sökningen i tid, vilket innebär att endast svar returneras där authorTime,
+                signatureTime eller diagnosisTime ligger helt eller delvis inom det sökta tidsintervallet."</i><br/><br/>
+            Additional information about failed assertions can be found in the script log.
+            The following Diagnosis-elements are recommended:
+            <ol>
+                <li>A diagnosis with authorTime within the given range, signatureTime and diagnosisTime outside the given range.</li>
+                <li>A diagnosis with signatureTime within the given range, authorTime and diagnosisTime outside the given range.</li>
+                <li>A diagnosis with diagnosisTime within the given range, authorTime and signatureTime outside the given range.</li>
+                <li>A diagnosis with authorTime exactly on the start-date of the given range, signatureTime and diagnosisTime outside the given range.</li>
+                <li>A diagnosis with signatureTime exactly on the end-date of the given range, authorTime and diagnosisTime outside the given range.</li>
+                <li>A diagnosis with all times outside the given range.</li>
+            </ol>
+            It is possible to have several diagnoses for on case, e.g. to test dates exactly at the start or end of the given range, and also to skip cases that are not applicable.<br/>
+            The expected DocumentId's, case 1-5 above, must be added as a comma-separated list in the
+            expectedDocumentIds field.<br/>
+            The unexpected DocumentId's, case 6 above, must be added as a comma-separated list in the
+            unexpectedDocumentIds field.<br/>
+            The fields httpHeaderHsaId and logicalAddress must contain values that do not limit the response.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>197609272393</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <timePeriodStart>20131101</timePeriodStart>
+            <timePeriodEnd>20131115</timePeriodEnd>
+            <!-- Add a list of comma-separated ids that at least should be included in the response -->
+            <expectedDocumentIds>1234567890,1234567891,1234567892,1234567893,1234567894</expectedDocumentIds>
+            <!-- Add a list of comma-separated ids that should not be included in the response -->
+            <unexpectedDocumentIds>9999</unexpectedDocumentIds>
+        </data>
+    </testcase>
+    <testcase id="CareUnitIdFilter">
+        <description>Verifies that the result only contains information for the requested CareUnitIds.<br/>
+            Enter a PatientId and two CareUnitIds that exist in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress must contain values that do not affect the returned list.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>194103219202</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careUnitId1>1122334455</careUnitId1>
+            <careUnitId2>9876</careUnitId2>
+        </data>
+    </testcase>
+    <testcase id="CareContactIdFilter">
+        <description>Verifies that the result only contains information for for the requested CareContactIds.<br/>
+            Enter a PatientId, sourceSystemHSAid and two CareContactIds that exist in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress must contain values that do not affect the returned list.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>194103219202</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <sourceSystemHSAId>112233</sourceSystemHSAId>
+            <careContactId1>1122334455</careContactId1>
+            <careContactId2>9876</careContactId2>
+        </data>
+    </testcase>
+    <testcase id="HttpHeaderFilter">
+        <description>Verifies that the source system filters the response based on the HttpHeader 'x-rivta-original-serviceconsumer-hsaid'.<br/>
+            The testcase is not applicable for systems that do not implement this kind of filtering.<br/>
+            Enter a PatientId that has data with more than one CareContactId in the source system.<br/>
+            One or more CareUnitIds must pass the Http-header-filtering. Add these to expectedCareUnitIds below.<br/>
+            One or more CareUnitIds must NOT pass the Http-header-filtering. Add these to unexpectedCareUnitIds below.<br/>
+            The field logicalAddress must be set to a value that does not affect the returned list.
+            <br/>
+        </description>
+        <data>
+            <httpHeaderHsaId>filtered</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>194103219202</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <!-- Add a list of comma-separated ids that are expected in the response -->
+            <expectedCareUnitIds>565656,777777</expectedCareUnitIds>
+            <!-- Add a list of comma-separated ids that sare not expected in the response -->
+            <unexpectedCareUnitIds>88</unexpectedCareUnitIds>
+        </data>
+    </testcase>
+    <testcase id="NonExistentPatientId">
+        <description>Verifies that the service returns an empty result instead of a Soap Fault if a nonexistent PatientId is given.<br/>
+            Enter a PatientId that is not found in the source system and valid values for httpHeaderHsaId and logical adress.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>199501062393</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+        </data>
+    </testcase>
+    <testcase id="NonExistentCareContactId">
+        <description>Verifies that the service returns an empty result instead of a Soap Fault if a nonexistent
+            CareContactId is given.<br/>
+            Enter a PatientId that exists in the source system and a sourceSystemHSAId and CareContactId that is not found in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress must contain values that do not affect the returned list.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>194103219202</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+            <sourceSystemHSAId>112233</sourceSystemHSAId>
+        </data>
+    </testcase>
+    <testcase id="CareContactIdWithoutSourceSystemHSAId">
+        <description>This negative test verifies that the source system returns a Soap Fault if careContactId has a value
+            and sourceSystemHSAId is empty or not supplied.<br/>
+            Enter a PatientId/CareContactId-combination that exists in the source system and valid values for httpHeaderHsaId and logicalAddress.<br/>
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>194103219202</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+        </data>
+    </testcase>
+    <testcase id="SourceSystemHSAIdAndLogicalAddress">
+        <description>This negative test verifies that the source system returns a Soap Fault if the logicalAddress and
+            sourceSystemHSAId are not the same.<br/>
+            Enter PatientId and a CareContactId and the correct SourceSystemHSAId of a CareContact that is found in the source system.<br/>
+            The field logicalAddress must NOT match SourceSystemHSAId.<br/>
+            The field httpHeaderHsaId must contain a valid value.
+        </description>
+        <data>
+            <httpHeaderHsaId>consumer</httpHeaderHsaId>
+            <logicalAddress>987654321</logicalAddress>
+            <careUnitHSAid>1123465</careUnitHSAid>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+            <sourceSystemHSAId>112233</sourceSystemHSAId>
+        </data>
+    </testcase>
+</testsuite>

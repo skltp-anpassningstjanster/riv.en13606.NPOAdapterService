@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements. See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<testsuite>
+    <id>GetCareContact</id>
+    <description>This testsuite is designed to verify the GetCareContact contract.</description>
+    <globaldata>
+        <webServiceUrl>http://localhost:8088/mockGetCareContactsResponderBinding</webServiceUrl>
+    </globaldata>
+    <testcase id="Date Boundaries">
+        <description>Verifies that the result only contains information within the date boundaries for the given patient.<br/>
+            This test will require at least nine CareContacts:
+            <ol>
+                <li>A contact with DocumentTime within the given range, and the CareContactTimePeriod (both start and end)
+                before or after the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts before and
+                ends within the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts within and
+                ends after the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts before and
+                ends after the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts within and
+                ends within the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts before and
+                no end time.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts before and
+                ends before the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts after and
+                ends after the given range.</li>
+                <li>A contact with DocumentTime outside the given range and a CareContactTimePeriod that starts after and
+                no end time.</li>
+            </ol>
+            The CareContactId's of case 1-6 should be added as a comma-separated list in the
+                expectedDocumentIds field.<br/>
+            The CareContactId's of case 7, 8 and 9 should be added as a comma-separated list in the
+                unexpectedDocumentIds field.<br/>
+            The fields httpHeaderHsaId and logicalAddress should contain values that does not affect the list of CareContacts.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601011212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <timePeriodStart>20130501</timePeriodStart>
+            <timePeriodEnd>20130531</timePeriodEnd>
+            <!-- Add a list of comma-separated ids that at least should be included in the response -->
+            <expectedDocumentIds>5566770,5566771</expectedDocumentIds>
+            <!-- Add a list of comma-separated ids that should not be included in the response -->
+            <unexpectedDocumentIds>11,12,13</unexpectedDocumentIds>
+        </data>
+    </testcase>
+    <testcase id="CareUnitHsaId Filter">
+        <description>Verifies that the result only contains information with correct CareUnitHsaId for the given patient.<br/>
+            The patient should have several CareContacts, with at least one CareContact from the given CareUnitHsaId.<br/>
+            The CareContactId's of the expected CareContacts should be added as a comma-separated list in the
+            expectedDocumentIds field.<br/>
+            The CareContactId's of CareContacts from other CareUnit's should be added as a comma-separated list in the
+            unexpectedDocumentIds field.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <careUnitHSAid>123465</careUnitHSAid>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <sourceSystemHSAid>112233</sourceSystemHSAid>
+            <!-- Add a list of comma-separated ids that at least should be included in the response -->
+            <expectedDocumentIds></expectedDocumentIds>
+            <!-- Add a list of comma-separated ids that should not be included in the response -->
+            <unexpectedDocumentIds>123456</unexpectedDocumentIds>
+        </data>
+    </testcase>
+    <testcase id="Only PatientId">
+        <description>Verifies that the result only contains information with correct PatientId.<br/>
+            Enter a PatientId that is stored in the source system.<br/>
+            The CareContactId's of the expected CareContacts should be added as a comma-separated list in the
+            expectedDocumentIds field.<br/>
+            The CareContactId's of CareContacts from other CareUnit's should be added as a comma-separated list in the
+            unexpectedDocumentIds field.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <!-- Add a list of comma-separated ids that at least should be included in the response -->
+            <expectedDocumentIds></expectedDocumentIds>
+            <!-- Add a list of comma-separated ids that should not be included in the response -->
+            <unexpectedDocumentIds>123456</unexpectedDocumentIds>
+        </data>
+    </testcase>
+    <testcase id="NonExisting PatientId">
+        <description>Verifies that the service returns an empty result instead of a Soap Fault if a non-existing PatientId is given.<br/>
+            Enter a PatientId that is not found in the source system.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>1234567890</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+        </data>
+    </testcase>
+    <testcase id="CareContactId Filter">
+        <description>Verifies that the result only contains information for a single CareContactId.<br/>
+            Enter a PatientId, CareContactId and sourceSystemHSAid that exists in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress should contain values that does not affect the list of CareContacts.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+            <sourceSystemHSAid>112233</sourceSystemHSAid>
+        </data>
+    </testcase>
+    <testcase id="NonExisting CareContactId">
+        <description>Verifies that the service returns an empty result instead of a Soap Fault if a non-existing
+            CareContactId is given.<br/>
+			Enter a PatientId that exists in the source system and a CareContactId and sourceSystemHSAid that is not found in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress should contain values that does not affect the list of CareContacts.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+            <sourceSystemHSAid>112233</sourceSystemHSAid>
+        </data>
+    </testcase>
+    <testcase id="Http-header Filter">
+        <description>Verifies that the result only contains information with correct PatientId, and that the source
+            system should filter CareContacts based on the HttpHeader 'x-rivta-original-serviceconsumer-hsaid'.<br/>
+            Enter a PatientId that has more than one CareContact in the source system.<br/>
+            Add one or more CareContactId's of contacts that should be included in the response based on the
+            filtering rules to the field 'expectedDocumentIds'.<br/>
+            Add one or more CareContactId's of contacts that should not be included in the response based on the
+            filtering rules to the field 'unexpectedDocumentIds'.<br/>
+			The field logicalAddress should contain a value that does not affect the list of CareContacts.
+        </description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <!-- Add a list of comma-separated ids that at least should be included in the response -->
+            <expectedDocumentIds>987654321</expectedDocumentIds>
+            <!-- Add a list of comma-separated ids that should not be included in the response -->
+            <unexpectedDocumentIds>123456</unexpectedDocumentIds>
+        </data>
+    </testcase>
+    <testcase id="CareContactId and SourceSystemHsaId">
+        <description>The test verifies that the source system returns a Soap Fault if the sourceSystemHSAid
+            is empty when careContactId has a value.<br/>
+            Enter a PatientId and a CareContactId of a CareContact that should be found in the source system.<br/>
+            The fields httpHeaderHsaId and logicalAddress should contain values that does not affect the list of CareContacts.
+		</description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>112233</logicalAddress>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+        </data>
+    </testcase>
+    <testcase id="SourceSystemHsaId and LogicalAddress">
+        <description>The test verifies that the source system returns a Soap Fault if the logicalAddress and
+            sourceSystemHSAid doesn't match.<br/>
+            Enter PatientId and a CareContactId and the correct SourceSystemHSAid of a CareContact that should be found in the source system.<br/>
+            The field logicalAddress should not match SourceSystemHSAid.<br/>
+            The field httpHeaderHsaId should contain a value that does not affect the list of records.
+		</description>
+        <data>
+            <httpHeaderHsaId>112233</httpHeaderHsaId>
+            <logicalAddress>987654321</logicalAddress>
+            <careUnitHSAid>1123465</careUnitHSAid>
+            <patientId>7601021212</patientId>
+            <patientIdType>1.2.752.129.2.1.3.1</patientIdType>
+            <careContactId>1122334455</careContactId>
+            <sourceSystemHSAid>112233</sourceSystemHSAid>
+        </data>
+    </testcase>
+</testsuite>

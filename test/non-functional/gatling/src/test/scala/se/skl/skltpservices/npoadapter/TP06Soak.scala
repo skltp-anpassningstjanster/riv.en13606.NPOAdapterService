@@ -19,18 +19,13 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
  */
 class TP06Soak extends Simulation with HasBaseURL {
 
-  // TODO - deduce parameters for 50% CPU
   // TODO - can we add assertions that check for degraded performance over time?
   
-  val totalUsers:Int            =  1
-  val maxRequestsPerSecond:Int  =  10
-  val ramp                      =  1 minute
-  val testDuration              =  1 minutes
-  val maxDuration               =  1 minute
+  val newUsersPerSecond:Int     = 40
+  val testDuration              = 18 hours
                             //  =  7 days
     
-  val getParallel = scenario("TP06Soak. Each contract - get parallel")
-                    .repeat(100000) {
+  val getParallel = scenario("TP06Soak. Each contract - get parallel").
                       uniformRandomSwitch(
                         exec(GetAlertInformationScenario.request),
                         exec(GetCareContactsScenario.request),
@@ -41,13 +36,6 @@ class TP06Soak extends Simulation with HasBaseURL {
                         exec(GetMedicationHistoryScenario.request),
                         exec(GetReferralOutcomeScenario.request)
                      )
-                    }
-/*    
-  setUp(getParallel.inject(constantUsersPerSec(3) during(testDuration)) 
+  setUp(getParallel.inject(constantUsersPerSec(newUsersPerSecond) during(testDuration)) 
                    .protocols(http.baseURL(baseURL)))
-                   .maxDuration(maxDuration)
-*/
-  setUp(getParallel.inject(atOnceUsers(3)) 
-                   .protocols(http.baseURL(baseURL)))
-                   .maxDuration(maxDuration)
 }

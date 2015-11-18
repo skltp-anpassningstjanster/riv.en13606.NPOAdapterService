@@ -15,8 +15,8 @@ import se.skl.skltpservices.npoadapter.scenarios.GetReferralOutcomeScenario
 class TP01Simultaneous200Users extends Simulation with HasBaseURL {
 
   val totalUsers:Int            = 200
-  val rampDuration              = 2 seconds
-  val maxDuration               = 1 minutes
+  val rampDuration              =   4 seconds
+  val maxDuration               =   2 minutes
   
   val simultaneousRequest = scenario("Simultaneous") 
 //                      .roundRobinSwitch(
