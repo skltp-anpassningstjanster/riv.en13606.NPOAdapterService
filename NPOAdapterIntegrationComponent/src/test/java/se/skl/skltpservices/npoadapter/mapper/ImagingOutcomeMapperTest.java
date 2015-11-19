@@ -19,11 +19,11 @@
  */
 package se.skl.skltpservices.npoadapter.mapper;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -55,15 +55,16 @@ import se.rivta.en13606.ehrextract.v11.RIV13606REQUESTEHREXTRACTResponseType;
 import se.skl.skltpservices.npoadapter.mapper.error.MapperException;
 import se.skl.skltpservices.npoadapter.test.Util;
 
-public class ImagingOutcomeMapperTest {
+public class ImagingOutcomeMapperTest extends MapperTest {
 	
 	private static EHREXTRACT ehrExtract;
 	private static ImagingOutcomeMapper mapper;
-	private static final RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
+	private static RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
 	
 	private static GetImagingOutcomeResponseType resp;
 	
-	private static ImagingOutcomeType record1;
+	private static ImagingOutcomeType record1 = null;
+    private static ImagingOutcomeType imagingOutcomeWithSignatureTime = null;
 	
 	@BeforeClass
 	public static void init() throws JAXBException {
@@ -79,10 +80,28 @@ public class ImagingOutcomeMapperTest {
 				break;
 			}
 		}
-	
+		if (record1 == null) {
+		    fail("failed to load record1");
+		}
+		
+		ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
+        ehrExtract = Util.loadEhrTestData(Util.IMAGINGOUTCOMESIGNEDTIMESTAMP);
+        mapper = (ImagingOutcomeMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_IMAGING_1);
+        
+        ehrResp.getEhrExtract().add(ehrExtract);
+        resp = mapper.mapResponse(ehrResp, mockMessage);
+        for(ImagingOutcomeType rec : resp.getImagingOutcome()) {
+            System.out.println("DocumentId: " + rec.getImagingOutcomeHeader().getDocumentId());
+            if(rec.getImagingOutcomeHeader().getDocumentId().equals("2321000032-HSATEST2-CSD:RcId:RadiologyReport:16377")) {
+                imagingOutcomeWithSignatureTime = rec;
+                break;
+            }
+        }
+        if (imagingOutcomeWithSignatureTime == null) {
+            fail("failed to load imagingOutcomeWithSignatureTime");
+        }
 	}
 	
-
     // Make it easy to dump the resulting response
     @XmlRootElement
     static class Root {
@@ -141,24 +160,55 @@ public class ImagingOutcomeMapperTest {
     	assertEquals("Önskad undersökning HKF höger Anamnes, status: XXXXXXXXX", ref.getReferralReason());
     }
     
+    // TODO - activate if SERVICE-400 is approved
+    @Ignore
+    @Test
+    public void testAttested() {
+        assertEquals("20151030090659", imagingOutcomeWithSignatureTime.getImagingOutcomeHeader().getLegalAuthenticator().getSignatureTime());
+        assertEquals("20151030090659", imagingOutcomeWithSignatureTime.getImagingOutcomeBody().getReferral().getAttested().getSignatureTime());
+    }
+    
+    // TODO - activate if SERVICE-400 is approved
+    @Ignore
+    @Test
+    public void checkAttested() {
+        String responseXml = getRivtaXml(mapper, Util.IMAGINGOUTCOMESIGNEDTIMESTAMP, false);
+        assertTrue(responseXml.contains("<ns2:legalAuthenticator><ns2:signatureTime>20151030090659"));
+        assertTrue(responseXml.contains("<ns2:attested><ns2:signatureTime>20151030090659"));
+    }
+    
+    @Test
+    public void testSignatureTime() {
+        assertEquals("20151030090659", imagingOutcomeWithSignatureTime.getImagingOutcomeHeader().getLegalAuthenticator().getSignatureTime());
+    }
+
+    @Test
+    public void checkSignatureTime() {
+        String responseXml = getRivtaXml(mapper, Util.IMAGINGOUTCOMESIGNEDTIMESTAMP, false);
+        assertTrue(responseXml.contains("<ns2:legalAuthenticator><ns2:signatureTime>20151030090659"));
+    }
+
+    // --- TODO - document why ignored
+    
     @Ignore
     public void testException() {
-    	MuleMessage mockMuleMessage = Mockito.mock(MuleMessage.class);
-    	try {
-    		Reader stringReader = new StringReader("abc");
-    		XMLInputFactory factory = XMLInputFactory.newInstance();
-    		try {
-				XMLStreamReader sr = factory.createXMLStreamReader(stringReader);
-	    		when(mockMuleMessage.getPayload()).thenReturn(sr);
-				mapper.mapResponse(mockMuleMessage);
-				fail("Exception expected");
-			} catch (MapperException e) {
-				assertTrue(e.getCause().getMessage().startsWith("javax.xml.bind.UnmarshalException\n - with linked exception:\n[com.ctc.wstx.exc.WstxUnexpectedCharException: Unexpected character 'a' (code 97) in prolog; expected '<'\n at [row,col {unknown-source}]: [1,1]]"));
-			} 
-    	} catch (XMLStreamException e) {
-    	    fail(e.getLocalizedMessage());
-    	}
+        MuleMessage mockMuleMessage = Mockito.mock(MuleMessage.class);
+        try {
+            Reader stringReader = new StringReader("abc");
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            try {
+                XMLStreamReader sr = factory.createXMLStreamReader(stringReader);
+                when(mockMuleMessage.getPayload()).thenReturn(sr);
+                mapper.mapResponse(mockMuleMessage);
+                fail("Exception expected");
+            } catch (MapperException e) {
+                assertTrue(e.getCause().getMessage().startsWith("javax.xml.bind.UnmarshalException\n - with linked exception:\n[com.ctc.wstx.exc.WstxUnexpectedCharException: Unexpected character 'a' (code 97) in prolog; expected '<'\n at [row,col {unknown-source}]: [1,1]]"));
+            } 
+        } catch (XMLStreamException e) {
+            fail(e.getLocalizedMessage());
+        }
     }
+    
     
     
     @Ignore

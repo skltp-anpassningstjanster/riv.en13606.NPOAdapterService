@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd">
+  <ehr_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:EhrId:193008077723"></ehr_id>
+  <ehr_system root="1.2.752.129.2.1.4.1" extension="HSATEST2-CSD"></ehr_system>
+  <rm_id>EN 13606</rm_id>
+  <subject_of_care root="1.2.752.129.2.1.3.1" extension="193008077723"></subject_of_care>
+  <time_created value="20151119080420"></time_created>
+  <all_compositions>
+    <meaning code="und" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd Undersökningsresultat"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1"
+      extension="2321000032-HSATEST2-CSD:RcId:RadiologyReport:16377"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151030090659"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="TSE2321000214-0001"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000214-0041632"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151030090731"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000214-0041632"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="und-bdi-ure" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Bilddiagnostik"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <links>
+        <follow_link value="true"></follow_link>
+        <nature code="LINK-A0"></nature>
+        <target_type code="vbe" codeSystem="1.2.752.129.2.2.2.1.1"></target_type>
+        <target_id root="1.2.752.129.2.1.2.1"
+          extension="HSATEST2-CSD:RcId:RadiologyRequest:23633"></target_id>
+      </links>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="CLUSTER">
+        <meaning code="und-und-ure" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Undersökningsresultat"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <structure_type nullFlavor="NA"></structure_type>
+        <parts xsi:type="ELEMENT">
+          <meaning code="und-und-ure-typ" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Svarstyp"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="DEF"></value>
+        </parts>
+        <parts xsi:type="ELEMENT">
+          <meaning code="und-und-ure-stp" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Svarstidpunkt"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="TS" value="20151030090659"></value>
+        </parts>
+        <parts xsi:type="ELEMENT">
+          <meaning code="und-und-ure-utl" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Utlåtande"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="Detta är ett svar...."></value>
+        </parts>
+        <parts xsi:type="ELEMENT">
+          <meaning code="und-bdi-ure-lab" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Labenhet"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="und-bdi"></value>
+        </parts>
+        <parts xsi:type="CLUSTER">
+          <meaning code="und-und-uat" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Utförd åtgärd"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <structure_type nullFlavor="NA"></structure_type>
+          <parts xsi:type="ELEMENT">
+            <meaning code="und-und-uat-kod" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Åtgärdskod"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <value xsi:type="ST" value="Manuellt inmatad"></value>
+          </parts>
+          <parts xsi:type="ELEMENT">
+            <meaning code="und-und-uat-txt" codeSystem="1.2.752.129.2.2.2.1">
+              <displayName value="Åtgärdskod text"></displayName>
+            </meaning>
+            <name nullFlavor="NA"></name>
+            <rc_id nullFlavor="NA"></rc_id>
+            <synthesised nullFlavor="NA"></synthesised>
+            <obs_time lowClosed="true" highClosed="true">
+              <low value="20151030090600"></low>
+              <high value="20151030090600"></high>
+            </obs_time>
+            <value xsi:type="ST" value="Manuellt inmatad"></value>
+          </parts>
+        </parts>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="vbe" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd Vårdbegäran"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:RadiologyRequest:23633"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="TSE2321000214-0001"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151030090600"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="TSE2321000214-13F8"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="TSE2321000214-13DP"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="vbe-vbe" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Vårdbegäran"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id root="1.2.752.129.2.1.2.1" extension="HSATEST2-CSD:RcId:RadiologyRequest:23633"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="vbe-vbe-fst" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Frågeställning"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST"
+          value="Frågeställning: Frågeställning....&#xA;Anamnes: Anamnes..."></value>
+      </items>
+    </content>
+  </all_compositions>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></extract_id>
+    <id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F7"></id>
+    <telecom xsi:type="TEL.PHONE" value="063-153000"></telecom>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name value="Barn- och ungdomsmedicin"></name>
+    <addr>
+      <part type="AL">Östersunds sjukhus, 831 83 Östersund</part>
+    </addr>
+    <addr>
+      <part type="CEN">Östersund</part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.4.1" extension="SE2321000214-0041632"></extract_id>
+    <id root="1.2.752.129.2.1.4.1" extension="SE2321000214-0041632"></id>
+    <telecom xsi:type="TEL.PHONE" value="0647-16600"></telecom>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name value="Röntgen Åre"></name>
+    <addr>
+      <part type="AL">Kurortsvägen 20, 830 13 Åre</part>
+    </addr>
+    <addr>
+      <part type="CEN">Åre</part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-0001"></extract_id>
+    <id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-0001"></id>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name value="Region Jämtland Härjedalen"></name>
+    <addr>
+      <part type="AL"></part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></extract_id>
+    <id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13F8"></id>
+    <telecom xsi:type="TEL.PHONE" value="063-154005"></telecom>
+    <telecom xsi:type="TEL.EMAIL" value="mailto:www.sj.se"></telecom>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name value="Barn- och ungdomsmottagningen"></name>
+    <addr>
+      <part type="AL">Östersunds sjukhus, 831 83 Östersund</part>
+    </addr>
+    <addr>
+      <part type="CEN">Östersund</part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="TSE2321000214-13DP"></extract_id>
+    <id root="1.2.752.129.2.1.4.1" extension="TSE2321000214-13DP"></id>
+    <name>
+      <part value="Fredrik Olsson"></part>
+    </name>
+    <role>
+      <profession code="Not implemented" codeSystem="1.2.752.129.2.2.1.4">
+        <displayName value="Läkare"></displayName>
+      </profession>
+    </role>
+  </demographic_extract>
+</ehr_extract>

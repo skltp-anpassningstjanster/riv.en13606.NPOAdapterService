@@ -43,6 +43,7 @@ import riv.clinicalprocess.healthcond.actoutcome._3.ImageRecordingType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImageStructuredDataType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingBodyType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ImagingOutcomeType;
+import riv.clinicalprocess.healthcond.actoutcome._3.LegalAuthenticatorType;
 import riv.clinicalprocess.healthcond.actoutcome._3.OrgUnitType;
 import riv.clinicalprocess.healthcond.actoutcome._3.PatientSummaryHeaderType;
 import riv.clinicalprocess.healthcond.actoutcome._3.ResultType;
@@ -236,6 +237,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
 	}
 	
 	
+    @SuppressWarnings("unused")
     private ImagingBodyType mapBody(Map<String, String> ehr13606values, final COMPOSITION und) {
     	
         ImagingBodyType body = new ImagingBodyType();
@@ -296,6 +298,13 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
         body.getReferral().setAccountableHealthcareProfessional(new HealthcareProfessionalType());
         body.getReferral().getAccountableHealthcareProfessional().setAuthorTime(ehr13606values.get("vbe-committal-timecommitted"));
 
+        // TODO - activate if SERVICE-400 is approved
+        if (false) {
+            if (StringUtils.isNotBlank(ehr13606values.get("und-attestation-time"))) {
+               body.getReferral().setAttested(new LegalAuthenticatorType());
+               body.getReferral().getAttested().setSignatureTime(ehr13606values.get("und-attestation-time"));
+            }
+        }
         // --- 
         
         return body;
@@ -355,6 +364,16 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
                     }
                 }
             }
+            
+            if ("und".equals(composition.getMeaning().getCode())) {
+                if (composition.getAttestations() != null && !composition.getAttestations().isEmpty()) {
+                    if (composition.getAttestations().get(0).getTime() != null) {
+                        if (StringUtils.isNotBlank(composition.getAttestations().get(0).getTime().getValue())) {
+                            values.put("und-attestation-time", composition.getAttestations().get(0).getTime().getValue());
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -369,6 +388,7 @@ public class ImagingOutcomeMapper extends AbstractMapper implements Mapper {
     private void retrieveItemValue(ITEM item, Map<String,String> values) {
         if (item.getMeaning() != null) {
             String code = item.getMeaning().getCode();
+            
             if (StringUtils.isNotBlank(code)) {
                 
                 if (item instanceof ELEMENT) {
