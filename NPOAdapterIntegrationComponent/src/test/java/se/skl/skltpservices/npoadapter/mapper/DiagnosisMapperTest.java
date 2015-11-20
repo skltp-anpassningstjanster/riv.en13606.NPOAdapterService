@@ -143,6 +143,7 @@ public class DiagnosisMapperTest extends MapperTest {
 
     
     // TODO - activate for SERVICE-401
+    @Ignore
     @Test
     public void testDiaDiaDbe() {
         RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
@@ -176,6 +177,7 @@ public class DiagnosisMapperTest extends MapperTest {
     
     
     // TODO - activate for SERVICE-401
+    @Ignore
     @Test
     public void checkDiaDiaDbe() {
         String responseXml = getRivtaXml(mapper, Util.DIAGNOSISDIADIADBE, false);
