@@ -410,6 +410,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                                     final INT intValue = (INT) lkfElement.getValue();
                                                     final PQType pq = new PQType();
                                                     pq.setValue(intValue.getValue().doubleValue());
+                                                    // TODO SERVICE-402 - default unit days
+                                                    // pq.setUnit("d");
                                                     dispensationAuth.setMinimumDispensationInterval(pq);
                                                 } else if(lkfElement.getValue() != null && lkfElement.getValue() instanceof PQ) {
                                                     final PQ pqValue = (PQ) lkfElement.getValue();
