@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:riv13606:v1.1 SE13606-1.xsd">
+  <ehr_id root="1.2.752.129.2.1.2.1" extension="SE162321000230-0011198208149297"></ehr_id>
+  <ehr_system root="1.2.752.129.2.1.4.1" extension="SE162321000230-0011"></ehr_system>
+  <rm_id>EN 13606</rm_id>
+  <subject_of_care root="1.2.752.129.2.1.3.1" extension="198208149297"></subject_of_care>
+  <time_created value="20151119144728"></time_created>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag13/1"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20131205000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1018"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-101G"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20131205152300"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-101G"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-LTMONLUN"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-kod" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnoskod"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="CD" code="E119" codeSystem="1.2.752.116.1.1.1.1.1">
+          <displayName
+            value="Diabetes mellitus, ej insulinberoende, utan komplikationer"></displayName>
+        </value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Huvuddiagnos"></value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20131205152300"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag14/1"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151117000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1016"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-1019"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20131205152500"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-LuBo-Kir"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-LTMONLUN"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-kod" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnoskod"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="CD" code="A009" codeSystem="1.2.752.116.1.1.1.1.1">
+          <displayName value="Kolera, ospecificerad"></displayName>
+        </value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Huvuddiagnos"></value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20131205152500"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag15/1"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151117000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1016"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-1019"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151022111800"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-LuBo-Kir"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-LAIISA01"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-kod" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnoskod"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="CD" code="R002" codeSystem="1.2.752.116.1.1.1.1.1">
+          <displayName value="Hjärtklappning"></displayName>
+        </value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Huvuddiagnos"></value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20151022111800"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag15/2"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151117000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1016"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-1019"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151022111800"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-LuBo-Kir"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-LAIISA01"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-kod" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnoskod"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="CD" code="I214" codeSystem="1.2.752.116.1.1.1.1.1">
+          <displayName value="Akut subendokardiell infarkt"></displayName>
+        </value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Bidiagnos"></value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20151022111800"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag17/1"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151118000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1018"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-101G"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151118154600"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-101G"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-KACARSIK"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Huvuddiagnos"></value>
+      </items>
+      <items xsi:type="CLUSTER">
+        <meaning code="dia-dia-dbe" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnosbeskrivning"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <structure_type nullFlavor="NA"></structure_type>
+        <parts xsi:type="ELEMENT">
+          <meaning code="dia-dia-dbe-kod" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Diagnosbeskrivning kod"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="I25-P"></value>
+        </parts>
+        <parts xsi:type="ELEMENT">
+          <meaning code="dia-dia-dbe-txt" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Diagnosbeskrivning text"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="Ischemisk hjärtsjukdom"></value>
+        </parts>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20151118154600"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag17/2"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151118000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1018"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-101G"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151118154600"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-101G"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-KACARSIK"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Bidiagnos"></value>
+      </items>
+      <items xsi:type="CLUSTER">
+        <meaning code="dia-dia-dbe" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnosbeskrivning"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <structure_type nullFlavor="NA"></structure_type>
+        <parts xsi:type="ELEMENT">
+          <meaning code="dia-dia-dbe-kod" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Diagnosbeskrivning kod"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST" value="E118P"></value>
+        </parts>
+        <parts xsi:type="ELEMENT">
+          <meaning code="dia-dia-dbe-txt" codeSystem="1.2.752.129.2.2.2.1">
+            <displayName value="Diagnosbeskrivning text"></displayName>
+          </meaning>
+          <name nullFlavor="NA"></name>
+          <rc_id nullFlavor="NA"></rc_id>
+          <synthesised nullFlavor="NA"></synthesised>
+          <value xsi:type="ST"
+            value="Diabetes mellitus typ 2, med komplikationer"></value>
+        </parts>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20151118154600"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <all_compositions>
+    <meaning code="dia" codeSystem="1.2.752.129.2.2.2.1">
+      <displayName value="Informationsmängd diagnos"></displayName>
+    </meaning>
+    <name nullFlavor="NA"></name>
+    <rc_id root="1.2.752.129.2.1.2.1" extension="SE1623210002198208149297ovdiag17/3"></rc_id>
+    <synthesised nullFlavor="NA"></synthesised>
+    <attestations>
+      <reason_for_attestation nullFlavor="NA"></reason_for_attestation>
+      <time value="20151118000000"></time>
+      <target_rc_id nullFlavor="NA"></target_rc_id>
+      <attester>
+        <performer nullFlavor="NA"></performer>
+      </attester>
+    </attestations>
+    <other_participations>
+      <function code="iag" codeSystem="1.2.752.129.2.2.2.22">
+        <displayName value="Informationsägare"></displayName>
+      </function>
+      <healthcare_facility root="1.2.752.129.2.1.4.1"
+        extension="SE2321000230-1018"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.4.1" extension="SE2321000230-101G"></performer>
+    </other_participations>
+    <committal>
+      <committer nullFlavor="NA"></committer>
+      <ehr_system nullFlavor="NA"></ehr_system>
+      <time_committed value="20151118154600"></time_committed>
+    </committal>
+    <composer>
+      <healthcare_facility root="1.2.752.129.2.1.2.1"
+        extension="SE2321000230-101G"></healthcare_facility>
+      <performer root="1.2.752.129.2.1.2.1" extension="SE2321000230-KACARSIK"></performer>
+    </composer>
+    <content xsi:type="ENTRY">
+      <meaning code="dia-dia" codeSystem="1.2.752.129.2.2.2.1">
+        <displayName value="Diagnos"></displayName>
+      </meaning>
+      <name nullFlavor="NA"></name>
+      <rc_id nullFlavor="NA"></rc_id>
+      <synthesised nullFlavor="NA"></synthesised>
+      <uncertainty_expressed nullFlavor="NA"></uncertainty_expressed>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-kod" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnoskod"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="CD" code="E109" codeSystem="1.2.752.116.1.1.1.1.1">
+          <displayName value="Diabetes mellitus typ 1, utan komplikationer"></displayName>
+        </value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-typ" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Diagnostyp"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="ST" value="Bidiagnos"></value>
+      </items>
+      <items xsi:type="ELEMENT">
+        <meaning code="dia-dia-tid" codeSystem="1.2.752.129.2.2.2.1">
+          <displayName value="Händelsetidpunkt"></displayName>
+        </meaning>
+        <name nullFlavor="NA"></name>
+        <rc_id nullFlavor="NA"></rc_id>
+        <synthesised nullFlavor="NA"></synthesised>
+        <value xsi:type="TS" value="20151118154600"></value>
+      </items>
+    </content>
+  </all_compositions>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-101G"></extract_id>
+    <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-101G"></id>
+    <telecom xsi:type="TEL.PHONE" value="0981-10560"></telecom>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name value="Vittangi Vårdcentral, Vittangi, Praktikertjänst AB Test"></name>
+    <addr>
+      <part type="AL">Centralvägen 10 98010 Vittangi</part>
+    </addr>
+    <addr>
+      <part type="CEN">Vittangi</part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="ORGANISATION">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"></extract_id>
+    <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LuBo-Kir"></id>
+    <telecom xsi:type="TEL.PHONE" value="0921-15323"></telecom>
+    <telecom xsi:type="TEL.EMAIL" value="mailto:epost.nll.se"></telecom>
+    <code nullFlavor="NA"></code>
+    <desc nullFlavor="NA"></desc>
+    <name
+      value="Kirurgkliniken Sunderby sjukhus , LULEÅ, Norrbottens läns landsting NPÖ"></name>
+    <addr>
+      <part type="AL">Sunderby sjukhus 97180 LULEÅ</part>
+    </addr>
+    <addr>
+      <part type="CEN">LULEÅ</part>
+    </addr>
+  </demographic_extract>
+  <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LTMONLUN"></extract_id>
+    <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LTMONLUN"></id>
+    <name>
+      <part value="Monica Kokkonen  (IS/IT-avd)"></part>
+    </name>
+    <role>
+      <profession code="Läkare" codeSystem="1.2.752.129.2.2.1.4">
+        <displayName value="Läkare"></displayName>
+      </profession>
+    </role>
+  </demographic_extract>
+  <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LAIISA01"></extract_id>
+    <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-LAIISA01"></id>
+    <name>
+      <part value="Laila Isaksson"></part>
+    </name>
+    <role>
+      <profession code="Läkare" codeSystem="1.2.752.129.2.2.1.4">
+        <displayName value="Läkare"></displayName>
+      </profession>
+    </role>
+  </demographic_extract>
+  <demographic_extract xsi:type="IDENTIFIED_HEALTHCARE_PROFESSIONAL">
+    <extract_id root="1.2.752.129.2.1.2.1" extension="SE2321000230-KACARSIK"></extract_id>
+    <id root="1.2.752.129.2.1.2.1" extension="SE2321000230-KACARSIK"></id>
+    <name>
+      <part value="Carina Sikku"></part>
+    </name>
+    <role>
+      <profession code="Sekreterare" codeSystem="1.2.752.129.2.2.1.4">
+        <displayName value="Sekreterare"></displayName>
+      </profession>
+    </role>
+  </demographic_extract>
+</ehr_extract>
