@@ -248,9 +248,46 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
                         }
                     } else if (item instanceof CLUSTER) {
                         
-                        // TODO - SERVICE-401 - If no dia-dia-kod, then use dia-dia-dbe instead
+                        // SERVICE-401 - If no dia-dia-kod, then use dia-dia-dbe instead
                         if (type.getDiagnosisCode() == null || type.getDiagnosisCode().getCode() == null) {
+                        
+                            if (type.getDiagnosisCode() == null) {
+                                type.setDiagnosisCode(new CVType());
+                            }
+                            CLUSTER cluster = (CLUSTER) item;
+                            if (cluster.getMeaning() != null && "dia-dia-dbe".equals(cluster.getMeaning().getCode())) {
+                                
+                                String code       = "";
+                                String codeSystem = "";
+                                String txt        = "";
+                                
+                                for (ITEM diaDiaDbeItem : cluster.getParts()) {
+                                    if (diaDiaDbeItem instanceof ELEMENT) {
+                                        ELEMENT diaDiaDbeElement = (ELEMENT) diaDiaDbeItem;
+                                        if (diaDiaDbeElement.getMeaning() != null && "dia-dia-dbe-kod".equals(diaDiaDbeElement.getMeaning().getCode()) && diaDiaDbeElement.getValue() != null && diaDiaDbeElement.getValue() instanceof ST) {
+                                            code = EHRUtil.getSTValue(diaDiaDbeElement.getValue());
+                                            if (diaDiaDbeElement.getMeaning().getCodeSystem() != null && StringUtils.isNotBlank(diaDiaDbeElement.getMeaning().getCodeSystem())) {
+                                                codeSystem = diaDiaDbeElement.getMeaning().getCodeSystem();
+                                            }
+                                        }
+                                        if (diaDiaDbeElement.getMeaning() != null && "dia-dia-dbe-txt".equals(diaDiaDbeElement.getMeaning().getCode()) && diaDiaDbeElement.getValue() != null && diaDiaDbeElement.getValue() instanceof ST) {
+                                            txt = EHRUtil.getSTValue(diaDiaDbeElement.getValue());
+                                        }
+                                    }
+                                }
+                                
+                                if (StringUtils.isNotBlank(code)) {
+                                    type.getDiagnosisCode().setCode(code);
+                                }
+                                if (StringUtils.isNotBlank(code)) {
+                                    type.getDiagnosisCode().setCodeSystem(codeSystem);
+                                }
+                                if (StringUtils.isNotBlank(txt)) {
+                                    type.getDiagnosisCode().setDisplayName(txt);
+                                }
+                            }
                         }
+
                     }
                 }
             }
