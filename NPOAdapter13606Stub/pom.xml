@@ -22,6 +22,22 @@
 
     <dependency>
       <groupId>se.skltp.adapterservices.npoadapter</groupId>
+      <artifactId>NPOAdapterIntegrationComponent</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+    </dependency>
+
+    <!-- TODO - we do not need all the classes from the adapter -->
+    <!--        consider refactoring and moving common code to common component -->
+    <dependency>
+      <groupId>se.skltp.adapterservices.npoadapter</groupId>
+      <artifactId>NPOAdapterIntegrationComponent</artifactId>
+      <version>${project.version}</version>
+      <classifier>core</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>se.skltp.adapterservices.npoadapter</groupId>
       <artifactId>riv-schemas</artifactId>
     </dependency>
 

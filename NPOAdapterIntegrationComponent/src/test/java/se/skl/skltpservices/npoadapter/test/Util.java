@@ -42,9 +42,11 @@ public class Util {
     public static final String CARECONTACTS_TEST_FILE_3      = "/data/CareContacts_norrbotten_198208149297_13606.xml";
     public static final String CAREDOCUMENTATION_TEST_FILE   = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
     public static final String DIAGNOSIS_TEST_FILE           = "/data/Diagnosis_SSEN13606-2.1.1.xml";
+    public static final String DIAGNOSISDIADIADBE            = "/data/Diagnosis.SERVICE-401.xml";
     public static final String IMAGE_TEST_FILE               = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
     public static final String IMAGINGOUTCOME_TEST_FILE      = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
     public static final String IMAGINGOUTCOME1MB_TEST_FILE   = "/data/ImagingOutcome1MB_SSEN13606-2.1.1.xml";
+    public static final String IMAGINGOUTCOMESIGNEDTIMESTAMP = "/data/ImagingOutcome.SERVICE-400.xml";
     public static final String LAB_TEST_FILE_1               = "/data/LaboratoryOrderOutcome_SSEN13606-2.1.1.xml";
     public static final String LAB_TEST_FILE_2               = "/data/LaboratoryOrderOutcome.SERVICE-357.xml";
     public static final String MEDICATIONHISTORY_TEST_FILE_1 = "/data/Lkemedelsordination_SSEN13606-2.1.2.xml";
@@ -59,8 +61,12 @@ public class Util {
     public static final String REFERRALOUTCOME_TEST_FILE_6   = "/data/Underskning_unrecognised_type.xml";
     
     //
-    public static EHREXTRACT loadEhrTestData(final String fileName) throws JAXBException {
+    public static EHREXTRACT loadEhrTestData(final String fileName) {
+        try {
         return loadEhrTestData(fileName, "se.rivta.en13606.ehrextract.v11");
+        } catch (JAXBException j) {
+            throw new RuntimeException(j);
+        }
     }
 
 

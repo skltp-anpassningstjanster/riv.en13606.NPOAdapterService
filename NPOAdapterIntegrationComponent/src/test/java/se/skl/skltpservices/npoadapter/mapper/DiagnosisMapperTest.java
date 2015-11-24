@@ -21,17 +21,24 @@ package se.skl.skltpservices.npoadapter.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
 import javax.xml.bind.JAXBException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mule.api.MuleMessage;
 
 import riv.clinicalprocess.healthcond.description._2.DiagnosisBodyType;
+import riv.clinicalprocess.healthcond.description._2.DiagnosisType;
 import riv.clinicalprocess.healthcond.description.enums._2.DiagnosisTypeEnum;
+import riv.clinicalprocess.healthcond.description.getdiagnosisresponder._2.GetDiagnosisResponseType;
 import se.rivta.en13606.ehrextract.v11.CD;
 import se.rivta.en13606.ehrextract.v11.COMPOSITION;
 import se.rivta.en13606.ehrextract.v11.CONTENT;
@@ -134,4 +141,48 @@ public class DiagnosisMapperTest extends MapperTest {
         assertTrue(responseXml.contains("documentId>SE123-relatedDiagnosis<"));
     }
 
+    
+    // TODO - activate for SERVICE-401
+    //@Ignore
+    @Test
+    public void testDiaDiaDbe() {
+        RIV13606REQUESTEHREXTRACTResponseType ehrResp = new RIV13606REQUESTEHREXTRACTResponseType();
+        ehrResp.getEhrExtract().add(Util.loadEhrTestData(Util.DIAGNOSISDIADIADBE));
+        final MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
+        
+        DiagnosisType diagnosisDiaDiaDbe = null;
+        DiagnosisType diagnosisDiaDiaKod = null;
+        GetDiagnosisResponseType resp = mapper.mapResponse(ehrResp, mockMessage);
+        for(DiagnosisType rec : resp.getDiagnosis()) {
+            if (rec.getDiagnosisHeader().getDocumentId().equals("SE1623210002198208149297ovdiag17/1")) {
+                diagnosisDiaDiaDbe = rec;
+            }
+            if (rec.getDiagnosisHeader().getDocumentId().equals("SE1623210002198208149297ovdiag13/1")) {
+                diagnosisDiaDiaKod = rec;
+            }
+        }
+        if (diagnosisDiaDiaDbe == null || diagnosisDiaDiaKod == null) {
+            fail("failed to load " + Util.DIAGNOSISDIADIADBE);
+        }
+        
+        assertEquals("I25-P", diagnosisDiaDiaDbe.getDiagnosisBody().getDiagnosisCode().getCode());
+        assertEquals("1.2.752.129.2.2.2.1", diagnosisDiaDiaDbe.getDiagnosisBody().getDiagnosisCode().getCodeSystem());
+        assertEquals("Ischemisk hjärtsjukdom", diagnosisDiaDiaDbe.getDiagnosisBody().getDiagnosisCode().getDisplayName());
+        
+        assertEquals("E119", diagnosisDiaDiaKod.getDiagnosisBody().getDiagnosisCode().getCode());
+        assertEquals("1.2.752.116.1.1.1.1.1", diagnosisDiaDiaKod.getDiagnosisBody().getDiagnosisCode().getCodeSystem());
+        assertEquals("Diabetes mellitus, ej insulinberoende, utan komplikationer", diagnosisDiaDiaKod.getDiagnosisBody().getDiagnosisCode().getDisplayName());
+    }
+    
+    
+    // TODO - activate for SERVICE-401
+    //@Ignore
+    @Test
+    public void checkDiaDiaDbe() {
+        String responseXml = getRivtaXml(mapper, Util.DIAGNOSISDIADIADBE, false);
+        assertTrue(responseXml.contains("<ns2:diagnosisCode><ns2:code>I25-P</ns2:code><ns2:codeSystem>1.2.752.129.2.2.2.1</ns2:codeSystem><ns2:displayName>Ischemisk hjärtsjukdom</ns2:displayName></ns2:diagnosisCode>"));
+        assertTrue(responseXml.contains("<ns2:diagnosisCode><ns2:code>E119</ns2:code><ns2:codeSystem>1.2.752.116.1.1.1.1.1</ns2:codeSystem><ns2:displayName>Diabetes mellitus, ej insulinberoende, utan komplikationer</ns2:displayName></ns2:diagnosisCode></ns2:diagnosisBody>"));
+    }
+    
 }

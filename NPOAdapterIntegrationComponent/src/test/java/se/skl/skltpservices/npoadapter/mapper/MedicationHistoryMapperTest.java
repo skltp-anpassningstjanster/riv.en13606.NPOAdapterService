@@ -248,8 +248,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
         assertEquals(1, drug.getDosage().size());
         final DosageType dos = drug.getDosage().get(0);
         assertEquals(Boolean.TRUE, dos.getLengthOfTreatment().isIsMaximumTreatmentTime());
-        assertEquals((Double)11d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
-        assertEquals((Double)11d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getLow());
+        assertEquals((Double)10d, dos.getLengthOfTreatment().getTreatmentInterval().getHigh());
         assertEquals("d", dos.getLengthOfTreatment().getTreatmentInterval().getUnit());
         assertEquals("potta", dos.getDosageInstruction());
         assertEquals("2+2+2+2", dos.getShortNotation());
@@ -373,8 +373,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
         
         PQIntervalType treatmentInterval = mapper.getTreatmentInterval(dosageIvlts);
         
-        assertEquals(14, treatmentInterval.getLow().doubleValue(), 0);
-        assertEquals(14, treatmentInterval.getHigh().doubleValue(), 0);
+        assertEquals(13, treatmentInterval.getLow().doubleValue(), 0);
+        assertEquals(13, treatmentInterval.getHigh().doubleValue(), 0);
         assertTrue(treatmentInterval.getUnit().equals("d"));
     }
 
@@ -393,8 +393,8 @@ public class MedicationHistoryMapperTest extends MapperTest {
         
         PQIntervalType treatmentInterval = mapper.getTreatmentInterval(dosageIvlts);
         
-        assertEquals(1, treatmentInterval.getLow() .doubleValue(), 0);
-        assertEquals(1, treatmentInterval.getHigh().doubleValue(), 0);
+        assertEquals(0, treatmentInterval.getLow() .doubleValue(), 0);
+        assertEquals(0, treatmentInterval.getHigh().doubleValue(), 0);
         assertTrue(treatmentInterval.getUnit().equals("d"));
     }
 
@@ -530,7 +530,7 @@ public class MedicationHistoryMapperTest extends MapperTest {
         // Kalmar
         responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_4, true);
         assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19690529000018</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>Tavegyl®</ns2:displayName>"));
-        assertTrue(responseXml.contains("<ns2:dosage><ns2:lengthOfTreatment><ns2:treatmentInterval><ns2:low>6.0</ns2:low>"));
+        assertTrue(responseXml.contains("<ns2:dosage><ns2:lengthOfTreatment><ns2:treatmentInterval><ns2:low>5.0</ns2:low>"));
     }
     
     

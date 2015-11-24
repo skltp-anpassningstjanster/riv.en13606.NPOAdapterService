@@ -118,8 +118,8 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
     }
 
     /**
-     * Create response. Collects organisation and healthcare-professional into maps with HSAId as key. So other functions dont need to
-     * itterat over document each time.
+     * Create response. Collects organisation and healthcare-professional into maps with HSAId as key. So other functions don't need to
+     * iterate over document each time.
      * 
      * @param ehrResp
      *            response to be loaded into soap-payload.
@@ -204,6 +204,10 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
 
                 
                 for (ITEM item : e.getItems()) {
+                    
+                    
+                    
+                    
                     if (item instanceof ELEMENT) {
                         ELEMENT elm = (ELEMENT) item;
                         if (elm.getValue() != null && elm.getMeaning() != null && elm.getMeaning().getCode() != null) {
@@ -239,8 +243,51 @@ public class DiagnosisMapper extends AbstractMapper implements Mapper {
                                     type.setDiagnosisCode(EHRUtil.cvTypeFromCD((CD) elm.getValue(), CVType.class));
                                 }
                                 break;
+                                
                             }
                         }
+                    } else if (item instanceof CLUSTER) {
+                        
+                        // SERVICE-401 - If no dia-dia-kod, then use dia-dia-dbe instead
+                        if (type.getDiagnosisCode() == null || type.getDiagnosisCode().getCode() == null) {
+                        
+                            if (type.getDiagnosisCode() == null) {
+                                type.setDiagnosisCode(new CVType());
+                            }
+                            CLUSTER cluster = (CLUSTER) item;
+                            if (cluster.getMeaning() != null && "dia-dia-dbe".equals(cluster.getMeaning().getCode())) {
+                                
+                                String code       = "";
+                                String codeSystem = "";
+                                String txt        = "";
+                                
+                                for (ITEM diaDiaDbeItem : cluster.getParts()) {
+                                    if (diaDiaDbeItem instanceof ELEMENT) {
+                                        ELEMENT diaDiaDbeElement = (ELEMENT) diaDiaDbeItem;
+                                        if (diaDiaDbeElement.getMeaning() != null && "dia-dia-dbe-kod".equals(diaDiaDbeElement.getMeaning().getCode()) && diaDiaDbeElement.getValue() != null && diaDiaDbeElement.getValue() instanceof ST) {
+                                            code = EHRUtil.getSTValue(diaDiaDbeElement.getValue());
+                                            if (diaDiaDbeElement.getMeaning().getCodeSystem() != null && StringUtils.isNotBlank(diaDiaDbeElement.getMeaning().getCodeSystem())) {
+                                                codeSystem = diaDiaDbeElement.getMeaning().getCodeSystem();
+                                            }
+                                        }
+                                        if (diaDiaDbeElement.getMeaning() != null && "dia-dia-dbe-txt".equals(diaDiaDbeElement.getMeaning().getCode()) && diaDiaDbeElement.getValue() != null && diaDiaDbeElement.getValue() instanceof ST) {
+                                            txt = EHRUtil.getSTValue(diaDiaDbeElement.getValue());
+                                        }
+                                    }
+                                }
+                                
+                                if (StringUtils.isNotBlank(code)) {
+                                    type.getDiagnosisCode().setCode(code);
+                                }
+                                if (StringUtils.isNotBlank(code)) {
+                                    type.getDiagnosisCode().setCodeSystem(codeSystem);
+                                }
+                                if (StringUtils.isNotBlank(txt)) {
+                                    type.getDiagnosisCode().setDisplayName(txt);
+                                }
+                            }
+                        }
+
                     }
                 }
             }
