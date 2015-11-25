@@ -69,6 +69,7 @@ import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationMedicalR
 import riv.clinicalprocess.activityprescription.actoutcome._2.MedicationPrescriptionType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.MerchandiseType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.PQIntervalType;
+import riv.clinicalprocess.activityprescription.actoutcome._2.PQType;
 import riv.clinicalprocess.activityprescription.actoutcome._2.UnstructuredDrugInformationType;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.PrescriptionStatusEnum;
 import riv.clinicalprocess.activityprescription.actoutcome.enums._2.TypeOfPrescriptionEnum;
@@ -531,6 +532,31 @@ public class MedicationHistoryMapperTest extends MapperTest {
         responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_4, true);
         assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19690529000018</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>Tavegyl®</ns2:displayName>"));
         assertTrue(responseXml.contains("<ns2:dosage><ns2:lengthOfTreatment><ns2:treatmentInterval><ns2:low>5.0</ns2:low>"));
+    }
+    
+    @Test
+    public void checkMininumDispensationIntervalUnit() {
+    	 ehrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_3);
+         
+         MuleMessage mockMessage = mock(MuleMessage.class);
+         when(mockMessage.getUniqueId()).thenReturn("1234");
+         mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
+         resp = mapper.mapEhrExtract(Arrays.asList(ehrextract), mockMessage);
+         
+         
+    	for (MedicationMedicalRecordType medicalRecordTyp : resp.getMedicationMedicalRecord()) {
+    		MedicationPrescriptionType medicalPrescriptionType = medicalRecordTyp.getMedicationMedicalRecordBody().getMedicationPrescription();
+    		if (medicalPrescriptionType != null) {
+    			DispensationAuthorizationType authorizationType = medicalPrescriptionType.getDispensationAuthorization();
+    			
+    			if (authorizationType != null) {
+    				PQType pqType = authorizationType.getMinimumDispensationInterval();
+    				if (pqType != null) {
+            			assertNotNull(pqType.getUnit());
+            		}
+    			}
+    		}
+    	}
     }
     
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehr_extract xmlns:s01="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ehr_extract xmlns="urn:riv13606:v1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ehr_id extension="TEEESTIGEEEN-1006_195001182046" root="1.2.752.129.2.1.2.1" />
   <ehr_system extension="TEEESTIGEEEN-1006" root="1.2.752.129.2.1.4.1" />
   <rm_id>EN 13606</rm_id>
@@ -638,7 +638,7 @@
         <name nullFlavor="NA" />
         <rc_id nullFlavor="NA" />
         <synthesised nullFlavor="NA" />
-        <value value="90" xsi:type="INT" />
+        <value xsi:type="PQ" value="10" unit="m"></value>
       </items>
       <items xsi:type="ELEMENT">
         <meaning code="lkm-for-mpt" codeSystem="1.2.752.129.2.2.2.1">
