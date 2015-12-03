@@ -36,29 +36,31 @@ import se.rivta.en13606.ehrextract.v11.EHREXTRACT;
  */
 public class Util {
 
-    public static final String ALERT_TEST_FILE               = "/data/AlertInformation_SSEN13606-2.1.1.xml";
-    public static final String CARECONTACTS_TEST_FILE_1      = "/data/CareContacts_SSEN13606-2.1.1.xml";
-    public static final String CARECONTACTS_TEST_FILE_2      = "/data/CareContacts_jamtland_194102069046_13606.xml";
-    public static final String CARECONTACTS_TEST_FILE_3      = "/data/CareContacts_norrbotten_198208149297_13606.xml";
-    public static final String CAREDOCUMENTATION_TEST_FILE   = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
-    public static final String DIAGNOSIS_TEST_FILE           = "/data/Diagnosis_SSEN13606-2.1.1.xml";
-    public static final String DIAGNOSISDIADIADBE            = "/data/Diagnosis.SERVICE-401.xml";
-    public static final String IMAGE_TEST_FILE               = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
-    public static final String IMAGINGOUTCOME_TEST_FILE      = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
-    public static final String IMAGINGOUTCOME1MB_TEST_FILE   = "/data/ImagingOutcome1MB_SSEN13606-2.1.1.xml";
-    public static final String IMAGINGOUTCOMESIGNEDTIMESTAMP = "/data/ImagingOutcome.SERVICE-400.xml";
-    public static final String LAB_TEST_FILE_1               = "/data/LaboratoryOrderOutcome_SSEN13606-2.1.1.xml";
-    public static final String LAB_TEST_FILE_2               = "/data/LaboratoryOrderOutcome.SERVICE-357.xml";
-    public static final String MEDICATIONHISTORY_TEST_FILE_1 = "/data/Lkemedelsordination_SSEN13606-2.1.2.xml";
-    public static final String MEDICATIONHISTORY_TEST_FILE_2 = "/data/Lkemedelsordination.SERVICE-291.xml";
-    public static final String MEDICATIONHISTORY_TEST_FILE_3 = "/data/Lkemedelsordination.SERVICE-369.xml";
-    public static final String MEDICATIONHISTORY_TEST_FILE_4 = "/data/Lkemedelsordination.SERVICE-398.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_1   = "/data/Underskning_SSEN13606-2.1.1.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_2   = "/data/Underskning_SSEN13606-2.1.1-SERVICE-322.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_3   = "/data/Underskning_SSEN13606-2.1.1-SERVICE-332.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_4   = "/data/Underskning_PREL.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_5   = "/data/Underskning_INVALID.xml";
-    public static final String REFERRALOUTCOME_TEST_FILE_6   = "/data/Underskning_unrecognised_type.xml";
+    public static final String ALERT_TEST_FILE                               = "/data/AlertInformation_SSEN13606-2.1.1.xml";
+    public static final String CARECONTACTS_TEST_FILE_1                      = "/data/CareContacts_SSEN13606-2.1.1.xml";
+    public static final String CARECONTACTS_TEST_FILE_2                      = "/data/CareContacts_jamtland_194102069046_13606.xml";
+    public static final String CARECONTACTS_TEST_FILE_3                      = "/data/CareContacts_norrbotten_198208149297_13606.xml";
+    public static final String CAREDOCUMENTATION_TEST_FILE                   = "/data/CareDocumentation_SSEN13606-2.1.1.xml";
+    public static final String DIAGNOSIS_TEST_FILE                           = "/data/Diagnosis_SSEN13606-2.1.1.xml";
+    public static final String DIAGNOSISDIADIADBE                            = "/data/Diagnosis.SERVICE-401.xml";
+    public static final String IMAGE_TEST_FILE                               = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
+    public static final String IMAGINGOUTCOME_TEST_FILE                      = "/data/ImagingOutcome_SSEN13606-2.1.1.xml";
+    public static final String IMAGINGOUTCOME1MB_TEST_FILE                   = "/data/ImagingOutcome1MB_SSEN13606-2.1.1.xml";
+    public static final String IMAGINGOUTCOMESIGNEDTIMESTAMP                 = "/data/ImagingOutcome.SERVICE-400.xml";
+    public static final String LAB_TEST_FILE_1                               = "/data/LaboratoryOrderOutcome_SSEN13606-2.1.1.xml";
+    public static final String LAB_TEST_FILE_2                               = "/data/LaboratoryOrderOutcome.SERVICE-357.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_1                 = "/data/Lkemedelsordination_SSEN13606-2.1.2.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_SERVICE_291       = "/data/Lkemedelsordination.SERVICE-291.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_SERVICE_369       = "/data/Lkemedelsordination.SERVICE-369.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_SERVICE_398       = "/data/Lkemedelsordination.SERVICE-398.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_SERVICE_408       = "/data/Lkemedelsordination.SERVICE-408.xml";
+    public static final String MEDICATIONHISTORY_TEST_FILE_SERVICE_408_FIXED = "/data/Lkemedelsordination.SERVICE-408.fixed.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_1                   = "/data/Underskning_SSEN13606-2.1.1.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_SERVICE_322         = "/data/Underskning_SSEN13606-2.1.1-SERVICE-322.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_SERVICE_332         = "/data/Underskning_SSEN13606-2.1.1-SERVICE-332.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_4                   = "/data/Underskning_PREL.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_5                   = "/data/Underskning_INVALID.xml";
+    public static final String REFERRALOUTCOME_TEST_FILE_6                   = "/data/Underskning_unrecognised_type.xml";
     
     //
     public static EHREXTRACT loadEhrTestData(final String fileName) {

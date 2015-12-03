@@ -274,6 +274,8 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
         
     private MedicationMedicalRecordType getMedicationMedicalRecord(COMPOSITION lko, COMPOSITION lkf, EHREXTRACT ehrExtract) {
 
+        log.debug("Processing lko:" + (lko == null ? null : lko.getRcId().getExtension()) + ", lkf:" + (lkf == null ? null : lkf.getRcId().getExtension()));
+        
         final MedicationMedicalRecordType record = new MedicationMedicalRecordType();
 
         // --- header
@@ -381,23 +383,25 @@ public class MedicationHistoryMapper extends AbstractMapper implements Mapper {
                                 dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalHSAId(lkfPro.getHealthcareProfessionalHSAId());
                                 dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalName(lkfPro.getHealthcareProfessionalName());
                                 
-                                final CVType lkfCv = new CVType();
-                                lkfCv.setCode(lkfPro.getHealthcareProfessionalRoleCode().getCode());
-                                lkfCv.setCodeSystem(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystem());
-                                lkfCv.setCodeSystemName(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemName());
-                                lkfCv.setCodeSystemVersion(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
-                                lkfCv.setDisplayName(lkfPro.getHealthcareProfessionalRoleCode().getDisplayName());
-                                lkfCv.setOriginalText(lkfPro.getHealthcareProfessionalRoleCode().getOriginalText());
-                                dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalRoleCode(lkfCv);
+                                if (lkfPro.getHealthcareProfessionalRoleCode() != null) {
+                                    dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalRoleCode(new CVType());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setCode(lkfPro.getHealthcareProfessionalRoleCode().getCode());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setCodeSystem(       lkfPro.getHealthcareProfessionalRoleCode().getCodeSystem());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setCodeSystemName(   lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemName());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setCodeSystemVersion(lkfPro.getHealthcareProfessionalRoleCode().getCodeSystemVersion());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setDisplayName(      lkfPro.getHealthcareProfessionalRoleCode().getDisplayName());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalRoleCode().setOriginalText(     lkfPro.getHealthcareProfessionalRoleCode().getOriginalText());
+                                }
                                 
-                                final OrgUnitType lkfOrg = new OrgUnitType();
-                                lkfOrg.setOrgUnitAddress(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
-                                lkfOrg.setOrgUnitEmail(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
-                                lkfOrg.setOrgUnitHSAId(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
-                                lkfOrg.setOrgUnitLocation(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
-                                lkfOrg.setOrgUnitName(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitName());
-                                lkfOrg.setOrgUnitTelecom(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
-                                dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalOrgUnit(lkfOrg);
+                                if (lkfPro.getHealthcareProfessionalOrgUnit() != null) {
+                                    dispensationAuth.getDispensationAuthorizer().setHealthcareProfessionalOrgUnit(new OrgUnitType());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitAddress( lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitAddress());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitEmail(   lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitEmail());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitHSAId(   lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitHSAId());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitLocation(lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitLocation());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitName(    lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitName());
+                                    dispensationAuth.getDispensationAuthorizer().getHealthcareProfessionalOrgUnit().setOrgUnitTelecom( lkfPro.getHealthcareProfessionalOrgUnit().getOrgUnitTelecom());
+                                }
                                 
                                 //Map lkf body
                                 for(ITEM lkfItem : lkfEntry.getItems()) {
