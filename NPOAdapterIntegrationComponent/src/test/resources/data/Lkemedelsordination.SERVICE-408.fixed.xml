@@ -322,7 +322,7 @@
       <info_provider>
         <healthcare_facility root="1.2.752.129.2.1.2.1"
           extension="SE2321000230-LuBo-Kir"></healthcare_facility>
-        <performer root="1.2.752.129.2.1.2.1" extension="dkop"></performer>
+        <performer root="1.2.752.129.2.1.2.1" extension="DKOP"></performer>
       </info_provider>
     </content>
   </all_compositions>
@@ -652,7 +652,7 @@
       <info_provider>
         <healthcare_facility root="1.2.752.129.2.1.2.1"
           extension="SE2321000230-LuBo-Kir"></healthcare_facility>
-        <performer root="1.2.752.129.2.1.2.1" extension="dkop"></performer>
+        <performer root="1.2.752.129.2.1.2.1" extension="DKOP"></performer>
       </info_provider>
     </content>
   </all_compositions>
@@ -964,7 +964,7 @@
       <info_provider>
         <healthcare_facility root="1.2.752.129.2.1.2.1"
           extension="SE2321000230-LuBo-Kir"></healthcare_facility>
-        <performer root="1.2.752.129.2.1.2.1" extension="dkop"></performer>
+        <performer root="1.2.752.129.2.1.2.1" extension="DKOP"></performer>
       </info_provider>
     </content>
   </all_compositions>
@@ -1294,7 +1294,7 @@
       <info_provider>
         <healthcare_facility root="1.2.752.129.2.1.2.1"
           extension="SE2321000230-LuBo-Kir"></healthcare_facility>
-        <performer root="1.2.752.129.2.1.2.1" extension="dkop"></performer>
+        <performer root="1.2.752.129.2.1.2.1" extension="DKOP"></performer>
       </info_provider>
     </content>
   </all_compositions>
@@ -1614,7 +1614,7 @@
       <info_provider>
         <healthcare_facility root="1.2.752.129.2.1.2.1"
           extension="SE2321000230-LuBo-Kir"></healthcare_facility>
-        <performer root="1.2.752.129.2.1.2.1" extension="dkop"></performer>
+        <performer root="1.2.752.129.2.1.2.1" extension="DKOP"></performer>
       </info_provider>
     </content>
   </all_compositions>

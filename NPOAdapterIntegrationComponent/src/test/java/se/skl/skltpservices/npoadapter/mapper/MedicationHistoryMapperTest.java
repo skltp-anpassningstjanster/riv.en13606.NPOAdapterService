@@ -481,7 +481,7 @@ public class MedicationHistoryMapperTest extends MapperTest {
     
     @Test
     public void checkLkoWithTwoLkf() {
-        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_369);
         assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331364_20020308000315"));
         
         // lko
@@ -505,7 +505,7 @@ public class MedicationHistoryMapperTest extends MapperTest {
     
     @Test
     public void checkLkoWithoutLkf() {
-        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_3);
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_369);
         assertTrue(responseXml.contains("<ns2:medicationMedicalRecordHeader><ns2:documentId>SE2321000081-10331367_19640101000028"));
         assertTrue(responseXml.contains("<ns2:prescriptionId><ns2:root>1.2.752.129.2.1.2.1</ns2:root><ns2:extension>SE2321000081-10331367_19640101000028"));
         
@@ -529,14 +529,14 @@ public class MedicationHistoryMapperTest extends MapperTest {
         assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19770615000037</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>CRESTOR</ns2:displayName>"));
         
         // Kalmar
-        responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_4, true);
+        responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_398, true);
         assertTrue(responseXml.contains("<ns2:drug><ns2:drug><ns2:nplId><ns2:code>19690529000018</ns2:code><ns2:codeSystem>1.2.752.129.2.1.5.1</ns2:codeSystem><ns2:displayName>Tavegyl®</ns2:displayName>"));
         assertTrue(responseXml.contains("<ns2:dosage><ns2:lengthOfTreatment><ns2:treatmentInterval><ns2:low>5.0</ns2:low>"));
     }
     
     @Test
     public void checkMininumDispensationIntervalUnit() {
-    	 ehrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_3);
+    	 ehrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_369);
          
          MuleMessage mockMessage = mock(MuleMessage.class);
          when(mockMessage.getUniqueId()).thenReturn("1234");
@@ -558,7 +558,51 @@ public class MedicationHistoryMapperTest extends MapperTest {
     		}
     	}
     }
+
     
+    @Test
+    public void checkLkfPro() {
+        String responseXml = getRivtaXml(mapper, Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_408, true);
+        log.debug(responseXml);
+        assertTrue(responseXml.contains("<ns2:documentId>SE1623210002198201179283ordination19</ns2:documentId>"));
+        assertTrue(responseXml.contains("<ns2:extension>SE1623210002198201179283recept191</ns2:extension>"));
+    }
+
+    
+    @Test
+    public void testDispensationAuthorizerIncorrectHsaId() {
+        EHREXTRACT localEhrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_408);
+        
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
+        mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
+        resp = mapper.mapEhrExtract(Arrays.asList(localEhrextract), mockMessage);
+        
+        for (MedicationMedicalRecordType medicalRecordTyp : resp.getMedicationMedicalRecord()) {
+            if (medicalRecordTyp.getMedicationMedicalRecordHeader().getDocumentId().equals("SE1623210002198201179283ordination19")) {
+                MedicationPrescriptionType medicalPrescriptionType = medicalRecordTyp.getMedicationMedicalRecordBody().getMedicationPrescription();
+                assertNull(medicalPrescriptionType.getDispensationAuthorization().getDispensationAuthorizer().getHealthcareProfessionalRoleCode());
+            }
+        }
+    }
+
+    
+    @Test
+    public void testDispensationAuthorizerCorrectHsaId() {
+        EHREXTRACT localEhrextract = Util.loadEhrTestData(Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_408_FIXED);
+        MuleMessage mockMessage = mock(MuleMessage.class);
+        when(mockMessage.getUniqueId()).thenReturn("1234");
+        mapper = (MedicationHistoryMapper) AbstractMapper.getInstance(AbstractMapper.NS_EN_EXTRACT, AbstractMapper.NS_MEDICATIONHISTORY);        
+        resp = mapper.mapEhrExtract(Arrays.asList(localEhrextract), mockMessage);
+        
+        for (MedicationMedicalRecordType medicalRecordTyp : resp.getMedicationMedicalRecord()) {
+            if (medicalRecordTyp.getMedicationMedicalRecordHeader().getDocumentId().equals("SE1623210002198201179283ordination19")) {
+                MedicationPrescriptionType medicalPrescriptionType = medicalRecordTyp.getMedicationMedicalRecordBody().getMedicationPrescription();
+                assertNotNull(medicalPrescriptionType.getDispensationAuthorization().getDispensationAuthorizer().getHealthcareProfessionalRoleCode());
+            }
+        }
+    }
+
     
     // --- ------------------------
     
@@ -570,7 +614,7 @@ public class MedicationHistoryMapperTest extends MapperTest {
         
         // load xml from test file - this contains an <ehr_extract/>
         StringBuilder xml13606Response = new StringBuilder();
-        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.MEDICATIONHISTORY_TEST_FILE_2), "UTF-8").useDelimiter("\\z")) {
+        try (@SuppressWarnings("resource") Scanner inputStringScanner = new Scanner(getClass().getResourceAsStream(Util.MEDICATIONHISTORY_TEST_FILE_SERVICE_291), "UTF-8").useDelimiter("\\z")) {
             while (inputStringScanner.hasNext()) {
                 xml13606Response.append(inputStringScanner.next());
             }
