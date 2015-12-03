@@ -137,7 +137,7 @@ public class ReferralOutcomeMapperTest extends MapperTest {
     @Test
     public void mapMultipleResponses() {
         
-        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_2);
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_SERVICE_322);
             
         int occurrences = 0;
         Pattern p = Pattern.compile("referralOutcomeBody");
@@ -155,7 +155,7 @@ public class ReferralOutcomeMapperTest extends MapperTest {
     @Test
     public void mapBlekinge() {
 
-        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_3);
+        String responseXml = getRivtaXml(getReferralOutcomeMapper(), Util.REFERRALOUTCOME_TEST_FILE_SERVICE_332);
             
         int occurrences = 0;
         Pattern p = Pattern.compile("referralOutcomeBody");
