@@ -15,7 +15,7 @@
 
     <groupId>se.skltp.adapterservices.npoadapter</groupId>
     <artifactId>NPOAdapter</artifactId>
-    <version>1.0.1-RC2-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
@@ -138,7 +138,7 @@
                         </properties>
                         <strictCheck>true</strictCheck>
                         <basedir>${basedir}</basedir>
-                        <header>http://skltp.googlecode.com/svn/tp/license/lgpl/header.txt</header>
+                        <header>./license/lgpl/header.txt</header>
                         <encoding>UTF-8</encoding>
                         <includes>
                             <include>src/main/**</include>
